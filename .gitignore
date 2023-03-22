@@ -1,0 +1,12 @@
+**/__pycache__
+**/migrations
+**/*.css.map
+.vscode
+db.sqlite3
+virtual
+.venv
+.idea
+/env
+_migrations/*
+!_migrations/__init__.py
+.env
