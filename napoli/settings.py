@@ -34,6 +34,7 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     #Modules
     'db',
+    'productManagement',
     #Django
     'django.contrib.admin',
     'django.contrib.auth',
