@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-2ndpr+usg_bqw25zgk*q)38*v-2a8)qwi-xe1g3q)z!kkay5#p
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     #Modules
     'db',
     'productManagement',
+    'authentication',
     #Django
     'django.contrib.admin',
     'django.contrib.auth',

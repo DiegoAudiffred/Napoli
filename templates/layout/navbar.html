@@ -1,0 +1,22 @@
+{% load static %}
+
+{% if request.user.is_authenticated %}
+<nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #CADE01;">
+    <div class="container-fluid px-0 py-3">
+
+        <div class="col-4 text-center fnTexto_Bold_Encabezado_002">
+
+            <a href="" class="text-black text-decoration-none"> Realizar pedido</a>
+        </div>
+        <div class="col-4 text-center fnTexto_Bold_Encabezado_002">
+            <a href="" class="text-black text-decoration-none"> Inventario</a>
+        </div>
+        <div class="col-4 text-center fnTexto_Bold_Encabezado_002">
+            <a href="" class="text-black text-decoration-none"> Ventas </a>
+        </div>
+
+    </div>
+</nav>
+
+
+{% endif %}

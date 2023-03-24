@@ -1,0 +1,35 @@
+{% extends 'layout/layout.html' %}
+{% load static %}
+{% block body %}
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-12 fnTexto_Bold_Encabezado_001 text-white my-5 text-center" style="background-color:#6924a5 ;">
+            Bienvenido a Napoli
+        </div>
+        <div class="col-12 fnTexto_Bold_Encabezado_001 text-white my-5 text-center" style="background-color:#120727 ;">
+            Por favor selecciona una cuenta para ingresar
+        </div>
+        {% for user in users %}
+        <div class="col-4 fnTexto_SemiBold_Dinamico_001 ">
+            <a href="" class="text-decoration-none">
+                <div class="p-3 text-break" style="background-color: #CADE01;">
+                    <div class="row">
+                        <div class="col-8 text-start">
+                            {{user.first_name}}
+                            {{user.last_name}}
+                        </div>
+                        <div class="col-4 text-end">
+                            {{user.rol}}
+                        </div>
+                    </div>
+                </div>
+                <img height="300px" class="w-100" src="{{user.url.url}}">
+            </a>
+
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
