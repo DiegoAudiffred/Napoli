@@ -1,0 +1,20 @@
+{% extends 'layout/layout.html' %}
+{% load static %}
+{% block body %}
+<form action="{% url 'authentication:createAccount' %}" method="POST" enctype='multipart/form-data'>
+    <div class="container border border-3 my-5">
+        <div class="row">
+            <p class="fnTexto_Bold_Encabezado_006">Registrar usuario nuevo</p>
+
+            <div class="col-4">
+                Nombre
+                {{form.first_name}}
+            </div>
+            <div class="col-4">
+                Apellidos
+                {{form.first_name}}
+            </div>
+        </div>
+    </div>
+</form>
+{% endblock %}
