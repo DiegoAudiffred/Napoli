@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'productManagement',
     'authentication',
     'Ventas',
+    'Empleados',
     #Django
     'django.contrib.admin',
     'django.contrib.auth',

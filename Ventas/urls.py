@@ -8,6 +8,7 @@ app_name="Ventas"
 urlpatterns = [
     path('',views.ventasIndex,name='ventasIndex'),
 
+    path('clientes/',views.clientList,name='clientList'),
 
 
 ] 
