@@ -11,3 +11,7 @@ def empleadosIndex(request):
     print(clientes)
     return render(request, 'Empleados/indexEmpleados.html',{'clientes':clientes})
 
+def empleadosEditar(request,id):
+    user = User.objects.get(id=id)
+    return render(request, 'Empleados/editarEmpleado.html',{'user':user})
+

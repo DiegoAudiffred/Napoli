@@ -27,6 +27,7 @@ urlpatterns = [
     path('Empleados/', include('Empleados.urls')),
     
 
+    path('Stock/', include('Stock.urls')),
 
 
 

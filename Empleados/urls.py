@@ -7,6 +7,7 @@ app_name="Empleados"
 
 urlpatterns = [
     path('',views.empleadosIndex,name='empleadosIndex'),
+    path('<int:id>',views.empleadosEditar,name='empleadosEditar'),
 
 
 

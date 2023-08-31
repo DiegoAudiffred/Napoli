@@ -59,8 +59,8 @@
                 <td>{{cliente.rol}}</td>
                 <td>{{cliente.email}}</td>
                 <td>{{cliente.phone_number}}</td>
-                <td><a href="">Modificar cliente</a></td>
-                <td><a href="">Eliminar cliente</a></td>
+                <td><a href="{% url 'Empleados:empleadosEditar' cliente.id %}">Modificar empleado</a></td>
+                <td><a href="">Eliminar empleado</a></td>
             </tr>
             {% endfor %}
         </tbody>

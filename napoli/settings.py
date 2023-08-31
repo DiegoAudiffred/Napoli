@@ -34,6 +34,7 @@ ALLOWED_HOSTS = ['*']
 INSTALLED_APPS = [
     #Modules
     'db',
+    'Stock',
     'productManagement',
     'authentication',
     'Ventas',
