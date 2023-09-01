@@ -1,3 +1,4 @@
+from datetime import timezone
 import decimal
 import math
 import urllib
@@ -7,6 +8,8 @@ from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.db.models.deletion import CASCADE
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db.models import Q
+from django.utils import timezone
+
 # Create your models here.
 
 
@@ -16,6 +19,27 @@ ROLES = [
     ("Mesero", "Mesero"),
     ("Admin", "Admin"),
    
+]
+
+UNIDADES = [
+    ("K", "Kilos"),
+    ("L", "Litros"),
+    ("ml", "mililitros"),
+    ("kg", "miligramos"),
+    ("U", "unidad"),
+
+]
+
+CATEGORIA = [
+    ("Entradas", "Entradas"),
+    ("Ensaladas", "Ensaladas"),
+    ("Pastas", "Pastas"),
+    ("Carnes", "Carnes"),
+    ("Postres", "Postres"),
+    ("Bebidas", "Bebidas"),
+    ("Pizza", "Pizza"),
+    ("Especialidad", "Especialidad"),
+
 ]
 
 class UserManager(BaseUserManager):
@@ -66,7 +90,6 @@ class User(AbstractUser):
     username = None
     email = models.EmailField('Correo electrónico', unique=True)
     first_name = models.CharField("Nombre", max_length=200, null=True, blank=True)
-    last_name = models.CharField("Apellido", max_length=200, null=True, blank=True)
     phone_number = models.CharField("Teléfono", max_length=15, unique=True, null=True)
     url = models.ImageField(upload_to="uploads/gallery/",null=True, blank=True)
     USERNAME_FIELD = 'email'
@@ -80,8 +103,28 @@ class User(AbstractUser):
         return self.email, self.first_name
     
 
-class Categoria(models.Model):
+
+
+
+class Bebidas(models.Model):
     nombre = models.CharField(max_length=100)
+    descripcion = models.TextField()
+    precio = models.DecimalField(max_digits=8, decimal_places=2)
+    categoria = models.CharField( 
+        choices=CATEGORIA, max_length=20)  
+    url = models.ImageField(upload_to="uploads/gallery/",null=True,blank=True)
+
+    def __str__(self):
+        return self.nombre
+
+
+
+class Ingredientes(models.Model):
+    nombre = models.CharField(max_length=100)
+    precio = models.DecimalField(max_digits=8, decimal_places=2)
+    unidad = models.CharField(choices=UNIDADES, max_length=20)
+    cantidad = models.DecimalField(max_digits=8,decimal_places=2,default=0,null=False)
+    fecha_compra = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
         return self.nombre
@@ -90,18 +133,10 @@ class Plato(models.Model):
     nombre = models.CharField(max_length=100)
     descripcion = models.TextField()
     precio = models.DecimalField(max_digits=8, decimal_places=2)
-    categoria = models.ForeignKey(Categoria, on_delete=models.CASCADE)
+    categoria = models.CharField( 
+        choices=CATEGORIA, max_length=20)
     url = models.ImageField(upload_to="uploads/gallery/")
-
-    def __str__(self):
-        return self.nombre
-
-class Bebidas(models.Model):
-    nombre = models.CharField(max_length=100)
-    descripcion = models.TextField()
-    precio = models.DecimalField(max_digits=8, decimal_places=2)
-    categoria = models.ForeignKey(Categoria, on_delete=models.CASCADE)
-    url = models.ImageField(upload_to="uploads/gallery/",null=True,blank=True)
+    ingredientes = models.ManyToManyField(Ingredientes)
 
     def __str__(self):
         return self.nombre
