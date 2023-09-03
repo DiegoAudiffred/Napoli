@@ -15,8 +15,8 @@ from django.utils import timezone
 
 ROLES = [
     ("Dueña/o", "Dueña/o"),
-    ("Cocinero", "Cocinero"),
-    ("Mesero", "Mesero"),
+    ("Cocinera/o", "Cocinera/o"),
+    ("Mesera/o", "Mesera/o"),
     ("Admin", "Admin"),
    
 ]
@@ -77,10 +77,12 @@ class UserManager(BaseUserManager):
 
 
 class Cliente(models.Model):
-    first_name = models.CharField("Nombre", max_length=200, null=True, blank=True)
-    last_name = models.CharField("Apellido", max_length=200, null=True, blank=True)
-    total_compras= models.IntegerField(null=True,blank=True)
-    total_gastado= models.FloatField(null=True,blank=True)
+    first_name = models.CharField("Nombre", max_length=200)
+    total_compras= models.IntegerField(null=True,blank=True,default=0)
+    total_gastado= models.FloatField(null=True,blank=True,default=0)
+    email = models.EmailField('Correo electrónico', unique=True, blank=True, null=True)
+    phone_number = models.CharField("Teléfono", max_length=15, unique=True, null=True,blank=True)
+
     
 def _str_(self):
         return self.first_name

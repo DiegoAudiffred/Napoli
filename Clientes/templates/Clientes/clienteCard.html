@@ -1,0 +1,44 @@
+{% load static %}
+
+
+
+
+
+<table class="table m-0">
+    <thead>
+        <tr class="align-middle">
+            <th>Nombre</th>
+            <th>Email</th>
+            <th>Teléfono</th>
+            <th>Total ventas</th>
+            <th>Total consumido</th>
+            <th>Editar</th>
+            <th>Eliminar</th>
+        </tr>
+
+    </thead>
+    <tbody>
+
+        {% for empleado in employees %}
+        <tr class="align-middle">
+
+
+
+            <td>{{empleado.first_name}}</td>
+            <td>{{empleado.email}}</td>
+            <td>{{empleado.phone_number}}</td>
+
+            <td>{{empleado.total_compras}}</td>
+            <td>$ {{empleado.total_gastado}} mxn</td>
+
+            <td><a href="{% url 'Clientes:clientesEditar' empleado.id %}">Modificar cliente</a></td>
+            <td><a href="">Eliminar cliente</a></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+
+
+
+<input type="hidden" name="totalPaginas" id="totalPaginas" value="{{totalPaginas}}">

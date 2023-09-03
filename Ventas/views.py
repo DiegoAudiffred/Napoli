@@ -11,8 +11,5 @@ def crearVenta(request):
     
     return HttpResponse("Vendido")
 
-def clientList(request):
-    clientes = Cliente.objects.all()
-    print(clientes)
-    return render(request,'Ventas/clientList.html',{'clientes':clientes})
+
 

@@ -1,0 +1,37 @@
+{% extends 'layout/layout.html' %}
+{% load static %}
+{% block body %}
+
+<div class="container ">
+
+    <div class="row py-3">
+        <h1>Lista de clientes</h1>
+
+        <div class="col-2 d-flex">
+            <a href="{% url 'Clientes:clientesCrear' %}" class="rounded-5 text-white py-2 px-3 text-decoration-none"
+                style="background-color: #199fd6;">
+                Agregar cliente
+            </a>
+        </div>
+        <div class="col-5 d-flex justify-content-center align-items-center">
+            <div class="input-group">
+
+                <input type="text" class="form-control shadow-none" placeholder="Buscar empleado por nombre"
+                    aria-label="" aria-describedby="basic-addon1" id="searchBar" onkeyup="getCardsReplace(this.value)">
+            </div>
+        </div>
+
+
+
+
+    </div>
+    <div id="cardHolder" class="border border-3 rounded rounded-3">
+    </div>
+
+
+</div>
+
+
+<script src="{% static 'js/clientsAjaxSearch.js' %}"></script>
+
+{% endblock %}
