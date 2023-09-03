@@ -1,0 +1,52 @@
+{% load static %}
+
+
+
+
+
+<table class="table">
+    <thead>
+        <tr class="align-middle">
+            <th>Foto</th>
+            <th>Nombre</th>
+            <th>Rol</th>
+            <th>Email</th>
+            <th>Numero</th>
+            <th>Modificar</th>
+            <th>Eliminar</th>
+        </tr>
+
+    </thead>
+    <tbody>
+
+        {% for empleado in employees %}
+        <tr class="align-middle">
+            <td>
+
+                {% if empleado.url %}
+                <img src="{{empleado.url.url}}" class="rounded-5 img-fluid" id="imgPerfil"
+                    style="width: 100px;height: 100px;">
+                {% else %}
+                <img src="https://vectorified.com/images/no-profile-picture-icon-8.jpg" id="imgPerfil"
+                    class="rounded-5 img-fluid" style="width: 100px;height: 100px;">
+
+                {% endif %}
+
+            </td>
+
+
+            <td>{{empleado.first_name}}</td>
+            <td>{{empleado.rol}}</td>
+            <td>{{empleado.email}}</td>
+            <td>{{empleado.phone_number}}</td>
+            <td><a href="{% url 'Empleados:empleadosEditar' empleado.id %}">Modificar empleado</a></td>
+            <td><a href="">Eliminar empleado</a></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+
+
+
+<input type="hidden" name="totalPaginas" id="totalPaginas" value="{{totalPaginas}}">

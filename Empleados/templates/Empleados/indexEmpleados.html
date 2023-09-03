@@ -15,8 +15,8 @@
         <div class="col-5 d-flex justify-content-center align-items-center">
             <div class="input-group">
 
-                <input type="text" class="form-control" placeholder="Buscar cliente por nombre" aria-label=""
-                    aria-describedby="basic-addon1">
+                <input type="text" class="form-control" placeholder="Buscar empleado por nombre" aria-label=""
+                    aria-describedby="basic-addon1" id="searchBar" onkeyup="getCardsReplace(this.value)">
             </div>
         </div>
 
@@ -24,49 +24,13 @@
 
 
     </div>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Foto</th>
-                <th>Nombre</th>
-                <th>Apellido</th>
-                <th>Rol</th>
-                <th>Email</th>
-                <th>Numero</th>
-                <th>Modificar</th>
-                <th>Eliminar</th>
-            </tr>
-
-        </thead>
-        <tbody>
-            {% for cliente in clientes %}
-            <tr>
-                <td>
-
-                    {% if cliente.url %}
-                    <img src="{{cliente.url.url}}" class="rounded-5 img-fluid" id="imgPerfil"
-                        style="width: 100px;height: 100px;">
-                    {% else %}
-                    <img src="https://vectorified.com/images/no-profile-picture-icon-8.jpg" id="imgPerfil"
-                        class="rounded-5 img-fluid" style="width: 100px;height: 100px;">
-
-                    {% endif %}
-
-                </td>
+    <div id="cardHolder">
+    </div>
 
 
-                <td>{{cliente.first_name}}</td>
-                <td>{{cliente.last_name}}</td>
-                <td>{{cliente.rol}}</td>
-                <td>{{cliente.email}}</td>
-                <td>{{cliente.phone_number}}</td>
-                <td><a href="{% url 'Empleados:empleadosEditar' cliente.id %}">Modificar empleado</a></td>
-                <td><a href="">Eliminar empleado</a></td>
-            </tr>
-            {% endfor %}
-        </tbody>
-
-    </table>
 </div>
+
+
+<script src="{% static 'js/employeesAjaxSearch.js' %}"></script>
 
 {% endblock %}

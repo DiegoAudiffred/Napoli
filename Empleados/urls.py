@@ -9,7 +9,7 @@ urlpatterns = [
     path('',views.empleadosIndex,name='empleadosIndex'),
     path('<int:id>',views.empleadosEditar,name='empleadosEditar'),
     path('crear/',views.empleadosCrear,name='empleadosCrear'),
-
+    path('AjaxSearch', views.employeeCard, name='employeeCard'),
 
 
 

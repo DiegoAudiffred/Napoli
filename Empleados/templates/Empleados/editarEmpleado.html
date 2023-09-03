@@ -2,9 +2,314 @@
 {% load static %}
 {% block body %}
 
-<div class="container">
 
-    {{user.first_name}}
+
+<style>
+    .file {
+        position: relative;
+        height: 30px;
+        width: 100px;
+    }
+
+    .file>input[type="file"] {
+        position: absoulte;
+        opacity: 0;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0
+    }
+
+    .file>label {
+        position: absolute;
+        top: 0;
+        right: 0;
+        left: 0;
+        bottom: 0;
+        background-color: #666;
+        color: #fff;
+        line-height: 30px;
+        text-align: center;
+        cursor: pointer;
+    }
+
+    .form-check-input[disabled] {
+        opacity: 1;
+
+    }
+
+    .disabled-text {
+        opacity: 1;
+        color: black;
+
+
+    }
+
+    .image-container {
+        position: relative;
+        display: inline-block;
+    }
+
+    .svg-container {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .svg-overlay {
+        z-index: 1;
+    }
+</style>
+<script>
+    var loadFile = function (event) {
+        var output = document.getElementById('output');
+        output.src = URL.createObjectURL(event.target.files[0]);
+        output.onload = function () {
+            URL.revokeObjectURL(output.src) // free memory
+        }
+
+
+    };
+
+</script>
+<script>
+    document.getElementById('id_url').addEventListener('change', function (event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function () {
+                const imagenPrevisualizacion = document.querySelector('#label-imagen img');
+                imagenPrevisualizacion.src = reader.result;
+            }
+            reader.readAsDataURL(file);
+        }
+    });
+</script>
+
+<style>
+    .profilePictureNotification {
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        padding: 15px;
+        background-color: rgba(0, 0, 0, 0.8);
+        color: white;
+        border-radius: 5px;
+        z-index: 1000;
+        opacity: 0;
+        transition: opacity 0.5s;
+    }
+</style>
+
+
+
+
+
+<div class="container">
+    <form action="{% url 'Empleados:empleadosEditar' user.id %}" method="POST" enctype="multipart/form-data"
+        id="user-profile-form">
+        {% csrf_token %}
+        <div class="row ">
+            <div class="col-sm-4 col-12 text-center p-3">
+
+                <label for="id_url" id="label-id_url">
+                    {{user.url}}
+                    <div class="image-container">
+                        {% if user.url %}
+                        <img src="{{user.url.url}}" alt="" width="100%" height="414px" id="output"
+                            style="cursor: pointer;" class="rounded rounded-2">
+                        {% else %}
+                        <img src="{% static 'img/fondogris.png'%}" alt="" width="100%" height="414px" id="output"
+                            style="cursor: pointer;" class="rounded rounded-2">
+                        {% endif %}
+
+                        <div class="svg-container">
+                            <svg class="svg-overlay" width="190" height="190" viewBox="0 0 190 190" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <g filter="url(#filter0_dd_3078_53209)">
+                                    <path
+                                        d="M95 123.625L95 74.6875M95 74.6875L116.75 96.4375M95 74.6875L73.25 96.4375M56.9375 145.375C38.9192 145.375 24.3125 130.768 24.3125 112.75C24.3125 98.3011 33.7052 86.0461 46.7179 81.7576C46.2876 79.4667 46.0625 77.1034 46.0625 74.6875C46.0625 53.6662 63.1037 36.625 84.125 36.625C101.751 36.625 116.579 48.6064 120.909 64.8692C123.024 64.1832 125.281 63.8125 127.625 63.8125C139.637 63.8125 149.375 73.5503 149.375 85.5625C149.375 88.0865 148.945 90.5101 148.154 92.7641C158.404 96.6583 165.688 106.572 165.688 118.188C165.688 133.203 153.515 145.375 138.5 145.375H56.9375Z"
+                                        stroke="white" stroke-width="6" stroke-linecap="round"
+                                        stroke-linejoin="round" />
+                                </g>
+                                <defs>
+                                    <filter id="filter0_dd_3078_53209" x="0" y="0" width="190" height="190"
+                                        filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+                                        <feFlood flood-opacity="0" result="BackgroundImageFix" />
+                                        <feColorMatrix in="SourceAlpha" type="matrix"
+                                            values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
+                                        <feOffset dy="4" />
+                                        <feGaussianBlur stdDeviation="4" />
+                                        <feColorMatrix type="matrix"
+                                            values="0 0 0 0 0.196487 0 0 0 0 0.196487 0 0 0 0 0.279476 0 0 0 0.06 0" />
+                                        <feBlend mode="multiply" in2="BackgroundImageFix"
+                                            result="effect1_dropShadow_3078_53209" />
+                                        <feColorMatrix in="SourceAlpha" type="matrix"
+                                            values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
+                                        <feOffset dy="4" />
+                                        <feGaussianBlur stdDeviation="2" />
+                                        <feColorMatrix type="matrix"
+                                            values="0 0 0 0 0.196487 0 0 0 0 0.196487 0 0 0 0 0.279476 0 0 0 0.08 0" />
+                                        <feBlend mode="multiply" in2="effect1_dropShadow_3078_53209"
+                                            result="effect2_dropShadow_3078_53209" />
+                                        <feBlend mode="normal" in="SourceGraphic" in2="effect2_dropShadow_3078_53209"
+                                            result="shape" />
+                                    </filter>
+                                </defs>
+                            </svg>
+
+                        </div>
+                    </div>
+                </label>
+
+
+
+
+
+                <div class="d-none">
+                    {{form.url}}
+
+                </div>
+
+
+                <div class="px-5 py-2 fnOS_Regular_Cuerpo_02">
+                    <p class="m-0">Subir una imagén para tu perfil.</p>
+                    <p class="m-0">Máximo 1000x1000px y 15 MB de peso.
+                    </p>
+                </div>
+
+
+            </div>
+            <div class="col-sm-4 col-12 p-3 text-start">
+                <div class="row justify-content-end">
+                    <div class="col-12 py-2">
+                        <div class="input-group rounded rounded-3 border border-2 border-primary">
+                            <span class="input-group-text bg-white " id="basic-addon1" style="border-right: none;"><svg
+                                    width="19px" height="19px" viewBox="0 0 24 24" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                    <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                                    <g id="SVGRepo_iconCarrier">
+                                        <path
+                                            d="M20 18L17 18M17 18L14 18M17 18V15M17 18V21M11 21H4C4 17.134 7.13401 14 11 14C11.695 14 12.3663 14.1013 13 14.2899M15 7C15 9.20914 13.2091 11 11 11C8.79086 11 7 9.20914 7 7C7 4.79086 8.79086 3 11 3C13.2091 3 15 4.79086 15 7Z"
+                                            stroke="#9a0e00" stroke-width="2" stroke-linecap="round"
+                                            stroke-linejoin="round"></path>
+                                    </g>
+                                </svg>
+                            </span>
+                            {{form.first_name}}
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-12 py-2">
+                        <div class="input-group rounded rounded-3 border border-2 border-primary">
+                            <span class="input-group-text bg-white " id="basic-addon1" style="border-right: none;"><svg
+                                    width="19px" height="19px" viewBox="0 0 19 19" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M17.2188 5.34375V13.6562C17.2188 14.64 16.4213 15.4375 15.4375 15.4375H3.5625C2.57874 15.4375 1.78125 14.64 1.78125 13.6562V5.34375M17.2188 5.34375C17.2188 4.35999 16.4213 3.5625 15.4375 3.5625H3.5625C2.57874 3.5625 1.78125 4.35999 1.78125 5.34375M17.2188 5.34375V5.5359C17.2188 6.15445 16.8978 6.72873 16.371 7.05291L10.4335 10.7068C9.86104 11.0591 9.13896 11.0591 8.56645 10.7068L2.62895 7.05291C2.10215 6.72873 1.78125 6.15445 1.78125 5.5359V5.34375"
+                                        stroke="#9a0e00" stroke-width="1.5" stroke-linecap="round"
+                                        stroke-linejoin="round" />
+                                </svg>
+                            </span>
+                            {{form.email}}
+
+                        </div>
+
+                    </div>
+                    <div class="col-12 py-2">
+                        <div class="input-group rounded rounded-3 border border-2 border-primary">
+                            <span class="input-group-text bg-white" id="basic-addon1" style="border-right: none;"><svg
+                                    width="19px" height="19px" viewBox="0 0 17 17" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M15.0312 1.96875V5.53125M15.0312 1.96875H11.4688M15.0312 1.96875L10.2812 6.71875M12.6562 16.2188C6.09787 16.2188 0.78125 10.9021 0.78125 4.34375V2.5625C0.78125 1.57874 1.57874 0.78125 2.5625 0.78125H3.64837C4.05705 0.78125 4.41328 1.05939 4.5124 1.45587L5.38783 4.95755C5.47474 5.30519 5.34484 5.67106 5.05817 5.88606L4.03405 6.65415C3.73683 6.87707 3.60539 7.26262 3.73319 7.61148C4.69221 10.2295 6.77052 12.3078 9.38852 13.2668C9.73738 13.3946 10.1229 13.2632 10.3459 12.9659L11.1139 11.9418C11.3289 11.6552 11.6948 11.5253 12.0424 11.6122L15.5441 12.4876C15.9406 12.5867 16.2188 12.943 16.2188 13.3516V14.4375C16.2188 15.4213 15.4213 16.2188 14.4375 16.2188H12.6562Z"
+                                        stroke="#9a0e00" stroke-width="1.5" stroke-linecap="round"
+                                        stroke-linejoin="round" />
+                                </svg>
+
+                            </span>
+                            {{form.phone_number}}
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="col-12 py-2">
+                        <div class="input-group rounded rounded-3 border border-2 border-primary">
+                            <span class="input-group-text bg-white " id="basic-addon1" style="border-right: none;"><svg
+                                    fill="#9a0e00" height="19px" width="19px" version="1.1" id="Layer_1"
+                                    xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                    viewBox="0 0 392.792 392.792" xml:space="preserve">
+                                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                    <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                                    <g id="SVGRepo_iconCarrier">
+                                        <g>
+                                            <g>
+                                                <path
+                                                    d="M71.24,0.162c-25.471,0-46.287,20.752-46.287,46.287S45.64,92.735,71.24,92.735c25.471,0,46.287-20.816,46.287-46.287 S96.711,0.162,71.24,0.162z M71.24,70.949c-13.511,0-24.501-10.99-24.501-24.501s10.99-24.501,24.501-24.501 s24.501,10.99,24.501,24.501S84.752,70.949,71.24,70.949z">
+                                                </path>
+                                            </g>
+                                        </g>
+                                        <g>
+                                            <g>
+                                                <path
+                                                    d="M381.867,288.873h-82.23c-6.012,0-10.925,4.848-10.925,10.925v30.061h-25.018V207.354h25.018v30.061 c0,6.012,4.848,10.925,10.925,10.925h81.972c6.012,0,10.925-4.849,10.925-10.925v-81.972c0-6.012-4.849-10.925-10.925-10.925 h-81.972c-6.012,0-10.925,4.849-10.925,10.925v30.061h-25.018V62.998h25.018v30.061c0.065,6.012,4.913,10.861,10.925,10.861 h81.972c6.012,0,10.925-4.849,10.925-10.925V11.022c0-6.012-4.849-10.925-10.925-10.925h-81.972 c-6.012,0-10.925,4.848-10.925,10.925v30.061h-35.943c-6.012,0-10.925,4.849-10.925,10.925v133.43h-99.362v-33.616 c0-23.208-18.101-42.667-41.18-44.412c-4.396-0.323-8.598,2.069-10.602,6.012l-19.523,39.305l-19.523-39.305 c-2.004-4.008-6.206-6.335-10.602-6.012C18.036,109.35,0,128.808,0,151.887v109.317c0,6.012,4.849,10.925,10.925,10.925h9.115 v109.64c0,6.012,4.849,10.925,10.925,10.925h80.614c6.012,0,10.925-4.849,10.925-10.925v-109.64h9.115 c6.012,0,10.925-4.848,10.925-10.925v-53.915h99.556v133.43c0,6.012,4.848,10.925,10.925,10.925h35.943v30.061 c0,6.012,4.849,10.925,10.925,10.925h81.972c6.012,0,10.925-4.849,10.925-10.925v-81.907 C392.792,293.786,387.943,288.873,381.867,288.873z M310.562,166.368h60.121v60.121h-60.121V166.368z M310.562,21.947h60.121 v60.186h-60.121V21.947z M100.59,370.909H82.036v-44.865c0-6.012-4.849-10.925-10.925-10.925c-6.077,0-10.925,4.848-10.925,10.925 v44.865H41.697v-98.78h58.893V370.909z M120.566,250.343h-98.78v-98.457c0-9.374,5.818-17.648,14.158-21.01l25.471,51.329 c1.875,3.685,5.624,6.012,9.762,6.012c4.202,0,7.951-2.327,9.762-6.012l25.471-51.329c8.339,3.426,14.158,11.572,14.158,21.01 V250.343z M370.683,370.844h-60.121v-60.121h60.121V370.844z">
+                                                </path>
+                                            </g>
+                                        </g>
+                                    </g>
+                                </svg>
+
+                            </span>
+                            {{form.rol}}
+
+                        </div>
+
+                    </div>
+
+
+
+
+
+
+
+
+                    <div class="col-6 col-sm-3 py-2 px-0 text-end">
+                        <button class="btn fnOS_Bold_Boton_10 text-primary my-auto px-3 border border-0" type="button"
+                            data-bs-dismiss="modal" aria-label="Close">
+
+                            <span style="border-bottom: 2px solid">Cancelar</span>
+
+                        </button>
+
+                    </div>
+                    <div class="col-6 col-sm-3 py-2 px-0 text-start">
+                        <button type="submit" onclick="verificarCampos()"
+                            class="btn fnOS_Bold_Boton_10 btn-primary border border-2 border-primary text-corporateTan500 my-auto rounded rounded-3 px-3">
+
+                            Guardar
+
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </form>
 </div>
+
+
 
 {% endblock %}
