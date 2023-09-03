@@ -2,12 +2,13 @@
 {% load static %}
 {% block body %}
 
-<div class="container">
-    <h1>Lista de empleados</h1>
+<div class="container ">
 
-    <div class="row">
+    <div class="row py-3">
+        <h1>Lista de empleados</h1>
+
         <div class="col-2 d-flex">
-            <a href="{% url 'Empleados:empleadosCrear' %}" class="rounded-5 text-white py-2 px-3"
+            <a href="{% url 'Empleados:empleadosCrear' %}" class="rounded-5 text-white py-2 px-3 text-decoration-none"
                 style="background-color: #199fd6;">
                 Agregar empleado
             </a>
@@ -15,8 +16,8 @@
         <div class="col-5 d-flex justify-content-center align-items-center">
             <div class="input-group">
 
-                <input type="text" class="form-control" placeholder="Buscar empleado por nombre" aria-label=""
-                    aria-describedby="basic-addon1" id="searchBar" onkeyup="getCardsReplace(this.value)">
+                <input type="text" class="form-control shadow-none" placeholder="Buscar empleado por nombre"
+                    aria-label="" aria-describedby="basic-addon1" id="searchBar" onkeyup="getCardsReplace(this.value)">
             </div>
         </div>
 
@@ -24,7 +25,7 @@
 
 
     </div>
-    <div id="cardHolder">
+    <div id="cardHolder" class="border border-3 rounded rounded-3">
     </div>
 
 
