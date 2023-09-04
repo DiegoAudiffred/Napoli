@@ -14,6 +14,7 @@
             <th>Total consumido</th>
             <th>Editar</th>
             <th>Eliminar</th>
+
         </tr>
 
     </thead>
@@ -32,13 +33,52 @@
             <td>$ {{empleado.total_gastado}} mxn</td>
 
             <td><a href="{% url 'Clientes:clientesEditar' empleado.id %}">Modificar cliente</a></td>
-            <td><a href="">Eliminar cliente</a></td>
+            <td><a type="button" class="" href="" data-bs-toggle="modal"
+                    data-bs-target="#exampleModal{{empleado.id}}">Eliminar
+                    cliente</a>
+
+            </td>
         </tr>
+        <div class="modal fade" id="exampleModal{{empleado.id}}" tabindex="-1"
+            aria-labelledby="exampleModalLabel{{empleado.id}}" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">¿Seguro que deseas eliminar a
+                            {{empleado.first_name}}?</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-12 text-center">
+                                <div class="py-3">
+                                    <h2>Escribe "Eliminar" para habilitar el botón
+                                    </h2>
+                                </div>
+                                <input type="text" name="" id="inputEliminar{{empleado.id}}"
+                                    onkeyup="checkText({{empleado.id}})" class="w-50 rounded rounded-3 py-2">
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cancelar</button>
+                        <a type="button" href="{% url 'Clientes:clientesEliminar' empleado.id %}" class="btn disabled"
+                            id="botonEliminar{{empleado.id}}" style="background-color: red;color: white;"
+                            disabled>Eliminar</a>
+                    </div>
+                </div>
+            </div>
+        </div>
         {% endfor %}
     </tbody>
 </table>
 
 
+<!-- Button trigger modal -->
+
+
+<!-- Modal -->
 
 
 <input type="hidden" name="totalPaginas" id="totalPaginas" value="{{totalPaginas}}">

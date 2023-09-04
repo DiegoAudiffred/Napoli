@@ -12,14 +12,13 @@ from authentication.forms import createUserForm
 
 # Create your views here.
 def clientesIndex(request):
-    clientes = Cliente.objects.all()
-    return render(request, 'Clientes/indexClientes.html',{'clientes':clientes})
+    return render(request, 'Clientes/indexClientes.html')
 
 
 def clientsCard(request):
     jsonObject = json.load(request)['jsonBody']
     search = jsonObject["search"]    
-    employees = Cliente.objects.all()
+    employees = Cliente.objects.filter(is_active=True)
     if search != "":
         employees = employees.filter(
             Q(first_name__icontains=search) 
@@ -47,8 +46,12 @@ def clientesEditar(request,id):
     return render(request, 'Clientes/editarCliente.html',{'form':form,'user':user})
 
 
-
-
+def clientesEliminar(request,id):
+    clientes = Cliente.objects.get(id=id)
+    print(clientes)
+    clientes.is_active=False
+    clientes.save()
+    return redirect("Clientes:clientesIndex")
 
 
 def clientesCrear(request):

@@ -2,7 +2,7 @@
 {% load static %}
 {% block body %}
 
-<div class="container ">
+<div class="container">
 
     <div class="row py-3">
         <h1>Lista de clientes</h1>
@@ -33,5 +33,22 @@
 
 
 <script src="{% static 'js/clientsAjaxSearch.js' %}"></script>
+<script>
+
+    function checkText(id) {
+        if (document.getElementById("inputEliminar" + id).value == "Eliminar") {
+            document.getElementById("botonEliminar" + id).classList.add("enabled");
+            document.getElementById("botonEliminar" + id).classList.remove("disabled");
+
+
+        } else {
+            document.getElementById("botonEliminar" + id).classList.remove("enabled");
+            document.getElementById("botonEliminar" + id).classList.add("disabled");
+
+        }
+    }
+
+</script>
+
 
 {% endblock %}

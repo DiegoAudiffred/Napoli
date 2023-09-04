@@ -82,7 +82,7 @@ class Cliente(models.Model):
     total_gastado= models.FloatField(null=True,blank=True,default=0)
     email = models.EmailField('Correo electrónico', unique=True, blank=True, null=True)
     phone_number = models.CharField("Teléfono", max_length=15, unique=True, null=True,blank=True)
-
+    is_active= models.BooleanField(default=True)
     
 def _str_(self):
         return self.first_name

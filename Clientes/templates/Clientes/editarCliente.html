@@ -67,7 +67,7 @@
 </style>
 <script>
     var loadFile = function (event) {
-        var output = document.getElementById('output');
+        var output = t.getElementById('output');
         output.src = URL.createObjectURL(event.target.files[0]);
         output.onload = function () {
             URL.revokeObjectURL(output.src) // free memory
@@ -78,7 +78,7 @@
 
 </script>
 <script>
-    document.getElementById('id_url').addEventListener('change', function (event) {
+    document.getElementById('id_url').addEventListener('change', functnt) {
         const file = event.target.files[0];
         if (file) {
             const reader = new FileReader();
