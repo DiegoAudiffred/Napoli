@@ -99,6 +99,7 @@ class User(AbstractUser):
     rol = models.CharField( 
         choices=ROLES, max_length=20)
     objects = UserManager()
+    is_active= models.BooleanField(default=True)
 
 
     def _str_(self):
@@ -121,15 +122,25 @@ class Bebidas(models.Model):
 
 
 
+
+
 class Ingredientes(models.Model):
     nombre = models.CharField(max_length=100)
     precio = models.DecimalField(max_digits=8, decimal_places=2)
     unidad = models.CharField(choices=UNIDADES, max_length=20)
     cantidad = models.DecimalField(max_digits=8,decimal_places=2,default=0,null=False)
-    fecha_compra = models.DateTimeField(default=timezone.now)
-
+    fecha = models.DateField(default=timezone.now())  # Establecer la fecha actual como valor predeterminado
     def __str__(self):
         return self.nombre
+    
+
+class Compras(models.Model):
+    ingrediente = models.ForeignKey(Ingredientes, on_delete=models.CASCADE)
+    cantidades = models.DecimalField(max_digits=8, decimal_places=2, default=0, null=False)
+    fecha = models.DateField(default=timezone.now())  # Establecer la fecha actual como valor predeterminado
+    precio = models.DecimalField(max_digits=8, decimal_places=2)
+
+
 
 class Plato(models.Model):
     nombre = models.CharField(max_length=100)

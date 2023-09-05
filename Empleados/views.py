@@ -10,13 +10,12 @@ from db.models import Cliente, User
 from authentication.forms import createUserForm
 # Create your views here.
 def empleadosIndex(request):
-    empleados = User.objects.all()
-    return render(request, 'Empleados/indexEmpleados.html',{'empleados':empleados})
+    return render(request, 'Empleados/indexEmpleados.html')
 
 def employeeCard(request):
     jsonObject = json.load(request)['jsonBody']
     search = jsonObject["search"]    
-    employees = User.objects.all()
+    employees = User.objects.filter(is_active=True)
     if search != "":
         employees = employees.filter(
             Q(first_name__icontains=search) 
@@ -72,3 +71,8 @@ def empleadosCrear(request):
     return render(request, 'Empleados/crearEmpleado.html',{'form':form})
 
 
+def empleadosEliminar(request,id):
+    clientes = User.objects.get(id=id)
+    clientes.is_active=False
+    clientes.save()
+    return redirect("Empleados:empleadosIndex")

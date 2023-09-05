@@ -31,7 +31,22 @@
 
 </div>
 
+<script>
 
+    function checkText(id) {
+        if (document.getElementById("inputEliminar" + id).value == "Eliminar") {
+            document.getElementById("botonEliminar" + id).classList.add("enabled");
+            document.getElementById("botonEliminar" + id).classList.remove("disabled");
+
+
+        } else {
+            document.getElementById("botonEliminar" + id).classList.remove("enabled");
+            document.getElementById("botonEliminar" + id).classList.add("disabled");
+
+        }
+    }
+
+</script>
 <script src="{% static 'js/employeesAjaxSearch.js' %}"></script>
 
 {% endblock %}
