@@ -90,7 +90,7 @@ def _str_(self):
 class User(AbstractUser):
 
     username = None
-    email = models.EmailField('Correo electrónico', unique=True)
+    email = models.EmailField('Correo electrónico', unique=True, blank=True, null=True)
     first_name = models.CharField("Nombre", max_length=200, null=True, blank=True)
     phone_number = models.CharField("Teléfono", max_length=15, unique=True, null=True)
     url = models.ImageField(upload_to="uploads/gallery/",null=True, blank=True)

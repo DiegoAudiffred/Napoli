@@ -31,6 +31,7 @@ def empleadosEditar(request,id):
     if request.method == "POST":
         form = createEmployeeForm(request.POST, request.FILES, instance=user)
         if form.is_valid():
+                print(form)
                 user = form.save()
                 user.save()
 
