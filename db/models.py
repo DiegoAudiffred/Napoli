@@ -129,15 +129,15 @@ class Ingredientes(models.Model):
     precio = models.DecimalField(max_digits=8, decimal_places=2)
     unidad = models.CharField(choices=UNIDADES, max_length=20)
     cantidad = models.DecimalField(max_digits=8,decimal_places=2,default=0,null=False)
-    fecha = models.DateField(default=timezone.now())  # Establecer la fecha actual como valor predeterminado
+    fecha_compra = models.DateField(timezone.now())  # Establecer la fecha actual como valor predeterminado
     def __str__(self):
         return self.nombre
     
 
 class Compras(models.Model):
     ingrediente = models.ForeignKey(Ingredientes, on_delete=models.CASCADE)
-    cantidades = models.DecimalField(max_digits=8, decimal_places=2, default=0, null=False)
-    fecha = models.DateField(default=timezone.now())  # Establecer la fecha actual como valor predeterminado
+    cantidades = models.DecimalField(max_digits=8, decimal_places=2, null=False)
+    fecha = models.DateField(timezone.now())  # Establecer la fecha actual como valor predeterminado
     precio = models.DecimalField(max_digits=8, decimal_places=2)
 
 
