@@ -1,11 +1,11 @@
 
 currPage = 1;
 search = ""
-currentOrder = "id"
+currentOrder = "fecha"
 
 
 window.addEventListener('DOMContentLoaded', (event) => {
-    currentOrder = "id"
+    currentOrder = "fecha"
     getCardsReplace2("", 1);
 });
 
@@ -43,7 +43,6 @@ window.onscroll = function (ev) {
 
 function getCardsReplace2(search, page = 1) {
     search = search
-    console.log(search)
     currPage = 1;
     fetch('AjaxSearch2', {
         method: 'POST',

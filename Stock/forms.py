@@ -28,7 +28,7 @@ class createStockForm(forms.ModelForm):
 
         
         self.fields['fecha_compra'].widget.attrs.update({'class':'form-control shadow-none bg-corporateTan200  px-2 py-1 text-primary','placeholder':' Última fecha*','rows':'1', 'aria-label':'Username','aria-describedby':'basic-addon1','style':'border-left:none', })
-        self.fields['fecha_compra'].required = True
+        self.fields['fecha_compra'].required = False
 
 
 class createCompraForm(forms.ModelForm):
@@ -54,6 +54,6 @@ class createCompraForm(forms.ModelForm):
 
         
         self.fields['fecha'].widget.attrs.update({'class':'form-control shadow-none bg-corporateTan200  px-2 py-1 text-primary','placeholder':'Fecha de compra*','rows':'1', 'aria-label':'Username','aria-describedby':'basic-addon1','style':'border-left:none', })
-        self.fields['fecha'].required = True
+        self.fields['fecha'].required = False
 
 

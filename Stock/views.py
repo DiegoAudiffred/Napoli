@@ -1,3 +1,4 @@
+import datetime
 import json
 from django.shortcuts import render
 from django.db.models import Q
@@ -20,23 +21,29 @@ def stockIndex(request):
 
 def stockCrear(request):
     if request.method == "POST":
+        print("POST")
         form = createStockForm(request.POST, request.FILES)
    
         if form.is_valid():
             user = form.save()
             user.save()
-    
+            user.fecha = datetime.now().strftime('%Y-%m-%dT%H:%M:%S')
+
+            print("Valido")
+
             return redirect("Stock:stockIndex")
         else:
+            print(form.errors)
+            print("No Valido")
+
             return render(request, 'Stock/crearStock.html',{'form':form})
-          
-
-    form = createStockForm()
-
-    return render(request, 'Stock/crearStock.html',{'form':form})
+    print("NADA")
+    return redirect("Stock:stockIndex")
 
 def compraCrear(request):
     if request.method == "POST":
+        print("POST")
+
         form = createCompraForm(request.POST, request.FILES)
    
         if form.is_valid():
@@ -44,18 +51,22 @@ def compraCrear(request):
             user.save()
             ingrediente = form.cleaned_data['ingrediente']
             cantidades = form.cleaned_data['cantidades']
+
             suma = Ingredientes.objects.get(nombre=ingrediente)
             suma.cantidad = suma.cantidad + cantidades
             suma.save()
-            
+            print("Valido")
+
             return redirect("Stock:stockIndex")
+        
         else:
+            print(form.errors)
+            print("No Valido")
             return render(request, 'Stock/compraCrear.html',{'form':form})
           
+    print("GET")
 
-    form = createCompraForm()
-
-    return render(request, 'Stock/compraCrear.html',{'form':form})
+    return redirect("Stock:stockIndex")
 
 def stockCard(request):
     jsonObject = json.load(request)['jsonBody']
@@ -78,8 +89,8 @@ def comprasCard(request):
         totalCompras = totalCompras.filter(
             Q(ingrediente__nombre__icontains=search) 
         )
-    totalCompras = totalCompras[:10]
-  
+    totalCompras = totalCompras[:5]
+
     return render(request, "Stock/compraCard.html",{'totalCompras':totalCompras})
 
 
