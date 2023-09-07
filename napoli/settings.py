@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'Ventas',
     'Empleados',
     'Clientes',
-
+    'Menu', 
     #Django
     'django.contrib.admin',
     'django.contrib.auth',
