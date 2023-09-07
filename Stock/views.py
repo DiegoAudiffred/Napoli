@@ -27,7 +27,6 @@ def stockCrear(request):
         if form.is_valid():
             user = form.save()
             user.save()
-            user.fecha = datetime.now().strftime('%Y-%m-%dT%H:%M:%S')
 
             print("Valido")
 
@@ -89,7 +88,7 @@ def comprasCard(request):
         totalCompras = totalCompras.filter(
             Q(ingrediente__nombre__icontains=search) 
         )
-    totalCompras = totalCompras[:5]
+    totalCompras = totalCompras[:10]
 
     return render(request, "Stock/compraCard.html",{'totalCompras':totalCompras})
 

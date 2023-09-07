@@ -137,7 +137,7 @@ class Ingredientes(models.Model):
 class Compras(models.Model):
     ingrediente = models.ForeignKey(Ingredientes, on_delete=models.CASCADE)
     cantidades = models.DecimalField(max_digits=8, decimal_places=2, null=False)
-    fecha = models.DateField(default=timezone.now())  # Establecer la fecha actual como valor predeterminado
+    fecha = models.DateTimeField(default=timezone.now())  # Establecer la fecha actual como valor predeterminado
     precio = models.DecimalField(max_digits=8, decimal_places=2)
 
 
