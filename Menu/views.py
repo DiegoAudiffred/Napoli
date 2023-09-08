@@ -5,12 +5,13 @@ from django.db.models import Q
 # Create your views here.
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
-from Menu.forms import createEmployeeForm
+from Menu.forms import createMenuForm
 from db.models import Cliente, User, Menu
-from authentication.forms import createUserForm
 # Create your views here.
 def menuIndex(request):
-    return render(request, 'Menu/menuIndex.html')
+    form = createMenuForm()
+
+    return render(request, 'Menu/menuIndex.html',{'form':form})
 
 def menuCard(request):
     jsonObject = json.load(request)['jsonBody']
@@ -29,7 +30,7 @@ def menuCard(request):
 def menuEditar(request,id):
     user = User.objects.get(id=id)
     if request.method == "POST":
-        form = createEmployeeForm(request.POST, request.FILES, instance=user)
+        form = createMenuForm(request.POST, request.FILES, instance=user)
         if form.is_valid():
                 print(form)
                 user = form.save()
@@ -40,7 +41,7 @@ def menuEditar(request,id):
                 return render(request, 'Menu/editarEmpleado.html',{'form':form, 'user':user})
 
 
-    form = createEmployeeForm(instance=user)
+    form = createMenuForm(instance=user)
     print(user)
     return render(request, 'Menu/editarEmpleado.html',{'form':form,'user':user})
 
@@ -51,25 +52,23 @@ def menuEditar(request,id):
 
 def menuCrear(request):
     if request.method == "POST":
-        form = createEmployeeForm(request.POST, request.FILES)
+        form = createMenuForm(request.POST, request.FILES)
    
         if form.is_valid():
             user = form.save()
             user.save()
-            
-            user.set_password('Super1')
-          
+                      
             user.save()
 
             
-            return redirect("Menu:empleadosIndex")
+            return redirect("Menu:menuIndex")
         else:
-            return render(request, 'Menu/crearEmpleado.html',{'form':form})
+            return render(request, 'Menu/crearIndex.html',{'form':form})
           
 
-    form = createEmployeeForm()
+    form = createMenuForm()
 
-    return render(request, 'Menu/crearEmpleado.html',{'form':form})
+    return redirect("Menu:menuIndex")
 
 
 def menuEliminar(request,id):

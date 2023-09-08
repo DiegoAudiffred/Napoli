@@ -1,37 +1,48 @@
 from django import forms
-from db.models import User
-from django.forms import ImageField
+from db.models import Ingredientes, Menu
+from django.forms import ImageField, ModelChoiceField, ModelMultipleChoiceField, MultipleChoiceField
 from django.forms.widgets import ClearableFileInput
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
-class createEmployeeForm(UserCreationForm):
+from django_select2.forms import Select2MultipleWidget
+
+class createMenuForm(forms.ModelForm):
 
     class Meta:
-        model = User
-        fields = ['email','first_name','phone_number','url', 'rol','password1','password2']
-        
+        model = Menu
+        fields = ['nombre','precio','descripcion','categoria', 'ingredientes','url']
+      
 
     def __init__(self, *args, **kwargs):
-        super(createEmployeeForm, self).__init__(*args, **kwargs)
-        self.fields['password1'].required = False
-        self.fields['password2'].required = False
+        super(createMenuForm, self).__init__(*args, **kwargs)
+    
+        OPTIONS = (
+        ("AUT", "Austria"),
+        ("DEU", "Germany"),
+        ("NLD", "Neitherlands"),
+        )
+        self.fields['nombre'].required = False
+        self.fields['nombre'].widget.attrs.update({'class':'form-control shadow-none bg-corporateTan200  px-2 py-1 text-primary','placeholder':' Nombre que aparece en el menú*','rows':'1', 'aria-label':'Username','aria-describedby':'basic-addon1','style':'border-left:none', })
 
-        self.fields['email'].required = False
-        self.fields['email'].widget.attrs.update({'class':'form-control shadow-none bg-corporateTan200  px-2 py-1 text-primary','placeholder':' Correo*','rows':'1', 'aria-label':'Username','aria-describedby':'basic-addon1','style':'border-left:none', })
+        self.fields['precio'].required = True
+        self.fields['precio'].widget.attrs.update({'class':'form-control shadow-none bg-corporateTan200  px-2 py-1 text-primary','placeholder':'Precio en el menú*','rows':'1', 'aria-label':'Username','aria-describedby':'basic-addon1','style':'border-left:none', })
 
-        self.fields['first_name'].required = True
-        self.fields['first_name'].widget.attrs.update({'class':'form-control shadow-none bg-corporateTan200  px-2 py-1 text-primary','placeholder':'Nombre del empleado*','rows':'1', 'aria-label':'Username','aria-describedby':'basic-addon1','style':'border-left:none', })
+        self.fields['descripcion'].required = True
+        self.fields['descripcion'].widget.attrs.update({'class':'form-control shadow-none bg-corporateTan200  px-2 py-1 text-primary','placeholder':' Breve descripción*','rows':'1', 'aria-label':'Username','aria-describedby':'basic-addon1','style':'border-left:none', })
+        
+        self.fields['categoria'].required = True
+        self.fields['categoria'].widget.attrs.update({'class':'form-control shadow-none bg-corporateTan200  px-2 py-1 text-primary','placeholder':' Categoría*','rows':'1', 'aria-label':'Username','aria-describedby':'basic-addon1','style':'border-left:none', })
 
-        self.fields['phone_number'].required = True
-        self.fields['phone_number'].widget.attrs.update({'class':'form-control shadow-none bg-corporateTan200  px-2 py-1 text-primary','placeholder':' Número telefónico*','rows':'1', 'aria-label':'Username','aria-describedby':'basic-addon1','style':'border-left:none', })
+        self.fields['ingredientes'].required = True 
+        self.fields['ingredientes'].widget.attrs.update({'class':'form-control shadow-none bg-corporateTan200  px-2 py-1 text-primary','placeholder':' Ingredientes*','rows':'1', 'aria-label':'Username','aria-describedby':'basic-addon1','style':'border-left:none', })
+        self.fields['ingredientes']= ModelMultipleChoiceField (widget=forms.CheckboxSelectMultiple,queryset=Ingredientes.objects.all())
 
+
+     
 
         self.fields['url'].required = False
         self.fields['url'].widget.attrs.update({'onchange':'loadFile(event);'})
 
         
-        self.fields['rol'].widget.attrs.update({'class':'form-control shadow-none bg-corporateTan200  px-2 py-1 text-primary','placeholder':' Rol del empleado*','rows':'1', 'aria-label':'Username','aria-describedby':'basic-addon1','style':'border-left:none', })
-
-        self.fields['rol'].required = True
-
+ 
 
 

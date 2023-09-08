@@ -61,7 +61,7 @@ def compraCrear(request):
         else:
             print(form.errors)
             print("No Valido")
-            return render(request, 'Stock/compraCrear.html',{'form':form})
+            return render(request, 'Stock/menuCrear.html',{'form':form})
           
     print("GET")
 
