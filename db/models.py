@@ -76,25 +76,16 @@ class UserManager(BaseUserManager):
         return self._create_user(email, password, **extra_fields)
 
 
-class Cliente(models.Model):
-    first_name = models.CharField("Nombre", max_length=200)
-    total_compras= models.IntegerField(null=True,blank=True,default=0)
-    total_gastado= models.FloatField(null=True,blank=True,default=0)
-    email = models.EmailField('Correo electrónico', unique=True, blank=True, null=True)
-    phone_number = models.CharField("Teléfono", max_length=15, unique=True, null=True,blank=True)
-    is_active= models.BooleanField(default=True)
-    
-def _str_(self):
-        return self.first_name
+
 
 class User(AbstractUser):
 
     username = None
     email = models.EmailField('Correo electrónico', unique=True, blank=True, null=True)
-    first_name = models.CharField("Nombre", max_length=200, null=True, blank=True)
+    first_name = models.CharField("Nombre", max_length=200, null=True, blank=True,unique=True)
     phone_number = models.CharField("Teléfono", max_length=15, unique=True, null=True)
     url = models.ImageField(upload_to="uploads/gallery/",null=True, blank=True)
-    USERNAME_FIELD = 'email'
+    USERNAME_FIELD = 'first_name'
     REQUIRED_FIELDS = ['phone_number']
     rol = models.CharField( 
         choices=ROLES, max_length=20)
@@ -103,7 +94,7 @@ class User(AbstractUser):
 
 
     def _str_(self):
-        return self.email, self.first_name
+        return self.first_name
     
 
 
@@ -141,6 +132,17 @@ class Compras(models.Model):
     precio = models.DecimalField(max_digits=8, decimal_places=2)
 
 
+class Cliente(models.Model):
+    
+    nombre = models.CharField(max_length=200)
+    total_compras= models.IntegerField(null=True,blank=True,default=0)
+    total_gastado= models.FloatField(null=True,blank=True,default=0)
+    email = models.EmailField('Correo electrónico', unique=True, blank=True, null=True)
+    phone_number = models.CharField("Teléfono", max_length=15, unique=True, null=True,blank=True)
+    is_active= models.BooleanField(default=True)
+    
+    def __str__(self):
+        return self.nombre
 
 class Menu(models.Model):
     nombre = models.CharField(max_length=100)
@@ -153,3 +155,16 @@ class Menu(models.Model):
 
     def __str__(self):
         return self.nombre
+
+class Venta(models.Model):
+    cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE,blank=True,null=True)
+    empleado = models.ForeignKey(User, on_delete=models.CASCADE,blank=True,null=True)
+    total = models.DecimalField(max_digits=8, decimal_places=2,default=0,blank=True,null=True)
+    fecha_compra = models.DateField(default=timezone.now())  # Establecer la fecha actual como valor predeterminado
+    is_open = models.BooleanField(default=True)
+    
+class VentaMenu(models.Model):
+    venta = models.ForeignKey(Venta, on_delete=models.CASCADE)
+    menu = models.ForeignKey(Menu, on_delete=models.CASCADE)
+    cantidad = models.IntegerField(blank=True,null=True)
+    totalfinal = models.DecimalField(max_digits=8, decimal_places=2,default=1,blank=True,null=True)

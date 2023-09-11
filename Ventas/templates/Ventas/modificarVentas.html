@@ -1,0 +1,94 @@
+{% extends 'layout/layout.html' %}
+{% load static %}
+{% block body %}
+<div class="container">
+
+    <div class="row">
+        <div class="col-1 d-flex align-items-center">
+            Venta: {{venta.id}}
+        </div>
+        <div class="col-2 d-flex align-items-center">
+            Empleado: {{form.empleado}}
+        </div>
+        <div class="col-2 d-flex align-items-center">
+            Cliente: {{form.cliente}}
+        </div>
+        <div class="col-2">
+            <a href="" class="btn">Guardar cambios</a>
+        </div>
+        <div class="col-2">
+            <form action="{% url 'Ventas:cerrarVenta' venta.id %}" method="POST" enctype="multipart/form-data"
+                id="user-profile-form">
+                {% csrf_token %}
+                <button class="card-link btn" type="submit">Cerrar venta</button>
+
+            </form>
+        </div>
+    </div>
+
+
+
+    <div class="row">
+        <div class="col-12">
+            <div class="table-responsive">
+                <table class="table border border-3 table-hover table-bordered border-primary table-sm">
+                    <thead>
+                        <th>Imagen</th>
+                        <th>ID</th>
+
+                        <th>Platillo</th>
+                        <th>Precio</th>
+                        <th>cantidad</th>
+                        <th>Total</th>
+                    </thead>
+                    <tbody>
+
+                        {% for list in lista%}
+                        <tr>
+                            <th>
+                                <img src="{{list.menu.url.url}}" alt="" width="100px" height="100px">
+                            </th>
+                            <th>{{list.venta.id}}
+                            </th>
+                            <th>
+                                {{list.menu}}
+
+                            </th>
+                            <th>
+                                $ {{list.menu.precio}} mxn
+                            </th>
+
+                            <th>
+                                {{list.cantidad}}
+                            </th>
+                            <th>
+                                $ {{list.totalfinal}} mxn
+                            </th>
+                        </tr>
+
+
+                        {% endfor %}
+                    </tbody>
+
+                    <tfoot>
+                        <tr>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th>Total: $ {{total}} mxn
+                            </th>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+            <div class="row">
+                <div class="col-3 text-end">
+                    <a href="">Agregar venta</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,17 +1,64 @@
 from django import forms
-from db.models import ROLES 
-from django.contrib.auth.forms import UserCreationForm
-from db.models import Cliente
+from db.models import Ingredientes, Menu, Venta, VentaMenu
+from django.forms import ImageField, ModelChoiceField, ModelMultipleChoiceField, MultipleChoiceField
+from django.forms.widgets import ClearableFileInput
+from django.contrib.auth.forms import UserCreationForm, UserChangeForm
+from django_select2.forms import Select2MultipleWidget
 
+class createVentaForm(forms.ModelForm):
 
-
-class createCliente(forms.Form):
     class Meta:
-        model = Cliente
-        fields = ['first_name','last_name','total_compras','total_gastado']
-        
+        model = Venta
+        fields = ['cliente','empleado','total','fecha_compra', 'is_open']
+      
+
     def __init__(self, *args, **kwargs):
-        super(createCliente, self).__init__(*args, **kwargs)
-   
-        self.fields['first_name'].required = True
-        self.fields['last_name'].required = True
+        super(createVentaForm, self).__init__(*args, **kwargs)
+    
+    
+        self.fields['cliente'].required = False
+        self.fields['cliente'].widget.attrs.update({'class':'form-control shadow-none bg-corporateTan200  px-2 py-1 text-primary','placeholder':' Nombre que aparece en el menú*','rows':'1', 'aria-label':'Username','aria-describedby':'basic-addon1','style':'border-left:none', })
+
+        self.fields['empleado'].required = False
+        self.fields['empleado'].widget.attrs.update({'class':'form-control shadow-none bg-corporateTan200  px-2 py-1 text-primary','placeholder':'Precio en el menú*','rows':'1', 'aria-label':'Username','aria-describedby':'basic-addon1','style':'border-left:none', })
+
+        self.fields['total'].required = False
+        self.fields['total'].widget.attrs.update({'class':'form-control shadow-none bg-corporateTan200  px-2 py-1 text-primary','placeholder':' Breve descripción*','rows':'1', 'aria-label':'Username','aria-describedby':'basic-addon1','style':'border-left:none', })
+        
+        self.fields['fecha_compra'].required = False
+        self.fields['fecha_compra'].widget.attrs.update({'class':'form-control shadow-none bg-corporateTan200  px-2 py-1 text-primary','placeholder':' Categoría*','rows':'1', 'aria-label':'Username','aria-describedby':'basic-addon1','style':'border-left:none', })
+
+        self.fields['is_open'].required = False 
+        self.fields['is_open'].default = True 
+
+        self.fields['is_open'].widget.attrs.update({'class':'form-control shadow-none bg-corporateTan200  px-2 py-1 text-primary','placeholder':' Ingredientes*','rows':'1', 'aria-label':'Username','aria-describedby':'basic-addon1','style':'border-left:none', })
+
+
+class modifyVentaForm(forms.ModelForm):
+
+    class Meta:
+        model = Venta
+        fields = ['is_open']
+      
+
+
+
+        
+class VentaMenuForm(forms.ModelForm):
+
+    class Meta:
+        model = VentaMenu
+        fields = ['venta','menu','cantidad']
+      
+
+    def __init__(self, *args, **kwargs):
+        super(VentaMenuForm, self).__init__(*args, **kwargs)
+    
+    
+        self.fields['venta'].required = True
+        self.fields['venta'].widget.attrs.update({'class':'form-control shadow-none bg-corporateTan200  px-2 py-1 text-primary','placeholder':' Nombre que aparece en el menú*','rows':'1', 'aria-label':'Username','aria-describedby':'basic-addon1','style':'border-left:none', })
+
+        self.fields['cantidad'].required = False
+        self.fields['cantidad'].widget.attrs.update({'class':'form-control shadow-none bg-corporateTan200  px-2 py-1 text-primary','placeholder':' Breve descripción*','rows':'1', 'aria-label':'Username','aria-describedby':'basic-addon1','style':'border-left:none', })
+
+

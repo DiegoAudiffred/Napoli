@@ -1,15 +1,66 @@
+import json
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
-from db.models import Cliente
-from authentication.forms import createUserForm
+from Ventas.forms import VentaMenuForm, createVentaForm, modifyVentaForm
+from db.models import Cliente, Venta, VentaMenu
+from django.db.models import Q
 # Create your views here.
 def ventasIndex(request):
-   
-    return render(request, 'Ventas/indexVentas.html')
+    form = createVentaForm()
+    form2 = modifyVentaForm()
 
-def crearVenta(request):
+    ventas = Venta.objects.filter(is_open=True)
+    print(ventas)
+    return render(request, 'Ventas/indexVentas.html',{'form':form,'ventas':ventas,'form2':form2})
+
+
+
+def modificarVenta(request,id):
+    venta = Venta.objects.get(id=id)
+    lista = VentaMenu.objects.filter(venta=id)
+    total = 0
+    for ventas in lista:
+        total += (ventas.menu.precio) * ventas.cantidad
+        ventas.totalfinal = (ventas.menu.precio) * ventas.cantidad
+        venta.save()
+        
+    venta.total = total
     
-    return HttpResponse("Vendido")
+    venta.save()
+    print(venta.total)
+    
+    form = modifyVentaForm(instance=venta)
+    form2 = VentaMenuForm()
+    return render(request, 'Ventas/modificarVentas.html',{'venta':venta,'lista':lista,'form':form,'form2':form2,'total':total})
 
 
+
+
+def cerrarVenta(request,id):
+    venta = Venta.objects.get(id=id)
+    venta.is_open= False
+    venta.save()
+    return redirect('Ventas:ventasIndex')
+
+
+
+def ventasCrear(request):
+    if request.method == "POST":
+        form = createVentaForm(request.POST, request.FILES)
+   
+        if form.is_valid():
+            user = form.save()
+            user.is_open = True
+            user.save()
+                      
+
+            
+            return redirect("Ventas:ventasIndex")
+        else:
+            return render(request, 'Ventas/ventasIndex.html',{'form':form})
+          
+
+    form = createVentaForm()
+
+    return redirect("Ventas:ventasIndex")
 
