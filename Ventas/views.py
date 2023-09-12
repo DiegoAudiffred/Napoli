@@ -27,9 +27,9 @@ def modificarVenta(request,id):
         print(ven.totalfinal)
         
         
-    #venta.total = total
-    #
-    #venta.save()
+    venta.total = total
+    
+    venta.save()
     #print(venta.total)
     
     form = modifyVentaForm(instance=venta)
@@ -57,14 +57,13 @@ def cerrarVenta(request,id):
 
 def agregarVenta(request,id):
     
-    venta = Venta.objects.get(id=id)
-    lista = VentaMenu.objects.filter(venta=id)
-    total = 0
+    ventas = Venta.objects.get(id=id)
 
     if request.method == "POST":
         form = VentaMenuForm(request.POST, request.FILES)
-        if form.is_valid():
-              
+        if form.is_valid():            
+            form.instance.venta = ventas
+
             user = form.save()
             user.save()
                       

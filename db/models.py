@@ -85,7 +85,7 @@ class User(AbstractUser):
     first_name = models.CharField("Nombre", max_length=200, null=True, blank=True,unique=True)
     phone_number = models.CharField("Teléfono", max_length=15, unique=True, null=True)
     url = models.ImageField(upload_to="uploads/gallery/",null=True, blank=True)
-    USERNAME_FIELD = 'first_name'
+    USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['phone_number']
     rol = models.CharField( 
         choices=ROLES, max_length=20)
@@ -93,7 +93,7 @@ class User(AbstractUser):
     is_active= models.BooleanField(default=True)
 
 
-    def _str_(self):
+    def __str__(self):
         return self.first_name
     
 
@@ -159,7 +159,7 @@ class Menu(models.Model):
 class Venta(models.Model):
     cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE,blank=True,null=True)
     empleado = models.ForeignKey(User, on_delete=models.CASCADE,blank=True,null=True)
-    total = models.DecimalField(max_digits=8, decimal_places=2,default=0,blank=True,null=True)
+    total = models.DecimalField(max_digits=8, decimal_places=2,blank=True,null=True)
     fecha_compra = models.DateTimeField(default=timezone.now,blank=True,null=True)  # Establecer la fecha actual como valor predeterminado
     is_open = models.BooleanField(default=True)
     
