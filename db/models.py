@@ -120,7 +120,7 @@ class Ingredientes(models.Model):
     precio = models.DecimalField(max_digits=8, decimal_places=2)
     unidad = models.CharField(choices=UNIDADES, max_length=20)
     cantidad = models.DecimalField(max_digits=8,decimal_places=2,default=0,null=False)
-    fecha_compra = models.DateField(default=timezone.now())  # Establecer la fecha actual como valor predeterminado
+    fecha_compra = models.DateField(default=timezone.now)  # Establecer la fecha actual como valor predeterminado
     def __str__(self):
         return self.nombre
     
@@ -128,7 +128,7 @@ class Ingredientes(models.Model):
 class Compras(models.Model):
     ingrediente = models.ForeignKey(Ingredientes, on_delete=models.CASCADE)
     cantidades = models.DecimalField(max_digits=8, decimal_places=2, null=False)
-    fecha = models.DateTimeField(default=timezone.now())  # Establecer la fecha actual como valor predeterminado
+    fecha = models.DateTimeField(default=timezone.now)  # Establecer la fecha actual como valor predeterminado
     precio = models.DecimalField(max_digits=8, decimal_places=2)
 
 
@@ -160,11 +160,11 @@ class Venta(models.Model):
     cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE,blank=True,null=True)
     empleado = models.ForeignKey(User, on_delete=models.CASCADE,blank=True,null=True)
     total = models.DecimalField(max_digits=8, decimal_places=2,default=0,blank=True,null=True)
-    fecha_compra = models.DateField(default=timezone.now())  # Establecer la fecha actual como valor predeterminado
+    fecha_compra = models.DateTimeField(default=timezone.now,blank=True,null=True)  # Establecer la fecha actual como valor predeterminado
     is_open = models.BooleanField(default=True)
     
 class VentaMenu(models.Model):
     venta = models.ForeignKey(Venta, on_delete=models.CASCADE)
     menu = models.ForeignKey(Menu, on_delete=models.CASCADE)
     cantidad = models.IntegerField(blank=True,null=True)
-    totalfinal = models.DecimalField(max_digits=8, decimal_places=2,default=1,blank=True,null=True)
+    totalfinal = models.DecimalField(max_digits=8, decimal_places=2,default=0)

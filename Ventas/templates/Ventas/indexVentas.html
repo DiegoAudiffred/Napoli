@@ -24,14 +24,14 @@
             <div class="col-3">
                 <div class="card">
                     <div class="card-body">
-                        <p class="card-text">Cliente: {% if venta.cliente.first_name %} {{venta.cliente.first_name}} {%
-                            else %} Por
+                        <p class="card-text">Cliente: {% if venta.cliente.first_name %} {{venta.cliente.first_name}}
+                            {% else %} Por
                             asignar {% endif %}</p>
 
                         <p class="card-text">Empleado: {% if venta.empleado.first_name %} {{venta.empleado.first_name}}
                             {% else %} Por
                             asignar {% endif %}</p>
-                        <p class="card-text">Fecha de venta: {{venta.fecha_compra}} </p>
+                        <p class="card-text">Fecha: {{venta.fecha_compra|date:"[d - M / H:i]"}} </p>
                         <p class="card-text">Total de venta: {{venta.total}} </p>
 
                         <a href="{% url 'Ventas:modificarVenta' venta.id %}" class="card-link btn">Modificar Venta</a>

@@ -10,7 +10,7 @@ def ventasIndex(request):
     form2 = modifyVentaForm()
 
     ventas = Venta.objects.filter(is_open=True)
-    print(ventas)
+
     return render(request, 'Ventas/indexVentas.html',{'form':form,'ventas':ventas,'form2':form2})
 
 
@@ -21,13 +21,16 @@ def modificarVenta(request,id):
     total = 0
     for ventas in lista:
         total += (ventas.menu.precio) * ventas.cantidad
-        ventas.totalfinal = (ventas.menu.precio) * ventas.cantidad
-        venta.save()
-        
-    venta.total = total
     
-    venta.save()
-    print(venta.total)
+    for ven in lista:
+        ven.totalfinal = (ven.menu.precio) * ven.cantidad
+        print(ven.totalfinal)
+        
+        
+    #venta.total = total
+    #
+    #venta.save()
+    #print(venta.total)
     
     form = modifyVentaForm(instance=venta)
     form2 = VentaMenuForm()
@@ -43,6 +46,33 @@ def cerrarVenta(request,id):
     return redirect('Ventas:ventasIndex')
 
 
+
+
+
+
+
+
+
+
+
+def agregarVenta(request,id):
+    
+    venta = Venta.objects.get(id=id)
+    lista = VentaMenu.objects.filter(venta=id)
+    total = 0
+
+    if request.method == "POST":
+        form = VentaMenuForm(request.POST, request.FILES)
+        if form.is_valid():
+              
+            user = form.save()
+            user.save()
+                      
+            return redirect("Ventas:modificarVenta",id)
+        else:
+            return render(request, 'Ventas/indexVentas.html',{'form':form})
+   
+    return redirect("Ventas:ventasIndex")
 
 def ventasCrear(request):
     if request.method == "POST":

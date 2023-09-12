@@ -48,17 +48,24 @@ class VentaMenuForm(forms.ModelForm):
 
     class Meta:
         model = VentaMenu
-        fields = ['venta','menu','cantidad']
+        fields = ['venta','menu','cantidad','totalfinal']
       
 
     def __init__(self, *args, **kwargs):
         super(VentaMenuForm, self).__init__(*args, **kwargs)
     
     
-        self.fields['venta'].required = True
-        self.fields['venta'].widget.attrs.update({'class':'form-control shadow-none bg-corporateTan200  px-2 py-1 text-primary','placeholder':' Nombre que aparece en el menú*','rows':'1', 'aria-label':'Username','aria-describedby':'basic-addon1','style':'border-left:none', })
+        self.fields['venta'].required = False
+
+        self.fields['menu'].required = False
+        self.fields['menu'].widget.attrs.update({'class':'form-control shadow-none bg-corporateTan200  px-2 py-1 text-primary','placeholder':' Breve descripción*','rows':'1', 'aria-label':'Username','aria-describedby':'basic-addon1','style':'border-left:none', })
+
 
         self.fields['cantidad'].required = False
         self.fields['cantidad'].widget.attrs.update({'class':'form-control shadow-none bg-corporateTan200  px-2 py-1 text-primary','placeholder':' Breve descripción*','rows':'1', 'aria-label':'Username','aria-describedby':'basic-addon1','style':'border-left:none', })
+
+
+        self.fields['totalfinal'].required = False
+        self.fields['totalfinal'].widget.attrs.update({'class':'form-control shadow-none bg-corporateTan200  px-2 py-1 text-primary','placeholder':' Breve descripción*','rows':'1', 'aria-label':'Username','aria-describedby':'basic-addon1','style':'border-left:none', })
 
 
