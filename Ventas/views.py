@@ -9,7 +9,7 @@ def ventasIndex(request):
     form = createVentaForm()
     form2 = modifyVentaForm()
 
-    ventas = Venta.objects.filter(is_open=True)
+    ventas = Venta.objects.filter(is_open=True).order_by('-fecha_compra')
 
     return render(request, 'Ventas/indexVentas.html',{'form':form,'ventas':ventas,'form2':form2})
 

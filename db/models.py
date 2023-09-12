@@ -166,5 +166,6 @@ class Venta(models.Model):
 class VentaMenu(models.Model):
     venta = models.ForeignKey(Venta, on_delete=models.CASCADE)
     menu = models.ForeignKey(Menu, on_delete=models.CASCADE)
+    descripcion = models.TextField(blank=True,null=True)
     cantidad = models.PositiveIntegerField(blank=True,null=True,)
     totalfinal = models.DecimalField(max_digits=8, decimal_places=2,default=0)
