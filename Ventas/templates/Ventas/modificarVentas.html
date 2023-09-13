@@ -1,91 +1,102 @@
 {% extends 'layout/layout.html' %}
 {% load static %}
 {% block body %}
-<div class="container">
+<div class="container min-vh-100 px-5 py-4">
 
-    <div class="row">
-        <div class="col-1 d-flex align-items-center">
-            Venta: {{venta.id}}
+    <div
+        class="row bg-whiterounded-top border-top border-end border-start border-3 border-quinto bg-white  rounded-top">
+        <div class="col-3 border-end border-quinto">
+            Cliente: {{venta.cliente}}
         </div>
-        <div class="col-2 d-flex align-items-center">
-            Empleado: {{form.empleado}}
+        <div class="col-3 border-end border-quinto">
+            Empleado: {{venta.empleado.first_name}}
         </div>
-        <div class="col-2 d-flex align-items-center">
-            Cliente: {{form.cliente}}
+        <div class="col-3 border-end border-quinto">
+            Fecha:{{venta.fecha_compra}}
         </div>
-        <div class="col-2">
-            <a href="" class="btn">Guardar cambios</a>
-        </div>
-        <div class="col-2">
-            <form action="{% url 'Ventas:cerrarVenta' venta.id %}" method="POST" enctype="multipart/form-data"
-                id="user-profile-form">
-                {% csrf_token %}
-                <button class="card-link btn" type="submit">Cerrar venta</button>
 
-            </form>
+        <div class="col-3 border-end border-quinto">
+            Fecha: {% if venta.is_open %} Cuenta abierta {% else %} Cuenta cerrada {% endif %}
         </div>
     </div>
 
 
 
     <div class="row">
-        <div class="col-12">
+        <div class="col-12 p-0">
             <div class="table-responsive">
-                <table class="table border border-3 table-hover table-bordered border-primary table-sm">
-                    <thead>
+                <table class="table border border-3 table-hover table-bordered border-quinto table-sm">
+                    <thead class="bg-tercero">
                         <th>Imagen</th>
                         <th>ID</th>
 
                         <th>Platillo</th>
+                        <th>Observaciones en preparación</th>
+
                         <th>Precio</th>
-                        <th>cantidad</th>
+                        <th>Cantidad</th>
                         <th>Total</th>
                     </thead>
                     <tbody>
 
                         {% for list in lista%}
                         <tr>
-                            <th>
-                                <img src="{{list.menu.url.url}}" alt="" width="100px" height="100px">
-                            </th>
-                            <th>{{list.menu.id}}
-                            </th>
-                            <th>
+                            <td class="align-middle" style="width: 75px;height:75px">
+                                <img src="{{list.menu.url.url}}" alt="" width="75px" height="75px">
+                            </td>
+                            <td class="align-middle">{{list.menu.id}}
+                            </td>
+                            <td class="align-middle">
                                 {{list.menu}}
 
-                            </th>
-                            <th>
-                                $ {{list.menu.precio}} mxn
-                            </th>
+                            </td>
+                            <td class="align-middle">
+                                {{list.observaciones}}
 
-                            <th>
+                            </td>
+                            <td class="align-middle">
+                                $ {{list.menu.precio}} mxn
+                            </td>
+
+                            <td class="align-middle">
                                 {{list.cantidad}}
-                            </th>
-                            <th>
+                            </td>
+                            <td class="align-middle">
                                 $ {{list.totalfinal}} mxn
-                            </th>
+                            </td>
                         </tr>
 
 
                         {% endfor %}
-                    </tbody>
-
-                    <tfoot>
                         <tr>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th>Total: $ {{total}} mxn
+                            <th class="bg-quinto"></th>
+                            <th class="bg-quinto"></th>
+                            <th class="bg-quinto"></th>
+                            <th class="bg-quinto"></th>
+                            <th class="bg-quinto"></th>
+                            <th class="bg-quinto"></th>
+
+
+                            <th class="bg-primary">Total: $ {{total}} mxn
                             </th>
                         </tr>
-                    </tfoot>
+                    </tbody>
+
                 </table>
             </div>
-            <div class="row">
-                <div class="col-3 text-end">
-                    <a href="" data-bs-toggle="modal" data-bs-target="#exampleModal">Agregar venta</a>
+            <div class="row justify-content-end">
+                <div class="col-2 text-center">
+                    <a href="" data-bs-toggle="modal" data-bs-target="#exampleModal"
+                        class="btn btn-tercero w-100 text-white">Agregar
+                        venta</a>
+                </div>
+                <div class="col-2 text-center">
+                    <form action="{% url 'Ventas:cerrarVenta' venta.id %}" method="POST" enctype="multipart/form-data"
+                        id="user-profile-form">
+                        {% csrf_token %}
+                        <button class="card-link btn btn-secondary w-100 text-white" type="submit">Cerrar venta</button>
+
+                    </form>
                 </div>
             </div>
         </div>
@@ -96,7 +107,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Agregar a la cuenta </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -182,7 +193,33 @@
 
                                 </div>
 
+                                <div class="col-12 py-2">
+                                    <div class="input-group rounded rounded-3 border border-2 border-primary">
+                                        <span class="input-group-text bg-white " id="basic-addon1"
+                                            style="border-right: none;"><svg width="19px" height="19px"
+                                                viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                                <g id="SVGRepo_tracerCarrier" stroke-linecap="round"
+                                                    stroke-linejoin="round"></g>
+                                                <g id="SVGRepo_iconCarrier">
+                                                    <circle opacity="0.5" cx="12" cy="12" r="10" stroke="#a8361a"
+                                                        stroke-width="1.5">
+                                                    </circle>
+                                                    <path d="M12 6V18" stroke="#a8361a" stroke-width="1.5"
+                                                        stroke-linecap="round">
+                                                    </path>
+                                                    <path
+                                                        d="M15 9.5C15 8.11929 13.6569 7 12 7C10.3431 7 9 8.11929 9 9.5C9 10.8807 10.3431 12 12 12C13.6569 12 15 13.1193 15 14.5C15 15.8807 13.6569 17 12 17C10.3431 17 9 15.8807 9 14.5"
+                                                        stroke="#a8361a" stroke-width="1.5" stroke-linecap="round">
+                                                    </path>
+                                                </g>
+                                            </svg>
+                                        </span>
+                                        {{form2.observaciones}}
 
+                                    </div>
+
+                                </div>
 
 
 

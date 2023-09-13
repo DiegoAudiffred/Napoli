@@ -42,6 +42,8 @@ CATEGORIA = [
 
 ]
 
+from django.contrib.auth.models import BaseUserManager
+
 class UserManager(BaseUserManager):
     """Define a model manager for User model with no username field."""
 
@@ -59,19 +61,12 @@ class UserManager(BaseUserManager):
 
     def create_user(self, email, password=None, **extra_fields):
         """Create and save a regular User with the given email and password."""
-        extra_fields.setdefault('is_staff', False)
-        extra_fields.setdefault('is_superuser', False)
+
         return self._create_user(email, password, **extra_fields)
 
     def create_superuser(self, email, password, **extra_fields):
-        """Create and save a SuperUser with the given email and password."""
-        extra_fields.setdefault('is_staff', True)
-        extra_fields.setdefault('is_superuser', True)
-
-        if extra_fields.get('is_staff') is not True:
-            raise ValueError('Superuser must have is_staff=True.')
-        if extra_fields.get('is_superuser') is not True:
-            raise ValueError('Superuser must have is_superuser=True.')
+        """Create and save a SuperUser with the given email, password, and first_name."""
+ 
 
         return self._create_user(email, password, **extra_fields)
 
@@ -166,6 +161,6 @@ class Venta(models.Model):
 class VentaMenu(models.Model):
     venta = models.ForeignKey(Venta, on_delete=models.CASCADE)
     menu = models.ForeignKey(Menu, on_delete=models.CASCADE)
-    descripcion = models.TextField(blank=True,null=True)
+    observaciones = models.TextField(blank=True,null=True)
     cantidad = models.PositiveIntegerField(blank=True,null=True,)
     totalfinal = models.DecimalField(max_digits=8, decimal_places=2,default=0)

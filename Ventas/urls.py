@@ -7,7 +7,7 @@ app_name="Ventas"
 
 urlpatterns = [
     path('',views.ventasIndex,name='ventasIndex'),
-    path('crear/',views.ventasCrear,name='ventasCrear'),
+    path('crear/<int:id>',views.ventasCrear,name='ventasCrear'),
     path('modificarVenta/<int:id>',views.modificarVenta,name='modificarVenta'),
     path('agregarVenta/<int:id>',views.agregarVenta,name='agregarVenta'),
     path('cerrarVenta/<int:id>',views.cerrarVenta,name='cerrarVenta'),

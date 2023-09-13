@@ -2,31 +2,22 @@
 {% load static %}
 {% block body %}
 
-<div class="container bg-primary min-vh-100 px-4">
+<div class="container min-vh-100 px-4">
     <div class="row pt-5 pb-3">
         <div class="col-sm-3 col-12 my-auto">
-            <h1 class="text-white">Ventas abiertas</h1>
+            <h1 class="text-quinto">Ventas abiertas</h1>
         </div>
         <div class="col-sm-2 col-6 my-auto">
-            <form action=" {% url 'Ventas:ventasCrear' %}" method="POST" enctype="multipart/form-data"
+            <form action=" {% url 'Ventas:ventasCrear' user.id%}" method="POST" enctype="multipart/form-data"
                 id="user-profile-form">
                 {% csrf_token %}
-                <button class="btn rounded rounded-3  bg-secondary text-white w-100" type="submit">Crear
-                    Venta <svg width="25px" height="25px" viewBox="0 0 24 24" fill="none" class="ms-2"
-                        xmlns="http://www.w3.org/2000/svg">
-                        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                        <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-                        <g id="SVGRepo_iconCarrier">
-                            <circle opacity="0.5" cx="12" cy="12" r="10" stroke="#f2c22c" stroke-width="1.5"></circle>
-                            <path d="M15 12L12 12M12 12L9 12M12 12L12 9M12 12L12 15" stroke="#f2c22c" stroke-width="1.5"
-                                stroke-linecap="round"></path>
-                        </g>
-                    </svg></button>
+                <button class="btn rounded rounded-3  bg-tercero text-white w-100" type="submit">Crear
+                    Venta </button>
 
             </form>
         </div>
         <div class="col-sm-2 col-6 my-auto">
-            <a class="btn rounded rounded-3  bg-tercero text-white w-100" type="submit">Buscar
+            <a class="btn rounded rounded-3  bg-quinto text-white w-100" type="submit">Buscar
                 Venta </a>
         </div>
     </div>
@@ -35,9 +26,9 @@
         {% for venta in ventas %}
 
         <div class="col-12 col-sm-3 my-3">
-            <div class="card rounded rounded-4">
-                <div class=" card-body ">
-                    <p class=" card-text">Cliente: {% if venta.cliente.nombre %} {{venta.cliente.nombre}}
+            <div class="card rounded rounded-4 border border-secondary bg-cuarto">
+                <div class=" card-body text-quinto">
+                    <p class=" card-text ">Cliente: {% if venta.cliente.nombre %} {{venta.cliente.nombre}}
                         {% else %} Por
                         asignar {% endif %}</p>
 
@@ -45,12 +36,14 @@
                         {% else %} Por
                         asignar {% endif %}</p>
                     <p class="card-text">Fecha: {{venta.fecha_compra|date:"[d - M / H:i]"}} </p>
-                    <p class="card-text">Total de venta: {{venta.total}} </p>
+                    <p class="card-text">Total de venta: ${% if venta.total is None %} 0 {% else %} {{venta.total}}
+                        {% endif %} mxn
+                    </p>
 
                     <div class="row">
                         <div class="col-6">
                             <a href="{% url 'Ventas:modificarVenta' venta.id %}"
-                                class="card-link btn w-100 text-white btn-secondary">Modificar
+                                class="card-link btn w-100 text-white btn-tercero">Modificar
                             </a>
                         </div>
                         <div class="col-6">
@@ -58,25 +51,24 @@
                             <form action="{% url 'Ventas:cerrarVenta' venta.id %}" method="POST"
                                 enctype="multipart/form-data" id="user-profile-form">
                                 {% csrf_token %}
-                                <a class="card-link btn w-100 btn-primary" data-bs-toggle="modal"
+                                <a class="card-link btn w-100 btn-secondary" data-bs-toggle="modal"
                                     data-bs-target="#exampleModal{{venta.id}}">Cerrar</a>
 
                                 <div class="modal fade" id="exampleModal{{venta.id}}" tabindex="-1"
                                     aria-labelledby="exampleModalLabel" aria-hidden="true">
                                     <div class="modal-dialog">
-                                        <div class="modal-content">
+                                        <div class="modal-content bg-cuarto">
                                             <div class="modal-header">
                                                 <h5 class="modal-title" id="exampleModalLabel">¿Esta seguro de
                                                     cerrar la cuenta de
                                                     {{venta.cliente.nombre}} ?</h5>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                    aria-label="Close"></button>
+
                                             </div>
 
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary"
+                                            <div class="modal-body">
+                                                <button type="button" class="btn btn-tercero text-white "
                                                     data-bs-dismiss="modal">Cancelar</button>
-                                                <button type="submit" class="btn btn-primary">Cerrar cuenta</button>
+                                                <button type="submit" class="btn btn-secondary">Cerrar cuenta</button>
                                             </div>
                                         </div>
                                     </div>
