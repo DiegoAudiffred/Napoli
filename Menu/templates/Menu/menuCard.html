@@ -9,7 +9,7 @@
     {% for empleado in employees %}
 
     <div class="col-2">
-        <div class="card rounded rounded-4">
+        <div class="card rounded rounded-4 bg-cuarto">
             {% if empleado.url %}
             <div class="position-relative d-inline-block">
                 <img src=" {{empleado.url.url}}" class="rounded-4 img-fluid" style="width: 100%; height: 200px;"
@@ -51,17 +51,17 @@
                 class="rounded-5 img-fluid" style="width: 100px;height: 100px;">
 
             {% endif %}
-            <div class="card-body">
-                <h5 class="card-title text-truncate">{{empleado.nombre}}
+            <div class="card-body ">
+                <h5 class="card-title text-truncate ">{{empleado.nombre}}
                 </h5>
             </div>
             <ul class="list-group list-group-flush">
 
 
-                <li class="list-group-item" style="height: 100px;">Descripción: {{empleado.descripcion}}</li>
+                <li class="list-group-item bg-cuarto" style="height: 100px;">Descripción: {{empleado.descripcion}}</li>
 
-                <li class="list-group-item">Precio: {{empleado.precio}} mxn</li>
-                <li class="list-group-item">Categoría: {{empleado.categoria}}</li>
+                <li class="list-group-item bg-cuarto">Precio: {{empleado.precio}} mxn</li>
+                <li class="list-group-item bg-cuarto">Categoría: {{empleado.categoria}}</li>
             </ul>
 
 
@@ -82,6 +82,11 @@
 
 
         </div>
+    </div>
+
+    {% empty %}
+    <div class="col-12">
+        <h2>No encontramos ningún resultado, intente cambiar su búsqueda</h2>
     </div>
 
 

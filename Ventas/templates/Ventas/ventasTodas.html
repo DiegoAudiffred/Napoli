@@ -1,0 +1,43 @@
+{% extends 'layout/layout.html' %}
+{% load static %}
+{% block body %}
+
+<div class="container min-vh-100 px-4">
+    <div class="row py-3">
+        <div class="col-3">
+            <h1>Ventas pasadas</h1>
+        </div>
+
+
+
+
+
+
+
+        <div class="col-4 d-flex justify-content-center align-items-center">
+            <div class="input-group">
+
+                <input type="text" class="form-control shadow-none" placeholder="Buscar producto por nombre"
+                    aria-label="" aria-describedby="basic-addon1" id="searchBar" onkeyup="getCardsReplace(this.value)">
+            </div>
+        </div>
+
+
+
+
+
+
+
+    </div>
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="row" id="cardHolder">
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="{% static 'js/ventasAjaxSearch.js' %}"></script>
+
+
+{% endblock %}

@@ -1,0 +1,35 @@
+{% regroup ventas by fecha_compra|date:"d-m-Y" as ventas_por_dia %}
+
+{% for venta_dia in ventas_por_dia %}
+<div class="col-12 mt-2 bg-tercero">
+    <h3>Fecha: {{ venta_dia.grouper }}</h3>
+</div>
+{% for venta in venta_dia.list %}
+<div class="col-4">
+    <div class="card m-2 bg-cuarto">
+        <div class="card-body ">
+            <ul class="list-group list-group-flush px-4 ">
+
+                <li class="list-group-item px-0 bg-cuarto fnTexto_Bold_Encabezado_003">Cliente: {{ venta.cliente }}
+                </li>
+                <li class="list-group-item px-0 bg-cuarto fnTexto_Bold_Encabezado_003">Empleado: {{ venta.empleado }}
+                </li>
+                <li class="list-group-item px-0 bg-cuarto fnTexto_Bold_Encabezado_003">Total: {% if venta.total %}
+                    ${{ venta.total }} mxn {% else %} $0 mxn {% endif %}
+                </li>
+                <li class="list-group-item px-0 bg-cuarto fnTexto_Bold_Encabezado_003">Hora:
+                    {{ venta.fecha_compra.time }}
+                </li>
+                <li class="list-group-item d-flex justify-content-end align-items-center px-0 bg-cuarto">
+                    <a href="{% url 'Ventas:modificarVenta' venta.id %}"
+                        class="card-link btn text-white btn-tercero">Ver cuenta
+                    </a> <a href="#" class="btn btn-secondary ms-2">Eliminar</a>
+                </li>
+
+            </ul>
+        </div>
+    </div>
+
+</div>
+{% endfor %}
+{% endfor %}

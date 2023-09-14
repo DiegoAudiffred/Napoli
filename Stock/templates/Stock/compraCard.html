@@ -1,5 +1,5 @@
 <table class="table table-striped m-0">
-    <thead>
+    <thead class="bg-tercero">
         <tr>
             <th>Nombre</th>
             <th>Precio</th>
@@ -14,9 +14,9 @@
     <tbody>
         {% for compras in totalCompras%}
 
-        <tr class="align-middle">
+        <tr class="align-middle bg-cuarto">
             <td>{{compras.ingrediente}}</td>
-            <td>{{compras.precio}}</td>
+            <td>${{compras.precio}}</td>
             <td>{{compras.fecha|date:"Y-m-d" }}</td>
 
             <td>{{compras.cantidades}}</td>
