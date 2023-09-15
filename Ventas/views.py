@@ -75,6 +75,11 @@ def cerrarVenta(request,id):
     venta.save()
     return redirect('Ventas:ventasIndex')
 
+def abrirVenta(request,id):
+    venta = Venta.objects.get(id=id)
+    venta.is_open= True
+    venta.save()
+    return redirect('Ventas:ventasIndex')
 
 
 

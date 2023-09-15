@@ -14,10 +14,11 @@
                     Cliente:
                     <div class="dropdown mx-2">
 
-                        <input type="text" class="form-control shadow-none py-0" placeholder="Buscar cliente"
-                            aria-label="" aria-describedby="basic-addon1" id="searchBar" list="cardHolder"
-                            data-bs-toggle="dropdown" onkeyup="getCardsReplace(this.value)" id="dropdownMenuLink"
-                            value="{{venta.cliente}}">
+                        <input type="text" class="form-control shadow-none py-0 border border-0"
+                            placeholder="Buscar cliente" aria-label="" aria-describedby="basic-addon1" id="searchBar"
+                            list="cardHolder" data-bs-toggle="dropdown" onkeyup="getCardsReplace(this.value)"
+                            id="dropdownMenuLink"
+                            value="{% if venta.cliente %} {{venta.cliente}} {% else %} Sin cliente {% endif %}">
 
 
                         <ul class="dropdown-menu w-100" aria-labelledby="dropdownMenuLink" id="cardHolder">
@@ -112,6 +113,7 @@
 
                 </table>
             </div>
+            {% if venta.is_open%}
             <div class="row justify-content-end">
                 <div class="col-2 text-center">
                     <a href="" data-bs-toggle="modal" data-bs-target="#exampleModal"
@@ -122,14 +124,54 @@
                     <form action="{% url 'Ventas:cerrarVenta' venta.id %}" method="POST" enctype="multipart/form-data"
                         id="user-profile-form">
                         {% csrf_token %}
-                        <button class="card-link btn btn-secondary w-100 text-white" type="submit">Cerrar venta</button>
+                        <a class="btn btn-secondary w-100 text-white" data-bs-toggle="modal"
+                            data-bs-target="#cerraModal">Cerrar
+                            venta</a>
+
+
+
+                        <div class="modal fade" id="cerraModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                            aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content bg-cuarto">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">¿Esta seguro de
+                                            cerrar la cuenta de
+                                            {{venta.cliente.nombre}} ?</h5>
+
+                                    </div>
+
+                                    <div class="modal-body">
+                                        <button type="button" class="btn btn-tercero text-white "
+                                            data-bs-dismiss="modal">Cancelar</button>
+                                        <button type="submit" class="btn btn-secondary">Cerrar cuenta</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
                     </form>
                 </div>
             </div>
+            {% else %}
+            <div class="row justify-content-end">
+                <div class="col-2 text-center">
+                    <form action="{% url 'Ventas:abrirVenta' venta.id %}" method="POST" enctype="multipart/form-data"
+                        id="user-profile-form">
+                        {% csrf_token %}
+
+                        <button href="" type="submit" class="btn btn-tercero w-100 text-white">Reabrir
+                            venta</button>
+                    </form>
+
+                </div>
+
+            </div>
+            {% endif %}
         </div>
     </div>
 </div>
+
 
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
