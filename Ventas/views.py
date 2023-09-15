@@ -1,7 +1,7 @@
 import json
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
-from Ventas.forms import VentaMenuForm, createVentaForm, modifyVentaForm
+from Ventas.forms import VentaMenuForm, addClienteForm, createVentaForm, modifyVentaForm
 from db.models import Cliente, User, Venta, VentaMenu
 from django.db.models import Q
 # Create your views here.
@@ -13,24 +13,41 @@ def ventasIndex(request):
 
     return render(request, 'Ventas/indexVentas.html',{'form':form,'ventas':ventas,'form2':form2,'user':user})
 
+
+def addCliente(request,id):
+    venta = Venta.objects.get(id=id)
+    print(venta)
+    if request.method == 'POST':
+        form = modifyVentaForm(request.POST, instance=venta)  # Inicializar el formulario con los datos POST
+        if form.is_valid():
+            print("Aqui Si")
+            user = form.save()
+            user.save()
+        else:
+            print("Aqui No")
+            return redirect('Ventas:modificarVenta',id)
+
+    return redirect('Ventas:modificarVenta',id)
+
+
+
+
 def clienteRow(request):
     
     jsonObject = json.load(request)['jsonBody']
     search = jsonObject["search"]    
-    clientes = Cliente.objects.all()
-    print(clientes)
-
+    clientes = Cliente.objects.filter(is_active=True)
     if search != "":
         clientes = clientes.filter(
             Q(nombre__icontains=search) 
         )
-    print(clientes)
     return render(request, "Ventas/clienteRow.html",{'clientes':clientes})
 
 
 def modificarVenta(request,id):
     venta = Venta.objects.get(id=id)
     lista = VentaMenu.objects.filter(venta=id)
+
     user = request.user
     total = 0
     for ventas in lista:
@@ -38,14 +55,12 @@ def modificarVenta(request,id):
     
     for ven in lista:
         ven.totalfinal = (ven.menu.precio) * ven.cantidad
-        print(ven.totalfinal)
    
       
 
     venta.total = total
     
     venta.save()
-    #print(venta.total)
     
     form = modifyVentaForm(instance=venta)
     form2 = VentaMenuForm()
@@ -114,12 +129,9 @@ def ventasCard(request):
     jsonObject = json.load(request)['jsonBody']
     search = jsonObject["search"]    
     ventas = Venta.objects.filter(is_open=False).order_by('-fecha_compra')
-    for venta in ventas:
-        print(venta.fecha_compra)
-
+ 
     if search != "":
         ventas = ventas.filter(
             Q(fecha_compra__icontains=search) 
         )
-    print(search)
     return render(request, "Ventas/ventasCard.html",{'ventas':ventas})

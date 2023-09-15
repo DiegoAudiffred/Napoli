@@ -6,18 +6,31 @@
     <div
         class="row bg-whiterounded-top border-top border-end border-start border-3 border-quinto bg-white  rounded-top">
         <div class="col-3 border-end border-quinto">
+            <form action="{% url 'Ventas:addCliente' venta.id%}" method="POST" enctype="multipart/form-data"
+                id="user-profile-form">
+                {% csrf_token %}
 
-            <div class="input-group">
-                Cliente:
+                <div class="input-group">
+                    Cliente:
+                    <div class="dropdown mx-2">
 
-                <input type="text" class="form-control shadow-none py-0" placeholder="Buscar producto por nombre"
-                    aria-label="" aria-describedby="basic-addon1" id="searchBar" list="cardHolder"
-                    onkeyup="getCardsReplace(this.value)">
-                <datalist id="cardHolder" class="">
+                        <input type="text" class="form-control shadow-none py-0" placeholder="Buscar cliente"
+                            aria-label="" aria-describedby="basic-addon1" id="searchBar" list="cardHolder"
+                            data-bs-toggle="dropdown" onkeyup="getCardsReplace(this.value)" id="dropdownMenuLink"
+                            value="{{venta.cliente}}">
 
-                </datalist>
 
-            </div>
+                        <ul class="dropdown-menu w-100" aria-labelledby="dropdownMenuLink" id="cardHolder">
+
+                        </ul>
+                        <div class="d-none">
+                            {{form.cliente}}
+
+                        </div>
+                    </div>
+
+                </div>
+            </form>
         </div>
 
 
@@ -269,6 +282,38 @@
         </div>
     </div>
 </div>
+<script>
+    function setNombre(id) {
+        if (id == 0) {
+            var nombre2 = document.getElementById("id_cliente");
+            nombre2.value = id
+
+        } else {
+            nombreC = "cliente" + id
+            var nombre = document.getElementById("searchBar");
+            var nombreChido = document.getElementById(nombreC);
+            nombre.value = nombreChido.textContent;
+
+            var nombre2 = document.getElementById("id_cliente");
+            nombre2.value = id
+        }
+
+
+    }
+</script>
+
+<script>
+    var inputElement = document.getElementById("searchBar");
+
+    // Escuchar el evento "click" en el elemento
+    inputElement.addEventListener("click", function () {
+        // Establecer el valor del input a una cadena vacía
+        inputElement.value = '';
+        getCardsReplace("")
+        setNombre(0)
+
+    });
+</script>
 
 <script src="{% static 'js/clienteRow.js' %}"></script>
 

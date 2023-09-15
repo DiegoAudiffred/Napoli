@@ -1,5 +1,9 @@
 {% for cliente in clientes %}
-<option class="text-black">
-    {{cliente.nombre}}
-</option>
+
+<li><button class="dropdown-item" type="submit" id="cliente{{cliente.id}}"
+        onclick="setNombre('{{cliente.id}}')">{{cliente.nombre}}</button>
+</li>
+{% empty %}
+<li><button class="dropdown-item" type="">No existe el empleado</button></li>
+
 {% endfor %}

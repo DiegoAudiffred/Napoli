@@ -38,7 +38,18 @@ class modifyVentaForm(forms.ModelForm):
 
     class Meta:
         model = Venta
-        fields = ['is_open']
+        fields = ['cliente']
+    def __init__(self, *args, **kwargs):
+        super(modifyVentaForm, self).__init__(*args, **kwargs)
+        
+        self.fields['cliente'].required = False
+
+
+class addClienteForm(forms.ModelForm):
+
+    class Meta:
+        model = Venta
+        fields = ['cliente']
       
 
 
