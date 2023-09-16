@@ -6,6 +6,11 @@
     <div
         class="row bg-whiterounded-top border-top border-end border-start border-3 border-quinto bg-white  rounded-top">
         <div class="col-3 border-end border-quinto">
+            {% if venta.is_reopen%}
+            Cliente: {{venta.cliente}}
+
+            {% else %}
+
             <form action="{% url 'Ventas:addCliente' venta.id%}" method="POST" enctype="multipart/form-data"
                 id="user-profile-form">
                 {% csrf_token %}
@@ -32,6 +37,7 @@
 
                 </div>
             </form>
+            {% endif %}
         </div>
 
 
@@ -45,7 +51,8 @@
         </div>
 
         <div class="col-3 border-end border-quinto">
-            Fecha: {% if venta.is_open %} Cuenta abierta {% else %} Cuenta cerrada {% endif %}
+            Fecha: {% if venta.is_open %} {% if venta.is_reopen%} Cuenta reabierta {% else %} Cuenta abierta {%endif %}
+            {% else %} Cuenta cerrada {% endif %}
         </div>
     </div>
 
@@ -135,13 +142,25 @@
                             <div class="modal-dialog">
                                 <div class="modal-content bg-cuarto">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="exampleModalLabel">¿Esta seguro de
+                                        <h5 class="modal-title" id="exampleModalLabel">{% if venta.is_reopen %} ¿Esta
+                                            seguro de
+                                            volver a cerrar la cuenta de
+                                            {{venta.cliente.nombre}} ?
+                                            {% else %} ¿Esta seguro de
                                             cerrar la cuenta de
-                                            {{venta.cliente.nombre}} ?</h5>
+                                            {{venta.cliente.nombre}} ? {% endif %} </h5>
+                                    </div>
+                                    {% if not venta.is_reopen%}
+                                    <div class="modal-body">
+                                        <h4 class="text-secondary">¡UNA VEZ CERRADA NO
+                                            PODRAS CAMBIAR AL
+                                            CLIENTE!
+                                        </h4>
+
 
                                     </div>
-
-                                    <div class="modal-body">
+                                    {% endif %}
+                                    <div class="modal-footer">
                                         <button type="button" class="btn btn-tercero text-white "
                                             data-bs-dismiss="modal">Cancelar</button>
                                         <button type="submit" class="btn btn-secondary">Cerrar cuenta</button>

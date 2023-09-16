@@ -79,9 +79,9 @@ def cerrarVenta(request,id):
     
 
       
-    cliente.total_gastado = total
     if venta.is_reopen == False:
         cliente.total_compras += 1
+        cliente.total_gastado += total
     venta.save()
 
     cliente.save()
