@@ -131,7 +131,7 @@ class Cliente(models.Model):
     
     nombre = models.CharField(max_length=200)
     total_compras= models.IntegerField(null=True,blank=True,default=0)
-    total_gastado= models.FloatField(null=True,blank=True,default=0)
+    total_gastado= models.DecimalField(null=True,blank=True,max_digits=8, decimal_places=2,default=0)
     email = models.EmailField('Correo electrónico', unique=True, blank=True, null=True)
     phone_number = models.CharField("Teléfono", max_length=15, unique=True, null=True,blank=True)
     is_active= models.BooleanField(default=True)
@@ -157,7 +157,8 @@ class Venta(models.Model):
     total = models.DecimalField(max_digits=8, decimal_places=2,blank=True,null=True)
     fecha_compra = models.DateTimeField(default=timezone.now,blank=True,null=True)  # Establecer la fecha actual como valor predeterminado
     is_open = models.BooleanField(default=True)
-    
+    is_reopen = models.BooleanField(default=False)
+
 class VentaMenu(models.Model):
     venta = models.ForeignKey(Venta, on_delete=models.CASCADE)
     menu = models.ForeignKey(Menu, on_delete=models.CASCADE)

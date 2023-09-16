@@ -21,7 +21,7 @@ def clientsCard(request):
     employees = Cliente.objects.filter(is_active=True)
     if search != "":
         employees = employees.filter(
-            Q(first_name__icontains=search) 
+            Q(nombre__icontains=search) 
         )
 
   

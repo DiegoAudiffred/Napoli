@@ -10,7 +10,9 @@ from db.models import Cliente, User
 from authentication.forms import createUserForm
 # Create your views here.
 def empleadosIndex(request):
-    return render(request, 'Empleados/indexEmpleados.html')
+    form = createEmployeeForm()
+
+    return render(request, 'Empleados/indexEmpleados.html',{'form':form})
 
 def employeeCard(request):
     jsonObject = json.load(request)['jsonBody']

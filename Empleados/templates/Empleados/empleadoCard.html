@@ -6,7 +6,7 @@
 
 <table class="table m-0">
     <thead>
-        <tr class="align-middle">
+        <tr class="align-middle bg-tercero">
             <th>Foto</th>
             <th>Nombre</th>
             <th>Rol</th>
@@ -21,7 +21,7 @@
 
         {% for empleado in employees %}
         <tr class="align-middle">
-            <td>
+            <td class="bg-cuarto">
 
                 {% if empleado.url %}
                 <img src="{{empleado.url.url}}" class="rounded-5 img-fluid" id="imgPerfil"
@@ -35,12 +35,14 @@
             </td>
 
 
-            <td>{{empleado.first_name}}</td>
-            <td>{{empleado.rol}}</td>
-            <td>{{empleado.email}}</td>
-            <td>{{empleado.phone_number}}</td>
-            <td><a href="{% url 'Empleados:empleadosEditar' empleado.id %}">Modificar empleado</a></td>
-            <td><a type="button" class="" href="" data-bs-toggle="modal"
+            <td class="bg-cuarto">{{empleado.first_name}}</td>
+            <td class="bg-cuarto">{{empleado.rol}}</td>
+            <td class="bg-cuarto">{{empleado.email}}</td>
+            <td class="bg-cuarto">{{empleado.phone_number}}</td>
+            <td class="bg-cuarto"><a href="{% url 'Empleados:empleadosEditar' empleado.id %}"
+                    class="text-quinto">Modificar empleado</a>
+            </td>
+            <td class="bg-cuarto text-secondary"><a type="button" class="text-secondary" href="" data-bs-toggle="modal"
                     data-bs-target="#exampleModal{{empleado.id}}">Eliminar
                     empleado</a></td>
         </tr>

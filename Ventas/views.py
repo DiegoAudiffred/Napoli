@@ -59,7 +59,6 @@ def modificarVenta(request,id):
       
 
     venta.total = total
-    
     venta.save()
     
     form = modifyVentaForm(instance=venta)
@@ -71,13 +70,35 @@ def modificarVenta(request,id):
 
 def cerrarVenta(request,id):
     venta = Venta.objects.get(id=id)
+    cliente = venta.cliente
+    lista = VentaMenu.objects.filter(venta=id)
+
+    total = 0
+    for ventas in lista:
+        total += (ventas.menu.precio) * ventas.cantidad
+    
+
+      
+    cliente.total_gastado = total
+    if venta.is_reopen == False:
+        cliente.total_compras += 1
+    venta.save()
+
+    cliente.save()
+    venta.is_reopen = True
     venta.is_open= False
     venta.save()
+    
+    
     return redirect('Ventas:ventasIndex')
 
 def abrirVenta(request,id):
     venta = Venta.objects.get(id=id)
     venta.is_open= True
+    if not venta.is_reopen:
+        venta.is_reopen= True
+  
+
     venta.save()
     return redirect('Ventas:ventasIndex')
 
