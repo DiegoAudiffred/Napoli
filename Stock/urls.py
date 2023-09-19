@@ -11,6 +11,7 @@ urlpatterns = [
     path('compraCrear/',views.compraCrear,name='compraCrear'),
     path('compraEditar/<int:id>',views.compraEditar,name='compraEditar'),
     path('compraEditar/agregarCompra/<int:id>',views.agregarCompra,name='agregarCompra'),
+    path('compraEditar/cerrarCompra/<int:id>',views.cerrarCompra,name='cerrarCompra'),
 
     path('AjaxSearch', views.stockCard, name='stockCard'),
     path('AjaxSearch2', views.comprasCard, name='comprasCard'),

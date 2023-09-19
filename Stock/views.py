@@ -115,7 +115,6 @@ def agregarCompra(request,id):
         form = CompraIngredientesForm(request.POST, request.FILES)
         if form.is_valid():            
             form.instance.compra = compra
-
             user = form.save()
             user.save()
                       
@@ -124,6 +123,22 @@ def agregarCompra(request,id):
             return render(request, 'Stock/stockIndex.html',{'form':form})
    
     return redirect("Stock:stockIndex")
+
+def cerrarCompra(request,id):
+    compra = Compras.objects.get(id=id)
+    lista = CompraIngredientes.objects.filter(compra=id)
+
+    total = 0
+    for ventas in lista:
+        total += (ventas.ingrediente.precio) * ventas.cantidad
+    
+    compra.total_comprado = total
+    
+    compra.save()
+
+    
+    return redirect('Stock:stockIndex')
+
 
 #def agregarCompraCamara(request,id):
 #    

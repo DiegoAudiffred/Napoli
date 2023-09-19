@@ -80,6 +80,44 @@
                         class="btn btn-tercero w-100 text-white">Agregar a la
                         compra</a>
                 </div>
+                <div class="col-2 text-center">
+                    <form action="{% url 'Stock:cerrarCompra' compra.id %}" method="POST" enctype="multipart/form-data"
+                        id="user-profile-form">
+                        {% csrf_token %}
+                        <a class="btn btn-secondary w-100 text-white" data-bs-toggle="modal"
+                            data-bs-target="#cerraModal">Cerrar
+                            venta</a>
+
+
+
+                        <div class="modal fade" id="cerraModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                            aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content bg-cuarto">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">¿Esta
+                                            seguro de cerrar la compra?
+                                        </h5>
+                                    </div>
+                                    <div class="modal-body">
+                                        <h4 class="text-secondary">¡UNA VEZ CERRADA NO
+                                            PODRAS CAMBIAR AL
+                                            CLIENTE!
+                                        </h4>
+
+
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-tercero text-white "
+                                            data-bs-dismiss="modal">Cancelar</button>
+                                        <button type="submit" class="btn btn-secondary">Cerrar cuenta</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
 
             </div>
 
@@ -118,11 +156,11 @@
             <div class="modal-body d-block" id="modal">
                 <div class="row">
                     <div class="col-6">
-                        <a class="btn btn-tercero" onclick="mostrarCampos()">Agregar manualmente datos del
+                        <a class="btn btn-tercero text-white" onclick="mostrarCampos()">Agregar manualmente datos del
                             producto</a>
                     </div>
                     <div class="col-6">
-                        <a class="btn btn-tercero" onclick="mostrarCamara()"> Agregar mediante codigo de
+                        <a class="btn btn-tercero  text-white" onclick="mostrarCamara()"> Agregar mediante codigo de
                             barras</a>
                     </div>
                 </div>
@@ -256,8 +294,15 @@
                         <div class="col-12 d-flex justify-content-center align-items-center">
                             <video id="video" class="w-100" autoplay></video>
                         </div>
-                        <div class="col-12">
+                        <div class="col-6">
                             <button id="startButton">Iniciar escaneo</button>
+                            <button id="stopButton">Detener escaneo</button>
+
+                        </div>
+                        <div class="col-6">
+                            <button onclick="print()">Print</button>
+                            <button onclick="contar()">Checar</button>
+
                         </div>
                         <div class="">
                             <div id="result"></div>
@@ -295,12 +340,40 @@
         modal3.classList.remove("d-block")
     }
 </script>
+
+
+
 <script>
     const video = document.getElementById('video');
     const startButton = document.getElementById('startButton');
+    const stopButton = document.getElementById('stopButton');
+
     const resultDiv = document.getElementById('result');
+    var codigos = {}; // Usamos un objeto en lugar de una lista
+    var contador = 0; // Contador total de códigos leídos
 
     startButton.addEventListener('click', startScanning);
+    stopButton.addEventListener('click', stopScanning);
+
+    function print() {
+        console.log("Aqui");
+        console.log(`Total de códigos leídos: ${contador}`);
+
+        // Mostrar el objeto codigos en la consola
+        console.log("Códigos leídos:");
+        for (const codigo in codigos) {
+            if (codigos.hasOwnProperty(codigo)) {
+                console.log(`${codigo}: ${codigos[codigo]} veces`);
+            }
+        }
+    }
+
+    function stopScanning() {
+        Quagga.stop(); // Detiene QuaggaJS
+        video.srcObject.getTracks().forEach(track => track.stop()); // Detiene la transmisión de video
+        console.log("Captura de video detenida");
+    }
+
     function startScanning() {
         navigator.mediaDevices.getUserMedia({ video: true })
             .then(function (stream) {
@@ -325,13 +398,47 @@
 
                 Quagga.onDetected(function (result) {
                     const code = result.codeResult.code;
-                    resultDiv.innerHTML = `Código de barras detectado: ${code}`;
+                    if (code.length === 13) {
+                        // Incrementa el contador total
+                        contador++;
+
+                        // Incrementa el contador específico del código o inicializa en 1 si es la primera vez
+                        if (codigos[code]) {
+                            codigos[code]++;
+                        } else {
+                            codigos[code] = 1;
+                        }
+
+                        resultDiv.innerHTML = `Código de barras detectado: ${code}`;
+                        console.log(`Código ${code} leído ${codigos[code]} veces`);
+                    } else {
+                        resultDiv.innerHTML = `El código ${code} no cumple con la longitud esperada.`;
+                    }
                 });
             })
             .catch(function (error) {
                 console.error('Error al acceder a la cámara web:', error);
             });
     }
+    function obtenerCodigosMasDe30() {
+        const codigosMasDe30 = [];
+
+        for (const codigo in codigos) {
+            if (codigos.hasOwnProperty(codigo) && codigos[codigo] > 30) {
+                codigosMasDe30.push(codigo);
+            }
+        }
+
+        return codigosMasDe30;
+    }
+
+    function contar() {
+        const codigosConMasDe30Escaneos = obtenerCodigosMasDe30();
+
+        console.log("Códigos con más de 30 escaneos:", codigosConMasDe30Escaneos);
+    }
+
+
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/quagga/0.12.1/quagga.min.js"></script>
 
