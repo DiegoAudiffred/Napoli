@@ -8,7 +8,7 @@ import time
 # Create your views here.
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
-from Stock.forms import CompraIngredientesForm, createCompraForm, createStockForm
+from Stock.forms import ActualizarCampoForm, CompraIngredientesForm, createCompraForm, createStockForm
 from db.models import Cliente, CompraIngredientes, Ingredientes, User, Compras
 from authentication.forms import createUserForm
 
@@ -73,7 +73,6 @@ def stockCard(request):
         totalStock = totalStock.filter(
             Q(nombre__icontains=search) 
         )
-    print(totalStock)
 
   
     return render(request, "Stock/stockCard.html",{'totalStock':totalStock})
@@ -94,6 +93,9 @@ def comprasCard(request):
 def compraEditar(request,id):
     compra = Compras.objects.get(id=id)
     lista = CompraIngredientes.objects.filter(compra=id)
+    productos = Ingredientes.objects.all()
+   
+
     total = 0
     for ventas in lista:
         total += (ventas.ingrediente.precio) * ventas.cantidad
@@ -102,11 +104,11 @@ def compraEditar(request,id):
         ven.totalfinal = (ven.ingrediente.precio) * ven.cantidad
    
     form = CompraIngredientesForm(instance=compra)
-  
+    form2 = ActualizarCampoForm()
 
     compra.total = total
     compra.save()
-    return render(request, "Stock/editarCompra.html",{'compra':compra,'total':total,'lista':lista,'form':form})
+    return render(request, "Stock/editarCompra.html",{'compra':compra,'total':total,'lista':lista,'form':form,'productos':productos,'form2':form2})
 
 def agregarCompra(request,id):
     compra = Compras.objects.get(id=id)
@@ -123,6 +125,42 @@ def agregarCompra(request,id):
             return render(request, 'Stock/stockIndex.html',{'form':form})
    
     return redirect("Stock:stockIndex")
+
+
+def agregarCompraCodigo(request,id):
+    venta = Compras.objects.get(id=id)
+    Ingre = Ingredientes.objects.all()
+    if request.method == 'POST':
+        print("Aqui")
+
+        form = ActualizarCampoForm(request.POST)
+        if form.is_valid():
+            codigos = form.cleaned_data['codigo_de_barras'].split(',')  # Dividir por comas
+
+            ingredientes_registrados = []  # Lista para almacenar ingredientes registrados
+
+
+    
+            for codigo in codigos:
+                codigo_limpio = codigo.strip()  # Eliminar espacios en blanco alrededor del código
+                existe_codigo = Ingredientes.objects.filter(codigo_de_barras=codigo_limpio).exists()
+
+                if existe_codigo:
+                    ingrediente = Ingredientes.objects.get(codigo_de_barras=codigo)
+                    ingredientes_registrados.append(ingrediente)
+
+                    print(f'El código de barras {codigo} está presente en la base de datos de ingredientes.')
+                else:
+                    print(f'El código de barras {codigo} no está presente en la base de datos de ingredientes.')
+                    
+            for ingrediente in ingredientes_registrados:
+                print(f'Ingrediente registrado: {ingrediente.nombre}')
+
+    else:
+        form = ActualizarCampoForm()
+
+    return redirect("Stock:stockIndex")
+
 
 def cerrarCompra(request,id):
     compra = Compras.objects.get(id=id)

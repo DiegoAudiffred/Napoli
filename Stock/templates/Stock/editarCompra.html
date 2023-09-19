@@ -290,23 +290,29 @@
 
                     </div>
 
-                    <div class="row">
+                    <div class="row justify-content-center">
                         <div class="col-12 d-flex justify-content-center align-items-center">
                             <video id="video" class="w-100" autoplay></video>
                         </div>
-                        <div class="col-6">
-                            <button id="startButton">Iniciar escaneo</button>
-                            <button id="stopButton">Detener escaneo</button>
+                        <div class="col-6 text-center">
+                            <button id="startButton" class="btn btn-tercero text-white">Iniciar escaneo</button>
 
                         </div>
-                        <div class="col-6">
-                            <button onclick="print()">Print</button>
-                            <button onclick="contar()">Checar</button>
+                        <div class="col-6 text-center">
+                            <button id="stopButton" class="btn btn-secondary text-white">Detener escaneo</button>
 
                         </div>
-                        <div class="">
-                            <div id="result"></div>
+                        <div class="col-12 text-center">
+
+
+                            <form action="{% url 'Stock:agregarCompraCodigo' compra.id %}" method="POST"
+                                enctype="multipart/form-data" id="user-profile-form"> {% csrf_token %}
+                                <div class="d-none">{{ form2.codigo_de_barras }}
+                                </div> <button class="btn btn-primary text-white" type="submit">Subir productos</button>
+                            </form>
+
                         </div>
+
                     </div>
 
 
@@ -348,7 +354,7 @@
     const startButton = document.getElementById('startButton');
     const stopButton = document.getElementById('stopButton');
 
-    const resultDiv = document.getElementById('result');
+    const resultDiv = document.getElementById('id_codigo_de_barras');
     var codigos = {}; // Usamos un objeto en lugar de una lista
     var contador = 0; // Contador total de códigos leídos
 
@@ -409,7 +415,7 @@
                             codigos[code] = 1;
                         }
 
-                        resultDiv.innerHTML = `Código de barras detectado: ${code}`;
+                        resultDiv.innerHTML = obtenerCodigosMasDe30();
                         console.log(`Código ${code} leído ${codigos[code]} veces`);
                     } else {
                         resultDiv.innerHTML = `El código ${code} no cumple con la longitud esperada.`;
@@ -424,18 +430,12 @@
         const codigosMasDe30 = [];
 
         for (const codigo in codigos) {
-            if (codigos.hasOwnProperty(codigo) && codigos[codigo] > 30) {
+            if (codigos.hasOwnProperty(codigo) && codigos[codigo] > 15) {
                 codigosMasDe30.push(codigo);
             }
         }
 
         return codigosMasDe30;
-    }
-
-    function contar() {
-        const codigosConMasDe30Escaneos = obtenerCodigosMasDe30();
-
-        console.log("Códigos con más de 30 escaneos:", codigosConMasDe30Escaneos);
     }
 
 

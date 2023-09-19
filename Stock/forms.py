@@ -99,3 +99,15 @@ class CompraIngredientesForm(forms.ModelForm):
         self.fields['totalfinal'].widget.attrs.update({'class':'form-control shadow-none bg-corporateTan200  px-2 py-1 ','placeholder':' Observaciones en la preparación*','rows':'5', 'aria-label':'Username','aria-describedby':'basic-addon1','style':'border-left:none', })
 
 
+
+
+class ActualizarCampoForm(forms.ModelForm):
+    codigos = forms.CharField(
+        widget=forms.Textarea(attrs={'rows': 5}),  # Textarea multilínea
+        label='Ingresar códigos (separados por líneas)',
+        required=False  # Puede hacerse requerido si es necesario
+    )
+
+    class Meta:
+        model = Ingredientes
+        fields = ['codigo_de_barras']  # Campos que se mostrarán en el formulario
