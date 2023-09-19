@@ -5,11 +5,40 @@
 
 <div class="container">
     <div class="row py-3">
-        <div class="col-6">
-            <h1>Inventario</h1>
-        </div>
-        <div class="col-6">
+        <div class="col-12">
             <h1>Compras recientes</h1>
+        </div>
+
+        <div class="col-2 d-flex text-center">
+            <button data-bs-toggle="modal" data-bs-target="#exampleModal2"
+                class="btn btn-tercero text-white py-2 px-3 text-decoration-none w-100 my-auto rounded rounded-5">
+                Agregar compra
+            </button>
+        </div>
+
+        <div class="col-3 d-flex justify-content-center align-items-center">
+            <div class="input-group">
+
+                <input type="text" class="form-control shadow-none" placeholder="Buscar compra por nombre" aria-label=""
+                    aria-describedby="basic-addon1" id="searchBar2" onkeyup="getCardsReplace2(this.value)">
+            </div>
+        </div>
+        <div class="col-1 d-flex text-center">
+            <button class="btn rounded-5 text-white py-2 px-3 text-decoration-none w-100 my-auto"
+                style="background-color: #d24040; " onclick="limpiarCampo('searchBar2')">
+                Limpiar </button>
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div id="cardHolder2" class="border rounded rounded-3">
+            </div>
+        </div>
+    </div>
+    <div class="row py-3">
+        <div class="col-12">
+            <h1>Inventario</h1>
         </div>
 
         <div class="col-2 d-flex text-center">
@@ -37,40 +66,19 @@
                 Limpiar </button>
         </div>
 
-        <div class="col-2 d-flex text-center">
-            <button data-bs-toggle="modal" data-bs-target="#exampleModal2"
-                class="btn btn-tercero text-white py-2 px-3 text-decoration-none w-100 my-auto rounded rounded-5">
-                Agregar compra
-            </button>
-        </div>
-
-        <div class="col-3 d-flex justify-content-center align-items-center">
-            <div class="input-group">
-
-                <input type="text" class="form-control shadow-none" placeholder="Buscar compra por nombre" aria-label=""
-                    aria-describedby="basic-addon1" id="searchBar2" onkeyup="getCardsReplace2(this.value)">
-            </div>
-        </div>
-        <div class="col-1 d-flex text-center">
-            <button class="btn rounded-5 text-white py-2 px-3 text-decoration-none w-100 my-auto"
-                style="background-color: #d24040; " onclick="limpiarCampo('searchBar2')">
-                Limpiar </button>
-        </div>
 
 
 
 
     </div>
     <div class="row  mb-4">
-        <div class="col-6 ">
+        <div class="col-12 ">
             <div id="cardHolder" class="border rounded rounded-3">
             </div>
         </div>
-        <div class="col-6">
-            <div id="cardHolder2" class="border rounded rounded-3">
-            </div>
-        </div>
+
     </div>
+
 </div>
 
 

@@ -18,6 +18,8 @@ ROLES = [
     ("Cocinera/o", "Cocinera/o"),
     ("Mesera/o", "Mesera/o"),
     ("Admin", "Admin"),
+    ("En asignación", "En asignación"),
+
    
 ]
 
@@ -30,6 +32,16 @@ UNIDADES = [
 
 ]
 
+
+METODOS = [
+    ("Tarjeta", "Tarjeta"),
+    ("Efectivo", "Efectivo"),
+    ("Cheque", "Cheque"),
+   
+
+]
+
+
 CATEGORIA = [
     ("Entradas", "Entradas"),
     ("Ensaladas", "Ensaladas"),
@@ -39,6 +51,8 @@ CATEGORIA = [
     ("Bebidas", "Bebidas"),
     ("Pizza", "Pizza"),
     ("Especialidad", "Especialidad"),
+    ("Limpieza","Limpieza"),
+    ("Otros","Otros")
 
 ]
 
@@ -61,15 +75,21 @@ class UserManager(BaseUserManager):
 
     def create_user(self, email, password=None, **extra_fields):
         """Create and save a regular User with the given email and password."""
-
+        extra_fields.setdefault('is_staff', False)
+        extra_fields.setdefault('is_superuser', False)
         return self._create_user(email, password, **extra_fields)
 
     def create_superuser(self, email, password, **extra_fields):
-        """Create and save a SuperUser with the given email, password, and first_name."""
- 
+        """Create and save a SuperUser with the given email and password."""
+        extra_fields.setdefault('is_staff', True)
+        extra_fields.setdefault('is_superuser', True)
+
+        if extra_fields.get('is_staff') is not True:
+            raise ValueError('Superuser must have is_staff=True.')
+        if extra_fields.get('is_superuser') is not True:
+            raise ValueError('Superuser must have is_superuser=True.')
 
         return self._create_user(email, password, **extra_fields)
-
 
 
 
@@ -77,13 +97,13 @@ class User(AbstractUser):
 
     username = None
     email = models.EmailField('Correo electrónico', unique=True, blank=True, null=True)
-    first_name = models.CharField("Nombre", max_length=200, null=True, blank=True,unique=True)
+    first_name = models.CharField("Nombre", max_length=200, null=True, blank=True,unique=True,default="Empleado")
     phone_number = models.CharField("Teléfono", max_length=15, unique=True, null=True)
     url = models.ImageField(upload_to="uploads/gallery/",null=True, blank=True)
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['phone_number']
     rol = models.CharField( 
-        choices=ROLES, max_length=20)
+        choices=ROLES, max_length=20,default="En asignación")
     objects = UserManager()
     is_active= models.BooleanField(default=True)
 
@@ -95,19 +115,11 @@ class User(AbstractUser):
 
 
 
-class Bebidas(models.Model):
-    nombre = models.CharField(max_length=100)
-    descripcion = models.TextField()
-    precio = models.DecimalField(max_digits=8, decimal_places=2)
-    categoria = models.CharField( 
-        choices=CATEGORIA, max_length=20)  
-    url = models.ImageField(upload_to="uploads/gallery/",null=True,blank=True)
 
+class Proovedores(models.Model):
+    nombre = models.CharField(max_length=50)
     def __str__(self):
         return self.nombre
-
-
-
 
 
 class Ingredientes(models.Model):
@@ -116,17 +128,28 @@ class Ingredientes(models.Model):
     unidad = models.CharField(choices=UNIDADES, max_length=20)
     cantidad = models.DecimalField(max_digits=8,decimal_places=2,default=0,null=False)
     fecha_compra = models.DateField(default=timezone.now)  # Establecer la fecha actual como valor predeterminado
+    codigo_de_barras = models.TextField(null=True,blank=True)
+
     def __str__(self):
         return self.nombre
     
-
 class Compras(models.Model):
-    ingrediente = models.ForeignKey(Ingredientes, on_delete=models.CASCADE)
-    cantidades = models.DecimalField(max_digits=8, decimal_places=2, null=False)
     fecha = models.DateTimeField(default=timezone.now)  # Establecer la fecha actual como valor predeterminado
-    precio = models.DecimalField(max_digits=8, decimal_places=2)
-
-
+    comprador = models.ForeignKey(User, on_delete=CASCADE)
+    metodo = models.CharField(choices=METODOS, max_length=20)
+    ticket = models.ImageField(upload_to="uploads/tickets/",blank=True,null=True)
+    total_comprado = models.DecimalField(max_digits=8, decimal_places=2,default=0)
+    numero_factura= models.PositiveIntegerField()
+    proovedor = models.ForeignKey(Proovedores, on_delete=models.CASCADE)
+  
+class CompraIngredientes(models.Model):
+    compra = models.ForeignKey(Compras, on_delete=models.CASCADE)
+    ingrediente = models.ForeignKey(Ingredientes, on_delete=models.CASCADE)
+    cantidad = models.PositiveIntegerField(blank=True,null=True,)
+    totalfinal = models.DecimalField(max_digits=8, decimal_places=2,default=0)
+ 
+  
+    
 class Cliente(models.Model):
     
     nombre = models.CharField(max_length=200)

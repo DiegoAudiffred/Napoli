@@ -2,12 +2,14 @@ import datetime
 import json
 from django.shortcuts import render
 from django.db.models import Q
-
+import cv2 
+from pyzbar.pyzbar import decode
+import time
 # Create your views here.
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
-from Stock.forms import createCompraForm, createStockForm
-from db.models import Cliente, Ingredientes, User, Compras
+from Stock.forms import CompraIngredientesForm, createCompraForm, createStockForm
+from db.models import Cliente, CompraIngredientes, Ingredientes, User, Compras
 from authentication.forms import createUserForm
 
 def stockIndex(request):
@@ -35,9 +37,9 @@ def stockCrear(request):
             print(form.errors)
             print("No Valido")
 
-            return render(request, 'Stock/crearStock.html',{'form':form})
     print("NADA")
     return redirect("Stock:stockIndex")
+
 
 def compraCrear(request):
     if request.method == "POST":
@@ -48,12 +50,9 @@ def compraCrear(request):
         if form.is_valid():
             user = form.save()
             user.save()
-            ingrediente = form.cleaned_data['ingrediente']
-            cantidades = form.cleaned_data['cantidades']
+          
+    
 
-            suma = Ingredientes.objects.get(nombre=ingrediente)
-            suma.cantidad = suma.cantidad + cantidades
-            suma.save()
             print("Valido")
 
             return redirect("Stock:stockIndex")
@@ -61,7 +60,6 @@ def compraCrear(request):
         else:
             print(form.errors)
             print("No Valido")
-            return render(request, 'Stock/menuCrear.html',{'form':form})
           
     print("GET")
 
@@ -86,10 +84,77 @@ def comprasCard(request):
     totalCompras = Compras.objects.all().order_by('-fecha')
     if search != "":
         totalCompras = totalCompras.filter(
-            Q(ingrediente__nombre__icontains=search) 
+            Q(fecha__icontains=search) 
         )
     totalCompras = totalCompras[:10]
 
     return render(request, "Stock/compraCard.html",{'totalCompras':totalCompras})
 
 
+def compraEditar(request,id):
+    compra = Compras.objects.get(id=id)
+    lista = CompraIngredientes.objects.filter(compra=id)
+    total = 0
+    for ventas in lista:
+        total += (ventas.ingrediente.precio) * ventas.cantidad
+    
+    for ven in lista:
+        ven.totalfinal = (ven.ingrediente.precio) * ven.cantidad
+   
+    form = CompraIngredientesForm(instance=compra)
+  
+
+    compra.total = total
+    compra.save()
+    return render(request, "Stock/editarCompra.html",{'compra':compra,'total':total,'lista':lista,'form':form})
+
+def agregarCompra(request,id):
+    compra = Compras.objects.get(id=id)
+
+    if request.method == "POST":
+        form = CompraIngredientesForm(request.POST, request.FILES)
+        if form.is_valid():            
+            form.instance.compra = compra
+
+            user = form.save()
+            user.save()
+                      
+            return redirect("Stock:compraEditar",id)
+        else:
+            return render(request, 'Stock/stockIndex.html',{'form':form})
+   
+    return redirect("Stock:stockIndex")
+
+#def agregarCompraCamara(request,id):
+#    
+#        compra = Compras.objects.get(id=id)
+#        cap = cv2.VideoCapture(0)
+#        cap.set (3, 640) 
+#        cap.set (4, 480) 
+#        used_codes = []
+#        camera = True
+#        while camera == True:
+#            success, frame = cap.read()
+#            for code in decode(frame):
+#                if code.data.decode('utf-8') not in used_codes: 
+#                    print ('Producto nuevo agregado con éxito')
+#                    print(code.data.decode('utf-8'))
+#                    used_codes.append(code.data.decode('utf-8'))
+#                    camera = False
+#                elif code.data.decode('utf-8') in used_codes: 
+#                    print ('Sorry, this code has been already used!')
+#
+#                else:
+#                    pass
+#            cv2.imshow('Testing-code-scan', frame) 
+#            cv2.waitKey (1)
+#        cv2.destroyAllWindows()
+#        print(used_codes)    
+#        
+#        
+#        ingredientes_encontrados = Ingredientes.objects.filter(codigo_de_barras__in=used_codes)
+#        print(ingredientes_encontrados)
+#                      
+#        return redirect("Stock:compraEditar",id)
+#   
+#

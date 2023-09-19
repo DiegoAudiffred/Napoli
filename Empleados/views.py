@@ -59,7 +59,7 @@ def empleadosCrear(request):
             user = form.save()
             user.save()
             
-            user.set_password('Super1')
+            user.set_password('super')
           
             user.save()
 

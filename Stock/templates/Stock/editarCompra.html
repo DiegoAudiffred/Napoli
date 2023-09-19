@@ -1,0 +1,338 @@
+{% extends 'layout/layout.html' %}
+{% load static %}
+{% block body %}
+<div class="container min-vh-100 px-5 py-4">
+
+    <div
+        class="row bg-whiterounded-top border-top border-end border-start border-3 border-quinto bg-white  rounded-top">
+        <div class="col-3 border-end border-quinto">
+            Comprador: {{compra.comprador}}
+        </div>
+        <div class="col-2 border-end border-quinto">
+            Metodo: {{compra.metodo}}
+        </div>
+        <div class="col-2 border-end border-quinto">
+            <a href="" data-bs-toggle="modal" data-bs-target="#exampleModal">Ver ticket</a>
+        </div>
+        <div class="col-2 border-end border-quinto">
+            Proveedor: {{compra.proovedor}}
+        </div>
+        <div class="col-3  border-quinto">
+            Fecha: {{compra.fecha}}
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-12 p-0">
+            <div class="table-responsive">
+                <table class="table border border-3 table-hover table-bordered border-quinto table-sm">
+                    <thead class="bg-tercero">
+                        <th>ID</th>
+                        <th>Producto</th>
+                        <th>Precio</th>
+                        <th>Cantidad</th>
+                        <th>Total</th>
+                    </thead>
+                    <tbody>
+
+                        {% for list in lista%}
+                        <tr>
+
+                            <td class="align-middle">{{list.ingrediente.id}}
+                            </td>
+                            <td class="align-middle">
+                                {{list.ingrediente}}
+
+                            </td>
+
+                            <td class="align-middle">
+                                $ {{list.ingrediente.precio}} mxn
+                            </td>
+
+                            <td class="align-middle">
+                                {{list.cantidad}}
+                            </td>
+                            <td class="align-middle">
+                                $ {{list.totalfinal}} mxn
+                            </td>
+                        </tr>
+
+
+                        {% endfor %}
+                        <tr>
+                            <th class="bg-quinto"></th>
+                            <th class="bg-quinto"></th>
+                            <th class="bg-quinto"></th>
+
+                            <th class="bg-quinto"></th>
+
+                            <th class="bg-primary">Total: $ {{total}} mxn
+                            </th>
+                        </tr>
+                    </tbody>
+
+                </table>
+            </div>
+            <div class="row justify-content-end">
+                <div class="col-2 text-center">
+                    <a href="" data-bs-toggle="modal" data-bs-target="#exampleModal2"
+                        class="btn btn-tercero w-100 text-white">Agregar a la
+                        compra</a>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+
+
+</div>
+
+<div class="modal fade" id="exampleModal" tabindex=" -1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header border border-0">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <img src="{{compra.ticket.url}}" alt="" width="100%" height="414px" id="output" style="cursor: pointer;"
+                    class="rounded rounded-2 border border-3">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Agregar a la compra </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body d-block" id="modal">
+                <div class="row">
+                    <div class="col-6">
+                        <a class="btn btn-tercero" onclick="mostrarCampos()">Agregar manualmente datos del
+                            producto</a>
+                    </div>
+                    <div class="col-6">
+                        <a class="btn btn-tercero" onclick="mostrarCamara()"> Agregar mediante codigo de
+                            barras</a>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-body d-none" id="modalCampo">
+                <form action="{% url 'Stock:agregarCompra' compra.id %}" method="POST" enctype="multipart/form-data"
+                    id="user-profile-form">
+                    {% csrf_token %}
+
+                    <div class="row ">
+                        <div class="d-none">
+                            {{form.venta}}
+
+                        </div>
+                        <div class="d-none">
+                            {{form.totalfinal}}
+
+                        </div>
+
+                        <div class="col-12 p-3 text-start">
+                            <div class="row justify-content-end">
+                                <div class="col-12 py-2">
+                                    <div class="input-group rounded rounded-3 border border-2 border-primary">
+                                        <span class="input-group-text bg-white " id="basic-addon1"
+                                            style="border-right: none;"><svg width="19px" height="19px"
+                                                viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                                <g id="SVGRepo_tracerCarrier" stroke-linecap="round"
+                                                    stroke-linejoin="round"></g>
+                                                <g id="SVGRepo_iconCarrier">
+                                                    <path
+                                                        d="M13 21H6C4.11438 21 3.17157 21 2.58579 20.4142C2 19.8284 2 18.8856 2 17C2 15.1144 2 14.1716 2.58579 13.5858C3.17157 13 4.11438 13 6 13H18C19.8856 13 20.8284 13 21.4142 13.5858C22 14.1716 22 15.1144 22 17C22 18.8856 22 19.8284 21.4142 20.4142C20.8284 21 19.8856 21 18 21H17"
+                                                        stroke="#a8361a" stroke-width="1.5" stroke-linecap="round">
+                                                    </path>
+                                                    <path
+                                                        d="M11 2H18C19.8856 2 20.8284 2 21.4142 2.58579C22 3.17157 22 4.11438 22 6C22 7.88562 22 8.82843 21.4142 9.41421C20.8284 10 19.8856 10 18 10H6C4.11438 10 3.17157 10 2.58579 9.41421C2 8.82843 2 7.88562 2 6C2 4.11438 2 3.17157 2.58579 2.58579C3.17157 2 4.11438 2 6 2H7"
+                                                        stroke="#a8361a" stroke-width="1.5" stroke-linecap="round">
+                                                    </path>
+                                                    <path d="M11 6H18" stroke="#a8361a" stroke-width="1.5"
+                                                        stroke-linecap="round">
+                                                    </path>
+                                                    <path d="M6 6H8" stroke="#a8361a" stroke-width="1.5"
+                                                        stroke-linecap="round">
+                                                    </path>
+                                                    <path d="M11 17H18" stroke="#a8361a" stroke-width="1.5"
+                                                        stroke-linecap="round">
+                                                    </path>
+                                                    <path d="M6 17H8" stroke="#a8361a" stroke-width="1.5"
+                                                        stroke-linecap="round">
+                                                    </path>
+                                                </g>
+                                            </svg>
+                                        </span>
+                                        {{form.ingrediente}}
+
+                                    </div>
+
+                                </div>
+
+                                <div class="col-12 py-2">
+                                    <div class="input-group rounded rounded-3 border border-2 border-primary">
+                                        <span class="input-group-text bg-white " id="basic-addon1"
+                                            style="border-right: none;"><svg width="19px" height="19px"
+                                                viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                                <g id="SVGRepo_tracerCarrier" stroke-linecap="round"
+                                                    stroke-linejoin="round"></g>
+                                                <g id="SVGRepo_iconCarrier">
+                                                    <circle opacity="0.5" cx="12" cy="12" r="10" stroke="#a8361a"
+                                                        stroke-width="1.5">
+                                                    </circle>
+                                                    <path d="M12 6V18" stroke="#a8361a" stroke-width="1.5"
+                                                        stroke-linecap="round">
+                                                    </path>
+                                                    <path
+                                                        d="M15 9.5C15 8.11929 13.6569 7 12 7C10.3431 7 9 8.11929 9 9.5C9 10.8807 10.3431 12 12 12C13.6569 12 15 13.1193 15 14.5C15 15.8807 13.6569 17 12 17C10.3431 17 9 15.8807 9 14.5"
+                                                        stroke="#a8361a" stroke-width="1.5" stroke-linecap="round">
+                                                    </path>
+                                                </g>
+                                            </svg>
+                                        </span>
+                                        {{form.cantidad}}
+
+                                    </div>
+
+                                </div>
+
+
+
+
+
+
+                                <div class="col-6 col-sm-3 py-2 px-0 text-end">
+                                    <button class="btn fnOS_Bold_Boton_10 text-primary my-auto px-3 border border-0"
+                                        type="button" data-bs-dismiss="modal" aria-label="Close">
+
+                                        <span style="border-bottom: 2px solid">Cancelar</span>
+
+                                    </button>
+
+                                </div>
+                                <div class="col-6 col-sm-3 py-2 px-0 text-start">
+                                    <button type="submit"
+                                        class="btn fnOS_Bold_Boton_10 btn-primary border border-2 border-primary text-corporateTan500 my-auto rounded rounded-3 px-3">
+
+                                        Guardar
+
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </form>
+            </div>
+            <div class="modal-body d-none" id="modalCamara">
+
+
+                <div class="row ">
+                    <div class="d-none">
+                        {{form.venta}}
+
+                    </div>
+                    <div class="d-none">
+                        {{form.totalfinal}}
+
+                    </div>
+
+                    <div class="row">
+                        <div class="col-12 d-flex justify-content-center align-items-center">
+                            <video id="video" class="w-100" autoplay></video>
+                        </div>
+                        <div class="col-12">
+                            <button id="startButton">Iniciar escaneo</button>
+                        </div>
+                        <div class="">
+                            <div id="result"></div>
+                        </div>
+                    </div>
+
+
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+</div>
+<script>
+    function mostrarCamara() {
+        modal = document.getElementById("modalCamara")
+        modal2 = document.getElementById("modalCampo")
+        modal3 = document.getElementById("modal")
+        modal.classList.add("d-block")
+        modal.classList.remove("d-none")
+        modal3.classList.add("d-none")
+        modal3.classList.remove("d-block")
+
+    }
+
+    function mostrarCampos() {
+        modal = document.getElementById("modalCampo")
+        modal2 = document.getElementById("modalCamara")
+        modal3 = document.getElementById("modal")
+        modal.classList.add("d-block")
+        modal.classList.remove("d-none")
+        modal3.classList.add("d-none")
+        modal3.classList.remove("d-block")
+    }
+</script>
+<script>
+    const video = document.getElementById('video');
+    const startButton = document.getElementById('startButton');
+    const resultDiv = document.getElementById('result');
+
+    startButton.addEventListener('click', startScanning);
+    function startScanning() {
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(function (stream) {
+                video.srcObject = stream;
+                Quagga.init({
+                    inputStream: {
+                        name: "Live",
+                        type: "LiveStream",
+                        target: video
+                    },
+                    decoder: {
+                        readers: ["ean_reader"]
+                    }
+                }, function (err) {
+                    if (err) {
+                        console.error("Error al iniciar Quagga: ", err);
+                        return;
+                    }
+                    Quagga.start();
+                    console.log("Quagga iniciado");
+                });
+
+                Quagga.onDetected(function (result) {
+                    const code = result.codeResult.code;
+                    resultDiv.innerHTML = `Código de barras detectado: ${code}`;
+                });
+            })
+            .catch(function (error) {
+                console.error('Error al acceder a la cámara web:', error);
+            });
+    }
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/quagga/0.12.1/quagga.min.js"></script>
+
+{% endblock %}
