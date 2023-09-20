@@ -143,9 +143,9 @@ class Compras(models.Model):
     proovedor = models.ForeignKey(Proovedores, on_delete=models.CASCADE)
   
 class CompraIngredientes(models.Model):
-    compra = models.ForeignKey(Compras, on_delete=models.CASCADE)
-    ingrediente = models.ForeignKey(Ingredientes, on_delete=models.CASCADE)
-    cantidad = models.PositiveIntegerField(blank=True,null=True,)
+    compra = models.ForeignKey(Compras, on_delete=models.CASCADE,null=True)
+    ingrediente = models.ForeignKey(Ingredientes, on_delete=models.CASCADE,null=True)
+    cantidad = models.PositiveIntegerField(blank=True,null=True,default=0)
     totalfinal = models.DecimalField(max_digits=8, decimal_places=2,default=0)
  
   

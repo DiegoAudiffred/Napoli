@@ -153,9 +153,20 @@ def agregarCompraCodigo(request,id):
                 else:
                     print(f'El código de barras {codigo} no está presente en la base de datos de ingredientes.')
                     
-            for ingrediente in ingredientes_registrados:
-                print(f'Ingrediente registrado: {ingrediente.nombre}')
+            form2 = CompraIngredientesForm(request.POST)
 
+            for ingrediente in ingredientes_registrados:
+              
+                if form2.is_valid():
+                    form2.instance.ingrediente = ingrediente
+                    form2.instance.compra = venta
+                    form2.instance.cantidad  = 1
+                    form2.instance.totalfinal  = 0
+                    form2.save()
+                    
+                    #form.save()
+                else:
+                    print("Nel")
     else:
         form = ActualizarCampoForm()
 

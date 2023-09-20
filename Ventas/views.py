@@ -72,7 +72,7 @@ def cerrarVenta(request,id):
     venta = Venta.objects.get(id=id)
     cliente = venta.cliente
     lista = VentaMenu.objects.filter(venta=id)
-
+    print(cliente)
     total = 0
     for ventas in lista:
         total += (ventas.menu.precio) * ventas.cantidad
@@ -80,7 +80,7 @@ def cerrarVenta(request,id):
 
       
     if venta.is_reopen == False:
-        cliente.total_compras += 1
+        cliente.total_compras +=  1
         cliente.total_gastado += total
     venta.save()
 
