@@ -2,7 +2,7 @@ import json
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from Ventas.forms import VentaMenuForm, addClienteForm, createVentaForm, modifyVentaForm
-from db.models import Cliente, User, Venta, VentaMenu
+from db.models import Cliente, Menu, User, Venta, VentaMenu
 from django.db.models import Q
 # Create your views here.
 def ventasIndex(request):
@@ -43,6 +43,17 @@ def clienteRow(request):
         )
     return render(request, "Ventas/clienteRow.html",{'clientes':clientes})
 
+def menuRow(request):
+    
+    jsonObject = json.load(request)['jsonBody']
+    search = jsonObject["search"]    
+    menus = Menu.objects.all()
+    print(Menu)
+    if search != "":
+        menus = menus.filter(
+            Q(nombre__icontains=search) 
+        )
+    return render(request, "Ventas/menuRow.html",{'menus':menus})
 
 def modificarVenta(request,id):
     venta = Venta.objects.get(id=id)

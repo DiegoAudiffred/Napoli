@@ -11,10 +11,12 @@ urlpatterns = [
     path('modificarVenta/<int:id>',views.modificarVenta,name='modificarVenta'),
     path('agregarVenta/<int:id>',views.agregarVenta,name='agregarVenta'),
     path('cerrarVenta/<int:id>',views.cerrarVenta,name='cerrarVenta'),
-        path('abrirVenta/<int:id>',views.abrirVenta,name='abrirVenta'),
+    path('abrirVenta/<int:id>',views.abrirVenta,name='abrirVenta'),
 
     path('ventasTodas/AjaxSearch', views.ventasCard, name='ventasCard'),
     path('modificarVenta/AjaxSearch', views.clienteRow, name='clienteRow'),
+    path('modificarVenta/AjaxSearch2', views.menuRow, name='menuRow'),
+
     path('modificarVenta/Cliente/<int:id>',views.addCliente,name='addCliente'),
     path('modificarVenta/guardarCambios/<int:compra_id>/<int:list_id>/<str:operacion>/', views.guardarCambios, name='guardarCambios'),
 

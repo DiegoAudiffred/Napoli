@@ -244,48 +244,49 @@
                         <div class="col-12 p-3 text-start">
                             <div class="row justify-content-end">
                                 <div class="col-12 py-2">
+
                                     <div class="input-group rounded rounded-3 border border-2 border-primary">
-                                        <span class="input-group-text bg-white " id="basic-addon1"
-                                            style="border-right: none;"><svg width="19px" height="19px"
-                                                viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                                                <g id="SVGRepo_tracerCarrier" stroke-linecap="round"
-                                                    stroke-linejoin="round"></g>
-                                                <g id="SVGRepo_iconCarrier">
-                                                    <path
-                                                        d="M13 21H6C4.11438 21 3.17157 21 2.58579 20.4142C2 19.8284 2 18.8856 2 17C2 15.1144 2 14.1716 2.58579 13.5858C3.17157 13 4.11438 13 6 13H18C19.8856 13 20.8284 13 21.4142 13.5858C22 14.1716 22 15.1144 22 17C22 18.8856 22 19.8284 21.4142 20.4142C20.8284 21 19.8856 21 18 21H17"
-                                                        stroke="#a8361a" stroke-width="1.5" stroke-linecap="round">
-                                                    </path>
-                                                    <path
-                                                        d="M11 2H18C19.8856 2 20.8284 2 21.4142 2.58579C22 3.17157 22 4.11438 22 6C22 7.88562 22 8.82843 21.4142 9.41421C20.8284 10 19.8856 10 18 10H6C4.11438 10 3.17157 10 2.58579 9.41421C2 8.82843 2 7.88562 2 6C2 4.11438 2 3.17157 2.58579 2.58579C3.17157 2 4.11438 2 6 2H7"
-                                                        stroke="#a8361a" stroke-width="1.5" stroke-linecap="round">
-                                                    </path>
-                                                    <path d="M11 6H18" stroke="#a8361a" stroke-width="1.5"
-                                                        stroke-linecap="round">
-                                                    </path>
-                                                    <path d="M6 6H8" stroke="#a8361a" stroke-width="1.5"
-                                                        stroke-linecap="round">
-                                                    </path>
-                                                    <path d="M11 17H18" stroke="#a8361a" stroke-width="1.5"
-                                                        stroke-linecap="round">
-                                                    </path>
-                                                    <path d="M6 17H8" stroke="#a8361a" stroke-width="1.5"
-                                                        stroke-linecap="round">
-                                                    </path>
-                                                </g>
-                                            </svg>
-                                        </span>
-                                        {{form2.menu}}
+
+
+                                        <div class="input-group-prepend dropdown me-2 my-auto">
+                                            <span class="input-group-text bg-white border border-0"
+                                                id="basic-addon1"><svg width="19px" height="19px"
+                                                    viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg"
+                                                    fill="#000000">
+                                                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                                    <g id="SVGRepo_tracerCarrier" stroke-linecap="round"
+                                                        stroke-linejoin="round"></g>
+                                                    <g id="SVGRepo_iconCarrier">
+                                                        <path fill="#000000"
+                                                            d="m384.064 274.56.064-50.688A128 128 0 0 1 512.128 96c70.528 0 127.68 57.152 127.68 127.68v50.752A448.192 448.192 0 0 1 955.392 768H68.544A448.192 448.192 0 0 1 384 274.56zM96 832h832a32 32 0 1 1 0 64H96a32 32 0 1 1 0-64zm32-128h768a384 384 0 1 0-768 0zm447.808-448v-32.32a63.68 63.68 0 0 0-63.68-63.68 64 64 0 0 0-64 63.936V256h127.68z">
+                                                        </path>
+                                                    </g>
+                                                </svg></span>
+                                        </div>
+                                        <input type="text"
+                                            class="form-control shadow-none  px-2 py-1 border border-0 rounded rounded-3"
+                                            placeholder="Buscar platillo" aria-label="" aria-describedby="basic-addon1"
+                                            id="searchBar2" list="cardHolder2" data-bs-toggle="dropdown"
+                                            onkeyup="getCardsReplace2(this.value)" id="dropdownMenuLink" value="">
+
+
+                                        <ul class="dropdown-menu w-100" aria-labelledby="dropdownMenuLink"
+                                            id="cardHolder2">
+
+                                        </ul>
+                                        <div class="d-none">
+                                            {{form2.menu}}
+
+                                        </div>
 
                                     </div>
-
                                 </div>
 
                                 <div class="col-12 py-2">
-                                    <div class="input-group rounded rounded-3 border border-2 border-primary">
-                                        <span class="input-group-text bg-white " id="basic-addon1"
-                                            style="border-right: none;"><svg width="19px" height="19px"
-                                                viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <div class="input-group rounded rounded-3 border border-2 border-primary my-auto">
+                                        <span class="input-group-text bg-white border border-0 " id="basic-addon1"><svg
+                                                width="19px" height="19px" viewBox="0 0 24 24" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
                                                 <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                                                 <g id="SVGRepo_tracerCarrier" stroke-linecap="round"
                                                     stroke-linejoin="round"></g>
@@ -309,11 +310,11 @@
 
                                 </div>
 
-                                <div class="col-12 py-2">
-                                    <div class="input-group rounded rounded-3 border border-2 border-primary">
-                                        <span class="input-group-text bg-white " id="basic-addon1"
-                                            style="border-right: none;"><svg width="19px" height="19px"
-                                                viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <div class="col-12 py-2 ">
+                                    <div class="input-group rounded rounded-3 border border-2 border-primary ">
+                                        <span class="input-group-text bg-white border border-0 " id="basic-addon1"> <svg
+                                                width="19px" height="19px" viewBox="0 0 24 24" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
                                                 <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                                                 <g id="SVGRepo_tracerCarrier" stroke-linecap="round"
                                                     stroke-linejoin="round"></g>
@@ -388,6 +389,23 @@
 
 
     }
+    function setNombre2(id) {
+        if (id == 0) {
+            var nombre2 = document.getElementById("id_menu");
+            nombre2.value = id
+
+        } else {
+            nombreC = "menu" + id
+            var nombre = document.getElementById("searchBar2");
+            var nombreChido = document.getElementById(nombreC);
+            nombre.value = nombreChido.textContent;
+
+            var nombre2 = document.getElementById("id_menu");
+            nombre2.value = id
+        }
+
+
+    }
 </script>
 
 <script>
@@ -402,8 +420,22 @@
 
     });
 </script>
+<script>
+    var inputElement = document.getElementById("searchBar2");
+
+    // Escuchar el evento "click" en el elemento
+    inputElement.addEventListener("click", function () {
+        // Establecer el valor del input a una cadena vacía
+        inputElement.value = '';
+        getCardsReplace2("")
+        setNombre2(0)
+
+    });
+</script>
 
 <script src="{% static 'js/clienteRow.js' %}"></script>
+<script src="{% static 'js/menuRow.js' %}"></script>
+
 <script>
     function incrementValue(id) {
         var inputField = document.getElementById('input' + id);

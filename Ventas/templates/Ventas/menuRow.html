@@ -1,0 +1,9 @@
+{% for menu in menus %}
+
+<li><a class="dropdown-item" id="menu{{menu.id}}" onclick="setNombre2('{{menu.id}}')">{{menu.nombre}}</a>
+
+</li>
+{% empty %}
+<li><button class="dropdown-item" type="">No existe el Platillo</button></li>
+
+{% endfor %}
