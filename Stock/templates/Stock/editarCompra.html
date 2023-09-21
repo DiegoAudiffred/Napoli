@@ -50,9 +50,37 @@
                                 $ {{list.ingrediente.precio}} mxn
                             </td>
 
-                            <td class="align-middle">
-                                {{list.cantidad}}
+                            <td class="align-middle" style="width: 135px;">
+                                <!-- Change the `data-field` of buttons and `name` of input field's for multiple plus minus buttons-->
+                                <div class="input-group plus-minus-input">
+                                    <div class="input-group-button">
+
+                                        <a onclick="decrementValue({{list.id}})" data-field="quantity1"
+                                            href="{% url 'Stock:guardarCambios' compra.id list.id 'resta' %}"
+                                            id="minus{{list.id}}" class="btn"><i class="fa fa-minus text-secondary"
+                                                aria-hidden="true"></i>
+                                        </a>
+
+                                    </div>
+                                    <input class="input-group-field border rounded rounded-4 text-center" type="number"
+                                        name="quantity" value="{{list.cantidad}}" style="width: 50px;"
+                                        id="input{{list.id}}" disabled>
+
+
+                                    <div class="input-group-button">
+
+                                        <a onclick="incrementValue({{list.id}})" data-field="quantity1"
+                                            href="{% url 'Stock:guardarCambios' compra.id list.id 'suma' %}"
+                                            id="plus{{list.id}}" class="btn"><i class="fa fa-plus text-primary"
+                                                aria-hidden="true"></i>
+                                        </a>
+
+                                    </div>
+                                </div>
+
                             </td>
+
+
                             <td class="align-middle">
                                 $ {{list.totalfinal}} mxn
                             </td>
@@ -75,6 +103,7 @@
                 </table>
             </div>
             <div class="row justify-content-end">
+
                 <div class="col-2 text-center">
                     <a href="" data-bs-toggle="modal" data-bs-target="#exampleModal2"
                         class="btn btn-tercero w-100 text-white">Agregar a la
@@ -85,7 +114,7 @@
                         id="user-profile-form">
                         {% csrf_token %}
                         <a class="btn btn-secondary w-100 text-white" data-bs-toggle="modal"
-                            data-bs-target="#cerraModal">Cerrar
+                            data-bs-target="#cerraModal">Guardar
                             venta</a>
 
 
@@ -430,7 +459,7 @@
         const codigosMasDe30 = [];
 
         for (const codigo in codigos) {
-            if (codigos.hasOwnProperty(codigo) && codigos[codigo] > 15) {
+            if (codigos.hasOwnProperty(codigo)) {
                 codigosMasDe30.push(codigo);
             }
         }
@@ -441,5 +470,31 @@
 
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/quagga/0.12.1/quagga.min.js"></script>
+
+<script>
+    function incrementValue(id) {
+        var inputField = document.getElementById('input' + id);
+        console.log(inputField);
+        var currentVal = parseInt(inputField.value);
+        if (!isNaN(currentVal)) {
+            inputField.value = currentVal + 1;
+        } else {
+            inputField.value = 0;
+        }
+
+
+    }
+
+    function decrementValue(id) {
+        var inputField = document.getElementById('input' + id);
+        var currentVal = parseInt(inputField.value);
+        if (!isNaN(currentVal) && currentVal > 0) {
+            inputField.value = currentVal - 1;
+        } else {
+            inputField.value = 0;
+        }
+
+    }
+</script>
 
 {% endblock %}

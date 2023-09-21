@@ -106,7 +106,7 @@ def compraEditar(request,id):
     form = CompraIngredientesForm(instance=compra)
     form2 = ActualizarCampoForm()
 
-    compra.total = total
+    compra.total_comprado = total
     compra.save()
     return render(request, "Stock/editarCompra.html",{'compra':compra,'total':total,'lista':lista,'form':form,'productos':productos,'form2':form2})
 
@@ -139,11 +139,15 @@ def agregarCompraCodigo(request,id):
 
             ingredientes_registrados = []  # Lista para almacenar ingredientes registrados
 
-
-    
+            print("Los codigos son:")
+            print(codigos)
             for codigo in codigos:
                 codigo_limpio = codigo.strip()  # Eliminar espacios en blanco alrededor del código
+                print("Codigo Limpio")
+                print(codigo_limpio)
+
                 existe_codigo = Ingredientes.objects.filter(codigo_de_barras=codigo_limpio).exists()
+                print(existe_codigo)
 
                 if existe_codigo:
                     ingrediente = Ingredientes.objects.get(codigo_de_barras=codigo)
@@ -152,25 +156,24 @@ def agregarCompraCodigo(request,id):
                     print(f'El código de barras {codigo} está presente en la base de datos de ingredientes.')
                 else:
                     print(f'El código de barras {codigo} no está presente en la base de datos de ingredientes.')
-                    
-            form2 = CompraIngredientesForm(request.POST)
+            
+            print("Lista de ingredientes:")      
+            print(ingredientes_registrados)
 
             for ingrediente in ingredientes_registrados:
-              
+                form2 = CompraIngredientesForm(request.POST)
                 if form2.is_valid():
                     form2.instance.ingrediente = ingrediente
                     form2.instance.compra = venta
                     form2.instance.cantidad  = 1
                     form2.instance.totalfinal  = 0
                     form2.save()
-                    
-                    #form.save()
-                else:
-                    print("Nel")
+                  
+              
     else:
         form = ActualizarCampoForm()
 
-    return redirect("Stock:stockIndex")
+    return redirect("Stock:compraEditar",id)
 
 
 def cerrarCompra(request,id):
@@ -188,6 +191,34 @@ def cerrarCompra(request,id):
     
     return redirect('Stock:stockIndex')
 
+def guardarCambios(request,compra_id,list_id,operacion):
+    print(compra_id)
+    print(list_id)
+    compras = Compras.objects.get(id=compra_id)
+    producto = CompraIngredientes.objects.get(compra=compras,id=list_id)
+    
+    print(operacion)
+    if operacion == "suma":
+        
+        producto.cantidad = producto.cantidad + 1
+        producto.save()
+
+    else:
+        
+        if producto.cantidad == 0:
+            producto.delete()
+   
+        if producto.cantidad > 0:
+            producto.cantidad = producto.cantidad - 1
+            producto.save()
+       
+
+        
+        
+    
+    return redirect("Stock:compraEditar",compra_id)
+  
+    #return redirect("Stock:compraEditar",id)
 
 #def agregarCompraCamara(request,id):
 #    

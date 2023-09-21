@@ -58,10 +58,10 @@
             <ul class="list-group list-group-flush">
 
 
-                <li class="list-group-item bg-cuarto" style="height: 100px;">Descripción: {{empleado.descripcion}}</li>
+                <li class="list-group-item bg-cuarto" style="height: 100px;"> {{empleado.descripcion}}</li>
 
-                <li class="list-group-item bg-cuarto">Precio: {{empleado.precio}} mxn</li>
-                <li class="list-group-item bg-cuarto">Categoría: {{empleado.categoria}}</li>
+                <li class="list-group-item bg-cuarto">${{empleado.precio}} mxn</li>
+                <li class="list-group-item bg-cuarto">{{empleado.categoria}}</li>
             </ul>
 
 
@@ -69,7 +69,7 @@
                 <div class="row">
 
                     {% for ingrediente in empleado.ingredientes.all %}
-                    <div class="col-auto rounded rounded-5 border border-2 text-sm-center">
+                    <div class="col-auto rounded rounded-5 border border-2 text-sm-center bg-tercero text-white">
                         {{ ingrediente.nombre }}
 
                     </div>

@@ -78,10 +78,10 @@ def cerrarVenta(request,id):
         total += (ventas.menu.precio) * ventas.cantidad
     
 
-      
     if venta.is_reopen == False:
         cliente.total_compras +=  1
         cliente.total_gastado += total
+    venta.total= total
     venta.save()
 
     cliente.save()
@@ -161,3 +161,30 @@ def ventasCard(request):
             Q(fecha_compra__icontains=search) 
         )
     return render(request, "Ventas/ventasCard.html",{'ventas':ventas})
+
+def guardarCambios(request,compra_id,list_id,operacion):
+    print(compra_id)
+    print(list_id)
+    compras = Venta.objects.get(id=compra_id)
+    producto = VentaMenu.objects.get(venta=compras,id=list_id)
+    
+    print(operacion)
+    if operacion == "suma":
+        
+        producto.cantidad = producto.cantidad + 1
+        producto.save()
+
+    else:
+        
+        if producto.cantidad == 0:
+            producto.delete()
+   
+        if producto.cantidad > 0:
+            producto.cantidad = producto.cantidad - 1
+            producto.save()
+       
+
+        
+        
+    
+    return redirect("Ventas:modificarVenta",compra_id)

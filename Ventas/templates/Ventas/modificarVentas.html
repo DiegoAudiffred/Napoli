@@ -95,7 +95,34 @@
                             </td>
 
                             <td class="align-middle">
-                                {{list.cantidad}}
+
+
+
+                                <div class="input-group plus-minus-input">
+                                    <div class="input-group-button">
+
+                                        <a onclick="decrementValue({{list.id}})" data-field="quantity1"
+                                            href="{% url 'Ventas:guardarCambios' venta.id list.id 'resta' %}"
+                                            id="minus{{list.id}}" class="btn"><i class="fa fa-minus text-secondary"
+                                                aria-hidden="true"></i>
+                                        </a>
+
+                                    </div>
+                                    <input class="input-group-field border rounded rounded-4 text-center" type="number"
+                                        name="quantity" value="{{list.cantidad}}" style="width: 50px;"
+                                        id="input{{list.id}}" disabled>
+
+
+                                    <div class="input-group-button">
+
+                                        <a onclick="incrementValue({{list.id}})" data-field="quantity1"
+                                            href="{% url 'Ventas:guardarCambios' venta.id list.id 'suma' %}"
+                                            id="plus{{list.id}}" class="btn"><i class="fa fa-plus text-primary"
+                                                aria-hidden="true"></i>
+                                        </a>
+
+                                    </div>
+                                </div>
                             </td>
                             <td class="align-middle">
                                 $ {{list.totalfinal}} mxn
@@ -377,5 +404,29 @@
 </script>
 
 <script src="{% static 'js/clienteRow.js' %}"></script>
+<script>
+    function incrementValue(id) {
+        var inputField = document.getElementById('input' + id);
+        console.log(inputField);
+        var currentVal = parseInt(inputField.value);
+        if (!isNaN(currentVal)) {
+            inputField.value = currentVal + 1;
+        } else {
+            inputField.value = 0;
+        }
 
+
+    }
+
+    function decrementValue(id) {
+        var inputField = document.getElementById('input' + id);
+        var currentVal = parseInt(inputField.value);
+        if (!isNaN(currentVal) && currentVal > 0) {
+            inputField.value = currentVal - 1;
+        } else {
+            inputField.value = 0;
+        }
+
+    }
+</script>
 {% endblock %}
