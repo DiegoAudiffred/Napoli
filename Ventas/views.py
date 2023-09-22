@@ -1,9 +1,12 @@
+import datetime
 import json
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from Ventas.forms import VentaMenuForm, addClienteForm, createVentaForm, modifyVentaForm
 from db.models import Cliente, Menu, User, Venta, VentaMenu
 from django.db.models import Q
+from datetime import datetime
+
 # Create your views here.
 def ventasIndex(request):
     form = createVentaForm()
@@ -47,12 +50,14 @@ def menuRow(request):
     
     jsonObject = json.load(request)['jsonBody']
     search = jsonObject["search"]    
+ 
     menus = Menu.objects.all()
     print(Menu)
     if search != "":
         menus = menus.filter(
             Q(nombre__icontains=search) 
         )
+
     return render(request, "Ventas/menuRow.html",{'menus':menus})
 
 def modificarVenta(request,id):
@@ -165,12 +170,21 @@ def ventasTodas(request):
 def ventasCard(request):
     jsonObject = json.load(request)['jsonBody']
     search = jsonObject["search"]    
+    fecha = jsonObject["date"]
+   
+    
     ventas = Venta.objects.filter(is_open=False).order_by('-fecha_compra')
- 
-    if search != "":
-        ventas = ventas.filter(
-            Q(fecha_compra__icontains=search) 
-        )
+
+    if fecha != "":
+        if fecha != "" :
+            date = fecha.split("/")
+            start_dt = datetime(int(date[2]), int(date[1]), int(date[0]))
+            ventas = ventas.filter(
+                Q(fecha_compra__date=start_dt)  
+            )
+
+
+                
     return render(request, "Ventas/ventasCard.html",{'ventas':ventas})
 
 def guardarCambios(request,compra_id,list_id,operacion):

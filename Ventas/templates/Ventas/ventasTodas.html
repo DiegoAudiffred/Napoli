@@ -1,7 +1,11 @@
 {% extends 'layout/layout.html' %}
 {% load static %}
 {% block body %}
-
+<link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
 <div class="container min-vh-100 px-4">
     <div class="row py-3">
         <div class="col-3">
@@ -20,9 +24,28 @@
                 <input type="text" class="form-control shadow-none" placeholder="Buscar producto por nombre"
                     aria-label="" aria-describedby="basic-addon1" id="searchBar" onkeyup="getCardsReplace(this.value)">
             </div>
+
         </div>
 
+        <form class="row">
+            <div class="col-12">
+                <label class="fnTitle2">Filtrar por fecha de solicitud</label>
+                <div class="row">
+                    <div class="col-4">
+                        <div class="input-group date" id="datepicker">
+                            <input type="search" class="form-control border-end-0" id="date" autocomplete="off"
+                                placeholder="DD / MM / AA" />
+                            <span
+                                class="input-group-append input-group-text bg-white border-start-0 text-black600 fnRegularText2">
+                                <i class="fa fa-calendar"></i>
+                            </span>
+                        </div>
+                    </div>
 
+                </div>
+
+            </div>
+        </form>
 
 
 
@@ -39,5 +62,37 @@
 </div>
 <script src="{% static 'js/ventasAjaxSearch.js' %}"></script>
 
+<script>
+    $(function () {
+        $('#datepicker').datepicker({ format: 'dd/mm/yyyy' });
+    });
 
+</script>
+
+<script type="text/javascript">
+
+
+    document.getElementById("date").addEventListener("search", function (event) {
+        getCardsReplace(document.getElementById('searchBar').value, 1, date)
+    });
+
+
+    $(document).ready(function () {
+        $("#date").on("change", function (e) {
+            run_date_filter()
+        })
+
+
+    });
+
+    function run_date_filter() {
+        date = $("#date").val()
+        console.log(date)
+
+
+        getCardsReplace(document.getElementById('searchBar').value, 1, date)
+
+    }
+
+</script>
 {% endblock %}

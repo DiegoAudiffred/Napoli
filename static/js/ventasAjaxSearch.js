@@ -1,13 +1,15 @@
 
-currPage = 1;
-search = ""
 currentOrder = "id"
-
-
+search = ""
+date = ""
 window.addEventListener('DOMContentLoaded', (event) => {
+    getCardsPaged("", 1);
     currentOrder = "id"
-    getCardsReplace("", 1);
+
+    date = ""
 });
+
+
 
 
 function changeOrder(str) {
@@ -26,7 +28,7 @@ function changeOrder(str) {
     }
     currPage = 1;
     currentOrder = dataValue
-    getCardsReplace(search, currPage)
+    getCardsReplace(search, 1)
 
 }
 
@@ -40,11 +42,10 @@ window.onscroll = function (ev) {
     }
 };
 
-
-function getCardsReplace(search, page = 1) {
-    search = search
-    console.log(search)
+function getCardsReplace(search, page = 1, date = '') {
+    currentSearch = search
     currPage = 1;
+
     fetch('AjaxSearch', {
         method: 'POST',
         credentials: 'same-origin',
@@ -53,7 +54,7 @@ function getCardsReplace(search, page = 1) {
             'X-Requested-With': 'XMLHttpRequest',
             'X-CSRFToken': csrftoken,
         },
-        body: JSON.stringify({ 'jsonBody': { "search": search, "page": page, "orderBy": currentOrder } })
+        body: JSON.stringify({ 'jsonBody': { "search": search, "page": page, "orderBy": currentOrder, "date": date } })
     })
         .then(response => response.text())
         .then(text => {
@@ -72,7 +73,7 @@ function getCardsPaged(page = 1) {
             'X-Requested-With': 'XMLHttpRequest',
             'X-CSRFToken': csrftoken,
         },
-        body: JSON.stringify({ 'jsonBody': { "search": search, "page": page, "orderBy": currentOrder } })
+        body: JSON.stringify({ 'jsonBody': { "search": search, "page": page, "orderBy": currentOrder, "date": date } })
     })
         .then(response => response.text())
         .then(text => {
@@ -80,12 +81,3 @@ function getCardsPaged(page = 1) {
 
         })
 }
-
-$(document).ready(function () {
-    $('.dropdown').each(function (key, dropdown) {
-        var $dropdown = $(dropdown);
-        $dropdown.find('.dropdown-menu a').on('click', function () {
-            $dropdown.find('button').text($(this).text()).append(' <span class="caret"></span>');
-        });
-    });
-});
