@@ -118,8 +118,8 @@ class User(AbstractUser):
 
 class Proovedores(models.Model):
     nombre = models.CharField(max_length=50)
-    phone_number = models.CharField("Teléfono", max_length=15, unique=True, null=True)
-    email = models.EmailField('Correo electrónico', unique=True, blank=True, null=True)
+    phone_number = models.CharField("Teléfono", max_length=15, null=True, blank=True)
+    email = models.EmailField('Correo electrónico', blank=True, null=True)
 
     def __str__(self):
         return self.nombre
@@ -144,7 +144,9 @@ class Compras(models.Model):
     total_comprado = models.DecimalField(max_digits=8, decimal_places=2,default=0)
     numero_factura= models.PositiveIntegerField()
     proovedor = models.ForeignKey(Proovedores, on_delete=models.CASCADE)
-  
+    is_open = models.BooleanField(default=True)
+
+
 class CompraIngredientes(models.Model):
     compra = models.ForeignKey(Compras, on_delete=models.CASCADE,null=True)
     ingrediente = models.ForeignKey(Ingredientes, on_delete=models.CASCADE,null=True)

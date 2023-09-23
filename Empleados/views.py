@@ -62,16 +62,14 @@ def empleadosCrear(request):
             user.set_password('super')
           
             user.save()
-
             
             return redirect("Empleados:empleadosIndex")
         else:
-            return render(request, 'Empleados/crearEmpleado.html',{'form':form})
+            print("Valio")
+            print(form.errors)
+            return render(request, 'Empleados/indexEmpleados.html',{'form':form})
           
 
-    form = createEmployeeForm()
-
-    return render(request, 'Empleados/crearEmpleado.html',{'form':form})
 
 
 def empleadosEliminar(request,id):

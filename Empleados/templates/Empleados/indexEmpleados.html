@@ -58,5 +58,11 @@
         }
     } </script>
 <script src="{% static 'js/employeesAjaxSearch.js' %}"></script>
-
+<script>
+    function ponerCorreo() {
+        email = document.getElementById("id_email")
+        usuario = document.getElementById("useremail")
+        email.value = usuario.value + "@napoli.com"
+    }
+</script>
 {% endblock %}

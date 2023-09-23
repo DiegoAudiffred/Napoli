@@ -10,8 +10,10 @@
 
 
     <div class="row">
+        <div class="col-1">
 
-        <div class="col-sm-5 col-12 px-5 bg-cuarto py-4">
+        </div>
+        <div class="col-sm-4 col-12 px-5 bg-cuarto pt-3">
             <div class="row px-4">
                 <h3 class="text-quinto">Bienvenid@ {{user.first_name}}</h3>
 
@@ -28,20 +30,7 @@
                     </a>
                 </div>
 
-                <div
-                    class="col-12 text-start text-center my-2  border border-5 rounded rounded-3 bg-cuarto border-quinto ">
 
-                    <a href="" class="text-decoration-none">
-
-                        <div class="row my-auto">
-
-                            <div class="col-12my-auto">
-                                <h3 class="my-auto text-quinto">Corte de caja</h3>
-                            </div>
-
-                        </div>
-                    </a>
-                </div>
 
                 <div
                     class="col-12 text-start text-center my-2  border border-5 rounded rounded-3 bg-cuarto border-quinto ">
@@ -56,6 +45,7 @@
                         </div>
                     </a>
                 </div>
+
                 <div
                     class="col-12 text-start text-center my-2  border border-5 rounded rounded-3 bg-cuarto border-quinto ">
 
@@ -69,6 +59,7 @@
                         </div>
                     </a>
                 </div>
+
                 <div
                     class="col-12 text-start text-center my-2  border border-5 rounded rounded-3 bg-cuarto border-quinto ">
 
@@ -121,12 +112,13 @@
                         <div class="row my-auto">
 
                             <div class="col-12my-auto">
-                                <h3 class="my-auto text-quinto">Facturas</h3>
+                                <h3 class="my-auto text-quinto text-decoration-line-through">Facturas</h3>
                             </div>
 
                         </div>
                     </a>
                 </div>
+
                 <div
                     class="col-12 text-start  my-2 text-center border border-5 rounded rounded-3 bg-cuarto border-quinto ">
 
@@ -134,7 +126,21 @@
                         <div class="row my-auto">
 
                             <div class="col-12my-auto">
-                                <h3 class="my-auto text-quinto">Proveedores</h3>
+                                <h3 class="my-auto text-quinto text-decoration-line-through">Proveedores</h3>
+                            </div>
+
+                        </div>
+                    </a>
+                </div>
+                <div
+                    class="col-12 text-start text-center my-2  border border-5 rounded rounded-3 bg-cuarto border-quinto ">
+
+                    <a href="" class="text-decoration-none">
+
+                        <div class="row my-auto">
+
+                            <div class="col-12my-auto">
+                                <h3 class="my-auto text-quinto text-decoration-line-through">Corte de caja</h3>
                             </div>
 
                         </div>
@@ -147,19 +153,17 @@
                         <div class="row my-auto">
 
                             <div class="col- my-auto">
-                                <h3 class="my-auto text-quinto">Cerrar sesion</h3>
+                                <h3 class="my-auto text-quinto text-decoration-line-through">Cerrar sesion</h3>
                             </div>
 
                         </div>
                     </a>
                 </div>
 
-
-
             </div>
         </div>
-        <div class="col-7 p-0">
-            <img src="{% static 'img/asd.jpg'%}" alt="" width="100%" id="output" style="cursor: pointer;">
+        <div class="col-6 p-0">
+            <img src="{% static 'img/asd.jpg'%}" class="w-100 h-100" alt="" width="" id="output">
         </div>
     </div>
 </div>

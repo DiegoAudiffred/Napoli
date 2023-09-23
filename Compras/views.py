@@ -146,7 +146,7 @@ def cerrarCompra(request,id):
         inventario.cantidad += ventas.cantidad
         inventario.save()
     compra.total_comprado = total
-    
+    compra.is_open=False
     compra.save()
 
     

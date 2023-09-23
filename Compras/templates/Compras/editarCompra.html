@@ -50,9 +50,13 @@
                                 $ {{list.ingrediente.precio}} mxn
                             </td>
 
-                            <td class="align-middle" style="width: 135px;">
+                            <td class="align-middle text-center" style="width: 135px;">
                                 <!-- Change the `data-field` of buttons and `name` of input field's for multiple plus minus buttons-->
-                                <div class="input-group plus-minus-input">
+                                <div class="                                         {% if compra.is_open%}
+        input-group {% endif %} plus-minus-input">
+
+                                    {% if compra.is_open%}
+
                                     <div class="input-group-button">
 
                                         <a onclick="decrementValue({{list.id}})" data-field="quantity1"
@@ -62,10 +66,12 @@
                                         </a>
 
                                     </div>
+                                    {% endif %}
                                     <input class="input-group-field border rounded rounded-4 text-center" type="number"
                                         name="quantity" value="{{list.cantidad}}" style="width: 50px;"
                                         id="input{{list.id}}" disabled>
 
+                                    {% if compra.is_open%}
 
                                     <div class="input-group-button">
 
@@ -76,6 +82,7 @@
                                         </a>
 
                                     </div>
+                                    {% endif %}
                                 </div>
 
                             </td>
@@ -102,6 +109,7 @@
 
                 </table>
             </div>
+            {% if compra.is_open%}
             <div class="row justify-content-end">
 
                 <div class="col-2 text-center">
@@ -149,6 +157,7 @@
                 </div>
 
             </div>
+            {% endif %}
 
         </div>
     </div>
@@ -336,7 +345,7 @@
 
                             <form action="{% url 'Compras:agregarCompraCodigo' compra.id %}" method="POST"
                                 enctype="multipart/form-data" id="user-profile-form"> {% csrf_token %}
-                                <div class="d-none">{{ form2.codigo_de_barras }}
+                                <div class="d-block">{{ form2.codigo_de_barras }}
                                 </div> <button class="btn btn-primary text-white" type="submit">Subir productos</button>
                             </form>
 

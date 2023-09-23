@@ -28,9 +28,16 @@
             <td>{{compras.numero_factura}}</td>
             <td>{{compras.proovedor}}</td>
 
-
+            {% if compras.is_open %}
             <td class="text-start"><a href="{% url 'Compras:compraEditar' compras.id %}"
-                    class="btn btn-tercero text-white"> Editar compra</a></td>
+                    class="btn btn-tercero text-white"> Editar
+                    compra</a></td>
+
+
+            {% else %}
+            <td class="text-start"><a href="{% url 'Compras:compraEditar' compras.id %}"
+                    class="btn btn-tercero text-white"> Ver
+                    compra</a></td> {% endif %}
 
             <td class="text-start"><a href="" class="btn btn-secondary text-white"> Eliminar compra</a></td>
 
