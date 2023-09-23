@@ -22,8 +22,6 @@ def createAccount(request):
     form = createUserForm()
     return render(request, 'authentication/createAccount.html',{'form':form})
 
-
-def propertiesCreate(request):
     owner = request.user
     totalproperties = Property.objects.filter(user=owner).count()
     if request.method == "POST":

@@ -4,55 +4,46 @@
 {% block body %}
 
 <div class="container">
-
-
     <div class="row py-3">
         <div class="col-12">
-            <h1>Inventario</h1>
+            <h1>Compras recientes</h1>
         </div>
 
         <div class="col-2 d-flex text-center">
-            <button class="btn btn-tercero rounded-5 text-white py-2 px-3 text-decoration-none w-100 my-auto"
-                data-bs-toggle="modal" data-bs-target="#exampleModal">
-                Agregar producto
+            <button data-bs-toggle="modal" data-bs-target="#exampleModal10"
+                class="btn btn-tercero text-white py-2 px-3 text-decoration-none w-100 my-auto rounded rounded-5">
+                Agregar compra
             </button>
         </div>
-
-
-
-
-
 
         <div class="col-3 d-flex justify-content-center align-items-center">
             <div class="input-group">
 
-                <input type="text" class="form-control shadow-none" placeholder="Buscar producto por nombre"
-                    aria-label="" aria-describedby="basic-addon1" id="searchBar" onkeyup="getCardsReplace(this.value)">
+                <input type="text" class="form-control shadow-none" placeholder="Buscar compra por nombre" aria-label=""
+                    aria-describedby="basic-addon1" id="searchBar2" onkeyup="getCardsReplace2(this.value)">
             </div>
         </div>
         <div class="col-1 d-flex text-center">
             <button class="btn rounded-5 text-white py-2 px-3 text-decoration-none w-100 my-auto"
-                style="background-color: #d24040;" onclick="limpiarCampo('searchBar')">
+                style="background-color: #d24040; " onclick="limpiarCampo('searchBar2')">
                 Limpiar </button>
         </div>
 
-
-
-
-
     </div>
-    <div class="row  mb-4">
-        <div class="col-12 ">
-            <div id="cardHolder" class="border rounded rounded-3">
+    <div class="row">
+        <div class="col-12">
+            <div id="cardHolder2" class="border rounded rounded-3 ">
             </div>
         </div>
-
     </div>
+
 
 </div>
 
 
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+
+
+<div class="modal fade" id="exampleModal10" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -60,16 +51,13 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                {% include 'Stock/crearStock.html' %}
+                {% include 'Compras/compraCrear.html' %}
             </div>
 
         </div>
     </div>
 </div>
-
-
 <script src="{% static 'js/comprasAjaxSearch.js' %}"></script>
-<script src="{% static 'js/productoAjaxSearch.js' %}"></script>
 <script>
     function limpiarCampo(inputId) {
         // Obtén el elemento de entrada por su ID

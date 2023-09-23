@@ -51,7 +51,7 @@
         </div>
 
         <div class="col-3 border-end border-quinto">
-            Fecha: {% if venta.is_open %} {% if venta.is_reopen%} Cuenta reabierta {% else %} Cuenta abierta {%endif %}
+            Estado: {% if venta.is_open %} {% if venta.is_reopen%} Cuenta reabierta {% else %} Cuenta abierta {%endif %}
             {% else %} Cuenta cerrada {% endif %}
         </div>
     </div>
@@ -70,6 +70,7 @@
                         <th>Observaciones en preparación</th>
 
                         <th>Precio</th>
+                        <th>Extras</th>
                         <th>Cantidad</th>
                         <th>Total</th>
                     </thead>
@@ -80,38 +81,43 @@
                             <td class="align-middle" style="width: 75px;height:75px">
                                 <img src="{{list.menu.url.url}}" alt="" width="75px" height="75px">
                             </td>
-                            <td class="align-middle">{{list.menu.id}}
+                            <td class="align-middle  text-center">{{list.menu.id}}
                             </td>
-                            <td class="align-middle">
+                            <td class="align-middle  text-center">
                                 {{list.menu}}
 
                             </td>
-                            <td class="align-middle">
+                            <td class="align-middle  text-center">
                                 {{list.observaciones}}
 
                             </td>
-                            <td class="align-middle">
+                            <td class="align-middle text-center">
                                 $ {{list.menu.precio}} mxn
                             </td>
+                            <td class="align-middle text-center">
+                                Extras
+                            </td>
+                            <td class="align-middle  text-center px-2" style="width: 145px;">
 
-                            <td class="align-middle">
 
+                                <div class="{% if venta.is_open %}input-group   {% endif %} plus-minus-input">
 
-
-                                <div class="input-group plus-minus-input">
+                                    {% if venta.is_open %}
+                                    <a onclick="decrementValue({{list.id}})" data-field="quantity1"
+                                        href="{% url 'Ventas:guardarCambios' venta.id list.id 'resta' %}"
+                                        id="minus{{list.id}}" class="btn"><i class="fa fa-minus text-secondary"
+                                            aria-hidden="true"></i>
+                                    </a>
+                                    {% endif %}
                                     <div class="input-group-button">
 
-                                        <a onclick="decrementValue({{list.id}})" data-field="quantity1"
-                                            href="{% url 'Ventas:guardarCambios' venta.id list.id 'resta' %}"
-                                            id="minus{{list.id}}" class="btn"><i class="fa fa-minus text-secondary"
-                                                aria-hidden="true"></i>
-                                        </a>
 
                                     </div>
                                     <input class="input-group-field border rounded rounded-4 text-center" type="number"
                                         name="quantity" value="{{list.cantidad}}" style="width: 50px;"
                                         id="input{{list.id}}" disabled>
 
+                                    {% if venta.is_open %}
 
                                     <div class="input-group-button">
 
@@ -122,9 +128,10 @@
                                         </a>
 
                                     </div>
+                                    {% endif %}
                                 </div>
                             </td>
-                            <td class="align-middle">
+                            <td class="align-middle text-center">
                                 $ {{list.totalfinal}} mxn
                             </td>
                         </tr>
@@ -132,6 +139,7 @@
 
                         {% endfor %}
                         <tr>
+                            <th class="bg-quinto"></th>
                             <th class="bg-quinto"></th>
                             <th class="bg-quinto"></th>
                             <th class="bg-quinto"></th>
@@ -270,8 +278,7 @@
                                             onkeyup="getCardsReplace2(this.value)" id="dropdownMenuLink" value="">
 
 
-                                        <ul class="dropdown-menu w-100" aria-labelledby="dropdownMenuLink"
-                                            id="cardHolder2">
+                                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink" id="cardHolder2">
 
                                         </ul>
                                         <div class="d-none">
@@ -395,7 +402,7 @@
             nombre2.value = id
 
         } else {
-            nombreC = "menu" + id
+            nombreC = "texto" + id
             var nombre = document.getElementById("searchBar2");
             var nombreChido = document.getElementById(nombreC);
             nombre.value = nombreChido.textContent;

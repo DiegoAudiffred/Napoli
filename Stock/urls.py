@@ -8,15 +8,10 @@ app_name="Stock"
 urlpatterns = [
     path('',views.stockIndex,name='stockIndex'),
     path('crear/',views.stockCrear,name='stockCrear'),
-    path('compraCrear/',views.compraCrear,name='compraCrear'),
-    path('compraEditar/<int:id>',views.compraEditar,name='compraEditar'),
-    path('compraEditar/agregarCompra/<int:id>',views.agregarCompra,name='agregarCompra'),
-    path('compraEditar/cerrarCompra/<int:id>',views.cerrarCompra,name='cerrarCompra'),
-    path('compraEditar/agregarCompraCodigo/<int:id>',views.agregarCompraCodigo,name='agregarCompraCodigo'),
-    path('compraEditar/guardarCambios/<int:compra_id>/<int:list_id>/<str:operacion>/', views.guardarCambios, name='guardarCambios'),
+
 
     path('AjaxSearch', views.stockCard, name='stockCard'),
-    path('AjaxSearch2', views.comprasCard, name='comprasCard'),
+
 
 
 ] 

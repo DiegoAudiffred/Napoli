@@ -31,19 +31,6 @@ class createStockForm(forms.ModelForm):
         self.fields['fecha_compra'].required = False
 
 
-class createCompraForm(forms.ModelForm):
-
-    class Meta:
-        model = Compras
-        fields = ['fecha','comprador','metodo','ticket','total_comprado','numero_factura','proovedor']
-        
-
-  
-    def __init__(self, *args, **kwargs):
-        super(createCompraForm, self).__init__(*args, **kwargs)
-
-        self.fields['fecha'].required = False
-        self.fields['total_comprado'].required = False
 
 
 class VentaMenuForm(forms.ModelForm):
