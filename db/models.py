@@ -181,7 +181,7 @@ class Menu(models.Model):
 class Extras(models.Model):
     nombre = models.CharField(max_length=100)
     precio = models.PositiveIntegerField()
-    ingredientes = models.ManyToManyField(Ingredientes)
+    ingredientes = models.ManyToManyField(Ingredientes,blank=True,null=True)
     def __str__(self):
         return self.nombre
     
@@ -200,6 +200,6 @@ class VentaMenu(models.Model):
     observaciones = models.TextField(blank=True,null=True,max_length=100)
     cantidad = models.PositiveIntegerField(blank=True,null=True,)
     totalfinal = models.DecimalField(max_digits=8, decimal_places=2,default=0)
-    extras = models.ManyToManyField(Extras)
+    extras = models.ManyToManyField(Extras,blank=True,null=True)
 
 

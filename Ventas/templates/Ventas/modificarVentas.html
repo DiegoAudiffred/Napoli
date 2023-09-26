@@ -92,7 +92,7 @@
                             <td class="align-middle text-center d-none d-sm-table-cell">
                                 $ {{list.menu.precio}} mxn
                             </td>
-                            <td class="align-middle text-center">
+                            <td class="align-middle text-center" style="width: 250px;height: 100px;">
                                 {% for ingrediente in list.extras.all %}
                                 <div class="col-auto">
                                     {{ ingrediente.nombre }}
@@ -158,75 +158,75 @@
 
                 </table>
             </div>
-            {% if venta.is_open%}
-            <div class="row justify-content-end">
-                <div class="col-6 col-md-2 text-center">
-                    <a href="" data-bs-toggle="modal" data-bs-target="#exampleModal"
-                        class="btn btn-tercero w-100 text-white">Agregar
-                        venta</a>
-                </div>
-                <div class="col-6 col-md-2 text-center">
-                    <form action="{% url 'Ventas:cerrarVenta' venta.id %}" method="POST" enctype="multipart/form-data"
-                        id="user-profile-form">
-                        {% csrf_token %}
-                        <a class="btn btn-secondary w-100 text-white" data-bs-toggle="modal"
-                            data-bs-target="#cerraModal">Cerrar
-                            venta</a>
 
-
-
-                        <div class="modal fade" id="cerraModal" tabindex="-1" aria-labelledby="exampleModalLabel"
-                            aria-hidden="true">
-                            <div class="modal-dialog">
-                                <div class="modal-content bg-cuarto">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="exampleModalLabel">{% if venta.is_reopen %} ¿Esta
-                                            seguro de
-                                            volver a cerrar la cuenta de
-                                            {{venta.cliente.nombre}} ?
-                                            {% else %} ¿Esta seguro de
-                                            cerrar la cuenta de
-                                            {{venta.cliente.nombre}} ? {% endif %} </h5>
-                                    </div>
-                                    {% if not venta.is_reopen%}
-                                    <div class="modal-body">
-                                        <h4 class="text-secondary">¡UNA VEZ CERRADA NO
-                                            PODRAS CAMBIAR AL
-                                            CLIENTE!
-                                        </h4>
-
-
-                                    </div>
-                                    {% endif %}
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-tercero text-white "
-                                            data-bs-dismiss="modal">Cancelar</button>
-                                        <button type="submit" class="btn btn-secondary">Cerrar cuenta</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                    </form>
-                </div>
-            </div>
-            {% else %}
-            <div class="row justify-content-end">
-                <div class="col-6 col-md-2 text-center">
-                    <form action="{% url 'Ventas:abrirVenta' venta.id %}" method="POST" enctype="multipart/form-data"
-                        id="user-profile-form">
-                        {% csrf_token %}
-
-                        <button href="" type="submit" class="btn btn-tercero w-100 text-white">Reabrir
-                            venta</button>
-                    </form>
-
-                </div>
-
-            </div>
-            {% endif %}
         </div>
     </div>
+    {% if venta.is_open%}
+    <div class="row ">
+        <div class="col-6 col-md-2 text-center">
+            <a href="" data-bs-toggle="modal" data-bs-target="#exampleModal"
+                class="btn btn-tercero text-white w-100">Agregar
+                venta</a>
+        </div>
+        <div class="col-6 col-md-2 text-center">
+            <form action="{% url 'Ventas:cerrarVenta' venta.id %}" method="POST" enctype="multipart/form-data"
+                id="user-profile-form">
+                {% csrf_token %}
+                <a class="btn btn-secondary text-white w-100" data-bs-toggle="modal" data-bs-target="#cerraModal">Cerrar
+                    venta</a>
+
+
+
+                <div class="modal fade" id="cerraModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content bg-cuarto">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">{% if venta.is_reopen %} ¿Esta
+                                    seguro de
+                                    volver a cerrar la cuenta de
+                                    {{venta.cliente.nombre}} ?
+                                    {% else %} ¿Esta seguro de
+                                    cerrar la cuenta de
+                                    {{venta.cliente.nombre}} ? {% endif %} </h5>
+                            </div>
+                            {% if not venta.is_reopen%}
+                            <div class="modal-body">
+                                <h4 class="text-secondary">¡UNA VEZ CERRADA NO
+                                    PODRAS CAMBIAR AL
+                                    CLIENTE!
+                                </h4>
+
+
+                            </div>
+                            {% endif %}
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-tercero text-white "
+                                    data-bs-dismiss="modal">Cancelar</button>
+                                <button type="submit" class="btn btn-secondary">Cerrar cuenta</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+    {% else %}
+    <div class="row justify-content-end w-100">
+        <div class="col-5 col-md-2 text-center">
+            <form action="{% url 'Ventas:abrirVenta' venta.id %}" method="POST" enctype="multipart/form-data"
+                id="user-profile-form">
+                {% csrf_token %}
+
+                <button href="" type="submit" class="btn btn-tercero w-100 text-white">Reabrir
+                    venta</button>
+            </form>
+
+        </div>
+
+    </div>
+    {% endif %}
 </div>
 
 
@@ -284,7 +284,7 @@
                                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink" id="cardHolder2">
 
                                         </ul>
-                                        <div class="d-none">
+                                        <div class="d-block">
                                             {{form2.menu}}
 
                                         </div>
@@ -426,6 +426,7 @@
 
     }
     function setNombre2(id) {
+        console.log(id)
         if (id == 0) {
             var nombre2 = document.getElementById("id_menu");
             nombre2.value = id
@@ -438,6 +439,7 @@
 
             var nombre2 = document.getElementById("id_menu");
             nombre2.value = id
+            console.log(nombre2)
         }
 
 

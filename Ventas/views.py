@@ -136,7 +136,9 @@ def agregarVenta(request,id):
                       
             return redirect("Ventas:modificarVenta",id)
         else:
-            return render(request, 'Ventas/indexVentas.html',{'form':form})
+            print("No jala")
+            print(form.errors)
+            return redirect("Ventas:ventasIndex")
    
     return redirect("Ventas:ventasIndex")
 
