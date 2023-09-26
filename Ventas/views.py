@@ -213,3 +213,14 @@ def guardarCambios(request,compra_id,list_id,operacion):
         
     
     return redirect("Ventas:modificarVenta",compra_id)
+
+def cambiarFactura(request,id):
+        compras = Venta.objects.get(id=id)
+        if compras.bool_factura == True:
+            compras.bool_factura = False
+            compras.save()
+        else:
+            compras.bool_factura = True
+            compras.save()
+
+        return redirect("Ventas:modificarVenta",id)

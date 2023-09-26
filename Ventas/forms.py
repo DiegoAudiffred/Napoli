@@ -1,5 +1,5 @@
 from django import forms
-from db.models import Ingredientes, Menu, Venta, VentaMenu
+from db.models import Extras, Ingredientes, Menu, Venta, VentaMenu
 from django.forms import ImageField, ModelChoiceField, ModelMultipleChoiceField, MultipleChoiceField
 from django.forms.widgets import ClearableFileInput
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
@@ -59,7 +59,7 @@ class VentaMenuForm(forms.ModelForm):
 
     class Meta:
         model = VentaMenu
-        fields = ['venta','menu','cantidad','totalfinal','observaciones']
+        fields = ['venta','menu','cantidad','totalfinal','observaciones','extras']
       
 
     def __init__(self, *args, **kwargs):
@@ -81,5 +81,13 @@ class VentaMenuForm(forms.ModelForm):
 
         self.fields['totalfinal'].required = False
         self.fields['totalfinal'].widget.attrs.update({'class':'form-control shadow-none bg-corporateTan200  px-2 py-1 text-primary','placeholder':' Breve descripción*','rows':'1', 'aria-label':'Username','aria-describedby':'basic-addon1','style':'border-left:none', })
+
+        self.fields['extras'].required = True 
+        self.fields['extras'].widget.attrs.update({'class':'form-control shadow-none bg-corporateTan200  px-2 py-1 text-primary','placeholder':' Ingredientes*','rows':'1', 'aria-label':'Username','aria-describedby':'basic-addon1','style':'border-left:none', })
+        self.fields['extras']= ModelMultipleChoiceField (widget=forms.CheckboxSelectMultiple,queryset=Extras.objects.all())
+
+
+        
+ 
 
 

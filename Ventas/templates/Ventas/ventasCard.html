@@ -11,6 +11,8 @@
             <ul class="list-group list-group-flush px-4 ">
 
                 <li class="list-group-item px-0 bg-cuarto fnTexto_Bold_Encabezado_003">Cliente: {{ venta.cliente }}
+
+
                 </li>
                 <li class="list-group-item px-0 bg-cuarto fnTexto_Bold_Encabezado_003">Empleado: {{ venta.empleado }}
                 </li>
@@ -19,6 +21,10 @@
                 </li>
                 <li class="list-group-item px-0 bg-cuarto fnTexto_Bold_Encabezado_003">Hora:
                     {{ venta.fecha_compra.time }}
+                </li>
+                <li class="list-group-item px-0 bg-cuarto fnTexto_Bold_Encabezado_003">Factura:
+                    {% if venta.bool_factura %} Si {% else %} No {% endif %}
+
                 </li>
                 <li class="list-group-item d-flex justify-content-end align-items-center px-0 bg-cuarto">
                     <a href="{% url 'Ventas:modificarVenta' venta.id %}" class="card-link btn text-white btn-quinto">Ver

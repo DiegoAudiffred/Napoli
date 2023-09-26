@@ -178,7 +178,13 @@ class Menu(models.Model):
 
     def __str__(self):
         return self.nombre
-
+class Extras(models.Model):
+    nombre = models.CharField(max_length=100)
+    precio = models.PositiveIntegerField()
+    ingredientes = models.ManyToManyField(Ingredientes)
+    def __str__(self):
+        return self.nombre
+    
 class Venta(models.Model):
     cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE,blank=True,null=True)
     empleado = models.ForeignKey(User, on_delete=models.CASCADE,blank=True,null=True)
@@ -186,10 +192,14 @@ class Venta(models.Model):
     fecha_compra = models.DateTimeField(default=timezone.now,blank=True,null=True)  # Establecer la fecha actual como valor predeterminado
     is_open = models.BooleanField(default=True)
     is_reopen = models.BooleanField(default=False)
-
+    bool_factura = models.BooleanField(default=False)
+    
 class VentaMenu(models.Model):
     venta = models.ForeignKey(Venta, on_delete=models.CASCADE)
     menu = models.ForeignKey(Menu, on_delete=models.CASCADE)
-    observaciones = models.TextField(blank=True,null=True)
+    observaciones = models.TextField(blank=True,null=True,max_length=100)
     cantidad = models.PositiveIntegerField(blank=True,null=True,)
     totalfinal = models.DecimalField(max_digits=8, decimal_places=2,default=0)
+    extras = models.ManyToManyField(Extras)
+
+
