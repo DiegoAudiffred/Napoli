@@ -9,6 +9,11 @@ from Empleados.forms import createEmployeeForm
 from db.models import Cliente, User
 from authentication.forms import createUserForm
 # Create your views here.
+from django.contrib.auth.decorators import user_passes_test,login_required
+
+
+@login_required(login_url='authentication:login')
+
 def empleadosIndex(request):
     form = createEmployeeForm()
 
@@ -27,6 +32,7 @@ def employeeCard(request):
   
     return render(request, "Empleados/empleadoCard.html",{'employees':employees})
 
+@login_required(login_url='authentication:login')
 
 def empleadosEditar(request,id):
     user = User.objects.get(id=id)
@@ -50,6 +56,7 @@ def empleadosEditar(request,id):
 
 
 
+@login_required(login_url='authentication:login')
 
 def empleadosCrear(request):
     if request.method == "POST":
@@ -71,6 +78,7 @@ def empleadosCrear(request):
           
 
 
+@login_required(login_url='authentication:login')
 
 def empleadosEliminar(request,id):
     clientes = User.objects.get(id=id)

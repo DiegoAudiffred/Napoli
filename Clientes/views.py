@@ -11,6 +11,10 @@ from authentication.forms import createUserForm
 # Create your views here.
 
 # Create your views here.
+
+from django.contrib.auth.decorators import user_passes_test,login_required
+
+@login_required(login_url='authentication:login')
 def clientesIndex(request):
     return render(request, 'Clientes/indexClientes.html')
 
@@ -27,6 +31,7 @@ def clientsCard(request):
   
     return render(request, "Clientes/clienteCard.html",{'employees':employees})
 
+@login_required(login_url='authentication:login')
 
 def clientesEditar(request,id):
     user = Cliente.objects.get(id=id)
@@ -45,6 +50,7 @@ def clientesEditar(request,id):
     print(user)
     return render(request, 'Clientes/editarCliente.html',{'form':form,'user':user})
 
+@login_required(login_url='authentication:login')
 
 def clientesEliminar(request,id):
     clientes = Cliente.objects.get(id=id)
@@ -54,6 +60,7 @@ def clientesEliminar(request,id):
     return redirect("Clientes:clientesIndex")
 
 
+@login_required(login_url='authentication:login')
 def clientesCrear(request):
     if request.method == "POST":
         form = createClientForm(request.POST, request.FILES)

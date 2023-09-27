@@ -35,7 +35,6 @@ INSTALLED_APPS = [
     #Modules
     'db',
     'Stock',
-    'productManagement',
     'authentication',
     'Ventas',
     'Empleados',
@@ -123,7 +122,8 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
 
-TIME_ZONE = 'America/Chicago'
+TIME_ZONE = "America/Mexico_City"
+LANGUAGE_CODE = "es-MX"
 
 
 USE_I18N = True
@@ -146,5 +146,5 @@ CRISPY_TEMPLATE_PACK = "bootstrap4"
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'db.User'
-LOGIN_REDIRECT_URL = "accountManagement:index"
-LOGOUT_REDIRECT_URL = "accountManagement:login"
+LOGIN_REDIRECT_URL = "authentication:index"
+LOGOUT_REDIRECT_URL = "authentication:login"

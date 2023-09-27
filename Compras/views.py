@@ -6,12 +6,16 @@ from Stock.forms import ActualizarCampoForm, CompraIngredientesForm
 from db.models import *
 from authentication.forms import createUserForm
 # Create your views here.
+from django.contrib.auth.decorators import user_passes_test,login_required
+
+@login_required(login_url='authentication:login')
 def indexCompras(request):
     totalCompras = Compras.objects.all().order_by('-fecha')[:10]
 
     form2 = createCompraForm()
     return render(request, 'Compras/indexCompras.html',{'totalCompras':totalCompras,'form2':form2})
 
+@login_required(login_url='authentication:login')
 def compraCrear(request):
     if request.method == "POST":
         print("POST")
@@ -49,6 +53,7 @@ def comprasCard(request):
 
     return render(request, "Compras/compraCard.html",{'totalCompras':totalCompras})
 
+@login_required(login_url='authentication:login')
 
 def compraEditar(request,id):
     compra = Compras.objects.get(id=id)
@@ -69,6 +74,9 @@ def compraEditar(request,id):
     compra.total_comprado = total
     compra.save()
     return render(request, "Compras/editarCompra.html",{'compra':compra,'total':total,'lista':lista,'form':form,'productos':productos,'form2':form2})
+
+
+@login_required(login_url='authentication:login')
 def agregarCompra(request,id):
     compra = Compras.objects.get(id=id)
 
@@ -85,6 +93,8 @@ def agregarCompra(request,id):
    
     return redirect("Compras:indexCompras")
 
+
+@login_required(login_url='authentication:login')
 
 def agregarCompraCodigo(request,id):
     venta = Compras.objects.get(id=id)
@@ -134,6 +144,7 @@ def agregarCompraCodigo(request,id):
 
     return redirect("Compras:compraEditar",id)
 
+@login_required(login_url='authentication:login')
 
 def cerrarCompra(request,id):
     compra = Compras.objects.get(id=id)
@@ -153,6 +164,7 @@ def cerrarCompra(request,id):
     return redirect('Compras:indexCompras')
 
 
+@login_required(login_url='authentication:login')
 
 def guardarCambios(request,compra_id,list_id,operacion):
     print(compra_id)

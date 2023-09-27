@@ -8,6 +8,12 @@ from django.shortcuts import redirect, render
 from Menu.forms import createMenuForm
 from db.models import Cliente, User, Menu
 # Create your views here.
+
+from django.contrib.auth.decorators import user_passes_test,login_required
+
+
+@login_required(login_url='authentication:login')
+
 def menuIndex(request):
     form = createMenuForm()
 
@@ -26,6 +32,7 @@ def menuCard(request):
   
     return render(request, "Menu/menuCard.html",{'employees':employees})
 
+@login_required(login_url='authentication:login')
 
 def menuEditar(request,id):
     user = User.objects.get(id=id)
@@ -49,6 +56,7 @@ def menuEditar(request,id):
 
 
 
+@login_required(login_url='authentication:login')
 
 def menuCrear(request):
     if request.method == "POST":
@@ -70,6 +78,7 @@ def menuCrear(request):
 
     return redirect("Menu:menuIndex")
 
+@login_required(login_url='authentication:login')
 
 def menuEliminar(request,id):
     clientes = User.objects.get(id=id)

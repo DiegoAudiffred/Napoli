@@ -6,7 +6,18 @@ from Ventas.forms import VentaMenuForm, addClienteForm, createVentaForm, modifyV
 from db.models import Cliente, Menu, User, Venta, VentaMenu
 from django.db.models import Q
 from datetime import datetime
+from django.contrib.auth.decorators import user_passes_test,login_required
 
+
+def isAdmin(user):
+    if user.rol == 'Admin':
+        return True
+    else:
+        return False
+    
+
+
+@login_required(login_url='authentication:login')
 # Create your views here.
 def ventasIndex(request):
     form = createVentaForm()
@@ -16,6 +27,7 @@ def ventasIndex(request):
 
     return render(request, 'Ventas/indexVentas.html',{'form':form,'ventas':ventas,'form2':form2,'user':user})
 
+@login_required(login_url='authentication:login')
 
 def addCliente(request,id):
     venta = Venta.objects.get(id=id)
@@ -59,6 +71,7 @@ def menuRow(request):
         )
 
     return render(request, "Ventas/menuRow.html",{'menus':menus})
+@login_required(login_url='authentication:login')
 
 def modificarVenta(request,id):
     venta = Venta.objects.get(id=id)
@@ -83,6 +96,7 @@ def modificarVenta(request,id):
 
 
 
+@login_required(login_url='authentication:login')
 
 def cerrarVenta(request,id):
     venta = Venta.objects.get(id=id)
@@ -107,6 +121,7 @@ def cerrarVenta(request,id):
     
     
     return redirect('Ventas:ventasIndex')
+@login_required(login_url='authentication:login')
 
 def abrirVenta(request,id):
     venta = Venta.objects.get(id=id)
@@ -121,6 +136,7 @@ def abrirVenta(request,id):
 
 
 
+@login_required(login_url='authentication:login')
 
 def agregarVenta(request,id):
     
@@ -141,6 +157,7 @@ def agregarVenta(request,id):
             return redirect("Ventas:ventasIndex")
    
     return redirect("Ventas:ventasIndex")
+@login_required(login_url='authentication:login')
 
 def ventasCrear(request,id):
     if request.method == "POST":
@@ -162,6 +179,7 @@ def ventasCrear(request,id):
     form = createVentaForm()
 
     return redirect("Ventas:ventasIndex")
+@login_required(login_url='authentication:login')
 
 def ventasTodas(request):
 
@@ -188,6 +206,7 @@ def ventasCard(request):
 
                 
     return render(request, "Ventas/ventasCard.html",{'ventas':ventas})
+@login_required(login_url='authentication:login')
 
 def guardarCambios(request,compra_id,list_id,operacion):
     print(compra_id)
@@ -215,6 +234,7 @@ def guardarCambios(request,compra_id,list_id,operacion):
         
     
     return redirect("Ventas:modificarVenta",compra_id)
+@login_required(login_url='authentication:login')
 
 def cambiarFactura(request,id):
         compras = Venta.objects.get(id=id)
