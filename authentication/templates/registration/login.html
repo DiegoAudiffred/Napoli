@@ -7,21 +7,28 @@
 
 
 
+<form action="{% url 'authentication:signin' %}" method="post">
+    {% csrf_token %}
 
-<div class="container">
-    <div class="row">
+    <div class="container">
+        <div class="row justify-content-center my-5">
+            <div class="col-3 text-center">
+                <div class="card shadow-lg bg-cuarto rounded rounded-3">
+                    <h4 class="my-2">Bienvenido</h4>
 
-        <h2>Bienvenido por favor ingresa sesion</h2>
-        <form action="{% url 'authentication:signin' %}" method="post">
+                    <label for="id_email">Correo</label>
+                    <input type="email" name="email" id="id_email" class="rounded rounded-pill mx-4">
 
-            {% csrf_token %}
-            <label for="">Correo</label>
-            <input type="email" name="email" id="id_email">
+                    <label for="id_password">Contraseña</label>
+                    <input type="password" name="password" id="id_password" class="rounded rounded-pill mx-4">
 
-            <label for="">Contraseña</label>
-            <input type="password" name="password" id="id_password">
-            <button type="submit">Ingresar</button>
-        </form>
+                    <div class="d-flex justify-content-center">
+                        <button type="submit" class="btn bg-primary w-50 py-2 my-3 text-white">Ingresar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-</div>
+
+</form>
 {% endblock %}

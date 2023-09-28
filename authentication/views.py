@@ -4,7 +4,7 @@ from django.shortcuts import redirect, render
 import authentication
 from db.models import *
 from authentication.forms import createUserForm
-from django.contrib.auth import authenticate,login
+from django.contrib.auth import authenticate,login,logout
 # Create your views here.
 from django.contrib.auth.decorators import user_passes_test,login_required
 
@@ -14,7 +14,6 @@ def index(request):
     return render(request, 'registration/index.html',{"users":users})
 
 def signin(request):
-    print("Holi")
     if request.method == "POST":
         email = request.POST['email']
         password = request.POST['password']  
@@ -31,9 +30,8 @@ def signin(request):
 
 def signout(request):
 
-    pass
+    logout(request)
+    return redirect('authentication:signin')
 
-def indexLogin(request):
-    return render(request, 'registration/login.html')
 
       
