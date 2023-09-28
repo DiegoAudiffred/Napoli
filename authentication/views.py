@@ -3,7 +3,6 @@ from django.http import HttpResponse
 from django.shortcuts import redirect, render
 import authentication
 from db.models import *
-from authentication.forms import createUserForm
 from django.contrib.auth import authenticate,login,logout
 # Create your views here.
 from django.contrib.auth.decorators import user_passes_test,login_required
@@ -23,10 +22,9 @@ def signin(request):
             
             return redirect('authentication:index')
         else:
-            messages.error(request,"Bad credentials")
-            return redirect('authentication:indexLogin')
-        
-    return render(request,"registration/login.html")
+            messages = "Error en la credenciales, inténtelo más tarde"
+            return redirect('authentication:index')
+    return render(request,"registration/login.html",{'form':form})
 
 def signout(request):
 

@@ -47,11 +47,11 @@
             Empleado: {{venta.empleado.first_name}}
         </div>
         <div class="col-3 border-end border-quinto d-none d-md-block">
-            Fecha:{{venta.fecha_compra}}
+            {{venta.fecha_compra}}
         </div>
 
         <div class="col-3 border-end border-quinto  d-none d-md-block">
-            Estado: {% if venta.is_open %} {% if venta.is_reopen%} Cuenta reabierta {% else %} Cuenta abierta {%endif %}
+            Estado:{% if venta.is_open %} {% if venta.is_reopen%} Cuenta reabierta {% else %} Cuenta abierta {% endif %}
             {% else %} Cuenta cerrada {% endif %}
         </div>
     </div>
@@ -284,7 +284,7 @@
                                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink" id="cardHolder2">
 
                                         </ul>
-                                        <div class="d-block">
+                                        <div class="d-none">
                                             {{form2.menu}}
 
                                         </div>

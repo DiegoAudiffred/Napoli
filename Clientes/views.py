@@ -7,7 +7,6 @@ from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from Clientes.forms import createClientForm
 from db.models import Cliente, User
-from authentication.forms import createUserForm
 # Create your views here.
 
 # Create your views here.
