@@ -14,6 +14,9 @@ class createCompraForm(forms.ModelForm):
   
     def __init__(self, *args, **kwargs):
         super(createCompraForm, self).__init__(*args, **kwargs)
+        self.fields['ticket'].required = False
+        self.fields['ticket'].widget.attrs.update({'onchange':'loadFile(event);'})
+        self.fields['numero_factura'].required = False
 
         self.fields['fecha'].required = False
         self.fields['total_comprado'].required = False

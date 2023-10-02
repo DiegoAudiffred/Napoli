@@ -142,7 +142,7 @@ class Compras(models.Model):
     metodo = models.CharField(choices=METODOS, max_length=20)
     ticket = models.ImageField(upload_to="uploads/tickets/",blank=True,null=True)
     total_comprado = models.DecimalField(max_digits=8, decimal_places=2,default=0)
-    numero_factura= models.PositiveIntegerField()
+    numero_factura= models.PositiveIntegerField(blank=True,null=True)
     proovedor = models.ForeignKey(Proovedores, on_delete=models.CASCADE)
     is_open = models.BooleanField(default=True)
 

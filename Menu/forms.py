@@ -14,12 +14,7 @@ class createMenuForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(createMenuForm, self).__init__(*args, **kwargs)
-    
-        OPTIONS = (
-        ("AUT", "Austria"),
-        ("DEU", "Germany"),
-        ("NLD", "Neitherlands"),
-        )
+  
         self.fields['nombre'].required = False
         self.fields['nombre'].widget.attrs.update({'class':'form-control shadow-none bg-corporateTan200  px-2 py-1 text-primary','placeholder':' Nombre que aparece en el menú*','rows':'1', 'aria-label':'Username','aria-describedby':'basic-addon1','style':'border-left:none', })
 

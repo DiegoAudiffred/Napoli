@@ -67,6 +67,7 @@
 <script>
     var loadFile = function (event) {
         var output = document.getElementById('output');
+        console.log(output)
         output.src = URL.createObjectURL(event.target.files[0]);
         output.onload = function () {
             URL.revokeObjectURL(output.src) // free memory
@@ -78,7 +79,7 @@
 
 </script>
 <script>
-    document.getElementById('id_url').addEventListener('change', function (event) {
+    document.getElementById('id_ticket').addEventListener('change', function (event) {
         const file = event.target.files[0];
         if (file) {
             const reader = new FileReader();
@@ -91,22 +92,6 @@
     });
 </script>
 
-<style>
-    .profilePictureNotification {
-        display: none;
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        padding: 15px;
-        background-color: rgba(0, 0, 0, 0.8);
-        color: white;
-        border-radius: 5px;
-        z-index: 1000;
-        opacity: 0;
-        transition: opacity 0.5s;
-    }
-</style>
 
 
 
@@ -118,7 +103,7 @@
 
         <div class="row ">
 
-            <div class="col-12 p-3 text-start">
+            <div class="col-8 p-3 text-start">
                 <div class="row justify-content-end">
                     <div class="col-12 py-2">
                         <div class="input-group rounded rounded-3 border border-2 border-primary">
@@ -174,41 +159,7 @@
                         </div>
 
                     </div>
-                    <div class="col-12 py-2">
-                        <div class="input-group rounded rounded-3 border border-2 border-primary">
-                            <span class="input-group-text bg-white" id="basic-addon1" style="border-right: none;"><svg
-                                    fill="#9a0e00" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg"
-                                    viewBox="0 0 52 52" width="19px" height="19px">
-                                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                                    <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-                                    <g id="SVGRepo_iconCarrier">
-                                        <path
-                                            d="M21.45,32.64H5.36a1.29,1.29,0,0,0-1.28,1.29v1.28a1.28,1.28,0,0,0,1.28,1.28H21.45a1.28,1.28,0,0,0,1.28-1.28V33.93A1.29,1.29,0,0,0,21.45,32.64Z">
-                                        </path>
-                                        <path
-                                            d="M21.45,41.66H5.36A1.29,1.29,0,0,0,4.08,43v1.32a1.28,1.28,0,0,0,1.28,1.28H21.45a1.28,1.28,0,0,0,1.28-1.28V43a1.29,1.29,0,0,0-1.24-1.34Z">
-                                        </path>
-                                        <path
-                                            d="M46.65,32.64H30.57a1.29,1.29,0,0,0-1.28,1.29v1.28a1.28,1.28,0,0,0,1.28,1.28H46.65a1.28,1.28,0,0,0,1.29-1.27h0V33.93a1.29,1.29,0,0,0-1.29-1.29Z">
-                                        </path>
-                                        <path
-                                            d="M46.65,41.66H30.57A1.29,1.29,0,0,0,29.29,43v1.32a1.28,1.28,0,0,0,1.28,1.28H46.65a1.28,1.28,0,0,0,1.29-1.27h0V43a1.29,1.29,0,0,0-1.24-1.34Z">
-                                        </path>
-                                        <path
-                                            d="M38.61,6.52A10.17,10.17,0,1,0,48.78,16.69h0A10.19,10.19,0,0,0,38.61,6.52Zm5,10.88A.63.63,0,0,1,43,18H34.21a.6.6,0,0,1-.64-.55,8.66,8.66,0,0,1,0-1.44.66.66,0,0,1,.64-.55H43a.64.64,0,0,1,.63.55,9.22,9.22,0,0,1,0,1.39Z">
-                                        </path>
-                                        <path
-                                            d="M20.63,9.45a10.21,10.21,0,1,0,0,14.44A10.21,10.21,0,0,0,20.63,9.45Zm-.43,8.07a.4.4,0,0,1-.38.42H15.11a.45.45,0,0,0-.43.43V23a.44.44,0,0,1-.42.42h-1.7a.4.4,0,0,1-.43-.37V18.37a.4.4,0,0,0-.37-.43H7a.4.4,0,0,1-.43-.37V15.82A.45.45,0,0,1,7,15.39h4.67a.4.4,0,0,0,.42-.38V10.3a.47.47,0,0,1,.43-.43h1.7a.42.42,0,0,1,.42.42h0V15a.4.4,0,0,0,.38.42h4.72a.45.45,0,0,1,.42.43Z">
-                                        </path>
-                                    </g>
-                                </svg>
 
-                            </span>
-                            {{form2.ticket}}
-
-                        </div>
-
-                    </div>
 
                     <div class="col-12 py-2">
                         <div class="input-group rounded rounded-3 border border-2 border-primary">
@@ -312,6 +263,61 @@
 
                         </button>
                     </div>
+                </div>
+            </div>
+            <div class="col-4">
+                <label for="id_ticket" id="label-id_ticket">
+
+                    <div class="image-container">
+
+                        <img src="{% static 'img/fondogris.png'%}" alt="" width="100%" height="414px" id="output"
+                            style="cursor: pointer;" class="rounded rounded-2">
+                        <div class="svg-container">
+                            <svg class="svg-overlay" width="190" height="190" viewBox="0 0 190 190" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <g filter="url(#filter0_dd_3078_53209)">
+                                    <path
+                                        d="M95 123.625L95 74.6875M95 74.6875L116.75 96.4375M95 74.6875L73.25 96.4375M56.9375 145.375C38.9192 145.375 24.3125 130.768 24.3125 112.75C24.3125 98.3011 33.7052 86.0461 46.7179 81.7576C46.2876 79.4667 46.0625 77.1034 46.0625 74.6875C46.0625 53.6662 63.1037 36.625 84.125 36.625C101.751 36.625 116.579 48.6064 120.909 64.8692C123.024 64.1832 125.281 63.8125 127.625 63.8125C139.637 63.8125 149.375 73.5503 149.375 85.5625C149.375 88.0865 148.945 90.5101 148.154 92.7641C158.404 96.6583 165.688 106.572 165.688 118.188C165.688 133.203 153.515 145.375 138.5 145.375H56.9375Z"
+                                        stroke="white" stroke-width="6" stroke-linecap="round"
+                                        stroke-linejoin="round" />
+                                </g>
+                                <defs>
+                                    <filter id="filter0_dd_3078_53209" x="0" y="0" width="190" height="190"
+                                        filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+                                        <feFlood flood-opacity="0" result="BackgroundImageFix" />
+                                        <feColorMatrix in="SourceAlpha" type="matrix"
+                                            values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
+                                        <feOffset dy="4" />
+                                        <feGaussianBlur stdDeviation="4" />
+                                        <feColorMatrix type="matrix"
+                                            values="0 0 0 0 0.196487 0 0 0 0 0.196487 0 0 0 0 0.279476 0 0 0 0.06 0" />
+                                        <feBlend mode="multiply" in2="BackgroundImageFix"
+                                            result="effect1_dropShadow_3078_53209" />
+                                        <feColorMatrix in="SourceAlpha" type="matrix"
+                                            values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
+                                        <feOffset dy="4" />
+                                        <feGaussianBlur stdDeviation="2" />
+                                        <feColorMatrix type="matrix"
+                                            values="0 0 0 0 0.196487 0 0 0 0 0.196487 0 0 0 0 0.279476 0 0 0 0.08 0" />
+                                        <feBlend mode="multiply" in2="effect1_dropShadow_3078_53209"
+                                            result="effect2_dropShadow_3078_53209" />
+                                        <feBlend mode="normal" in="SourceGraphic" in2="effect2_dropShadow_3078_53209"
+                                            result="shape" />
+                                    </filter>
+                                </defs>
+                            </svg>
+
+                        </div>
+                    </div>
+                </label>
+
+
+
+
+
+                <div class="d-none">
+                    {{form2.ticket}}
+
                 </div>
             </div>
 

@@ -28,9 +28,13 @@ urlpatterns = [
     path('Compras/', include('Compras.urls')),
     path('Proveedores/', include('Proveedores.urls')),
     path('Menu/', include('Menu.urls')),
+    path('', include('Index.urls')),
 
     path('Stock/', include('Stock.urls')),
 
 
 
 ] + staticfiles_urlpatterns() + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+#handler404 = 'propertyCatalog.views.page_not_found'
+#handler500 = 'propertyCatalog.views.internal_error'

@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'Menu', 
     'Compras',
     'Proveedores',
+    'Index',
     #Django
     'django.contrib.admin',
     'django.contrib.auth',
@@ -128,7 +129,9 @@ LANGUAGE_CODE = "es-MX"
 
 USE_I18N = True
 
-USE_TZ = False
+USE_L10N = True
+
+USE_TZ = True
 
 REST_USE_JWT = True
 
@@ -146,5 +149,5 @@ CRISPY_TEMPLATE_PACK = "bootstrap4"
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'db.User'
-LOGIN_REDIRECT_URL = "authentication:index"
+LOGIN_REDIRECT_URL = "Index:index"
 LOGOUT_REDIRECT_URL = "authentication:login"

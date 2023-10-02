@@ -22,8 +22,8 @@
             <td>{{compras.fecha|date:"d-m-Y" }}</td>
 
             <td>${{compras.total_comprado}}</td>
-            <td><a data-bs-toggle="modal" data-bs-target="#exampleModal{{compras.id}}"
-                    class="text-decoration-underline">Ticket</a>
+            <td>{% if compras.ticket %} <a data-bs-toggle="modal" data-bs-target="#exampleModal{{compras.id}}"
+                    class="text-decoration-underline">Ticket</a>{% else %} Sin ticket {% endif %}
             </td>
             <td>{{compras.numero_factura}}</td>
             <td>{{compras.proovedor}}</td>
@@ -46,6 +46,7 @@
 
 
         </tr>
+        {% if compras.ticket %}
         <div class="modal fade" id="exampleModal{{compras.id}}" tabindex=" -1" aria-labelledby="exampleModalLabel"
             aria-hidden="true">
             <div class="modal-dialog">
@@ -54,13 +55,14 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <img src="{{compras.ticket.url}}" alt="" width="100%" height="414px" id="output"
-                            style="cursor: pointer;" class="rounded rounded-2 border border-3">
+                        <img src="{{compras.ticket.url}}" alt="" width="100%" height="414px" style="cursor: pointer;"
+                            class="rounded rounded-2 border border-3">
 
                     </div>
                 </div>
             </div>
         </div>
+        {% endif %}
         {% empty %}
         <tr class="align-middle bg-cuarto">
             <td>No encontramos ningun resultado</td>
