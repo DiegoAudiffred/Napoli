@@ -7,13 +7,13 @@
     <div class="row py-3">
         <h1>Lista de clientes</h1>
 
-        <div class="col-2 d-flex">
-            <a href="{% url 'Clientes:clientesCrear' %}" class="rounded-5 text-white py-2 px-3 text-decoration-none"
-                style="background-color: #199fd6;">
+        <div class="col-md-2 col-6 d-flex">
+            <a href="{% url 'Clientes:clientesCrear' %}"
+                class="rounded-5 text-white py-2 px-3 text-decoration-none bg-tercero">
                 Agregar cliente
             </a>
         </div>
-        <div class="col-5 d-flex justify-content-center align-items-center">
+        <div class="col-md-5 col-12 d-flex justify-content-center align-items-center my-2 my-md-0">
             <div class="input-group">
 
                 <input type="text" class="form-control shadow-none" placeholder="Buscar empleado por nombre"
@@ -25,7 +25,7 @@
 
 
     </div>
-    <div id="cardHolder" class="border border-3 rounded rounded-3">
+    <div id="cardHolder" class="border border-3 rounded rounded-3 table-responsive">
     </div>
 
 

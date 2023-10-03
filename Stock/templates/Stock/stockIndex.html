@@ -11,7 +11,7 @@
             <h1>Inventario</h1>
         </div>
 
-        <div class="col-2 d-flex text-center">
+        <div class="col-md-2 col-6 d-flex text-center">
             <button class="btn btn-tercero rounded-5 text-white py-2 px-3 text-decoration-none w-100 my-auto"
                 data-bs-toggle="modal" data-bs-target="#exampleModal">
                 Agregar producto
@@ -23,18 +23,14 @@
 
 
 
-        <div class="col-3 d-flex justify-content-center align-items-center">
+        <div class="col-md-3 col-12 d-flex justify-content-center align-items-center my-2 my-md-0">
             <div class="input-group">
 
                 <input type="text" class="form-control shadow-none" placeholder="Buscar producto por nombre"
                     aria-label="" aria-describedby="basic-addon1" id="searchBar" onkeyup="getCardsReplace(this.value)">
             </div>
         </div>
-        <div class="col-1 d-flex text-center">
-            <button class="btn rounded-5 text-white py-2 px-3 text-decoration-none w-100 my-auto"
-                style="background-color: #d24040;" onclick="limpiarCampo('searchBar')">
-                Limpiar </button>
-        </div>
+
 
 
 
@@ -43,7 +39,7 @@
     </div>
     <div class="row  mb-4">
         <div class="col-12 ">
-            <div id="cardHolder" class="border rounded rounded-3 border border-3 border-quinto">
+            <div id="cardHolder" class="border rounded rounded-3 border border-3 border-quinto table-responsive">
             </div>
         </div>
 

@@ -35,16 +35,16 @@
             </td>
 
 
-            <td class="bg-cuarto">{{empleado.first_name}}</td>
-            <td class="bg-cuarto">{{empleado.rol}}</td>
-            <td class="bg-cuarto">{{empleado.email}}</td>
-            <td class="bg-cuarto">{{empleado.phone_number}}</td>
+            <td class="bg-cuarto text-truncate">{{empleado.first_name}}</td>
+            <td class="bg-cuarto text-truncate">{{empleado.rol}}</td>
+            <td class="bg-cuarto text-truncate">{{empleado.email}}</td>
+            <td class="bg-cuarto text-truncate">{{empleado.phone_number}}</td>
             <td class="bg-cuarto"><a href="{% url 'Empleados:empleadosEditar' empleado.id %}"
-                    class="text-quinto">Modificar empleado</a>
+                    class="text-quinto">Modificar</a>
             </td>
             <td class="bg-cuarto text-secondary"><a type="button" class="text-secondary" href="" data-bs-toggle="modal"
                     data-bs-target="#exampleModal{{empleado.id}}">Eliminar
-                    empleado</a></td>
+                </a></td>
         </tr>
 
 

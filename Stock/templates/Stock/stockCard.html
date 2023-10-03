@@ -3,11 +3,9 @@
         <tr>
             <th>ID</th>
             <th>Nombre</th>
-            <th>Marca</th>
-            <th>Precio</th>
+            <th>Precio/U</th>
             <th>Cantidad</th>
             <th>Fecha</th>
-            <th>Notas</th>
             <th>Editar</th>
 
         </tr>
@@ -16,16 +14,14 @@
         {% for stock in totalStock%}
 
         <tr class="align-middle {% if stock.cantidad > 10 %} bg-cuarto {% else %} bg-secondary {% endif %}">
-            <td>{{stock.id}}</td>
-            <td>{{stock.nombre}}</td>
-            <td>Marca</td>
-            <td>${{stock.precio}}</td>
-            <td>{{stock.cantidad}}
+            <td class="text-truncate">{{stock.id}}</td>
+            <td class="text-truncate">{{stock.nombre}}</td>
+            <td class="text-truncate">${{stock.precio}}</td>
+            <td class="text-truncate">{{stock.cantidad}}
                 {{stock.unidad}}
             </td>
-            <td>{{stock.fecha_compra|date:"Y-m-d"}}</td>
-            <td>Notas</td>
-            <td class=""><a href="" class="btn p-0"> Editar</a></td>
+            <td class="text-truncate">{{stock.fecha_compra|date:"Y-m-d"}}</td>
+            <td class="text-truncate"><a href="" class="btn p-0"> Editar</a></td>
 
 
 

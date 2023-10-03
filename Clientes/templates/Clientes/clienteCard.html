@@ -25,17 +25,17 @@
 
 
 
-            <td>{{empleado.nombre}}</td>
-            <td>{{empleado.email}}</td>
-            <td>{{empleado.phone_number}}</td>
+            <td class="text-truncate">{{empleado.nombre}}</td>
+            <td class="text-truncate">{{empleado.email}}</td>
+            <td class="text-truncate">{{empleado.phone_number}}</td>
 
-            <td>{{empleado.total_compras}}</td>
-            <td>$ {{empleado.total_gastado}} mxn</td>
+            <td class="text-truncate">{{empleado.total_compras}}</td>
+            <td class="text-truncate">$ {{empleado.total_gastado}} mxn</td>
 
-            <td><a href="{% url 'Clientes:clientesEditar' empleado.id %}">Modificar cliente</a></td>
-            <td><a type="button" class="" href="" data-bs-toggle="modal"
+            <td class="text-truncate"><a href="{% url 'Clientes:clientesEditar' empleado.id %}">Modificar </a></td>
+            <td class="text-truncate"><a type="button" class="" href="" data-bs-toggle="modal"
                     data-bs-target="#exampleModal{{empleado.id}}">Eliminar
-                    cliente</a>
+                </a>
 
             </td>
         </tr>
