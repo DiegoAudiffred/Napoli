@@ -174,7 +174,7 @@ class Menu(models.Model):
     categoria = models.CharField( 
         choices=CATEGORIA, max_length=20)
     url = models.ImageField(upload_to="uploads/gallery/")
-    ingredientes = models.ManyToManyField(Ingredientes)
+    ingredientes = models.ManyToManyField(Ingredientes,blank=True,null=True)
 
     def __str__(self):
         return self.nombre

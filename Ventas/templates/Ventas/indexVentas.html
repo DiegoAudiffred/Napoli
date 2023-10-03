@@ -16,18 +16,22 @@
 
             </form>
         </div>
+        {% if user.rol == "Admin" or user.rol == "Dueña/o"%}
+
         <div class="col-sm-2 col-6 my-auto">
             <a class="btn rounded rounded-3  bg-quinto text-white w-100" href="{% url 'Ventas:ventasTodas'%}"
                 type="submit">Buscar
                 Venta </a>
         </div>
+        {% endif %}
+
     </div>
     <div class="row">
 
         {% for venta in ventas %}
 
         <div class="col-12 col-sm-3 my-3">
-            <div class="card rounded rounded-4 border border-secondary bg-cuarto">
+            <div class="card rounded rounded-4 border border-secondary bg-white">
                 <div class=" card-body text-quinto">
                     <p class=" card-text ">Cliente: {% if venta.cliente.nombre %} {{venta.cliente.nombre}}
                         {% else %} Por

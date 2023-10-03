@@ -1,7 +1,6 @@
 <table class="table table-striped m-0">
-    <thead class="bg-tercero ">
+    <thead class="bg-tercero text-white ">
         <tr>
-            <th>Imagen</th>
             <th>ID</th>
             <th>Nombre</th>
             <th>Marca</th>
@@ -17,7 +16,6 @@
         {% for stock in totalStock%}
 
         <tr class="align-middle {% if stock.cantidad > 10 %} bg-cuarto {% else %} bg-secondary {% endif %}">
-            <td><img src="" alt=""></td>
             <td>{{stock.id}}</td>
             <td>{{stock.nombre}}</td>
             <td>Marca</td>

@@ -18,8 +18,8 @@
                 {% if user.is_authenticated %}
                 <h3 class="text-quinto">Bienvenid@ {{user.first_name}}</h3>
                 {% endif %}
-                <div
-                    class="col-12 text-start text-center my-2  border border-5 rounded rounded-3 bg-cuarto border-quinto ">
+                <div class="col-12 text-start text-center my-2  border border-5 rounded
+                     rounded-3 bg-cuarto border-quinto ">
                     <a href="{% url 'Ventas:ventasIndex' %}" class="text-decoration-none">
                         <div class="row my-auto">
 
@@ -29,12 +29,10 @@
 
                         </div>
                     </a>
-                </div>
-
-
-
-                <div
-                    class="col-12 text-start text-center my-2  border border-5 rounded rounded-3 bg-cuarto border-quinto ">
+                </div><!-- Realizar Venta -->
+                {% if user.rol == "Admin" or user.rol == "Dueña/o"%}
+                <div class="col-12 text-start text-center my-2  border border-5 rounded
+                     rounded-3 bg-cuarto border-quinto ">
 
                     <a href="{% url 'Compras:indexCompras' %}" class="text-decoration-none">
                         <div class="row my-auto">
@@ -45,8 +43,10 @@
 
                         </div>
                     </a>
-                </div>
+                </div> <!-- Compras -->
 
+                {% endif %}
+                {% if user.rol == "Admin" or user.rol == "Dueña/o"%}
                 <div
                     class="col-12 text-start text-center my-2  border border-5 rounded rounded-3 bg-cuarto border-quinto ">
 
@@ -59,8 +59,8 @@
 
                         </div>
                     </a>
-                </div>
-
+                </div><!-- Stock -->
+                {% endif %}
                 <div
                     class="col-12 text-start text-center my-2  border border-5 rounded rounded-3 bg-cuarto border-quinto ">
 
@@ -74,7 +74,9 @@
 
                         </div>
                     </a>
-                </div>
+                </div> <!-- Clientes -->
+                {% if user.rol == "Admin" or user.rol == "Dueña/o"%}
+
 
                 <div
                     class="col-12 text-start text-center my-2  border border-5 rounded rounded-3 bg-cuarto border-quinto ">
@@ -89,7 +91,9 @@
 
                         </div>
                     </a>
-                </div>
+                </div> <!-- Empleados -->
+                {% endif %}
+                {% if user.rol == "Admin" or user.rol == "Dueña/o"%}
 
                 <div
                     class="col-12 text-start text-center my-2  border border-5 rounded rounded-3 bg-cuarto border-quinto ">
@@ -104,8 +108,9 @@
 
                         </div>
                     </a>
-                </div>
-
+                </div> <!-- Menu -->
+                {% endif %}
+                {% if user.rol == "Admin" or user.rol == "Dueña/o"%}
                 <div
                     class="col-12 text-start  my-2 text-center border border-5 rounded rounded-3 bg-cuarto border-quinto ">
 
@@ -118,7 +123,10 @@
 
                         </div>
                     </a>
-                </div>
+                </div> <!-- Proovedores -->
+                {% endif %}
+                {% if user.rol == "Admin" or user.rol == "Dueña/o"%}
+
                 <div
                     class="col-12 text-start text-center my-2  border border-5 rounded rounded-3 bg-cuarto border-quinto ">
 
@@ -132,7 +140,8 @@
 
                         </div>
                     </a>
-                </div>
+                </div> <!-- Corte de caja -->
+                {% endif %}
                 <div
                     class="col-12 text-start  my-2 text-center border border-5 rounded rounded-3 bg-cuarto border-quinto ">
 
@@ -140,12 +149,12 @@
                         <div class="row my-auto">
 
                             <div class="col- my-auto">
-                                <h3 class="my-auto text-quinto ">Cerrar sesion</h3>
+                                <h3 class="my-auto text-quinto  ">Cerrar sesion</h3>
                             </div>
 
                         </div>
                     </a>
-                </div>
+                </div> <!-- Cerrar sesión -->
 
             </div>
         </div>

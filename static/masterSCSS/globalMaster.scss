@@ -6,6 +6,7 @@
 @import url(../fonts/Manrope-Regular.ttf);
 @import url(../fonts/Manrope-SemiBold.ttf);
 @import url(../fonts/VanillaRavioli_Demo.ttf);
+@import url(../fonts/Salsa-Regular.ttf);
 // Custom.scss
 
 //Colors
@@ -119,15 +120,20 @@ $theme-colors: (
 //Typography
 
 //Titles
-
-.fnTexto_Ravioli {
-
-    font-family: "VanillaRavioli_Demo", sans-serif;
-
+.fnTexto_Salsa {
+    font-family: 'Salsa-Regular', sans-serif;
     font-style: normal;
     font-weight: 700;
-    font-size: 11px;
-    line-height: 15px;
+    font-size: 15px;
+    line-height: 20px;
+}
+
+.fnTexto_Ravioli {
+    font-family: 'VanillaRavioli_Demo', ;
+    font-style: italic;
+    font-weight: 700;
+    font-size: 15px;
+    line-height: 20px;
 }
 
 .fnTexto_Bold_Encabezado_005 {

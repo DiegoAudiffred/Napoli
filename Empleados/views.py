@@ -41,6 +41,9 @@ def empleadosEditar(request,id):
         if form.is_valid():
                 print(form)
                 user = form.save()
+                    
+                user.set_password('super')
+          
                 user.save()
 
                 return redirect("Empleados:empleadosIndex")
