@@ -12,10 +12,14 @@
             Metodo: {{compra.metodo}}
         </div>
         <div class="col-2 border-end border-quinto">
-            <a href="" data-bs-toggle="modal" data-bs-target="#exampleModal">Ver ticket</a>
+
+            {% if compras.ticket %} <a href="" data-bs-toggle="modal" data-bs-target="#exampleModal">Ver ticket</a>
+            {% else %} Sin ticket {% endif %}
         </div>
         <div class="col-2 border-end border-quinto">
-            Proveedor: {{compra.proovedor}}
+
+            {% if compras.proovedor %} Proveedor: {{compra.proovedor}}
+            {% else %} Sin proovedor {% endif %}
         </div>
         <div class="col-3  border-quinto">
             Fecha: {{compra.fecha}}
@@ -173,9 +177,11 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <img src="{{compra.ticket.url}}" alt="" width="100%" height="414px" id="output" style="cursor: pointer;"
-                    class="rounded rounded-2 border border-3">
 
+                {% if compras.ticket %} <img src="{{compra.ticket.url}}" alt="" width="100%" height="414px" id="output"
+                    style="cursor: pointer;" class="rounded rounded-2 border border-3">
+                {% else %}
+                Sin ticket {% endif %}
             </div>
         </div>
     </div>

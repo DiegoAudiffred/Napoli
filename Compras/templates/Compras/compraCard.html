@@ -1,5 +1,5 @@
 <table class="table table-striped m-0">
-    <thead class="bg-tercero">
+    <thead class="bg-tercero text-white">
         <tr>
             <th>Comprador</th>
             <th>Metodo</th>
@@ -16,30 +16,34 @@
     <tbody>
         {% for compras in totalCompras%}
 
-        <tr class="align-middle bg-cuarto">
-            <td>{{compras.comprador}}</td>
-            <td>{{compras.metodo}}</td>
-            <td>{{compras.fecha|date:"d-m-Y" }}</td>
-
-            <td>${{compras.total_comprado}}</td>
-            <td>{% if compras.ticket %} <a data-bs-toggle="modal" data-bs-target="#exampleModal{{compras.id}}"
-                    class="text-decoration-underline">Ticket</a>{% else %} Sin ticket {% endif %}
+        <tr class="align-middle bg-cuarto ">
+            <td class="text-truncate">{{compras.comprador}}</td>
+            <td class="text-truncate">{{compras.metodo}}</td>
+            <td class="text-truncate">{{compras.fecha|date:"d-m-Y" }}</td>
+            <td class="text-truncate">${{compras.total_comprado}}</td>
+            <td class="text-truncate">{% if compras.ticket %} <a data-bs-toggle="modal"
+                    data-bs-target="#exampleModal{{compras.id}}" class="text-decoration-underline">Ticket</a>{% else %}
+                Sin ticket {% endif %}
             </td>
-            <td>{{compras.numero_factura}}</td>
-            <td>{{compras.proovedor}}</td>
+            <td class="text-truncate">{% if compras.numero_factura %}{{compras.numero_factura}} {% else %} Sin factura
+                {% endif %}
+            </td>
+            <td class="text-truncate">{% if compras.ticket %} {{compras.proovedor}} {% else %} Sin proveedor {% endif %}
+            </td>
 
             {% if compras.is_open %}
-            <td class="text-start"><a href="{% url 'Compras:compraEditar' compras.id %}"
+            <td class="text-start text-truncate"><a href="{% url 'Compras:compraEditar' compras.id %}"
                     class="btn btn-tercero text-white"> Editar
                     compra</a></td>
 
 
             {% else %}
-            <td class="text-start"><a href="{% url 'Compras:compraEditar' compras.id %}"
+            <td class="text-start text-truncate"><a href="{% url 'Compras:compraEditar' compras.id %}"
                     class="btn btn-tercero text-white"> Ver
                     compra</a></td> {% endif %}
 
-            <td class="text-start"><a href="" class="btn btn-secondary text-white"> Eliminar compra</a></td>
+            <td class="text-start text-truncate"><a href="" class="btn btn-secondary text-white"> Eliminar compra</a>
+            </td>
 
 
 
