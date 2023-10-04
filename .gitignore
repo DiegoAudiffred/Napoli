@@ -2,7 +2,6 @@
 **/migrations
 **/*.css.map
 .vscode
-db.sqlite3
 virtual
 .venv
 .idea
