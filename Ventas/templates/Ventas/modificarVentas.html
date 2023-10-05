@@ -1,5 +1,6 @@
 {% extends 'layout/layout.html' %}
 {% load static %}
+
 {% block body %}
 <div class="container min-vh-100  py-4">
 
@@ -80,22 +81,56 @@
                             <td class="align-middle border border-0 d-none d-sm-table-cell"
                                 style=" width: 75px;height:75px">
                                 <img src="{{list.menu.url.url}}" alt="" width="90px" height="90px">
+                                {% if list.pizza_mitad %}
+                                <img src="{{list.pizza_mitad.url.url}}" alt="" width="90px" height="90px">
+                                {% endif %}
                             </td>
 
                             <td class="align-middle  text-center">
-                                {{list.menu}}
 
+                                {% if list.media_orden %}
+                                <p>Media Orden:</p>
+
+                                {% endif %}
+                                {% if list.familiar %}
+                                <p>Pizza Familiar</p>
+
+                                {% endif %}
+                                {% if list.pizza_mitad %}
+                                Mitad:
+                                {% endif %}
+                                {{list.menu}}
+                                {% if list.pizza_mitad %}
+                                <p>Mitad: {{list.pizza_mitad}}
+                                </p> {% endif %}
                             </td>
                             <td class="align-middle" style="width: 300px;height: 100px;">
-                                <p class=" text-break">{{list.observaciones}}</p>
+
+                                <p class=" text-break">
+
+                                    {{list.observaciones}}</p>
                             </td>
                             <td class="align-middle text-center d-none d-sm-table-cell">
-                                $ {{list.menu.precio}} mxn
-                            </td>
-                            <td class="align-middle text-center" style="width: 250px;height: 100px;">
+                                {% if list.menu.categoria == "Pizza" %}
+                                {% if list.familiar %}
+                                {% if list.pizza_mitad %}
+                                {% if list.pizza_mitad.precioFamiliar < list.menu.precioFamiliar %}
+                                    ${{list.menu.precioFamiliar}} mxn {% else %} $ {{list.pizza_mitad.precioFamiliar}}
+                                    mxn {% endif %} {% else %} ${{list.menu.precioFamiliar}} mxn {% endif %} {% else %}
+                                    {% if list.pizza_mitad %} {% if list.pizza_mitad.precio < list.menu.precio %}
+                                    ${{list.menu.precio}} mxn {% else %} $ {{list.pizza_mitad.precio}} mxn {% endif %}
+                                    {% else %} ${{list.menu.precio}} mxn {% endif %} {% endif %} {% else %} {% if list.media_orden %} $ {{list.menu.mediaOrden}} mxn {% else %} $ {{list.menu.precio}} mxn {% endif %}
+                                    {% endif %} </td>
+                            <td class="align-middle text-center" style="width: 200px;height: 100px;">
                                 {% for ingrediente in list.extras.all %}
                                 <div class="col-auto">
-                                    {{ ingrediente.nombre }}
+                                    <p>{{ ingrediente.nombre }}
+                                        {% if list.familiar %}
+                                        ${{ ingrediente.precioFamiliar }}
+                                        {% else %}
+                                        ${{ ingrediente.precio }}
+                                        {% endif %}
+                                    </p>
 
                                 </div>
 
@@ -263,7 +298,7 @@
                         </div>
 
                         <div class="col-12 p-3 text-start">
-                            <div class="row justify-content-end">
+                            <div class="row justify-content-start">
                                 <div class="col-12 py-2">
 
                                     <div class="input-group rounded rounded-3 border border-2 border-primary">
@@ -294,13 +329,83 @@
                                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink" id="cardHolder2">
 
                                         </ul>
-                                        <div class="d-none">
+                                        <div class="d-block">
                                             {{form2.menu}}
 
                                         </div>
 
                                     </div>
                                 </div>
+                                <div class="col-3 py-2">
+
+                                    <p class="m-0">Mitad Pizza:</p>
+
+
+                                </div>
+                                <div class="col-1 py-2 px-0">
+                                    <input class="form-check-input m-0" type="checkbox" value="" id="defaultCheck1"
+                                        style="height:30px;width:30px" onclick="show()">
+
+                                </div>
+                                <div class="col-3 py-2 ">
+                                    <p class="m-0">Familiar:</p>
+
+                                </div>
+                                <div class="col-1 py-2 px-0">
+                                    {{form2.familiar}}
+                                </div>
+                                <div class="col-3 py-2 ">
+                                    <p class="m-0">Media Orden:</p>
+
+                                </div>
+                                <div class="col-1 py-2 px-0">
+                                    {{form2.media_orden}}
+                                </div>
+
+                                <div class="col-12 py-2">
+
+                                    <div id="pruebas" class="d-none">
+                                        <div class="input-group rounded rounded-3 border border-2 border-primary">
+
+
+                                            <div class="input-group-prepend dropdown me-2 my-auto">
+                                                <span class="input-group-text bg-white border border-0"
+                                                    id="basic-addon1"><svg width="19px" height="19px"
+                                                        viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg"
+                                                        fill="#000000">
+                                                        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                                        <g id="SVGRepo_tracerCarrier" stroke-linecap="round"
+                                                            stroke-linejoin="round"></g>
+                                                        <g id="SVGRepo_iconCarrier">
+                                                            <path fill="#000000"
+                                                                d="m384.064 274.56.064-50.688A128 128 0 0 1 512.128 96c70.528 0 127.68 57.152 127.68 127.68v50.752A448.192 448.192 0 0 1 955.392 768H68.544A448.192 448.192 0 0 1 384 274.56zM96 832h832a32 32 0 1 1 0 64H96a32 32 0 1 1 0-64zm32-128h768a384 384 0 1 0-768 0zm447.808-448v-32.32a63.68 63.68 0 0 0-63.68-63.68 64 64 0 0 0-64 63.936V256h127.68z">
+                                                            </path>
+                                                        </g>
+                                                    </svg></span>
+                                            </div>
+                                            <input type="text"
+                                                class="form-control shadow-none  px-2 py-1 border border-0 rounded rounded-3"
+                                                placeholder="Buscar platillo" aria-label=""
+                                                aria-describedby="basic-addon1" id="searchBar3" list="cardHolder3"
+                                                data-bs-toggle="dropdown" onkeyup="getCardsReplace3(this.value)"
+                                                id="dropdownMenuLink3" value="">
+
+
+                                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink3"
+                                                id="cardHolder3">
+
+                                            </ul>
+                                            <div class="d-block">
+                                                {{form2.pizza_mitad}}
+
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
 
                                 <div class="col-12 py-2">
                                     <div class="input-group rounded rounded-3 border border-2 border-primary my-auto">
@@ -389,6 +494,7 @@
 
 
 
+
                                 <div class="col-6 col-sm-3 py-2 px-0 text-end">
                                     <button class="btn fnOS_Bold_Boton_10 text-primary my-auto px-3 border border-0"
                                         type="button" data-bs-dismiss="modal" aria-label="Close">
@@ -418,6 +524,23 @@
     </div>
 </div>
 <script>
+    var bandera = true
+    function show() {
+        var pizza_extra = document.getElementById("pruebas")
+        console.log(pizza_extra)
+        if (bandera == true) {
+            pizza_extra.classList.remove('d-none')
+            pizza_extra.classList.add('d-block')
+            bandera = false
+        } else {
+            pizza_extra.classList.remove('d-block')
+            pizza_extra.classList.add('d-none')
+            bandera = true
+        }
+
+
+    }
+
     function setNombre(id) {
         if (id == 0) {
             var nombre2 = document.getElementById("id_cliente");
@@ -454,6 +577,25 @@
 
 
     }
+    function setNombre3(id) {
+        console.log(id)
+        if (id == 0) {
+            var nombre3 = document.getElementById("id_pizza_mitad");
+            nombre3.value = id
+
+        } else {
+            nombreC = "text" + id
+            var nombre = document.getElementById("searchBar3");
+            var nombreChido = document.getElementById(nombreC);
+            nombre.value = nombreChido.textContent;
+
+            var nombre3 = document.getElementById("id_pizza_mitad");
+            nombre3.value = id
+            console.log(nombre3)
+        }
+
+
+    }
 </script>
 
 <script>
@@ -480,9 +622,21 @@
 
     });
 </script>
+<script>
+    var inputElement = document.getElementById("searchBar3");
 
+    // Escuchar el evento "click" en el elemento
+    inputElement.addEventListener("click", function () {
+        // Establecer el valor del input a una cadena vacía
+        inputElement.value = '';
+        getCardsReplace3("")
+        setNombre3(0)
+
+    });
+</script>
 <script src="{% static 'js/clienteRow.js' %}"></script>
 <script src="{% static 'js/menuRow.js' %}"></script>
+<script src="{% static 'js/menuRow2.js' %}"></script>
 
 <script>
     function incrementValue(id) {

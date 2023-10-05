@@ -80,11 +80,20 @@ class VentaMenuForm(forms.ModelForm):
 
         self.fields['extras'].required = False 
         self.fields['extras'].widget.attrs.update({'class':'form-control shadow-none bg-corporateTan200  px-2 py-1 text-primary','placeholder':' Ingredientes*','rows':'1', 'aria-label':'Username','aria-describedby':'basic-addon1','style':'border-left:none', })
-        self.fields['extras']= ModelMultipleChoiceField (widget=forms.CheckboxSelectMultiple,queryset=Extras.objects.all())
+        self.fields['extras'].widget = forms.CheckboxSelectMultiple()
+        self.fields['extras'].queryset = Extras.objects.all()
+
+        
+        self.fields['familiar'].widget.attrs.update({'style':'height:30px;width:30px','class':'' })
+        self.fields['media_orden'].widget.attrs.update({'style':'height:30px;width:30px','class':'' })
+        
+        self.fields['pizza_mitad'].required = False
+        self.fields['pizza_mitad'].widget.attrs.update({'class':'form-control shadow-none   px-2 py-1','placeholder':' Breve descripción*','rows':'1', 'aria-label':'Username','aria-describedby':'basic-addon1','style':'border-left:none', })
+
 
     class Meta:
         model = VentaMenu
-        fields = ['venta','menu','cantidad','totalfinal','observaciones','extras']
+        fields = ['venta','menu','cantidad','totalfinal','observaciones','extras','media_orden','familiar','pizza_mitad']
 
 
         

@@ -1,0 +1,12 @@
+{% for menu in menus %}
+
+<li><a class="dropdown-item" id="menu3{{menu.id}}" onclick="setNombre3('{{menu.id}}')"><img src="{{menu.url.url}}"
+            alt="" width="50px" height="50px" id="menu3Imagen{{menu.id}}">
+        <span id="text{{menu.id}}">{{menu.nombre}}</span>
+    </a>
+
+</li>
+{% empty %}
+<li><button class="dropdown-item" type="">No existe el Platillo</button></li>
+
+{% endfor %}

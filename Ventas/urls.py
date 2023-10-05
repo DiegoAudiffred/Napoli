@@ -16,6 +16,7 @@ urlpatterns = [
     path('ventasTodas/AjaxSearch', views.ventasCard, name='ventasCard'),
     path('modificarVenta/AjaxSearch', views.clienteRow, name='clienteRow'),
     path('modificarVenta/AjaxSearch2', views.menuRow, name='menuRow'),
+    path('modificarVenta/AjaxSearch3', views.menuRow2, name='menuRow2'),
 
     path('modificarVenta/cambiarFactura/<int:id>/',views.cambiarFactura,name='cambiarFactura'),
     path('modificarVenta/guardarCambios/<int:compra_id>/<int:list_id>/<str:operacion>/', views.guardarCambios, name='guardarCambios'),

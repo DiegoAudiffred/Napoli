@@ -71,28 +71,87 @@ def menuRow(request):
         )
 
     return render(request, "Ventas/menuRow.html",{'menus':menus})
+
+
+def menuRow2(request):
+    
+    jsonObject = json.load(request)['jsonBody']
+    search = jsonObject["search"]    
+ 
+    menus = Menu.objects.filter(categoria='Pizza')
+    print(Menu)
+    if search != "":
+        menus = menus.filter(
+            Q(nombre__icontains=search) 
+        )
+
+    return render(request, "Ventas/menuRow2.html",{'menus':menus})
+
 @login_required(login_url='authentication:login')
 
 def modificarVenta(request,id):
     venta = Venta.objects.get(id=id)
     lista = VentaMenu.objects.filter(venta=id)
+ 
+  
 
     user = request.user
     total = 0
+    total2 = 0
     for ventas in lista:
-        total += (ventas.menu.precio) * ventas.cantidad
-    
-    for ven in lista:
-        ven.totalfinal = (ven.menu.precio) * ven.cantidad
-   
-      
+        if ventas.menu.categoria == "Pizza":
+            if ventas.familiar:
+                if ventas.pizza_mitad:
+                    if ventas.pizza_mitad.precioFamiliar < ventas.menu.precioFamiliar:
+                        total += (ventas.menu.precioFamiliar) * ventas.cantidad
+                    else:
+                        total += (ventas.pizza_mitad.precioFamiliar) * ventas.cantidad
+                else:
+                    total += (ventas.menu.precioFamiliar) * ventas.cantidad
+            else:
+                if ventas.pizza_mitad:
+                    if ventas.pizza_mitad.precio < ventas.menu.precio:
+                        total += (ventas.menu.precio) * ventas.cantidad
+                    else:
+                        total += (ventas.pizza_mitad.precio) * ventas.cantidad
+                else:
+                        total += (ventas.menu.precio) * ventas.cantidad
+        else:        
+            if ventas.media_orden:
+                total += ventas.menu.mediaOrden* ventas.cantidad
+            else:
+                total += (ventas.menu.precio) * ventas.cantidad
 
-    venta.total = total
+            
+            
+            
+            
+        if ventas.extras:
+            if ventas.familiar:
+                for venti in ventas.extras.all():
+                    total += venti.precioFamiliar * ventas.cantidad
+            else:
+                for venti in ventas.extras.all():
+                    total += venti.precio * ventas.cantidad
+            
+            
+  
+        
+            
+        ventas.totalfinal = total
+        total2 = total2 + total
+      
+        total = 0
+        ventas.save()
+        
+        
+    print(total2)    
+    venta.total = total2
     venta.save()
     
     form = modifyVentaForm(instance=venta)
     form2 = VentaMenuForm()
-    return render(request, 'Ventas/modificarVentas.html',{'venta':venta,'lista':lista,'form':form,'form2':form2,'total':total,'user':user})
+    return render(request, 'Ventas/modificarVentas.html',{'venta':venta,'lista':lista,'form':form,'form2':form2,'total':total2,'user':user})
 
 
 
@@ -166,6 +225,8 @@ def ventasCrear(request,id):
         if form.is_valid():
             user = form.save()
             user.empleado = User.objects.get(id=id)
+            user.cliente = Cliente.objects.get(id=1)
+
             user.is_open = True
             user.save()
                       
@@ -173,6 +234,7 @@ def ventasCrear(request,id):
             
             return redirect("Ventas:ventasIndex")
         else:
+            print(form.errors)
             return render(request, 'Ventas/ventasIndex.html',{'form':form})
           
 
@@ -206,8 +268,8 @@ def ventasCard(request):
 
                 
     return render(request, "Ventas/ventasCard.html",{'ventas':ventas})
-@login_required(login_url='authentication:login')
 
+@login_required(login_url='authentication:login')
 def guardarCambios(request,compra_id,list_id,operacion):
     print(compra_id)
     print(list_id)
@@ -222,12 +284,15 @@ def guardarCambios(request,compra_id,list_id,operacion):
 
     else:
         
-        if producto.cantidad == 0:
-            producto.delete()
+    
    
         if producto.cantidad > 0:
             producto.cantidad = producto.cantidad - 1
+            
             producto.save()
+            if producto.cantidad == 0:
+                producto.delete()
+   
        
 
         

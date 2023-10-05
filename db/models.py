@@ -51,8 +51,7 @@ CATEGORIA = [
     ("Bebidas", "Bebidas"),
     ("Pizza", "Pizza"),
     ("Especialidad", "Especialidad"),
-    ("Limpieza","Limpieza"),
-    ("Otros","Otros")
+
 
 ]
 
@@ -171,6 +170,8 @@ class Menu(models.Model):
     nombre = models.CharField(max_length=100)
     descripcion = models.TextField()
     precio = models.DecimalField(max_digits=8, decimal_places=2)
+    precioFamiliar = models.DecimalField(max_digits=8, decimal_places=2,blank=True,null=True)
+    mediaOrden = models.DecimalField(max_digits=8, decimal_places=2,blank=True,null=True)
     categoria = models.CharField( 
         choices=CATEGORIA, max_length=20)
     url = models.ImageField(upload_to="uploads/gallery/")
@@ -178,12 +179,22 @@ class Menu(models.Model):
 
     def __str__(self):
         return self.nombre
+    def save(self, *args, **kwargs):
+        self.precioFamiliar = self.precio + 120
+        self.mediaOrden = self.precio / 2
+        super().save(*args, **kwargs)
+    
+    
 class Extras(models.Model):
     nombre = models.CharField(max_length=100)
     precio = models.PositiveIntegerField()
+    precioFamiliar = models.PositiveIntegerField(blank=True,null=True)
     ingredientes = models.ManyToManyField(Ingredientes,blank=True,null=True)
     def __str__(self):
         return self.nombre
+    def save(self, *args, **kwargs):
+        self.precioFamiliar = self.precio * 2
+        super().save(*args, **kwargs)
     
 class Venta(models.Model):
     cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE,blank=True,null=True)
@@ -196,10 +207,13 @@ class Venta(models.Model):
     
 class VentaMenu(models.Model):
     venta = models.ForeignKey(Venta, on_delete=models.CASCADE)
-    menu = models.ForeignKey(Menu, on_delete=models.CASCADE)
+    menu = models.ForeignKey(Menu, on_delete=models.CASCADE,related_name="menu")
     observaciones = models.TextField(blank=True,null=True,max_length=100)
     cantidad = models.PositiveIntegerField(blank=True,null=True,)
     totalfinal = models.DecimalField(max_digits=8, decimal_places=2,default=0)
     extras = models.ManyToManyField(Extras,blank=True,null=True)
+    media_orden = models.BooleanField(default=False)
+    familiar = models.BooleanField(default=False)
+    pizza_mitad = models.ForeignKey(Menu, on_delete=models.CASCADE,blank=True,null=True,related_name="pizza_mitad")
 
 
