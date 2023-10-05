@@ -36,6 +36,7 @@
                     <p class=" card-text ">Cliente: {% if venta.cliente.nombre %} {{venta.cliente.nombre}}
                         {% else %} Por
                         asignar {% endif %}</p>
+                    <p class="card-text">Mesa: {{venta.mesa }} </p>
 
                     <p class="card-text">Empleado: {% if venta.empleado.first_name %} {{venta.empleado.first_name}}
                         {% else %} Por

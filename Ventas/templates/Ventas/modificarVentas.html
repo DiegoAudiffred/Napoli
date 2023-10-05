@@ -3,21 +3,19 @@
 
 {% block body %}
 <div class="container min-vh-100  py-4">
+    <form action="{% url 'Ventas:addCliente' venta.id%}" method="POST" enctype="multipart/form-data"
+        id="user-profile-form">
+        {% csrf_token %}
 
-    <div
-        class="row bg-whiterounded-top border-top border-end border-start border-3 border-quinto bg-white  rounded-top">
-        <div class="col-6 col-md-3 border-end border-quinto">
-            {% if venta.is_reopen%}
-            Cliente: {{venta.cliente}}
+        <div
+            class="row bg-whiterounded-top border-top border-end border-start border-3 border-quinto bg-white  rounded-top">
+            <div class="col-6 col-md-2 border-end border-quinto">
+                {% if venta.is_reopen%}
+                {{venta.cliente}}
 
-            {% else %}
-
-            <form action="{% url 'Ventas:addCliente' venta.id%}" method="POST" enctype="multipart/form-data"
-                id="user-profile-form">
-                {% csrf_token %}
-
+                {% else %}
                 <div class="input-group">
-                    Cliente:
+
                     <div class="dropdown mx-2">
 
                         <input type="text" class="form-control shadow-none py-0 border border-0"
@@ -37,27 +35,38 @@
                     </div>
 
                 </div>
-            </form>
-            {% endif %}
+
+                {% endif %}
+            </div>
+            <div class="col-6 col-md-2 border-end border-quinto">
+                {{venta.empleado.first_name}}
+            </div>
+            <div class="col-3 border-end border-quinto d-none d-md-block">
+                {{venta.fecha_compra}}
+            </div>
+
+            <div class="col-2 border-end border-quinto  d-none d-md-block">
+                Estado:{% if venta.is_open %} {% if venta.is_reopen%} Cuenta reabierta {% else %} Cuenta abierta {% endif %}
+                {% else %} Cuenta cerrada {% endif %}
+            </div>
+
+
+            <div class="col-1 d-none d-md-block border-end border-quinto  ">
+
+              
+
+                {{venta.mesa}}
+
+
+
+
+            </div>
+<div class="col-2  d-none d-md-block">
+  Factura
+</div>
         </div>
 
-
-
-
-        <div class="col-6 col-md-3 border-end border-quinto">
-            Empleado: {{venta.empleado.first_name}}
-        </div>
-        <div class="col-3 border-end border-quinto d-none d-md-block">
-            {{venta.fecha_compra}}
-        </div>
-
-        <div class="col-3 border-end border-quinto  d-none d-md-block">
-            Estado:{% if venta.is_open %} {% if venta.is_reopen%} Cuenta reabierta {% else %} Cuenta abierta {% endif %}
-            {% else %} Cuenta cerrada {% endif %}
-        </div>
-    </div>
-
-
+    </form>
 
     <div class="row">
         <div class="col-12 p-0">
@@ -119,8 +128,8 @@
                                     mxn {% endif %} {% else %} ${{list.menu.precioFamiliar}} mxn {% endif %} {% else %}
                                     {% if list.pizza_mitad %} {% if list.pizza_mitad.precio < list.menu.precio %}
                                     ${{list.menu.precio}} mxn {% else %} $ {{list.pizza_mitad.precio}} mxn {% endif %}
-                                    {% else %} ${{list.menu.precio}} mxn {% endif %} {% endif %} {% else %} {% if list.media_orden %} $ {{list.menu.mediaOrden}} mxn {% else %} $ {{list.menu.precio}} mxn {% endif %}
-                                    {% endif %} </td>
+                                    {% else %}${{list.menu.precio}} mxn{% endif %}{% endif %} {% else %} {% if list.media_orden %} $ {{list.menu.mediaOrden}} mxn {% else %} $ {{list.menu.precio}}
+                                    mxn {% endif %} {% endif %} </td>
                             <td class="align-middle text-center" style="width: 200px;height: 100px;">
                                 {% for ingrediente in list.extras.all %}
                                 <div class="col-auto">
@@ -241,7 +250,9 @@
                                     PODRAS CAMBIAR AL
                                     CLIENTE!
                                 </h4>
-
+                                <h4>
+                                    El total de la venta es $ {{total}} mxn
+                                </h4>
 
                             </div>
                             {% endif %}
@@ -329,7 +340,7 @@
                                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink" id="cardHolder2">
 
                                         </ul>
-                                        <div class="d-block">
+                                        <div class="d-none">
                                             {{form2.menu}}
 
                                         </div>
@@ -395,7 +406,7 @@
                                                 id="cardHolder3">
 
                                             </ul>
-                                            <div class="d-block">
+                                            <div class="d-none">
                                                 {{form2.pizza_mitad}}
 
                                             </div>
@@ -663,4 +674,32 @@
 
     }
 </script>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#update-button").click(function () {
+            var item_id = {{ venta.id }
+        };  // Aquí asigna el ID que deseas enviar
+
+        $.ajax({
+            type: "POST",
+            url: `/Ventas/modificarVenta/Mesa/${item_id}`,  // URL con el ID en la ruta
+            data: {
+                csrfmiddlewaretoken: '{{ csrf_token }}',
+                // Otros datos si es necesario
+            },
+            success: function (data) {
+                alert(data.mensaje);
+            },
+            error: function () {
+                alert("Error al actualizar la base de datos.");
+            }
+        });
+    });
+});
+
+
+</script>
+
 {% endblock %}

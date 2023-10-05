@@ -1,8 +1,8 @@
 import datetime
 import json
-from django.http import HttpResponse
-from django.shortcuts import redirect, render
-from Ventas.forms import VentaMenuForm, addClienteForm, createVentaForm, modifyVentaForm
+from django.http import HttpResponse, JsonResponse
+from django.shortcuts import get_object_or_404, redirect, render
+from Ventas.forms import VentaMenuForm, createVentaForm, modifyVentaForm
 from db.models import Cliente, Menu, User, Venta, VentaMenu
 from django.db.models import Q
 from datetime import datetime
@@ -31,20 +31,29 @@ def ventasIndex(request):
 
 def addCliente(request,id):
     venta = Venta.objects.get(id=id)
-    print(venta)
     if request.method == 'POST':
         form = modifyVentaForm(request.POST, instance=venta)  # Inicializar el formulario con los datos POST
         if form.is_valid():
-            print("Aqui Si")
             user = form.save()
             user.save()
         else:
-            print("Aqui No")
             return redirect('Ventas:modificarVenta',id)
 
     return redirect('Ventas:modificarVenta',id)
 
 
+
+def addMesa(request, id):
+    venta = Venta.objects.get(id=id)
+    print(venta.mesa)
+    print(venta)
+
+    nueva_mesa = 'Para llevar' 
+
+    response_data = {'mensaje': 'Actualización exitosa'}
+   
+    
+    return JsonResponse(response_data)
 
 
 def clienteRow(request):
@@ -58,13 +67,13 @@ def clienteRow(request):
         )
     return render(request, "Ventas/clienteRow.html",{'clientes':clientes})
 
+
 def menuRow(request):
     
     jsonObject = json.load(request)['jsonBody']
     search = jsonObject["search"]    
  
     menus = Menu.objects.all()
-    print(Menu)
     if search != "":
         menus = menus.filter(
             Q(nombre__icontains=search) 
@@ -79,7 +88,6 @@ def menuRow2(request):
     search = jsonObject["search"]    
  
     menus = Menu.objects.filter(categoria='Pizza')
-    print(Menu)
     if search != "":
         menus = menus.filter(
             Q(nombre__icontains=search) 
@@ -145,7 +153,6 @@ def modificarVenta(request,id):
         ventas.save()
         
         
-    print(total2)    
     venta.total = total2
     venta.save()
     
@@ -161,7 +168,6 @@ def cerrarVenta(request,id):
     venta = Venta.objects.get(id=id)
     cliente = venta.cliente
     lista = VentaMenu.objects.filter(venta=id)
-    print(cliente)
     total = 0
     for ventas in lista:
         total += (ventas.menu.precio) * ventas.cantidad
@@ -211,8 +217,6 @@ def agregarVenta(request,id):
                       
             return redirect("Ventas:modificarVenta",id)
         else:
-            print("No jala")
-            print(form.errors)
             return redirect("Ventas:ventasIndex")
    
     return redirect("Ventas:ventasIndex")
@@ -234,7 +238,6 @@ def ventasCrear(request,id):
             
             return redirect("Ventas:ventasIndex")
         else:
-            print(form.errors)
             return render(request, 'Ventas/ventasIndex.html',{'form':form})
           
 
@@ -271,12 +274,10 @@ def ventasCard(request):
 
 @login_required(login_url='authentication:login')
 def guardarCambios(request,compra_id,list_id,operacion):
-    print(compra_id)
-    print(list_id)
+   
     compras = Venta.objects.get(id=compra_id)
     producto = VentaMenu.objects.get(venta=compras,id=list_id)
     
-    print(operacion)
     if operacion == "suma":
         
         producto.cantidad = producto.cantidad + 1

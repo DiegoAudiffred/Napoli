@@ -71,6 +71,7 @@ def menuCrear(request):
             
             return redirect("Menu:menuIndex")
         else:
+            print(form.errors)
             return render(request, 'Menu/crearIndex.html',{'form':form})
           
 

@@ -12,6 +12,25 @@ from django.utils import timezone
 
 # Create your models here.
 
+MESAS = [
+    ("1A","1A"),
+    ("1B","1B"),
+    ("2","2"),
+    ("3","3"),
+    ("4","4"),
+    ("5","5"),
+    ("6","6"),
+    ("7","7"),
+    ("8","8"),
+    ("T2","T2"),
+    ("T3","T3"),
+    ("T4","T4"),
+    ("8A","8A"),
+    ("8B","8B"),
+    ("9A","9A"),
+    ("9A","9A"),
+    ("Para lleva","Para llevar"),
+]
 
 ROLES = [
     ("Dueña/o", "Dueña/o"),
@@ -24,11 +43,8 @@ ROLES = [
 ]
 
 UNIDADES = [
-    ("K", "Kilos"),
-    ("L", "Litros"),
-    ("ml", "mililitros"),
-    ("kg", "miligramos"),
-    ("U", "unidad"),
+
+    ("U", "Unidad"),
 
 ]
 
@@ -195,16 +211,21 @@ class Extras(models.Model):
     def save(self, *args, **kwargs):
         self.precioFamiliar = self.precio * 2
         super().save(*args, **kwargs)
-    
+
+class Mesa(models.Model):
+    nombre = models.CharField(max_length=20)
+    def __str__(self):
+        return self.nombre
 class Venta(models.Model):
     cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE,blank=True,null=True)
     empleado = models.ForeignKey(User, on_delete=models.CASCADE,blank=True,null=True)
+    mesa = models.ForeignKey(Mesa, on_delete=models.CASCADE,blank=True,null=True)
     total = models.DecimalField(max_digits=8, decimal_places=2,blank=True,null=True)
     fecha_compra = models.DateTimeField(default=timezone.now,blank=True,null=True)  # Establecer la fecha actual como valor predeterminado
     is_open = models.BooleanField(default=True)
     is_reopen = models.BooleanField(default=False)
     bool_factura = models.BooleanField(default=False)
-    
+
 class VentaMenu(models.Model):
     venta = models.ForeignKey(Venta, on_delete=models.CASCADE)
     menu = models.ForeignKey(Menu, on_delete=models.CASCADE,related_name="menu")

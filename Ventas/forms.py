@@ -3,7 +3,6 @@ from db.models import Extras, Ingredientes, Menu, Venta, VentaMenu
 from django.forms import ImageField, ModelChoiceField, ModelMultipleChoiceField, MultipleChoiceField
 from django.forms.widgets import ClearableFileInput
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
-from django_select2.forms import Select2MultipleWidget
 
 class createVentaForm(forms.ModelForm):
 
@@ -44,13 +43,6 @@ class modifyVentaForm(forms.ModelForm):
         
         self.fields['cliente'].required = False
 
-
-class addClienteForm(forms.ModelForm):
-
-    class Meta:
-        model = Venta
-        fields = ['cliente']
-      
 
 
 
