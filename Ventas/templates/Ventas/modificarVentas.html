@@ -3,13 +3,15 @@
 
 {% block body %}
 <div class="container min-vh-100  py-4">
-    <form action="{% url 'Ventas:addCliente' venta.id%}" method="POST" enctype="multipart/form-data"
-        id="user-profile-form">
-        {% csrf_token %}
 
-        <div
-            class="row bg-whiterounded-top border-top border-end border-start border-3 border-quinto bg-white  rounded-top">
-            <div class="col-6 col-md-2 border-end border-quinto">
+
+    <div
+        class="row bg-whiterounded-top border-top border-end border-start border-3 border-quinto bg-white  rounded-top">
+
+        <div class="col-6 col-md-2 border-end border-quinto">
+            <form action="{% url 'Ventas:addCliente' venta.id%}" method="POST" enctype="multipart/form-data"
+                id="user-profile-form">
+                {% csrf_token %}
                 {% if venta.is_reopen%}
                 {{venta.cliente}}
 
@@ -30,43 +32,79 @@
                         </ul>
                         <div class="d-none">
                             {{form.cliente}}
-
                         </div>
                     </div>
 
                 </div>
 
                 {% endif %}
-            </div>
-            <div class="col-6 col-md-2 border-end border-quinto">
-                {{venta.empleado.first_name}}
-            </div>
-            <div class="col-3 border-end border-quinto d-none d-md-block">
-                {{venta.fecha_compra}}
-            </div>
-
-            <div class="col-2 border-end border-quinto  d-none d-md-block">
-                Estado:{% if venta.is_open %} {% if venta.is_reopen%} Cuenta reabierta {% else %} Cuenta abierta {% endif %}
-                {% else %} Cuenta cerrada {% endif %}
-            </div>
-
-
-            <div class="col-1 d-none d-md-block border-end border-quinto  ">
-
-              
-
-                {{venta.mesa}}
-
-
-
-
-            </div>
-<div class="col-2  d-none d-md-block">
-  Factura
-</div>
+            </form>
         </div>
 
-    </form>
+        <div class="col-6 col-md-2 border-end border-quinto">
+            {{venta.empleado.first_name}}
+        </div>
+        <div class="col-3 border-end border-quinto d-none d-md-block">
+            {{venta.fecha_compra}}
+        </div>
+
+        <div class="col-2 border-end border-quinto  d-none d-md-block">
+            Estado:{% if venta.is_open %} {% if venta.is_reopen%} Cuenta reabierta {% else %} Cuenta abierta {% endif %}
+            {% else %} Cuenta cerrada {% endif %}
+        </div>
+
+
+        <div class="col-1 d-none d-md-block border-end border-quinto  ">
+
+
+
+
+        <form action="{% url 'Ventas:addMesa' venta.id %}" method="POST" enctype="multipart/form-data" id="user-profile-form2">
+            {% csrf_token %}
+            {% if venta.is_reopen %}
+            {{ venta.mesa }}
+            {% else %}
+            <select class="form-select border border-0 shadow-none" aria-label="Default select example" id="selectMesa" name="mesa">
+                {% for mesa in mesas %}
+                <option {% if venta.mesa == mesa %} selected {% endif %} value="{{ mesa.id }}">{{ mesa.nombre }}</option>
+                {% endfor %}
+            </select>
+            {% endif %}
+                <div class="d-none">
+                    {{form3.mesa}}
+                
+                </div>
+
+        </form>
+
+
+            
+
+
+
+
+        </div>
+        <div class="col-2  d-none d-md-block">
+            Factura
+        </div>
+    </div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // Capturar el cambio en el select
+        $('#selectMesa').on('change', function () {
+            // Obtener el valor seleccionado en el select
+            var selectedValue = $(this).val();
+
+            // Establecer el valor en el campo del formulario 'mesa'
+            $('#id_mesa').val(selectedValue);
+                        $('#user-profile-form2').submit();
+
+        });
+    });
+</script>
+
 
     <div class="row">
         <div class="col-12 p-0">
@@ -126,10 +164,11 @@
                                 {% if list.pizza_mitad.precioFamiliar < list.menu.precioFamiliar %}
                                     ${{list.menu.precioFamiliar}} mxn {% else %} $ {{list.pizza_mitad.precioFamiliar}}
                                     mxn {% endif %} {% else %} ${{list.menu.precioFamiliar}} mxn {% endif %} {% else %}
-                                    {% if list.pizza_mitad %} {% if list.pizza_mitad.precio < list.menu.precio %}
-                                    ${{list.menu.precio}} mxn {% else %} $ {{list.pizza_mitad.precio}} mxn {% endif %}
-                                    {% else %}${{list.menu.precio}} mxn{% endif %}{% endif %} {% else %} {% if list.media_orden %} $ {{list.menu.mediaOrden}} mxn {% else %} $ {{list.menu.precio}}
-                                    mxn {% endif %} {% endif %} </td>
+                                    {% if list.pizza_mitad %} {% if list.pizza_mitad.precio < list.menu.precio %} $
+                                    {{list.menu.precio}} mxn {% else %} $ {{ list.pizza_mitad.precio }} mxm {% endif %}
+                                    {% else %} $ {{ list.menu.precio }} mxnmxnmxnmxn {% endif %} {% endif %} {% else %}
+                                    {% if list.media_orden %} $ {{list.menu.mediaOrden}} mxn {% else %} $
+                                    {{list.menu.precio}} mxn {% endif %} {% endif %} </td>
                             <td class="align-middle text-center" style="width: 200px;height: 100px;">
                                 {% for ingrediente in list.extras.all %}
                                 <div class="col-auto">
@@ -677,10 +716,9 @@
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-    $(document).ready(function () {
-        $("#update-button").click(function () {
-            var item_id = {{ venta.id }
-        };  // Aquí asigna el ID que deseas enviar
+  /*  $(document).ready(function () {
+        $("#id_mesa").onchange(function () {
+            var item_id = {{ venta.id }};  // Aquí asigna el ID que deseas enviarasdasdsadsadsadsdsdswsdaasdasdsadasdasdsdsa
 
         $.ajax({
             type: "POST",
@@ -697,7 +735,7 @@
             }
         });
     });
-});
+});*/
 
 
 </script>

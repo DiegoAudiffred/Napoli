@@ -43,7 +43,16 @@ class modifyVentaForm(forms.ModelForm):
         
         self.fields['cliente'].required = False
 
+class modifyMesaForm(forms.ModelForm):
 
+    class Meta:
+        model = Venta
+        fields = ['mesa']
+    def __init__(self, *args, **kwargs):
+        super(modifyMesaForm, self).__init__(*args, **kwargs)
+        
+        self.fields['mesa'].required = False
+        self.fields['mesa'].widget.attrs.update({'class':'border border-0' })
 
 
         

@@ -2,8 +2,8 @@ import datetime
 import json
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
-from Ventas.forms import VentaMenuForm, createVentaForm, modifyVentaForm
-from db.models import Cliente, Menu, User, Venta, VentaMenu
+from Ventas.forms import VentaMenuForm, createVentaForm, modifyMesaForm, modifyVentaForm
+from db.models import Cliente, Menu, Mesa, User, Venta, VentaMenu
 from django.db.models import Q
 from datetime import datetime
 from django.contrib.auth.decorators import user_passes_test,login_required
@@ -22,10 +22,11 @@ def isAdmin(user):
 def ventasIndex(request):
     form = createVentaForm()
     form2 = modifyVentaForm()
+    form3 = modifyMesaForm()
     ventas = Venta.objects.filter(is_open=True).order_by('-fecha_compra')
     user = request.user
 
-    return render(request, 'Ventas/indexVentas.html',{'form':form,'ventas':ventas,'form2':form2,'user':user})
+    return render(request, 'Ventas/indexVentas.html',{'form':form,'ventas':ventas,'form2':form2,'form3':form3,'user':user})
 
 @login_required(login_url='authentication:login')
 
@@ -42,11 +43,23 @@ def addCliente(request,id):
     return redirect('Ventas:modificarVenta',id)
 
 
-
-def addMesa(request, id):
+def addMesa(request,id):
     venta = Venta.objects.get(id=id)
-    print(venta.mesa)
     print(venta)
+    if request.method == 'POST':
+        form = modifyMesaForm (request.POST, instance=venta)  # Inicializar el formulario con los datos POST
+        if form.is_valid():
+            user = form.save()
+            user.save()
+        else:
+            print(form.errors)
+            return redirect('Ventas:modificarVenta',id)
+
+    return redirect('Ventas:modificarVenta',id)
+
+def addRow(request, id):
+    venta = Venta.objects.get(id=id)
+  
 
     nueva_mesa = 'Para llevar' 
 
@@ -100,7 +113,7 @@ def menuRow2(request):
 def modificarVenta(request,id):
     venta = Venta.objects.get(id=id)
     lista = VentaMenu.objects.filter(venta=id)
- 
+    mesas = Mesa.objects.all()
   
 
     user = request.user
@@ -158,7 +171,9 @@ def modificarVenta(request,id):
     
     form = modifyVentaForm(instance=venta)
     form2 = VentaMenuForm()
-    return render(request, 'Ventas/modificarVentas.html',{'venta':venta,'lista':lista,'form':form,'form2':form2,'total':total2,'user':user})
+    form3 = modifyMesaForm()
+
+    return render(request, 'Ventas/modificarVentas.html',{'venta':venta,'lista':lista,'form':form,'form2':form2,'form3':form3,'total':total2,'user':user,'mesas':mesas})
 
 
 
