@@ -8,6 +8,7 @@ from django.shortcuts import redirect, render
 from Menu.forms import createMenuForm
 from db.models import Cliente, User, Menu
 # Create your views here.
+from django.templatetags.static import static
 
 from django.contrib.auth.decorators import user_passes_test,login_required
 
@@ -64,9 +65,10 @@ def menuCrear(request):
    
         if form.is_valid():
             user = form.save()
+            img = static('img/fondogris.PNG')
+            user.url = img
             user.save()
                       
-            user.save()
 
             
             return redirect("Menu:menuIndex")

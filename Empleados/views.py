@@ -1,6 +1,7 @@
 import json
 from django.shortcuts import render
 from django.db.models import Q
+from django.templatetags.static import static
 
 # Create your views here.
 from django.http import HttpResponse
@@ -68,7 +69,8 @@ def empleadosCrear(request):
         if form.is_valid():
             user = form.save()
             user.save()
-            
+            img = static('img/fondogris.PNG')
+            user.url = img
             user.set_password('super')
           
             user.save()
