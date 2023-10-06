@@ -59,26 +59,29 @@
 
 
 
-        <form action="{% url 'Ventas:addMesa' venta.id %}" method="POST" enctype="multipart/form-data" id="user-profile-form2">
-            {% csrf_token %}
-            {% if venta.is_reopen %}
-            {{ venta.mesa }}
-            {% else %}
-            <select class="form-select border border-0 shadow-none py-0" aria-label="Default select example" id="selectMesa" name="mesa">
-                {% for mesa in mesas %}
-                <option {% if venta.mesa == mesa %} selected {% endif %} value="{{ mesa.id }}">{{ mesa.nombre }}</option>
-                {% endfor %}
-            </select>
-            {% endif %}
+            <form action="{% url 'Ventas:addMesa' venta.id %}" method="POST" enctype="multipart/form-data"
+                id="user-profile-form2">
+                {% csrf_token %}
+                {% if venta.is_reopen %}
+                {{ venta.mesa }}
+                {% else %}
+                <select class="form-select border border-0 shadow-none py-0" aria-label="Default select example"
+                    id="selectMesa" name="mesa">
+                    {% for mesa in mesas %}
+                    <option {% if venta.mesa == mesa %} selected {% endif %} value="{{ mesa.id }}">{{ mesa.nombre }}
+                    </option>
+                    {% endfor %}
+                </select>
+                {% endif %}
                 <div class="d-none">
                     {{form3.mesa}}
-                
+
                 </div>
 
-        </form>
+            </form>
 
 
-            
+
 
 
 
@@ -89,28 +92,28 @@
         </div>
     </div>
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-    $(document).ready(function () {
-        // Capturar el cambio en el select
-        $('#selectMesa').on('change', function () {
-            // Obtener el valor seleccionado en el select
-            var selectedValue = $(this).val();
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Capturar el cambio en el select
+            $('#selectMesa').on('change', function () {
+                // Obtener el valor seleccionado en el select
+                var selectedValue = $(this).val();
 
-            // Establecer el valor en el campo del formulario 'mesa'
-            $('#id_mesa').val(selectedValue);
-                        $('#user-profile-form2').submit();
+                // Establecer el valor en el campo del formulario 'mesa'
+                $('#id_mesa').val(selectedValue);
+                $('#user-profile-form2').submit();
 
+            });
         });
-    });
-</script>
+    </script>
 
 
     <div class="row">
         <div class="col-12 p-0">
             <div class="table-responsive">
                 <table class="table border border-3 table-hover table-bordered border-quinto table-sm">
-                    <thead class="bg-tercero">
+                    <thead class="bg-tercero text-white">
                         <th class="d-none d-sm-table-cell">Imagen</th>
 
                         <th>Platillo</th>
@@ -234,17 +237,17 @@
                             <th class="bg-quinto"></th>
 
 
-                            <th class="bg-primary">Total: $ {{total}} mxn
+                            <th class="bg-primary text-white">Total: $ {{total}} mxn
                             </th>
                         </tr>
                         <tr class="d-block d-sm-none d-table-row">
                             <th class="bg-quinto"></th>
 
                             <th class="bg-quinto"></th>
-                            <th class="bg-quinto">Total: $</th>
+                            <th class="bg-quinto text-white">Total: $</th>
 
 
-                            <th class="bg-primary"> {{total}}
+                            <th class="bg-primary text-white"> {{total}}
                             </th>
                         </tr>
                     </tbody>
@@ -575,7 +578,7 @@
 </div>
 <script>
 
-   
+
     const barra = document.getElementById("searchBar")
 
     barra.addEventListener('dblclick', function () {
@@ -724,26 +727,26 @@
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-  /*  $(document).ready(function () {
-        $("#id_mesa").onchange(function () {
-            var item_id = {{ venta.id }};  // Aquí asigna el ID que deseas enviarasdasdsadsadsadsdsdswsdaasdasdsadasdasdsdsa
-
-        $.ajax({
-            type: "POST",
-            url: `/Ventas/modificarVenta/Mesa/${item_id}`,  // URL con el ID en la ruta
-            data: {
-                csrfmiddlewaretoken: '{{ csrf_token }}',
-                // Otros datos si es necesario
-            },
-            success: function (data) {
-                alert(data.mensaje);
-            },
-            error: function () {
-                alert("Error al actualizar la base de datos.");
-            }
-        });
-    });
-});*/
+    /*  $(document).ready(function () {
+          $("#id_mesa").onchange(function () {
+              var item_id = {{ venta.id }};  // Aquí asigna el ID que deseas enviarasdasdsadsadsadsdsdswsdaasdasdsadasdasdsdsa
+  
+          $.ajax({
+              type: "POST",
+              url: `/Ventas/modificarVenta/Mesa/${item_id}`,  // URL con el ID en la ruta
+              data: {
+                  csrfmiddlewaretoken: '{{ csrf_token }}',
+                  // Otros datos si es necesario
+              },
+              success: function (data) {
+                  alert(data.mensaje);
+              },
+              error: function () {
+                  alert("Error al actualizar la base de datos.");
+              }
+          });
+      });
+  });*/
 
 
 </script>

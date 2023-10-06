@@ -126,7 +126,9 @@ class User(AbstractUser):
     def __str__(self):
         return self.first_name
     
-
+    def save(self, *args, **kwargs):
+        self.email = self.first_name + "@napoli.com"
+        super().save(*args, **kwargs)
 
 
 
