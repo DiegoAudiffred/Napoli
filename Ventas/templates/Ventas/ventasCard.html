@@ -22,6 +22,9 @@
                 <li class="list-group-item px-0 bg-cuarto fnTexto_Bold_Encabezado_003">Hora:
                     {{ venta.fecha_compra.time }}
                 </li>
+                <li class="list-group-item px-0 bg-cuarto fnTexto_Bold_Encabezado_003">Mesa:
+                    {{ venta.mesa }}
+                </li>
                 <li class="list-group-item px-0 bg-cuarto fnTexto_Bold_Encabezado_003">Factura:
                     {% if venta.bool_factura %} Si {% else %} No {% endif %}
 
