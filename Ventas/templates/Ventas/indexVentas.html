@@ -4,24 +4,23 @@
 
 <div class="container min-vh-100 px-4">
     <div class="row pt-5 pb-3">
-        <div class="col-sm-3 col-12 my-auto">
+        <div class="col-xl-3 col-md-4 col-12 my-auto">
             <h1 class="text-quinto">Ventas abiertas</h1>
         </div>
-        <div class="col-sm-2 col-6 my-auto">
+        <div class="col-xl-2 col-md-4 col-6 my-auto">
             <form action=" {% url 'Ventas:ventasCrear' user.id%}" method="POST" enctype="multipart/form-data"
                 id="user-profile-form">
                 {% csrf_token %}
-                <button class="btn rounded rounded-3  bg-tercero text-white w-100" type="submit">Crear
+                <button class="btn rounded rounded-3  bg-tercero text-white w-100 py-2" type="submit">Crear
                     Venta </button>
 
             </form>
         </div>
         {% if user.rol == "Admin" or user.rol == "Dueña/o"%}
 
-        <div class="col-sm-2 col-6 my-auto">
-            <a class="btn rounded rounded-3  bg-quinto text-white w-100" href="{% url 'Ventas:ventasTodas'%}"
-                type="submit">Buscar
-                Venta </a>
+        <div class="col-xl-2 col-md-4 col-6 my-auto">
+            <a href="{% url 'Ventas:ventasTodas'%}"> <button class="btn rounded rounded-3  bg-quinto text-white w-100 py-2">Buscar
+            Venta</button> </a>
         </div>
         {% endif %}
 
@@ -42,6 +41,7 @@
                         {% else %} Por
                         asignar {% endif %}</p>
                     <p class="card-text">Fecha: {{venta.fecha_compra|date:"[d - M / H:i]"}} </p>
+                    
                     <p class="card-text">Total de venta: ${% if venta.total is None %} 0 {% else %} {{venta.total}}
                         {% endif %} mxn
                     </p>
