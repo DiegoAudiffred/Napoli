@@ -6,15 +6,18 @@
 
 <table class="table m-0">
     <thead>
-        <tr class="align-middle">
+        <tr class="align-middle bg-tercero text-white">
             <th>Nombre</th>
+                                    {% if request.user.rol == "Admin"%}
+
             <th>Email</th>
+            
             <th>Teléfono</th>
             <th>Total ventas</th>
             <th>Total consumido</th>
             <th>Editar</th>
             <th>Eliminar</th>
-
+                {% endif %}
         </tr>
 
     </thead>
@@ -26,6 +29,8 @@
 
 
             <td class="text-truncate">{{empleado.nombre}}</td>
+                                    {% if request.user.rol == "Admin"%}
+
             <td class="text-truncate">{{empleado.email}}</td>
             <td class="text-truncate">{{empleado.phone_number}}</td>
 
@@ -70,6 +75,7 @@
                 </div>
             </div>
         </div>
+        {% endif %}
         {% endfor %}
     </tbody>
 </table>

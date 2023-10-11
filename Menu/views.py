@@ -65,7 +65,7 @@ def menuCrear(request):
    
         if form.is_valid():
             user = form.save()
-            img = static('img/fondogris.PNG')
+            img = static('img/noimage.jpg')
             user.url = img
             user.save()
                       

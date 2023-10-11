@@ -232,6 +232,7 @@ def agregarVenta(request,id):
                       
             return redirect("Ventas:modificarVenta",id)
         else:
+            print(form.errors)
             return redirect("Ventas:ventasIndex")
    
     return redirect("Ventas:ventasIndex")
