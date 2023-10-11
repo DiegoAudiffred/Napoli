@@ -8,7 +8,7 @@
     <div
         class="row bg-whiterounded-top border-top border-end border-start border-3 border-quinto bg-white  rounded-top">
 
-        <div class="col-6 col-md-2 border-end border-quinto">
+        <div class="col-4 col-md-2 border-end border-quinto">
             <form action="{% url 'Ventas:addCliente' venta.id%}" method="POST" enctype="multipart/form-data"
                 id="user-profile-form">
                 {% csrf_token %}
@@ -18,9 +18,9 @@
                 {% else %}
                 <div class="input-group">
 
-                    <div class="dropdown mx-2">
+                    <div class="dropdown">
 
-                        <input type="text" class="form-control shadow-none py-0 border border-0"
+                        <input type="text" class="form-control shadow-none p-0 border border-0 "
                             placeholder="Buscar cliente" aria-label="" aria-describedby="basic-addon1" id="searchBar"
                             list="cardHolder" data-bs-toggle="dropdown" onkeyup="getCardsReplace(this.value)"
                             id="dropdownMenuLink"
@@ -41,7 +41,7 @@
             </form>
         </div>
 
-        <div class="col-6 col-md-2 border-end border-quinto">
+        <div class="col-5 col-md-2 border-end border-quinto">
             {{venta.empleado.first_name}}
         </div>
         <div class="col-3 border-end border-quinto d-none d-md-block">
@@ -49,12 +49,12 @@
         </div>
 
         <div class="col-2 border-end border-quinto  d-none d-md-block">
-            Estado:{% if venta.is_open %} {% if venta.is_reopen%} Cuenta reabierta {% else %} Cuenta abierta {% endif %}
+            {% if venta.is_open %} {% if venta.is_reopen%} Cuenta reabierta {% else %} Cuenta abierta {% endif %}
             {% else %} Cuenta cerrada {% endif %}
         </div>
 
 
-        <div class="col-1 d-none d-md-block border-end border-quinto  ">
+        <div class="col-3 border-end border-quinto  ">
 
 
 
@@ -97,9 +97,7 @@
 
 
         </div>
-        <div class="col-2  d-none d-md-block">
-            Factura
-        </div>
+       
     </div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -170,7 +168,7 @@
 
                                     {{list.observaciones}}</p>
                             </td>
-                            <td class="align-middle text-center d-none d-sm-table-cell">
+                            <td class="align-middle text-center d-none d-sm-table-cell" style="width: 200px;height: 100px;">
                                 {% if list.menu.categoria == "Pizza" %}
                                 {% if list.familiar %}
                                 {% if list.pizza_mitad %}
@@ -230,8 +228,8 @@
 
                                 </div>
                             </td>
-                            <td class="align-middle text-center d-none d-sm-table-cell">
-                                $ {{list.totalfinal}} mxn
+                            <td class="align-middle text-center d-none d-sm-table-cell"  style="width: 200px;height: 100px;">
+                                $ {{list.totalfinal}} 
                             </td>
                         </tr>
 
@@ -246,7 +244,7 @@
                             <th class="bg-quinto"></th>
 
 
-                            <th class="bg-primary text-white">Total: $ {{total}} mxn
+                            <th class="bg-primary text-white"  style="width: 200px;height: 100px;">Total: $ {{total}} 
                             </th>
                         </tr>
                         <tr class="d-block d-sm-none d-table-row">

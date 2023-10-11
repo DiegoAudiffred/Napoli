@@ -186,7 +186,7 @@ class Cliente(models.Model):
 
 class Menu(models.Model):
     nombre = models.CharField(max_length=100)
-    descripcion = models.TextField()
+    descripcion = models.TextField(blank=True,null=True)
     precio = models.DecimalField(max_digits=8, decimal_places=2)
     precioFamiliar = models.DecimalField(max_digits=8, decimal_places=2,blank=True,null=True)
     mediaOrden = models.DecimalField(max_digits=8, decimal_places=2,blank=True,null=True)
