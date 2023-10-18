@@ -44,7 +44,7 @@
         <div class="col-5 col-md-2 border-end border-quinto">
             {{venta.empleado.first_name}}
         </div>
-        <div class="col-3 border-end border-quinto d-none d-md-block">
+        <div class="col-4 border-end border-quinto d-none d-md-block">
             {{venta.fecha_compra}}
         </div>
 
@@ -54,7 +54,7 @@
         </div>
 
 
-        <div class="col-3 border-end border-quinto  ">
+        <div class="col-3 col-md-2 border-end border-quinto  ">
 
 
 
@@ -162,13 +162,13 @@
                                 <p>Mitad: {{list.pizza_mitad}}
                                 </p> {% endif %}
                             </td>
-                            <td class="align-middle" style="width: 300px;height: 100px;">
+                            <td class="align-middle" style="min-width: 100px; max-width: 250px;">
 
                                 <p class=" text-break">
 
                                     {{list.observaciones}}</p>
                             </td>
-                            <td class="align-middle text-center d-none d-sm-table-cell" style="width: 200px;height: 100px;">
+                            <td class="align-middle text-center d-none d-sm-table-cell" style="width: 200px;">
                                 {% if list.menu.categoria == "Pizza" %}
                                 {% if list.familiar %}
                                 {% if list.pizza_mitad %}
@@ -179,7 +179,7 @@
                                     {{list.menu.precio}} mxn {% else %} $ {{ list.pizza_mitad.precio }} mxm {% endif %}
                                     {% else %} $ {{ list.menu.precio }} mxn {% endif %} {% endif %} {% else %} {% if list.media_orden %} $ {{list.menu.mediaOrden}} mxn {% else %} $ {{list.menu.precio}}
                                     mxn {% endif %} {% endif %} </td>
-                            <td class="align-middle text-center" style="width: 200px;height: 100px;">
+                            <td class="align-middle text-center" style="width: 100px;">
                                 {% for ingrediente in list.extras.all %}
                                 <div class="col-auto">
                                     <p>{{ ingrediente.nombre }}
@@ -244,7 +244,7 @@
                             <th class="bg-quinto"></th>
 
 
-                            <th class="bg-primary text-white"  style="width: 200px;height: 100px;">Total: $ {{total}} 
+                            <th class="bg-primary text-white"  style="width: 200px">Total: $ {{total}} 
                             </th>
                         </tr>
                         <tr class="d-block d-sm-none d-table-row">

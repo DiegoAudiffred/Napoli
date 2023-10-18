@@ -134,6 +134,9 @@ def modificarVenta(request,id):
                     if ventas.pizza_mitad.precio < ventas.menu.precio:
                         total += (ventas.menu.precio) * ventas.cantidad
                     else:
+                        print(ventas.pizza_mitad.precio)
+                        print(ventas.cantidad)
+
                         total += (ventas.pizza_mitad.precio) * ventas.cantidad
                 else:
                         total += (ventas.menu.precio) * ventas.cantidad

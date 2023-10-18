@@ -65,11 +65,11 @@ class VentaMenuForm(forms.ModelForm):
     
         self.fields['venta'].required = False
 
-        self.fields['menu'].required = False
+        self.fields['menu'].required = True
         self.fields['menu'].widget.attrs.update({'class':'form-control shadow-none   px-2 py-1','placeholder':' Breve descripción*','rows':'1', 'aria-label':'Username','aria-describedby':'basic-addon1','style':'border-left:none', })
 
 
-        self.fields['cantidad'].required = False
+        self.fields['cantidad'].required = True
         self.fields['cantidad'].widget.attrs.update({'class':'form-control shadow-none border border-0   px-2 py-1 ','placeholder':' Cantidad*','rows':'1', 'aria-label':'Username','aria-describedby':'basic-addon1','style':'border-left:none', })
         
         self.fields['observaciones'].required = False
