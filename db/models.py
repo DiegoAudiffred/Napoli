@@ -232,7 +232,7 @@ class VentaMenu(models.Model):
     venta = models.ForeignKey(Venta, on_delete=models.CASCADE)
     menu = models.ForeignKey(Menu, on_delete=models.CASCADE,related_name="menu")
     observaciones = models.TextField(blank=True,null=True,max_length=100)
-    cantidad = models.PositiveIntegerField(blank=True,null=True,)
+    cantidad = models.PositiveIntegerField(blank=True,null=True,default=1)
     totalfinal = models.DecimalField(max_digits=8, decimal_places=2,default=0)
     extras = models.ManyToManyField(Extras,blank=True,null=True)
     media_orden = models.BooleanField(default=False)

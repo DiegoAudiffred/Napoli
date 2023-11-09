@@ -58,7 +58,6 @@
 
 
 
-
             <form action="{% url 'Ventas:addMesa' venta.id %}" method="POST" enctype="multipart/form-data"
                 id="user-profile-form2">
                 {% csrf_token %}
@@ -67,20 +66,20 @@
                 {% else %}
                 <select class="form-select border border-0 shadow-none py-0" aria-label="Default select example"
                     id="selectMesa" name="mesa">
-            {% if venta.mesa %}
-{% for mesa in mesas %}
-<option {% if venta.mesa == mesa %} selected {% endif %} value="{{ mesa.id }}">{{ mesa.nombre }}
-</option>
-{% endfor %}
-{% else %}
-<option selected value="0">NA
-</option>
-{% for mesa in mesas %}
-<option value="{{ mesa.id }}">{{ mesa.nombre }}
-</option>
-{% endfor %}
-                                    {% endif %}
-                 
+                    {% if venta.mesa %}
+                    {% for mesa in mesas %}
+                    <option {% if venta.mesa == mesa %} selected {% endif %} value="{{ mesa.id }}">{{ mesa.nombre }}
+                    </option>
+                    {% endfor %}
+                    {% else %}
+                    <option selected value="0">NA
+                    </option>
+                    {% for mesa in mesas %}
+                    <option value="{{ mesa.id }}">{{ mesa.nombre }}
+                    </option>
+                    {% endfor %}
+                    {% endif %}
+
                 </select>
                 {% endif %}
                 <div class="d-none">
@@ -97,7 +96,7 @@
 
 
         </div>
-       
+
     </div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -162,7 +161,7 @@
                                 <p>Mitad: {{list.pizza_mitad}}
                                 </p> {% endif %}
                             </td>
-                            <td class="align-middle" style="min-width: 100px; max-width: 250px;">
+                            <td class="align-middle">
 
                                 <p class=" text-break">
 
@@ -177,9 +176,11 @@
                                     mxn {% endif %} {% else %} ${{list.menu.precioFamiliar}} mxn {% endif %} {% else %}
                                     {% if list.pizza_mitad %} {% if list.pizza_mitad.precio < list.menu.precio %} $
                                     {{list.menu.precio}} mxn {% else %} $ {{ list.pizza_mitad.precio }} mxm {% endif %}
-                                    {% else %} $ {{ list.menu.precio }} mxn {% endif %} {% endif %} {% else %} {% if list.media_orden %} $ {{list.menu.mediaOrden}} mxn {% else %} $ {{list.menu.precio}}
+                                    {% else %} $ {{ list.menu.precio }} mxn {% endif %} {% endif %} {% else %} <!-- -->
+                                    {% if list.media_orden %} $ {{list.menu.mediaOrden}} mxn {% else %} $
+                                    {{list.menu.precio}}
                                     mxn {% endif %} {% endif %} </td>
-                            <td class="align-middle text-center" style="width: 100px;">
+                            <td class="align-middle text-center">
                                 {% for ingrediente in list.extras.all %}
                                 <div class="col-auto">
                                     <p>{{ ingrediente.nombre }}
@@ -195,7 +196,7 @@
 
                                 {% endfor %}
                             </td>
-                            <td class="align-middle  text-center" style="width: 100px;">
+                            <td class="align-middle  text-center">
 
 
                                 <div class="plus-minus-input">
@@ -228,13 +229,17 @@
 
                                 </div>
                             </td>
-                            <td class="align-middle text-center d-none d-sm-table-cell"  style="width: 200px;height: 100px;">
-                                $ {{list.totalfinal}} 
+                            <td class="align-middle text-center d-none d-sm-table-cell">
+                                $ {{list.totalfinal}}
                             </td>
                         </tr>
-
-
                         {% endfor %}
+
+
+
+
+
+
                         <tr class="d-none d-sm-table-row">
                             <th class="bg-quinto"></th>
                             <th class="bg-quinto"></th>
@@ -244,7 +249,7 @@
                             <th class="bg-quinto"></th>
 
 
-                            <th class="bg-primary text-white"  style="width: 200px">Total: $ {{total}} 
+                            <th class="bg-primary text-white" style="width: 200px">Total: $ {{total}}
                             </th>
                         </tr>
                         <tr class="d-block d-sm-none d-table-row">
@@ -260,6 +265,12 @@
                     </tbody>
 
                 </table>
+                <div class="container"> <!-- Contenedor  -->
+                    <div id="dynamic-forms-container">
+
+                    </div>
+                 
+                </div>
             </div>
 
         </div>
@@ -267,9 +278,8 @@
     {% if venta.is_open%}
     <div class="row ">
         <div class="col-6 col-md-2 text-center">
-            <a href="" data-bs-toggle="modal" data-bs-target="#exampleModal"
-                class="btn btn-tercero text-white w-100">Agregar
-                venta</a>
+            <a onclick="agregarFormulario()" class="btn btn-tercero text-white w-100">Agregar venta</a>
+
         </div>
         <div class="col-6 col-md-2 text-center">
             <form action="{% url 'Ventas:cerrarVenta' venta.id %}" method="POST" enctype="multipart/form-data"
@@ -316,6 +326,10 @@
 
             </form>
         </div>
+        <div class="col-md-2">
+        <button id="submit-all-forms-button" class="btn btn-primary">Enviar todos los formularios</button>
+
+        </div>
     </div>
     {% else %}
     <div class="row justify-content-end w-100">
@@ -335,254 +349,569 @@
 </div>
 
 
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Agregar a la cuenta </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
+<div class="container d-none">
+<form action="{% url 'Ventas:agregarVenta' venta.id %}" method="POST" enctype="multipart/form-data" id="formVenta">
+    {% csrf_token %}
+    <div class="row border border-4 rounded rounded-4 border-quinto p-2">
+        <div id="formCounterID">
+
+        </div>
+
+
+        <div class="col-4">
+            <div class="rounded rounded-3 border border-2 border-primary">
+
+
+                <input type="text" class="form-control shadow-none  px-2 py-1 border border-0 rounded rounded-3"
+                    placeholder="Buscar platillo" aria-label="" aria-describedby="basic-addon1" id="searchBarMenu" name="menu_text"
+                    list="cardHolder2" data-bs-toggle="dropdown" onkeyup="getCardsReplace2(this.value,1,this)"
+                    id="dropdownMenuLink" value="">
+
+
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink" id="cardHolder2">
+
+                </ul>
+                <div class="d-block">
+                <select name="menu" class="form-control shadow-none   px-2 py-1"  placeholder=" Breve descripción*" rows="1" aria-label="Username" aria-describedby="basic-addon1" style="border-left:none" required="" id="id_menu">
+                    <option value="" selected="">---------</option>
+                
+                    <option value="1">Bruschetta</option>
+                
+                    <option value="2">Bruschetta Angri</option>
+                
+                    <option value="3">Pimientos Ambra</option>
+                
+                    <option value="4">Zucchini all ´aceto</option>
+                
+                    <option value="5">Carpaccio de Carne</option>
+                
+                    <option value="6">Provolone al horno</option>
+                
+                    <option value="7">Antipasto misto</option>
+                
+                    <option value="8">Insalata Caprese</option>
+                
+                    <option value="9">Insalata Ninnarella</option>
+                
+                    <option value="10">Insalata Ambra</option>
+                
+                    <option value="11">Insalata Napoli</option>
+                
+                    <option value="12">Insalata André</option>
+                
+                    <option value="13">Corte Rib Eye (350grs)</option>
+                
+                    <option value="14">Pollo alla Pompeiana</option>
+                
+                    <option value="15">Salmón alla Mediterranea</option>
+                
+                    <option value="16">Pasta Siciliana</option>
+                
+                    <option value="17">Fusilli al Pesto</option>
+                
+                    <option value="18">Spaguetti Bolognesa</option>
+                
+                    <option value="19">Spaghetti Carbonara</option>
+                
+                    <option value="20">Fusilli del Chef</option>
+                
+                    <option value="21">Spaghetti Aglio e Olio</option>
+                
+                    <option value="22">Fusilli Funghi e Carciofine</option>
+                
+                    <option value="23">Spaghetti Primavera</option>
+                
+                    <option value="24">Margherita</option>
+                
+                    <option value="25">Marinara</option>
+                
+                    <option value="26">Napoletana</option>
+                
+                    <option value="27">Frutti Di Mare</option>
+                
+                    <option value="28">Peperoni</option>
+                
+                    <option value="29">Tropicale</option>
+                
+                    <option value="30">Capatone</option>
+                
+                    <option value="31">Mare e Monti</option>
+                
+                    <option value="32">Soucera</option>
+                
+                    <option value="33">Oaxaqueña</option>
+                
+                    <option value="34">Cognata</option>
+                
+                    <option value="35">Chucky Lozano</option>
+                
+                    <option value="36">Fratello</option>
+                
+                    <option value="37">4 Formaggi</option>
+                
+                    <option value="38">Paktiel</option>
+                
+                    <option value="39">Carciofina</option>
+                
+                    <option value="40">O´pazzo</option>
+                
+                    <option value="41">We´Alfo</option>
+                
+                    <option value="42">Salumi</option>
+                
+                    <option value="43">Calzone Maradona</option>
+                
+                    <option value="44">Calzone Vesuvio</option>
+                
+                    <option value="45">Calzone Puebla</option>
+                
+                    <option value="46">Calzone Vegetariano</option>
+                
+                    <option value="47">Calzone Napoletano</option>
+                
+                    <option value="48">Involtini Vegetariano</option>
+                
+                    <option value="49">Involtini de Embutidos</option>
+                
+                    <option value="50">Calzone de Nutella</option>
+                
+                    <option value="51">Calzone de Nutella con frutas</option>
+                
+                    <option value="52">Tiramisú</option>
+                
+                    <option value="53">Panna Cotta</option>
+                
+                    <option value="54">Agua Natural</option>
+                
+                    <option value="55">Agua Mineral</option>
+                
+                    <option value="56">Refresco</option>
+                
+                    <option value="57">Limonada</option>
+                
+                    <option value="58">Cerveza</option>
+                
+                    <option value="59">Chelada</option>
+                
+                    <option value="60">Michelada</option>
+                
+                    <option value="61">Copa de vino de la casa</option>
+                
+                    <option value="62">Clamato con cerveza</option>
+                
+                    <option value="63">Café Americano</option>
+                
+                    <option value="64">Café Espresso</option>
+                
+                    <option value="65">Café Espresso Doble</option>
+                
+                    <option value="66">Café Espresso Cortado</option>
+                
+                    <option value="67">Café Cappuchino</option>
+                
+                    <option value="68">Café con Leche</option>
+                
+                    <option value="69">Café Carajillo</option>
+                
+                    <option value="70">Té</option>
+                
+                    <option value="71">Café Bombón</option>
+                
+                    <option value="72">Barra Pan</option>
+                
+                    <option value="73">Jarra Limonada</option>
+                
+                    <option value="74">Gelato</option>
+                
+                    <option value="75">Limonchelo</option>
+                
+                    <option value="76">Grapa</option>
+                
+                    <option value="77">Ravioli espinaca</option>
+                
+                    <option value="78">Ravioli Queso</option>
+                
+                    <option value="79">Mezcal</option>
+                
+                </select>
+
+                </div>
+
             </div>
-            <div class="modal-body">
-                <form action="{% url 'Ventas:agregarVenta' venta.id %}" method="POST" enctype="multipart/form-data"
-                    id="user-profile-form">
-                    {% csrf_token %}
-
-                    <div class="row ">
-                        <div class="d-none">
-                            {{form2.venta}}
-
-                        </div>
-                        <div class="d-none">
-                            {{form2.totalfinal}}
-
-                        </div>
-
-                        <div class="col-12 p-3 text-start">
-                            <div class="row justify-content-start">
-                                <div class="col-12 py-2">
-
-                                    <div class="input-group rounded rounded-3 border border-2 border-primary">
+            <div id="pruebas" class="d-none">
+                <div class="input-group rounded rounded-3 border border-2 border-primary">
 
 
-                                        <div class="input-group-prepend dropdown me-2 my-auto">
-                                            <span class="input-group-text bg-white border border-0"
-                                                id="basic-addon1"><svg width="19px" height="19px"
-                                                    viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg"
-                                                    fill="#000000">
-                                                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                                                    <g id="SVGRepo_tracerCarrier" stroke-linecap="round"
-                                                        stroke-linejoin="round"></g>
-                                                    <g id="SVGRepo_iconCarrier">
-                                                        <path fill="#000000"
-                                                            d="m384.064 274.56.064-50.688A128 128 0 0 1 512.128 96c70.528 0 127.68 57.152 127.68 127.68v50.752A448.192 448.192 0 0 1 955.392 768H68.544A448.192 448.192 0 0 1 384 274.56zM96 832h832a32 32 0 1 1 0 64H96a32 32 0 1 1 0-64zm32-128h768a384 384 0 1 0-768 0zm447.808-448v-32.32a63.68 63.68 0 0 0-63.68-63.68 64 64 0 0 0-64 63.936V256h127.68z">
-                                                        </path>
-                                                    </g>
-                                                </svg></span>
-                                        </div>
-                                        <input type="text"
-                                            class="form-control shadow-none  px-2 py-1 border border-0 rounded rounded-3"
-                                            placeholder="Buscar platillo" aria-label="" aria-describedby="basic-addon1"
-                                            id="searchBar2" list="cardHolder2" data-bs-toggle="dropdown"
-                                            onkeyup="getCardsReplace2(this.value)" id="dropdownMenuLink" value="">
+                    <div class="input-group-prepend dropdown me-2 my-auto">
+                     
+                    </div>
+                    <input type="text" class="form-control shadow-none  px-2 py-1 border border-0 rounded rounded-3"
+                        placeholder="Buscar platillo" aria-label="" aria-describedby="basic-addon1" id="searchBarPizza"
+                        list="cardHolder3" data-bs-toggle="dropdown" onkeyup="getCardsReplace3(this.value)" name="pizza_mitad_text"
+                        id="dropdownMenuLink3" value="">
 
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink3" id="cardHolder3">
 
-                                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink" id="cardHolder2">
-
-                                        </ul>
-                                        <div class="d-none">
-                                            {{form2.menu}}
-
-                                        </div>
-
-                                    </div>
-                                </div>
-                                <div class="col-3 py-2">
-
-                                    <p class="m-0">Mitad Pizza:</p>
-
-
-                                </div>
-                                <div class="col-1 py-2 px-0">
-                                    <input class="form-check-input m-0" type="checkbox" value="" id="defaultCheck1"
-                                        style="height:30px;width:30px" onclick="show()">
-
-                                </div>
-                                <div class="col-3 py-2 ">
-                                    <p class="m-0">Familiar:</p>
-
-                                </div>
-                                <div class="col-1 py-2 px-0">
-                                    {{form2.familiar}}
-                                </div>
-                                <div class="col-3 py-2 ">
-                                    <p class="m-0">Media Orden:</p>
-
-                                </div>
-                                <div class="col-1 py-2 px-0">
-                                    {{form2.media_orden}}
-                                </div>
-
-                                <div class="col-12 py-2">
-
-                                    <div id="pruebas" class="d-none">
-                                        <div class="input-group rounded rounded-3 border border-2 border-primary">
-
-
-                                            <div class="input-group-prepend dropdown me-2 my-auto">
-                                                <span class="input-group-text bg-white border border-0"
-                                                    id="basic-addon1"><svg width="19px" height="19px"
-                                                        viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg"
-                                                        fill="#000000">
-                                                        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                                                        <g id="SVGRepo_tracerCarrier" stroke-linecap="round"
-                                                            stroke-linejoin="round"></g>
-                                                        <g id="SVGRepo_iconCarrier">
-                                                            <path fill="#000000"
-                                                                d="m384.064 274.56.064-50.688A128 128 0 0 1 512.128 96c70.528 0 127.68 57.152 127.68 127.68v50.752A448.192 448.192 0 0 1 955.392 768H68.544A448.192 448.192 0 0 1 384 274.56zM96 832h832a32 32 0 1 1 0 64H96a32 32 0 1 1 0-64zm32-128h768a384 384 0 1 0-768 0zm447.808-448v-32.32a63.68 63.68 0 0 0-63.68-63.68 64 64 0 0 0-64 63.936V256h127.68z">
-                                                            </path>
-                                                        </g>
-                                                    </svg></span>
-                                            </div>
-                                            <input type="text"
-                                                class="form-control shadow-none  px-2 py-1 border border-0 rounded rounded-3"
-                                                placeholder="Buscar platillo" aria-label=""
-                                                aria-describedby="basic-addon1" id="searchBar3" list="cardHolder3"
-                                                data-bs-toggle="dropdown" onkeyup="getCardsReplace3(this.value)"
-                                                id="dropdownMenuLink3" value="">
-
-
-                                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink3"
-                                                id="cardHolder3">
-
-                                            </ul>
-                                            <div class="d-none">
-                                                {{form2.pizza_mitad}}
-
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                </div>
-
-
-
-
-                                <div class="col-12 py-2">
-                                    <div class="input-group rounded rounded-3 border border-2 border-primary my-auto">
-                                        <span class="input-group-text bg-white border border-0 " id="basic-addon1"><svg
-                                                width="19px" height="19px" viewBox="0 0 24 24" fill="none"
-                                                xmlns="http://www.w3.org/2000/svg">
-                                                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                                                <g id="SVGRepo_tracerCarrier" stroke-linecap="round"
-                                                    stroke-linejoin="round"></g>
-                                                <g id="SVGRepo_iconCarrier">
-                                                    <circle opacity="0.5" cx="12" cy="12" r="10" stroke="#a8361a"
-                                                        stroke-width="1.5">
-                                                    </circle>
-                                                    <path d="M12 6V18" stroke="#a8361a" stroke-width="1.5"
-                                                        stroke-linecap="round">
-                                                    </path>
-                                                    <path
-                                                        d="M15 9.5C15 8.11929 13.6569 7 12 7C10.3431 7 9 8.11929 9 9.5C9 10.8807 10.3431 12 12 12C13.6569 12 15 13.1193 15 14.5C15 15.8807 13.6569 17 12 17C10.3431 17 9 15.8807 9 14.5"
-                                                        stroke="#a8361a" stroke-width="1.5" stroke-linecap="round">
-                                                    </path>
-                                                </g>
-                                            </svg>
-                                        </span>
-                                        {{form2.cantidad}}
-
-                                    </div>
-
-                                </div>
-
-                                <div class="col-12 py-2 ">
-                                    <div class="input-group rounded rounded-3 border border-2 border-primary ">
-                                        <span class="input-group-text bg-white border border-0 " id="basic-addon1"> <svg
-                                                width="19px" height="19px" viewBox="0 0 24 24" fill="none"
-                                                xmlns="http://www.w3.org/2000/svg">
-                                                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                                                <g id="SVGRepo_tracerCarrier" stroke-linecap="round"
-                                                    stroke-linejoin="round"></g>
-                                                <g id="SVGRepo_iconCarrier">
-                                                    <circle opacity="0.5" cx="12" cy="12" r="10" stroke="#a8361a"
-                                                        stroke-width="1.5">
-                                                    </circle>
-                                                    <path d="M12 6V18" stroke="#a8361a" stroke-width="1.5"
-                                                        stroke-linecap="round">
-                                                    </path>
-                                                    <path
-                                                        d="M15 9.5C15 8.11929 13.6569 7 12 7C10.3431 7 9 8.11929 9 9.5C9 10.8807 10.3431 12 12 12C13.6569 12 15 13.1193 15 14.5C15 15.8807 13.6569 17 12 17C10.3431 17 9 15.8807 9 14.5"
-                                                        stroke="#a8361a" stroke-width="1.5" stroke-linecap="round">
-                                                    </path>
-                                                </g>
-                                            </svg>
-                                        </span>
-                                        {{form2.observaciones}}
-
-                                    </div>
-
-                                </div>
-
-
-                                <div class="col-12 py-2 ">
-                                    <div class="input-group rounded rounded-3 border border-2 border-primary ">
-                                        <span class="input-group-text bg-white border border-0 " id="basic-addon1"> <svg
-                                                width="19px" height="19px" viewBox="0 0 24 24" fill="none"
-                                                xmlns="http://www.w3.org/2000/svg">
-                                                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                                                <g id="SVGRepo_tracerCarrier" stroke-linecap="round"
-                                                    stroke-linejoin="round"></g>
-                                                <g id="SVGRepo_iconCarrier">
-                                                    <circle opacity="0.5" cx="12" cy="12" r="10" stroke="#a8361a"
-                                                        stroke-width="1.5">
-                                                    </circle>
-                                                    <path d="M12 6V18" stroke="#a8361a" stroke-width="1.5"
-                                                        stroke-linecap="round">
-                                                    </path>
-                                                    <path
-                                                        d="M15 9.5C15 8.11929 13.6569 7 12 7C10.3431 7 9 8.11929 9 9.5C9 10.8807 10.3431 12 12 12C13.6569 12 15 13.1193 15 14.5C15 15.8807 13.6569 17 12 17C10.3431 17 9 15.8807 9 14.5"
-                                                        stroke="#a8361a" stroke-width="1.5" stroke-linecap="round">
-                                                    </path>
-                                                </g>
-                                            </svg>
-                                        </span>
-                                        {{form2.extras}}
-
-                                    </div>
-
-                                </div>
-
-
-
-
-                                <div class="col-6 col-sm-3 py-2 px-0 text-end">
-                                    <button class="btn fnOS_Bold_Boton_10 my-auto px-3 border border-0"
-                                        type="button" data-bs-dismiss="modal" aria-label="Close">
-
-                                        <span>Cancelar</span>
-
-                                    </button>
-
-                                </div>
-                                <div class="col-6 col-sm-3 py-2 px-0 text-start">
-                                    <button type="submit"
-                                        class="btn fnOS_Bold_Boton_10 btn-primary border border-2 border-primary text-white my-auto rounded rounded-3 px-3">
-
-                                        Guardar
-
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
+                    </ul>
+                    <div class="d-none">
+                    <select name="pizza_mitad" class="form-control shadow-none   px-2 py-1" placeholder=" Breve descripción*" rows="1"
+                        aria-label="Username" aria-describedby="basic-addon1" style="border-left:none" id="id_pizza_mitad">
+                        <option value="" selected="">---------</option>
+                    
+                        <option value="1">Bruschetta</option>
+                    
+                        <option value="2">Bruschetta Angri</option>
+                    
+                        <option value="3">Pimientos Ambra</option>
+                    
+                        <option value="4">Zucchini all ´aceto</option>
+                    
+                        <option value="5">Carpaccio de Carne</option>
+                    
+                        <option value="6">Provolone al horno</option>
+                    
+                        <option value="7">Antipasto misto</option>
+                    
+                        <option value="8">Insalata Caprese</option>
+                    
+                        <option value="9">Insalata Ninnarella</option>
+                    
+                        <option value="10">Insalata Ambra</option>
+                    
+                        <option value="11">Insalata Napoli</option>
+                    
+                        <option value="12">Insalata André</option>
+                    
+                        <option value="13">Corte Rib Eye (350grs)</option>
+                    
+                        <option value="14">Pollo alla Pompeiana</option>
+                    
+                        <option value="15">Salmón alla Mediterranea</option>
+                    
+                        <option value="16">Pasta Siciliana</option>
+                    
+                        <option value="17">Fusilli al Pesto</option>
+                    
+                        <option value="18">Spaguetti Bolognesa</option>
+                    
+                        <option value="19">Spaghetti Carbonara</option>
+                    
+                        <option value="20">Fusilli del Chef</option>
+                    
+                        <option value="21">Spaghetti Aglio e Olio</option>
+                    
+                        <option value="22">Fusilli Funghi e Carciofine</option>
+                    
+                        <option value="23">Spaghetti Primavera</option>
+                    
+                        <option value="24">Margherita</option>
+                    
+                        <option value="25">Marinara</option>
+                    
+                        <option value="26">Napoletana</option>
+                    
+                        <option value="27">Frutti Di Mare</option>
+                    
+                        <option value="28">Peperoni</option>
+                    
+                        <option value="29">Tropicale</option>
+                    
+                        <option value="30">Capatone</option>
+                    
+                        <option value="31">Mare e Monti</option>
+                    
+                        <option value="32">Soucera</option>
+                    
+                        <option value="33">Oaxaqueña</option>
+                    
+                        <option value="34">Cognata</option>
+                    
+                        <option value="35">Chucky Lozano</option>
+                    
+                        <option value="36">Fratello</option>
+                    
+                        <option value="37">4 Formaggi</option>
+                    
+                        <option value="38">Paktiel</option>
+                    
+                        <option value="39">Carciofina</option>
+                    
+                        <option value="40">O´pazzo</option>
+                    
+                        <option value="41">We´Alfo</option>
+                    
+                        <option value="42">Salumi</option>
+                    
+                        <option value="43">Calzone Maradona</option>
+                    
+                        <option value="44">Calzone Vesuvio</option>
+                    
+                        <option value="45">Calzone Puebla</option>
+                    
+                        <option value="46">Calzone Vegetariano</option>
+                    
+                        <option value="47">Calzone Napoletano</option>
+                    
+                        <option value="48">Involtini Vegetariano</option>
+                    
+                        <option value="49">Involtini de Embutidos</option>
+                    
+                        <option value="50">Calzone de Nutella</option>
+                    
+                        <option value="51">Calzone de Nutella con frutas</option>
+                    
+                        <option value="52">Tiramisú</option>
+                    
+                        <option value="53">Panna Cotta</option>
+                    
+                        <option value="54">Agua Natural</option>
+                    
+                        <option value="55">Agua Mineral</option>
+                    
+                        <option value="56">Refresco</option>
+                    
+                        <option value="57">Limonada</option>
+                    
+                        <option value="58">Cerveza</option>
+                    
+                        <option value="59">Chelada</option>
+                    
+                        <option value="60">Michelada</option>
+                    
+                        <option value="61">Copa de vino de la casa</option>
+                    
+                        <option value="62">Clamato con cerveza</option>
+                    
+                        <option value="63">Café Americano</option>
+                    
+                        <option value="64">Café Espresso</option>
+                    
+                        <option value="65">Café Espresso Doble</option>
+                    
+                        <option value="66">Café Espresso Cortado</option>
+                    
+                        <option value="67">Café Cappuchino</option>
+                    
+                        <option value="68">Café con Leche</option>
+                    
+                        <option value="69">Café Carajillo</option>
+                    
+                        <option value="70">Té</option>
+                    
+                        <option value="71">Café Bombón</option>
+                    
+                        <option value="72">Barra Pan</option>
+                    
+                        <option value="73">Jarra Limonada</option>
+                    
+                        <option value="74">Gelato</option>
+                    
+                        <option value="75">Limonchelo</option>
+                    
+                        <option value="76">Grapa</option>
+                    
+                        <option value="77">Ravioli espinaca</option>
+                    
+                        <option value="78">Ravioli Queso</option>
+                    
+                        <option value="79">Mezcal</option>
+                    
+                    </select>
 
                     </div>
 
-                </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Opciones -->
+        <div class="col-4">
+            <div class="row">
+                <div class="col-4">
+                    <p class="m-0">Mitad Pizza:</p>
+
+                    <input type="checkbox" name="mitad_pizza" style="height:30px;width:30px" class="" id="mitad_pizza" value="" onclick="show(this)">
+                </div>
+                <div class="col-4">
+                    <p class="m-0">Familiar:</p>
+
+            <input type="checkbox" name="familiar" style="height:30px;width:30px" class="" id="id_familiar" value="">
+
+                </div>
+
+                <div class="col-4">
+                    <p class="m-0">Media Orden:</p>
+
+                <input type="checkbox" name="media_orden" style="height:30px;width:30px" class="" id="id_media_orden" value="">
+                </div>
+
+
+
+
             </div>
 
         </div>
-    </div>
+        <div class="col-2">
+<input type="number" name="cantidad" value="1" min="0" class="form-control shadow-none border border-0   px-2 py-1 "
+    placeholder=" Cantidad*" rows="1" aria-label="Username" aria-describedby="basic-addon1" style="border-left:none"
+    required="" id="id_cantidad">        </div>
+
+        <!-- Observaciones -->
+
+        <div class="col-6">
+            <div class="input-group rounded rounded-3 border border-2 border-primary ">
+                <span class="input-group-text bg-white border border-0 " id="basic-addon1"> <svg width="19px"
+                        height="19px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                        <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round">
+                        </g>
+                        <g id="SVGRepo_iconCarrier">
+                            <circle opacity="0.5" cx="12" cy="12" r="10" stroke="#a8361a" stroke-width="1.5">
+                            </circle>
+                            <path d="M12 6V18" stroke="#a8361a" stroke-width="1.5" stroke-linecap="round">
+                            </path>
+                            <path
+                                d="M15 9.5C15 8.11929 13.6569 7 12 7C10.3431 7 9 8.11929 9 9.5C9 10.8807 10.3431 12 12 12C13.6569 12 15 13.1193 15 14.5C15 15.8807 13.6569 17 12 17C10.3431 17 9 15.8807 9 14.5"
+                                stroke="#a8361a" stroke-width="1.5" stroke-linecap="round">
+                            </path>
+                        </g>
+                    </svg>
+                </span>
+            <textarea name="observaciones" cols="40" rows="5" maxlength="100"
+                class="form-control shadow-none border border-0  px-2 py-1 " placeholder=" Observaciones en la preparación*"
+                aria-label="Username" aria-describedby="basic-addon1" style="border-left:none" id="id_observaciones"
+                data-lt-tmp-id="lt-336604" spellcheck="false" data-gramm="false"></textarea>
+
+            </div>
+        </div>
+
+
+
+        <div class="col-5">
+        <div id="id_extras">
+            <div>
+                <label for="id_extras_0"><input type="checkbox" name="extras-1" value="" id="id_extras_0">
+                    Ingrediente extra</label>
+        
+            </div>
+            <div>
+                <label for="id_extras_1"><input type="checkbox" name="extras-1" value="" id="id_extras_1">
+                    Camarón, jamón serrano, alcachofa,anchoas</label>
+        
+            </div>
+            <div>
+                <label for="id_extras_2"><input type="checkbox" name="extras-1" value="" id="id_extras_2">
+                    Parmesano reggiano o arúgula</label>
+        
+            </div>
+            <div>
+                <label for="id_extras_3"><input type="checkbox" name="extras-1" value="" id="id_extras_3">
+                    Mozzarela fresca</label>
+        
+            </div>
+        </div>
+        </div>
+<div class="col-2">
+    <button class="btn" type="submit"> Guardar</button>
 </div>
+  
+
+    </div>
+</form>
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+{% csrf_token %} <!-- Agregar el token CSRF en tu formulario Django -->
+
+<script>
+    $("#submit-all-forms-button").on("click", function () {
+        var formularios = $(".dynamic-form");
+        var datos = [];
+
+        formularios.each(function (index, form) {
+            var formData = $(form).serialize();
+            datos.push(formData);
+        });
+
+        // Obtener el token CSRF del formulario
+        var csrfToken = $("input[name=csrfmiddlewaretoken]").val();
+
+        // Agregar el token CSRF a los datos que se envían
+        datos.push("csrfmiddlewaretoken=" + csrfToken);
+
+        $.ajax({
+            type: "POST",
+            url: "{% url 'Ventas:agregarVenta' venta.id %}",
+            data: datos.join("&"),
+            success: function (response) {
+                console.log(response);
+            }
+        });
+    });
+</script>
+
+
+
+<script>
+ var formCounter = 0; // Variable global para mantener un contador único
+
+    function agregarFormulario() {
+        formCounter++; // Incrementa el contador global
+
+        var formClone = $("#formVenta").clone();
+        formClone.find("input, select, textarea,ul,a").val("");
+
+        // Cambia el nombre y el ID del formulario clonado
+        var uniqueFormId = "formVenta" + formCounter;
+        formClone.attr("id", uniqueFormId);
+        formClone.find("input, select, textarea,ul,a").each(function () {
+            var originalName = $(this).attr("name");
+            var updatedName = originalName + formCounter;
+            $(this).attr("name", updatedName);
+            var originalId = $(this).attr("id");
+            var updatedId = originalId + formCounter;
+            $(this).attr("id", updatedId);
+        });
+
+        // Actualiza el ID y el texto del div "pruebas" con el valor de formCounter
+        var pruebas = formClone.find("#pruebas");
+        var pruebasID = "pruebas" + formCounter;
+        pruebas.attr("id", pruebasID);
+        pruebas.text(formCounter);
+       
+
+        var formCounterID = formClone.find("#formCounterID");
+        var updatedFormCounterIDId = "formCounterID" + formCounter;
+        formCounterID.attr("id", updatedFormCounterIDId);
+        formCounterID.text(formCounter);
+
+
+        var formCounterID = formClone.find("#contenedorborrar");
+        var updatedFormCounterIDId = "formCounterID" + formCounter;
+        formCounterID.attr("id", updatedFormCounterIDId);
+        formCounterID.text(formCounter);
+
+
+
+
+
+        // Agrega un botón de "Borrar" a la copia del formulario
+        var deleteButton = $("<button class='btn btn-secondary text-white' type='button'>Borrar Formulario</button>");
+        deleteButton.on("click", function () {
+            formClone.remove(); // Elimina la copia del formulario
+        });
+        formClone.append(deleteButton);
+
+        $("#dynamic-forms-container").append(formClone);
+    }
+
+
+
+</script>
+
+      
 <script>
 
 
@@ -592,11 +921,15 @@
         barra.value = ""
     });
 
-    var bandera = true
-    function show() {
-        var pizza_extra = document.getElementById("pruebas")
+    var bandera;
+    bandera = true
+    function show(element) {
+        var currentId = element.id; 
+        var targetId = "pruebas" + currentId.substr(11); 
+        var pizza_extra = document.getElementById(targetId);     
         console.log(pizza_extra)
-        if (bandera == true) {
+
+        if (bandera == true || bandera == null) {
             pizza_extra.classList.remove('d-none')
             pizza_extra.classList.add('d-block')
             bandera = false
@@ -605,8 +938,6 @@
             pizza_extra.classList.add('d-none')
             bandera = true
         }
-
-
     }
 
     function setNombre(id) {
@@ -626,21 +957,35 @@
 
 
     }
-    function setNombre2(id) {
-        console.log(id)
+    function setNombre2(id,element) {
+        var currentId = element.id;
+        var targetId = "menus_"+id+"_" + currentId.substr(8);
+        var ids= document.getElementById(targetId);
+        console.log(targetId)
+        console.log(ids)
+
+
         if (id == 0) {
+            var prp= "id_menu" + currentId.substr(8)
+            console.log(prp)
             var nombre2 = document.getElementById("id_menu");
             nombre2.value = id
 
         } else {
+          
+            var prp = "id_menu" + currentId.substr(8)
+            var prpsearchBarMenu = "searchBarMenu" + currentId.substr(8)
+
+            console.log(prp)
+            console.log(prpsearchBarMenu)
+
             nombreC = "texto" + id
-            var nombre = document.getElementById("searchBar2");
+            var nombre = document.getElementById(prpsearchBarMenu);
             var nombreChido = document.getElementById(nombreC);
             nombre.value = nombreChido.textContent;
 
-            var nombre2 = document.getElementById("id_menu");
+            var nombre2 = document.getElementById(prp);
             nombre2.value = id
-            console.log(nombre2)
         }
 
 
@@ -652,8 +997,8 @@
             nombre3.value = id
 
         } else {
-            nombreC = "text" + id
-            var nombre = document.getElementById("searchBar3");
+            nombreC = "texto" + id
+            var nombre = document.getElementById("searchBarPizza");
             var nombreChido = document.getElementById(nombreC);
             nombre.value = nombreChido.textContent;
 
@@ -679,7 +1024,7 @@
     });
 </script>
 <script>
-    var inputElement = document.getElementById("searchBar2");
+    var inputElement = document.getElementById("searchBarMenu1");
 
     // Escuchar el evento "click" en el elemento
     inputElement.addEventListener("click", function () {
@@ -691,7 +1036,7 @@
     });
 </script>
 <script>
-    var inputElement = document.getElementById("searchBar3");
+    var inputElement = document.getElementById("searchBarPizza1");
 
     // Escuchar el evento "click" en el elemento
     inputElement.addEventListener("click", function () {

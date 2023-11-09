@@ -57,8 +57,8 @@ function getCardsReplace(search, page = 1) {
     })
         .then(response => response.text())
         .then(text => {
-            document.getElementById('cardHolder').innerHTML = ``
-            document.getElementById('cardHolder').innerHTML += text
+            document.getElementById('cardHolder100').innerHTML = ``
+            document.getElementById('cardHolder100').innerHTML += text
 
         })
 }
@@ -76,7 +76,7 @@ function getCardsPaged(page = 1) {
     })
         .then(response => response.text())
         .then(text => {
-            document.getElementById('cardHolder').innerHTML += text
+            document.getElementById('cardHolder100').innerHTML += text
 
         })
 }

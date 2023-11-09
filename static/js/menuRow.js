@@ -6,7 +6,7 @@ currentOrder = "id"
 
 window.addEventListener('DOMContentLoaded', (event) => {
     currentOrder = "id"
-    getCardsReplace2("", 1);
+    getCardsReplace2("", 1, document.getElementById(searchBarMenu));
 });
 
 
@@ -41,7 +41,10 @@ window.onscroll = function (ev) {
 };
 
 
-function getCardsReplace2(search, page = 1) {
+
+
+function getCardsReplace2(search, page = 1,element) {
+   
     search = search
     console.log(search)
     currPage = 1;
@@ -64,6 +67,7 @@ function getCardsReplace2(search, page = 1) {
 }
 
 function getCardsPaged2(page = 1) {
+
     fetch('AjaxSearch2', {
         method: 'POST',
         credentials: 'same-origin',
