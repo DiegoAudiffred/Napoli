@@ -91,7 +91,7 @@ def menuRow(request):
         menus = menus.filter(
             Q(nombre__icontains=search) 
         )
-
+    print(menus)
     return render(request, "Ventas/menuRow.html",{'menus':menus})
 
 

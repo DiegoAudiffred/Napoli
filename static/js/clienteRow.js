@@ -43,7 +43,7 @@ window.onscroll = function (ev) {
 
 function getCardsReplace(search, page = 1) {
     search = search
-    console.log(search)
+    //console.log(search)
     currPage = 1;
     fetch('AjaxSearch', {
         method: 'POST',

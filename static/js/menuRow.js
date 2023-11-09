@@ -6,7 +6,7 @@ currentOrder = "id"
 
 window.addEventListener('DOMContentLoaded', (event) => {
     currentOrder = "id"
-    getCardsReplace2("", 1, document.getElementById(searchBarMenu));
+    getCardsReplace2("", 1);
 });
 
 
@@ -43,28 +43,37 @@ window.onscroll = function (ev) {
 
 
 
-function getCardsReplace2(search, page = 1,element) {
+function getCardsReplace2(search, page = 1) {
    
     search = search
     console.log(search)
     currPage = 1;
-    fetch('AjaxSearch2', {
-        method: 'POST',
-        credentials: 'same-origin',
-        headers: {
-            'Accept': 'application/json',
-            'X-Requested-With': 'XMLHttpRequest',
-            'X-CSRFToken': csrftoken,
-        },
-        body: JSON.stringify({ 'jsonBody': { "search": search, "page": page, "orderBy": currentOrder } })
-    })
-        .then(response => response.text())
-        .then(text => {
-            document.getElementById('cardHolder2').innerHTML = ``
-            document.getElementById('cardHolder2').innerHTML += text
-
+    var cardHolderElement = document.getElementById('cardHolder2_');
+    if (cardHolderElement){
+        fetch('AjaxSearch2', {
+            method: 'POST',
+            credentials: 'same-origin',
+            headers: {
+                'Accept': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest',
+                'X-CSRFToken': csrftoken,
+            },
+            body: JSON.stringify({ 'jsonBody': { "search": search, "page": page, "orderBy": currentOrder } })
         })
+            .then(response => response.text())
+            .then(text => {
+                document.getElementById('cardHolder2_').innerHTML = ``
+                document.getElementById('cardHolder2_').innerHTML += text
+
+
+            })
+    }
+ 
 }
+
+
+
+
 
 function getCardsPaged2(page = 1) {
 
@@ -80,7 +89,7 @@ function getCardsPaged2(page = 1) {
     })
         .then(response => response.text())
         .then(text => {
-            document.getElementById('cardHolder2').innerHTML += text
+            document.getElementById('cardHolder2_1').innerHTML += text
 
         })
 }

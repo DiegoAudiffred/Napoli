@@ -278,7 +278,7 @@
     {% if venta.is_open%}
     <div class="row ">
         <div class="col-6 col-md-2 text-center">
-            <a onclick="agregarFormulario()" class="btn btn-tercero text-white w-100">Agregar venta</a>
+            <button onclick="agregarFormulario()" class="btn btn-tercero text-white w-100">Agregar venta</button>
 
         </div>
         <div class="col-6 col-md-2 text-center">
@@ -350,7 +350,7 @@
 
 
 
-<div class="container d-none">
+<div class="container d-block">
 <form action="{% url 'Ventas:agregarVenta' venta.id %}" method="POST" enctype="multipart/form-data" id="formVenta">
     {% csrf_token %}
     <div class="row border border-4 rounded rounded-4 border-quinto p-2">
@@ -364,16 +364,16 @@
 
 
                 <input type="text" class="form-control shadow-none  px-2 py-1 border border-0 rounded rounded-3"
-                    placeholder="Buscar platillo" aria-label="" aria-describedby="basic-addon1" id="searchBarMenu" name="menu_text"
-                    list="cardHolder2" data-bs-toggle="dropdown" onkeyup="getCardsReplace2(this.value,1,this)"
-                    id="dropdownMenuLink" value="">
+                    placeholder="Buscar platillo" aria-label="" aria-describedby="basic-addon1" id="searchBarMenu_" name="menu_text"
+                    list="cardHolder2_" data-bs-toggle="dropdown" onkeyup="getCardsReplace2(this.value,1)"
+                     value="">
 
 
-                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink" id="cardHolder2">
+                <ul class="dropdown-menu" aria-labelledby="searchBarMenu_" id="cardHolder2_">
 
                 </ul>
                 <div class="d-block">
-                <select name="menu" class="form-control shadow-none   px-2 py-1"  placeholder=" Breve descripción*" rows="1" aria-label="Username" aria-describedby="basic-addon1" style="border-left:none" required="" id="id_menu">
+                <select name="menu" class="form-control shadow-none   px-2 py-1"  placeholder=" Breve descripción*" rows="1" aria-label="Username" aria-describedby="basic-addon1" style="border-left:none" required="" id="id_menu_">
                     <option value="" selected="">---------</option>
                 
                     <option value="1">Bruschetta</option>
@@ -861,20 +861,26 @@
         formCounter++; // Incrementa el contador global
 
         var formClone = $("#formVenta").clone();
-        formClone.find("input, select, textarea,ul,a").val("");
+        formClone.find("input, select, textarea, ul, a , span, img,li").val("");
 
         // Cambia el nombre y el ID del formulario clonado
         var uniqueFormId = "formVenta" + formCounter;
         formClone.attr("id", uniqueFormId);
-        formClone.find("input, select, textarea,ul,a").each(function () {
+        formClone.find("input, select, textarea, ul, a, span, img,li").each(function () {
+
             var originalName = $(this).attr("name");
             var updatedName = originalName + formCounter;
             $(this).attr("name", updatedName);
+
             var originalId = $(this).attr("id");
             var updatedId = originalId + formCounter;
             $(this).attr("id", updatedId);
-        });
 
+            var originallist = $(this).attr("list");
+            var updatedlist = originallist + formCounter;
+            $(this).attr("list", updatedlist);
+        });
+        
         // Actualiza el ID y el texto del div "pruebas" con el valor de formCounter
         var pruebas = formClone.find("#pruebas");
         var pruebasID = "pruebas" + formCounter;
@@ -897,30 +903,26 @@
 
 
 
-        // Agrega un botón de "Borrar" a la copia del formulario
         var deleteButton = $("<button class='btn btn-secondary text-white' type='button'>Borrar Formulario</button>");
         deleteButton.on("click", function () {
-            formClone.remove(); // Elimina la copia del formulario
+            formClone.remove(); 
         });
         formClone.append(deleteButton);
 
         $("#dynamic-forms-container").append(formClone);
+        getCardsReplace2("", 1);
+
     }
 
 
-
 </script>
+
 
       
 <script>
 
 
-    const barra = document.getElementById("searchBar")
-
-    barra.addEventListener('dblclick', function () {
-        barra.value = ""
-    });
-
+  
     var bandera;
     bandera = true
     function show(element) {
@@ -957,31 +959,34 @@
 
 
     }
-    function setNombre2(id,element) {
+
+
+
+
+    function setNombre2(id, element) {
         var currentId = element.id;
+        console.log(element)
         var targetId = "menus_"+id+"_" + currentId.substr(8);
         var ids= document.getElementById(targetId);
-        console.log(targetId)
-        console.log(ids)
+   
 
 
         if (id == 0) {
-            var prp= "id_menu" + currentId.substr(8)
-            console.log(prp)
-            var nombre2 = document.getElementById("id_menu");
+            var prp= "id_menu_" + currentId.substr(8)
+            var nombre2 = document.getElementById(prp);
             nombre2.value = id
 
         } else {
           
-            var prp = "id_menu" + currentId.substr(8)
-            var prpsearchBarMenu = "searchBarMenu" + currentId.substr(8)
+            var prp = "id_menu_" + currentId.substr(8)
+            var prpsearchBarMenu = "searchBarMenu_" + currentId.substr(8)
 
-            console.log(prp)
-            console.log(prpsearchBarMenu)
 
-            nombreC = "texto" + id
+            nombreC = "texto_" + id + "_" + currentId.substr(8);
             var nombre = document.getElementById(prpsearchBarMenu);
             var nombreChido = document.getElementById(nombreC);
+           // console.log(nombre)
+           // console.log(nombreChido)
             nombre.value = nombreChido.textContent;
 
             var nombre2 = document.getElementById(prp);
@@ -1011,42 +1016,7 @@
     }
 </script>
 
-<script>
-    var inputElement = document.getElementById("searchBar");
 
-    // Escuchar el evento "click" en el elemento
-    inputElement.addEventListener("click", function () {
-        // Establecer el valor del input a una cadena vacía
-        inputElement.value = '';
-        getCardsReplace("")
-        setNombre(0)
-
-    });
-</script>
-<script>
-    var inputElement = document.getElementById("searchBarMenu1");
-
-    // Escuchar el evento "click" en el elemento
-    inputElement.addEventListener("click", function () {
-        // Establecer el valor del input a una cadena vacía
-        inputElement.value = '';
-        getCardsReplace2("")
-        setNombre2(0)
-
-    });
-</script>
-<script>
-    var inputElement = document.getElementById("searchBarPizza1");
-
-    // Escuchar el evento "click" en el elemento
-    inputElement.addEventListener("click", function () {
-        // Establecer el valor del input a una cadena vacía
-        inputElement.value = '';
-        getCardsReplace3("")
-        setNombre3(0)
-
-    });
-</script>
 <script src="{% static 'js/clienteRow.js' %}"></script>
 <script src="{% static 'js/menuRow.js' %}"></script>
 <script src="{% static 'js/menuRow2.js' %}"></script>
