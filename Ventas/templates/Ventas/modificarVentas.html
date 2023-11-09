@@ -350,7 +350,7 @@
 
 
 
-<div class="container d-block">
+<div class="container d-none">
 <form action="{% url 'Ventas:agregarVenta' venta.id %}" method="POST" enctype="multipart/form-data" id="formVenta">
     {% csrf_token %}
     <div class="row border border-4 rounded rounded-4 border-quinto p-2">
