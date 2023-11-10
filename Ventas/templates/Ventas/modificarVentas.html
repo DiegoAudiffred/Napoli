@@ -365,7 +365,7 @@
 
                 <input type="text" class="form-control shadow-none  px-2 py-1 border border-0 rounded rounded-3"
                     placeholder="Buscar platillo" aria-label="" aria-describedby="basic-addon1" id="searchBarMenu_" name="menu_text"
-                    list="cardHolder2_" data-bs-toggle="dropdown" onkeyup="getCardsReplace2(this.value,1)"
+                    list="cardHolder2_" data-bs-toggle="dropdown" onkeyup="getCardsReplace2(this.value,1,this)"
                      value="">
 
 
@@ -761,23 +761,7 @@
 
         <div class="col-6">
             <div class="input-group rounded rounded-3 border border-2 border-primary ">
-                <span class="input-group-text bg-white border border-0 " id="basic-addon1"> <svg width="19px"
-                        height="19px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                        <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round">
-                        </g>
-                        <g id="SVGRepo_iconCarrier">
-                            <circle opacity="0.5" cx="12" cy="12" r="10" stroke="#a8361a" stroke-width="1.5">
-                            </circle>
-                            <path d="M12 6V18" stroke="#a8361a" stroke-width="1.5" stroke-linecap="round">
-                            </path>
-                            <path
-                                d="M15 9.5C15 8.11929 13.6569 7 12 7C10.3431 7 9 8.11929 9 9.5C9 10.8807 10.3431 12 12 12C13.6569 12 15 13.1193 15 14.5C15 15.8807 13.6569 17 12 17C10.3431 17 9 15.8807 9 14.5"
-                                stroke="#a8361a" stroke-width="1.5" stroke-linecap="round">
-                            </path>
-                        </g>
-                    </svg>
-                </span>
+             
             <textarea name="observaciones" cols="40" rows="5" maxlength="100"
                 class="form-control shadow-none border border-0  px-2 py-1 " placeholder=" Observaciones en la preparación*"
                 aria-label="Username" aria-describedby="basic-addon1" style="border-left:none" id="id_observaciones"
@@ -861,7 +845,8 @@
         formCounter++; // Incrementa el contador global
 
         var formClone = $("#formVenta").clone();
-        formClone.find("input, select, textarea, ul, a , span, img,li").val("");
+        
+    formClone.find("input, select, textarea, ul, a , span, img,li").val("");
 
         // Cambia el nombre y el ID del formulario clonado
         var uniqueFormId = "formVenta" + formCounter;
@@ -965,24 +950,30 @@
 
     function setNombre2(id, element) {
         var currentId = element.id;
+        var idMatch = currentId.match(/\d+$/);
         console.log(element)
-        var targetId = "menus_"+id+"_" + currentId.substr(8);
+        var idMatch = idMatch[0];
+        var targetId = "menus_"+id+"_"+idMatch;
         var ids= document.getElementById(targetId);
    
-
+        console.log(targetId)
+        console.log(ids)
 
         if (id == 0) {
-            var prp= "id_menu_" + currentId.substr(8)
+            var prp= "id_menu_" + idMatch
             var nombre2 = document.getElementById(prp);
             nombre2.value = id
 
         } else {
           
-            var prp = "id_menu_" + currentId.substr(8)
-            var prpsearchBarMenu = "searchBarMenu_" + currentId.substr(8)
+            var prp = "id_menu_" + idMatch
+            var prpsearchBarMenu = "searchBarMenu_" + idMatch;
+            console.log(prp)
+            console.log(prpsearchBarMenu)
 
 
-            nombreC = "texto_" + id + "_" + currentId.substr(8);
+
+            nombreC = "texto_" + id + "_" + idMatch;
             var nombre = document.getElementById(prpsearchBarMenu);
             var nombreChido = document.getElementById(nombreC);
            // console.log(nombre)
@@ -1009,7 +1000,7 @@
 
             var nombre3 = document.getElementById("id_pizza_mitad");
             nombre3.value = id
-            console.log(nombre3)
+            //console.log(nombre3)
         }
 
 

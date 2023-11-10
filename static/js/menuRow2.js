@@ -30,15 +30,6 @@ function changeOrder3(str) {
 
 }
 
-window.onscroll = function (ev) {
-    if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
-        total = document.getElementById("totalPaginas").value
-        if (currPage < total) {
-            currPage++;
-            getCardsPaged3(currPage);
-        }
-    }
-};
 
 
 function getCardsReplace3(search, page = 1) {

@@ -30,26 +30,23 @@ function changeOrder2(str) {
 
 }
 
-window.onscroll = function (ev) {
-    if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
-        total = document.getElementById("totalPaginas").value
-        if (currPage < total) {
-            currPage++;
-            getCardsPaged2(currPage);
-        }
-    }
-};
 
 
 
+function getCardsReplace2(search, page = 1, element) {
+    if (element && element.id) {
+        var searchBarFId = element.id;
 
-function getCardsReplace2(search, page = 1) {
-   
-    search = search
-    console.log(search)
-    currPage = 1;
-    var cardHolderElement = document.getElementById('cardHolder2_');
-    if (cardHolderElement){
+        var match = searchBarFId.match(/(\d+)$/);
+        var number = match ? parseInt(match[1], 10) : null;
+
+
+        var targetId = "searchBarMenu_" + number;
+        console.log(targetId);
+
+        search = search;
+        currPage = 1;
+
         fetch('AjaxSearch2', {
             method: 'POST',
             credentials: 'same-origin',
@@ -62,15 +59,91 @@ function getCardsReplace2(search, page = 1) {
         })
             .then(response => response.text())
             .then(text => {
+                console.log(text);
+                var cardHolderId = 'cardHolder2_' + number;
+                var elementosLista = [];
+
+                // Crear un elemento temporal (div)
+                var tempDiv = document.createElement('div');
+
+                // Asignar el HTML al 'innerHTML' del elemento temporal
+                tempDiv.innerHTML = text;
+
+                // Obtener el elemento 'cardHolder2_'
+                var cardHolder = document.getElementById(cardHolderId);
+
+                // Limpiar el contenido actual de 'cardHolder2_'
+                cardHolder.innerHTML = '';
+
+                // Iterar sobre los elementos hijos del elemento temporal y agregarlos a 'cardHolder2_'
+                for (var i = 0; i < tempDiv.children.length; i++) {
+                    var child = tempDiv.children[i];
+
+                    // Generar un ID dinámico basado en el número proporcionado
+                    var nuevoId = child.id + number;
+
+                    // Asignar el nuevo ID al elemento
+                    child.id = nuevoId;
+
+                    // Iterar sobre los elementos internos y actualizar sus IDs
+                    child.querySelectorAll('[id]').forEach(function (element) {
+                        element.id = element.id  + number;
+                    });
+
+                    cardHolder.appendChild(child);
+
+                    // Puedes realizar operaciones adicionales aquí, si es necesario
+                    // ...
+
+                    // Agregar información a la lista
+                    elementosLista.push({
+                        'id': nuevoId,
+                        'imagen': child.querySelector('img').src,
+                        'texto': child.querySelector('span').textContent
+                    });
+
+                    // Imprimir el ID del elemento recién agregado
+                    console.log('ID del elemento recién agregado:', nuevoId);
+                }
+
+                // Imprimir la lista de elementos
+                console.log('Lista de elementos:', elementosLista);
+            });
+
+
+
+
+
+    }
+  
+     else {
+     
+        search = search
+        console.log(search)
+        currPage = 1;
+
+        fetch('AjaxSearch2', {
+            method: 'POST',
+            credentials: 'same-origin',
+            headers: {
+                'Accept': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest',
+                'X-CSRFToken': csrftoken,
+            },
+            body: JSON.stringify({ 'jsonBody': { "search": search, "page": page, "orderBy": currentOrder } })
+        })
+            .then(response => response.text())
+            .then(text => {
+                console.log("Primera vez")
                 document.getElementById('cardHolder2_').innerHTML = ``
                 document.getElementById('cardHolder2_').innerHTML += text
 
 
             })
-    }
- 
-}
+    }    
 
+
+}
 
 
 
