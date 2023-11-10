@@ -102,11 +102,9 @@ function getCardsReplace2(search, page = 1, element) {
                         'texto': child.querySelector('span').textContent
                     });
 
-                    // Imprimir el ID del elemento recién agregado
                     console.log('ID del elemento recién agregado:', nuevoId);
                 }
 
-                // Imprimir la lista de elementos
                 console.log('Lista de elementos:', elementosLista);
             });
 
