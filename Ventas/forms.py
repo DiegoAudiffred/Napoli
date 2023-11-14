@@ -130,22 +130,15 @@ class VentaMenuForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(VentaMenuForm, self).__init__(*args, **kwargs)
     
-    
         self.fields['venta'].required = False
-
         self.fields['menu'].required = False
-
-
         self.fields['cantidad'].required = False
-        
         self.fields['observaciones'].required = False
-
-
         self.fields['totalfinal'].required = False
- 
         self.fields['extras'].required = False 
-     
-
+        self.fields['pizza_mitad'].required = False 
+        self.fields['media_orden'].required = False 
+        self.fields['familiar'].required = False 
 
 
     class Meta:

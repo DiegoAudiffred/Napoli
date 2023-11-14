@@ -327,7 +327,7 @@
             </form>
         </div>
         <div class="col-md-2">
-        <button id="submit-all-forms-button" class="btn btn-primary">Enviar todos los formularios</button>
+        <button id="submit-all-forms-button" class="btn btn-primary" type="submit">Enviar todos los formularios</button>
 
         </div>
     </div>
@@ -351,7 +351,7 @@
 
 
 <div class="container d-none">
-<form action="{% url 'Ventas:agregarVenta' venta.id %}" method="POST" enctype="multipart/form-data" id="formVenta">
+<form  method="POST" enctype="multipart/form-data" id="formVenta">
     {% csrf_token %}
     <div class="row border border-4 rounded rounded-4 border-quinto p-2">
         <div id="formCounterID">
@@ -359,7 +359,7 @@
         </div>
 
 
-        <div class="col-4">
+        <div class="col-6">
             <div class="rounded rounded-3 border border-2 border-primary">
 
 
@@ -539,266 +539,320 @@
                 </div>
 
             </div>
-            <div id="pruebas" class="d-none">
-                <div class="input-group rounded rounded-3 border border-2 border-primary">
-
-
-                    <div class="input-group-prepend dropdown me-2 my-auto">
-                     
-                    </div>
-                    <input type="text" class="form-control shadow-none  px-2 py-1 border border-0 rounded rounded-3"
-                        placeholder="Buscar platillo" aria-label="" aria-describedby="basic-addon1" id="searchBarPizza"
-                        list="cardHolder3" data-bs-toggle="dropdown" onkeyup="getCardsReplace3(this.value)" name="pizza_mitad_text"
-                        id="dropdownMenuLink3" value="">
-
-                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink3" id="cardHolder3">
-
-                    </ul>
-                    <div class="d-none">
-                    <select name="pizza_mitad" class="form-control shadow-none   px-2 py-1" placeholder=" Breve descripción*" rows="1"
-                        aria-label="Username" aria-describedby="basic-addon1" style="border-left:none" id="id_pizza_mitad">
-                        <option value="" selected="">---------</option>
-                    
-                        <option value="1">Bruschetta</option>
-                    
-                        <option value="2">Bruschetta Angri</option>
-                    
-                        <option value="3">Pimientos Ambra</option>
-                    
-                        <option value="4">Zucchini all ´aceto</option>
-                    
-                        <option value="5">Carpaccio de Carne</option>
-                    
-                        <option value="6">Provolone al horno</option>
-                    
-                        <option value="7">Antipasto misto</option>
-                    
-                        <option value="8">Insalata Caprese</option>
-                    
-                        <option value="9">Insalata Ninnarella</option>
-                    
-                        <option value="10">Insalata Ambra</option>
-                    
-                        <option value="11">Insalata Napoli</option>
-                    
-                        <option value="12">Insalata André</option>
-                    
-                        <option value="13">Corte Rib Eye (350grs)</option>
-                    
-                        <option value="14">Pollo alla Pompeiana</option>
-                    
-                        <option value="15">Salmón alla Mediterranea</option>
-                    
-                        <option value="16">Pasta Siciliana</option>
-                    
-                        <option value="17">Fusilli al Pesto</option>
-                    
-                        <option value="18">Spaguetti Bolognesa</option>
-                    
-                        <option value="19">Spaghetti Carbonara</option>
-                    
-                        <option value="20">Fusilli del Chef</option>
-                    
-                        <option value="21">Spaghetti Aglio e Olio</option>
-                    
-                        <option value="22">Fusilli Funghi e Carciofine</option>
-                    
-                        <option value="23">Spaghetti Primavera</option>
-                    
-                        <option value="24">Margherita</option>
-                    
-                        <option value="25">Marinara</option>
-                    
-                        <option value="26">Napoletana</option>
-                    
-                        <option value="27">Frutti Di Mare</option>
-                    
-                        <option value="28">Peperoni</option>
-                    
-                        <option value="29">Tropicale</option>
-                    
-                        <option value="30">Capatone</option>
-                    
-                        <option value="31">Mare e Monti</option>
-                    
-                        <option value="32">Soucera</option>
-                    
-                        <option value="33">Oaxaqueña</option>
-                    
-                        <option value="34">Cognata</option>
-                    
-                        <option value="35">Chucky Lozano</option>
-                    
-                        <option value="36">Fratello</option>
-                    
-                        <option value="37">4 Formaggi</option>
-                    
-                        <option value="38">Paktiel</option>
-                    
-                        <option value="39">Carciofina</option>
-                    
-                        <option value="40">O´pazzo</option>
-                    
-                        <option value="41">We´Alfo</option>
-                    
-                        <option value="42">Salumi</option>
-                    
-                        <option value="43">Calzone Maradona</option>
-                    
-                        <option value="44">Calzone Vesuvio</option>
-                    
-                        <option value="45">Calzone Puebla</option>
-                    
-                        <option value="46">Calzone Vegetariano</option>
-                    
-                        <option value="47">Calzone Napoletano</option>
-                    
-                        <option value="48">Involtini Vegetariano</option>
-                    
-                        <option value="49">Involtini de Embutidos</option>
-                    
-                        <option value="50">Calzone de Nutella</option>
-                    
-                        <option value="51">Calzone de Nutella con frutas</option>
-                    
-                        <option value="52">Tiramisú</option>
-                    
-                        <option value="53">Panna Cotta</option>
-                    
-                        <option value="54">Agua Natural</option>
-                    
-                        <option value="55">Agua Mineral</option>
-                    
-                        <option value="56">Refresco</option>
-                    
-                        <option value="57">Limonada</option>
-                    
-                        <option value="58">Cerveza</option>
-                    
-                        <option value="59">Chelada</option>
-                    
-                        <option value="60">Michelada</option>
-                    
-                        <option value="61">Copa de vino de la casa</option>
-                    
-                        <option value="62">Clamato con cerveza</option>
-                    
-                        <option value="63">Café Americano</option>
-                    
-                        <option value="64">Café Espresso</option>
-                    
-                        <option value="65">Café Espresso Doble</option>
-                    
-                        <option value="66">Café Espresso Cortado</option>
-                    
-                        <option value="67">Café Cappuchino</option>
-                    
-                        <option value="68">Café con Leche</option>
-                    
-                        <option value="69">Café Carajillo</option>
-                    
-                        <option value="70">Té</option>
-                    
-                        <option value="71">Café Bombón</option>
-                    
-                        <option value="72">Barra Pan</option>
-                    
-                        <option value="73">Jarra Limonada</option>
-                    
-                        <option value="74">Gelato</option>
-                    
-                        <option value="75">Limonchelo</option>
-                    
-                        <option value="76">Grapa</option>
-                    
-                        <option value="77">Ravioli espinaca</option>
-                    
-                        <option value="78">Ravioli Queso</option>
-                    
-                        <option value="79">Mezcal</option>
-                    
-                    </select>
-
-                    </div>
-
-                </div>
-            </div>
+               
+            
         </div>
+        <div class="col-6">
+<div class="rounded rounded-3 border border-2 border-primary d-none" id="pruebas_">
 
+
+
+    <input type="text" class="form-control shadow-none  px-2 py-1 border border-0 rounded rounded-3"
+        placeholder="Buscar platillo" aria-label="" aria-describedby="basic-addon1" id="searchBarPizza_"
+        list="cardHolder3_" data-bs-toggle="dropdown" onkeyup="getCardsReplace3(this.value,1,this)" name="pizza_mitad_text_"
+        value="">
+
+    <ul class="dropdown-menu" aria-labelledby="searchBarMenu_" id="cardHolder3_">
+
+    </ul>
+    <select name="pizza_mitad" class="form-control shadow-none   px-2 py-1" placeholder=" Breve descripción*" rows="1"
+        aria-label="Username" aria-describedby="basic-addon1" style="border-left:none" id="id_pizza_mitad_">
+        <option value="" selected="">---------</option>
+
+        <option value="1">Bruschetta</option>
+
+        <option value="2">Bruschetta Angri</option>
+
+        <option value="3">Pimientos Ambra</option>
+
+        <option value="4">Zucchini all ´aceto</option>
+
+        <option value="5">Carpaccio de Carne</option>
+
+        <option value="6">Provolone al horno</option>
+
+        <option value="7">Antipasto misto</option>
+
+        <option value="8">Insalata Caprese</option>
+
+        <option value="9">Insalata Ninnarella</option>
+
+        <option value="10">Insalata Ambra</option>
+
+        <option value="11">Insalata Napoli</option>
+
+        <option value="12">Insalata André</option>
+
+        <option value="13">Corte Rib Eye (350grs)</option>
+
+        <option value="14">Pollo alla Pompeiana</option>
+
+        <option value="15">Salmón alla Mediterranea</option>
+
+        <option value="16">Pasta Siciliana</option>
+
+        <option value="17">Fusilli al Pesto</option>
+
+        <option value="18">Spaguetti Bolognesa</option>
+
+        <option value="19">Spaghetti Carbonara</option>
+
+        <option value="20">Fusilli del Chef</option>
+
+        <option value="21">Spaghetti Aglio e Olio</option>
+
+        <option value="22">Fusilli Funghi e Carciofine</option>
+
+        <option value="23">Spaghetti Primavera</option>
+
+        <option value="24">Margherita</option>
+
+        <option value="25">Marinara</option>
+
+        <option value="26">Napoletana</option>
+
+        <option value="27">Frutti Di Mare</option>
+
+        <option value="28">Peperoni</option>
+
+        <option value="29">Tropicale</option>
+
+        <option value="30">Capatone</option>
+
+        <option value="31">Mare e Monti</option>
+
+        <option value="32">Soucera</option>
+
+        <option value="33">Oaxaqueña</option>
+
+        <option value="34">Cognata</option>
+
+        <option value="35">Chucky Lozano</option>
+
+        <option value="36">Fratello</option>
+
+        <option value="37">4 Formaggi</option>
+
+        <option value="38">Paktiel</option>
+
+        <option value="39">Carciofina</option>
+
+        <option value="40">O´pazzo</option>
+
+        <option value="41">We´Alfo</option>
+
+        <option value="42">Salumi</option>
+
+        <option value="43">Calzone Maradona</option>
+
+        <option value="44">Calzone Vesuvio</option>
+
+        <option value="45">Calzone Puebla</option>
+
+        <option value="46">Calzone Vegetariano</option>
+
+        <option value="47">Calzone Napoletano</option>
+
+        <option value="48">Involtini Vegetariano</option>
+
+        <option value="49">Involtini de Embutidos</option>
+
+        <option value="50">Calzone de Nutella</option>
+
+        <option value="51">Calzone de Nutella con frutas</option>
+
+        <option value="52">Tiramisú</option>
+
+        <option value="53">Panna Cotta</option>
+
+        <option value="54">Agua Natural</option>
+
+        <option value="55">Agua Mineral</option>
+
+        <option value="56">Refresco</option>
+
+        <option value="57">Limonada</option>
+
+        <option value="58">Cerveza</option>
+
+        <option value="59">Chelada</option>
+
+        <option value="60">Michelada</option>
+
+        <option value="61">Copa de vino de la casa</option>
+
+        <option value="62">Clamato con cerveza</option>
+
+        <option value="63">Café Americano</option>
+
+        <option value="64">Café Espresso</option>
+
+        <option value="65">Café Espresso Doble</option>
+
+        <option value="66">Café Espresso Cortado</option>
+
+        <option value="67">Café Cappuchino</option>
+
+        <option value="68">Café con Leche</option>
+
+        <option value="69">Café Carajillo</option>
+
+        <option value="70">Té</option>
+
+        <option value="71">Café Bombón</option>
+
+        <option value="72">Barra Pan</option>
+
+        <option value="73">Jarra Limonada</option>
+
+        <option value="74">Gelato</option>
+
+        <option value="75">Limonchelo</option>
+
+        <option value="76">Grapa</option>
+
+        <option value="77">Ravioli espinaca</option>
+
+        <option value="78">Ravioli Queso</option>
+
+        <option value="79">Mezcal</option>
+
+    </select>
+
+
+</div>
+        </div>
+        
         <!-- Opciones -->
-        <div class="col-4">
+        <div class="col-12 py-3">
             <div class="row">
-                <div class="col-4">
+                <div class="col-auto my-auto">
                     <p class="m-0">Mitad Pizza:</p>
 
-                    <input type="checkbox" name="mitad_pizza" style="height:30px;width:30px" class="" id="mitad_pizza" value="" onclick="show(this)">
                 </div>
-                <div class="col-4">
+                <div class="col-auto my-auto text-center">
+                    <input type="checkbox" name="mitad_pizza" style="height:40px;width:40px" class="my-auto" id="mitad_pizza_" value=""                        onclick="show(this)">
+
+                </div>
+                <div class="col-auto my-auto">
                     <p class="m-0">Familiar:</p>
-
-            <input type="checkbox" name="familiar" style="height:30px;width:30px" class="" id="id_familiar" value="">
+                </div>
+                <div class="col-auto my-auto text-center">
+            <input type="checkbox" name="familiar" style="height:40px;width:40px" class="" id="id_familiar_" value="">
 
                 </div>
 
-                <div class="col-4">
+                <div class="col-auto my-auto">
                     <p class="m-0">Media Orden:</p>
 
-                <input type="checkbox" name="media_orden" style="height:30px;width:30px" class="" id="id_media_orden" value="">
+                </div>
+                <div class="col-auto my-auto text-center">
+                <input type="checkbox" name="media_orden_" style="height:40px;width:40px" class="" id="id_media_orden_" value="">
+
                 </div>
 
 
-
+  
 
             </div>
 
         </div>
-        <div class="col-2">
-<input type="number" name="cantidad" value="1" min="0" class="form-control shadow-none border border-0   px-2 py-1 "
-    placeholder=" Cantidad*" rows="1" aria-label="Username" aria-describedby="basic-addon1" style="border-left:none"
-    required="" id="id_cantidad">        </div>
-
-        <!-- Observaciones -->
-
-        <div class="col-6">
-            <div class="input-group rounded rounded-3 border border-2 border-primary ">
-             
-            <textarea name="observaciones" cols="40" rows="5" maxlength="100"
-                class="form-control shadow-none border border-0  px-2 py-1 " placeholder=" Observaciones en la preparación*"
-                aria-label="Username" aria-describedby="basic-addon1" style="border-left:none" id="id_observaciones"
-                data-lt-tmp-id="lt-336604" spellcheck="false" data-gramm="false"></textarea>
-
-            </div>
-        </div>
-
-
-
-        <div class="col-5">
-        <div id="id_extras">
-            <div>
-                <label for="id_extras_0"><input type="checkbox" name="extras-1" value="" id="id_extras_0">
-                    Ingrediente extra</label>
-        
-            </div>
-            <div>
-                <label for="id_extras_1"><input type="checkbox" name="extras-1" value="" id="id_extras_1">
-                    Camarón, jamón serrano, alcachofa,anchoas</label>
-        
-            </div>
-            <div>
-                <label for="id_extras_2"><input type="checkbox" name="extras-1" value="" id="id_extras_2">
-                    Parmesano reggiano o arúgula</label>
-        
-            </div>
-            <div>
-                <label for="id_extras_3"><input type="checkbox" name="extras-1" value="" id="id_extras_3">
-                    Mozzarela fresca</label>
-        
-            </div>
-        </div>
-        </div>
+    
+        <div class="row align-items-center justify-content-center">
 <div class="col-2">
-    <button class="btn" type="submit"> Guardar</button>
+
+
+<div class="row align-items-center justify-content-center ">
+    <div class="col-4">
+<a onclick="decrementValueForm(this)" data-field="quantity1" class="btn p-1 border border-0" id="id_cantidad_minus_" ><svg width="40px" height="40px" viewBox="0 -12 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg"
+    xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns" fill="#000000">
+    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+    <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+    <g id="SVGRepo_iconCarrier">
+
+        <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+            <g id="Icon-Set-Filled" sketch:type="MSLayerGroup" transform="translate(-414.000000, -1049.000000)"
+                fill="#B05750">
+                <path
+                    d="M442,1049 L418,1049 C415.791,1049 414,1050.79 414,1053 C414,1055.21 415.791,1057 418,1057 L442,1057 C444.209,1057 446,1055.21 446,1053 C446,1050.79 444.209,1049 442,1049"
+                    id="minus" sketch:type="MSShapeGroup"> </path>
+            </g>
+        </g>
+    </g>
+</svg>
+</a>
+    </div>
+    <div class="col-4">
+        <input class="input-group-field border rounded rounded-4 text-center" type="number" name="quantity" value="1"
+            style="width: 50px;" id="id_cantidad_">
+    </div>
+    <div class="col-4">
+    <a onclick="incrementValueForm(this)" data-field="quantity1" class="btn p-1 border border-0" id="id_cantidad_plus_" ><svg width="40px" height="40px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg"
+        xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns" fill="#000000">
+        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+        <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+        <g id="SVGRepo_iconCarrier">
+         
+            <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+                <g id="Icon-Set-Filled" sketch:type="MSLayerGroup" transform="translate(-362.000000, -1037.000000)"
+                    fill="#349B67">
+                    <path
+                        d="M390,1049 L382,1049 L382,1041 C382,1038.79 380.209,1037 378,1037 C375.791,1037 374,1038.79 374,1041 L374,1049 L366,1049 C363.791,1049 362,1050.79 362,1053 C362,1055.21 363.791,1057 366,1057 L374,1057 L374,1065 C374,1067.21 375.791,1069 378,1069 C380.209,1069 382,1067.21 382,1065 L382,1057 L390,1057 C392.209,1057 394,1055.21 394,1053 C394,1050.79 392.209,1049 390,1049"
+                        id="plus" sketch:type="MSShapeGroup"> </path>
+                </g>
+            </g>
+        </g>
+    </svg>
+    </a>
+    </div>
+   
 </div>
+           
+        
+        
+           
+        
+     
+</div>
+<!-- Observaciones -->
+
+<div class="col-6">
+    <div class="input-group rounded rounded-3 border border-2 border-primary ">
+
+        <textarea name="observaciones" cols="40" rows="5" maxlength="100"
+            class="form-control shadow-none border border-0  px-2 py-1 " placeholder=" Observaciones en la preparación*"
+            aria-label="Username" aria-describedby="basic-addon1" style="border-left:none" id="id_observaciones_"
+            data-lt-tmp-id="lt-336604" spellcheck="false" data-gramm="false"></textarea>
+
+    </div>
+</div>
+
+<div class="col-4">
+    <div id="id_extras_">
+        <div class="my-auto">
+            <label for="id_extras_0_"><input type="checkbox" style="height:30px;width:30px" name="extras-1" value="" id="id_extras_0_">
+                Ingrediente extra</label>
+
+        </div>
+        <div>
+            <label for="id_extras_1_"><input type="checkbox"  style="height:30px;width:30px"name="extras-1" value="" id="id_extras_1_">
+                Camarón, jamón serrano, alcachofa,anchoas</label>
+
+        </div>
+        <div>
+            <label for="id_extras_2_"><input type="checkbox" style="height:30px;width:30px" name="extras-1" value="" id="id_extras_2_">
+                Parmesano reggiano o arúgula</label>
+
+        </div>
+        <div>
+            <label for="id_extras_3_"><input type="checkbox" style="height:30px;width:30px" name="extras-1" value="" id="id_extras_3_">
+                Mozzarela fresca</label>
+
+        </div>
+    </div>
+</div>
+        </div>
+
   
 
     </div>
@@ -807,33 +861,43 @@
 
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-{% csrf_token %} <!-- Agregar el token CSRF en tu formulario Django -->
 
 <script>
     $("#submit-all-forms-button").on("click", function () {
-        var formularios = $(".dynamic-form");
-        var datos = [];
+            var formularios = $("#dynamic-forms-container").find("[id^='formVenta']");
 
-        formularios.each(function (index, form) {
-            var formData = $(form).serialize();
-            datos.push(formData);
+            formularios.each(function (index, form) {
+                var formData = {};
+
+                $(form)
+                    .find("input, select, textarea")
+                    .each(function () {
+                        var fieldId = $(this).attr("id");
+                        var fieldValue = $(this).val();
+
+                        // Si el campo es un checkbox, asignar valor booleano
+                        if ($(this).is(":checkbox")) {
+                            fieldValue = $(this).is(":checked");
+                        }
+
+                        formData[fieldId] = fieldValue;
+                    });
+
+                var csrfToken = $("input[name=csrfmiddlewaretoken]").val();
+                formData["csrfmiddlewaretoken"] = csrfToken;
+
+                $.ajax({
+                    type: "POST",
+                    url: "{% url 'Ventas:agregarVenta' venta.id %}",
+                    data: formData,
+                    success: function (response) {
+                                location.reload(true);
+
+                    }
+                });
+            });
         });
 
-        // Obtener el token CSRF del formulario
-        var csrfToken = $("input[name=csrfmiddlewaretoken]").val();
-
-        // Agregar el token CSRF a los datos que se envían
-        datos.push("csrfmiddlewaretoken=" + csrfToken);
-
-        $.ajax({
-            type: "POST",
-            url: "{% url 'Ventas:agregarVenta' venta.id %}",
-            data: datos.join("&"),
-            success: function (response) {
-                console.log(response);
-            }
-        });
-    });
 </script>
 
 
@@ -846,12 +910,12 @@
 
         var formClone = $("#formVenta").clone();
         
-    formClone.find("input, select, textarea, ul, a , span, img,li").val("");
+    formClone.find("input, select, textarea, ul, a , span, img,li,button").val("");
 
         // Cambia el nombre y el ID del formulario clonado
         var uniqueFormId = "formVenta" + formCounter;
         formClone.attr("id", uniqueFormId);
-        formClone.find("input, select, textarea, ul, a, span, img,li").each(function () {
+        formClone.find("input, select, textarea, ul, a, span, img,li,button").each(function () {
 
             var originalName = $(this).attr("name");
             var updatedName = originalName + formCounter;
@@ -867,11 +931,14 @@
         });
         
         // Actualiza el ID y el texto del div "pruebas" con el valor de formCounter
-        var pruebas = formClone.find("#pruebas");
-        var pruebasID = "pruebas" + formCounter;
+        var pruebas = formClone.find("#pruebas_");
+        var pruebasID = "pruebas_" + formCounter;
         pruebas.attr("id", pruebasID);
-        pruebas.text(formCounter);
        
+        var extras = formClone.find("#id_extras_");
+        var extrasID = "id_extras_" + formCounter;
+        extras.attr("id", extrasID);
+        
 
         var formCounterID = formClone.find("#formCounterID");
         var updatedFormCounterIDId = "formCounterID" + formCounter;
@@ -884,11 +951,12 @@
         formCounterID.attr("id", updatedFormCounterIDId);
         formCounterID.text(formCounter);
 
+        var updateCantidad = formClone.find("#id_cantidad_" + formCounter);
+        updateCantidad.val(1)
 
 
 
-
-        var deleteButton = $("<button class='btn btn-secondary text-white' type='button'>Borrar Formulario</button>");
+        var deleteButton = $("<button class='btn btn-secondary text-white my-2' type='button'>Borrar Formulario</button>");
         deleteButton.on("click", function () {
             formClone.remove(); 
         });
@@ -896,6 +964,7 @@
 
         $("#dynamic-forms-container").append(formClone);
         getCardsReplace2("", 1);
+        getCardsReplace3("",1)
 
     }
 
@@ -908,15 +977,18 @@
 
 
   
-    var bandera;
-    bandera = true
+   
     function show(element) {
-        var currentId = element.id; 
-        var targetId = "pruebas" + currentId.substr(11); 
-        var pizza_extra = document.getElementById(targetId);     
-        console.log(pizza_extra)
+                console.log(element)
 
-        if (bandera == true || bandera == null) {
+        var currentId = element.id;
+        var idMatch = currentId.match(/\d+$/);
+        var idMatch = idMatch[0];
+        var targetId = "pruebas_" + idMatch;
+
+        var pizza_extra = document.getElementById(targetId);     
+
+        if (element.checked) {
             pizza_extra.classList.remove('d-none')
             pizza_extra.classList.add('d-block')
             bandera = false
@@ -986,22 +1058,43 @@
 
 
     }
-    function setNombre3(id) {
-        console.log(id)
+
+    function setNombre3(id,element) {
+        var currentId = element.id;
+        var idMatch = currentId.match(/\d+$/);
+        console.log(element)
+        var idMatch = idMatch[0];
+        var targetId = "menusPizza_" + id + "_" + idMatch;
+        var ids = document.getElementById(targetId);
+        console.log(targetId)
+        console.log(ids)
+
+        
         if (id == 0) {
-            var nombre3 = document.getElementById("id_pizza_mitad");
-            nombre3.value = id
+            var prp = "id_pizza_mitad_" + idMatch
+            var nombre2 = document.getElementById(prp);
+            nombre2.value = id
 
         } else {
-            nombreC = "texto" + id
-            var nombre = document.getElementById("searchBarPizza");
+
+            var prp = "id_pizza_mitad_" + idMatch
+            var prpsearchBarMenu = "searchBarPizza_" + idMatch;
+            console.log(prp)
+            console.log(prpsearchBarMenu)
+
+
+
+            nombreC = "textPizza_" + id + "_" + idMatch;
+            var nombre = document.getElementById(prpsearchBarMenu);
             var nombreChido = document.getElementById(nombreC);
+            // console.log(nombre)
+            // console.log(nombreChido)
             nombre.value = nombreChido.textContent;
 
-            var nombre3 = document.getElementById("id_pizza_mitad");
-            nombre3.value = id
-            //console.log(nombre3)
+            var nombre2 = document.getElementById(prp);
+            nombre2.value = id
         }
+
 
 
     }
@@ -1036,32 +1129,37 @@
         }
 
     }
+
+    function incrementValueForm(element){
+        var incrementID = element.id
+        var idMatch = incrementID.match(/\d+$/);
+        input= document.getElementById("id_cantidad_"+ idMatch[0])
+        var currentVal = parseInt(input.value);
+        input.value = currentVal + 1;
+
+
+    }
+
+       function decrementValueForm(element) {
+            var decrementID = element.id
+            var idMatch = decrementID.match(/\d+$/);
+            input = document.getElementById("id_cantidad_" + idMatch[0])
+            var currentVal = parseInt(input.value);
+
+           if (input.value > 1){
+                input.value = currentVal - 1;
+
+           }else{
+            input.value = 1
+            alert("No puedes poner numeros negativos o 0")
+
+           }
+
+
+        }
 </script>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-    /*  $(document).ready(function () {
-          $("#id_mesa").onchange(function () {
-              var item_id = {{ venta.id }};  // Aquí asigna el ID que deseas enviarasdasdsadsadsadsdsdswsdaasdasdsadasdasdsdsa
-  
-          $.ajax({
-              type: "POST",
-              url: `/Ventas/modificarVenta/Mesa/${item_id}`,  // URL con el ID en la ruta
-              data: {
-                  csrfmiddlewaretoken: '{{ csrf_token }}',
-                  // Otros datos si es necesario
-              },
-              success: function (data) {
-                  alert(data.mensaje);
-              },
-              error: function () {
-                  alert("Error al actualizar la base de datos.");
-              }
-          });
-      });
-  });*/
 
-
-</script>
 
 {% endblock %}

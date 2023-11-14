@@ -7,6 +7,7 @@ from db.models import Cliente, Menu, Mesa, User, Venta, VentaMenu
 from django.db.models import Q
 from datetime import datetime
 from django.contrib.auth.decorators import user_passes_test,login_required
+from django.http import QueryDict
 
 
 def isAdmin(user):
@@ -91,7 +92,6 @@ def menuRow(request):
         menus = menus.filter(
             Q(nombre__icontains=search) 
         )
-    print(menus)
     return render(request, "Ventas/menuRow.html",{'menus':menus})
 
 
@@ -105,7 +105,7 @@ def menuRow2(request):
         menus = menus.filter(
             Q(nombre__icontains=search) 
         )
-
+    print(menus)
     return render(request, "Ventas/menuRow2.html",{'menus':menus})
 
 @login_required(login_url='authentication:login')
@@ -221,24 +221,52 @@ def abrirVenta(request,id):
 
 @login_required(login_url='authentication:login')
 
-def agregarVenta(request,id):
-    
+def agregarVenta(request, id):
     ventas = Venta.objects.get(id=id)
+    data_from_jquery = request.POST
+    mutable_data = QueryDict(mutable=True)
+    mutable_data.update(data_from_jquery)
+    new_dict = {key.replace('_1', ''): value for key, value in mutable_data.items()}
 
     if request.method == "POST":
-        form = VentaMenuForm(request.POST, request.FILES)
-        if form.is_valid():            
-            form.instance.venta = ventas
+        menu_id = new_dict.get('id_menu')
+        cantidad = new_dict.get('id_cantidad')
+        observaciones = new_dict.get('id_observaciones')
+        familiar = new_dict.get('id_familiar')
+        media_orden = new_dict.get('id_media_orden')
+        pizza_id = new_dict.get('id_pizza_mitad')
 
-            user = form.save()
-            user.save()
-                      
-            return redirect("Ventas:modificarVenta",id)
+        menu = None
+        pizza_mitad = None
+
+        if menu_id:
+            menu = Menu.objects.get(id=menu_id)
+        
+        if pizza_id:
+            pizza_mitad = Menu.objects.get(id=pizza_id)
+            
+        form = VentaMenuForm({
+            'venta': ventas,
+            'menu': menu,
+            'cantidad': cantidad,
+            'observaciones': observaciones,
+            'familiar': familiar,
+            'media_orden': media_orden,
+            'pizza_mitad': pizza_mitad
+        })
+
+        if form.is_valid():    
+            print("Es valido")
+            data = form.cleaned_data
+            print(data)
+            data2 = form.save()
+            return redirect("Ventas:modificarVenta", id)
         else:
+            print("No es valido")
             print(form.errors)
-            return redirect("Ventas:ventasIndex")
-   
     return redirect("Ventas:ventasIndex")
+
+
 @login_required(login_url='authentication:login')
 
 def ventasCrear(request,id):
