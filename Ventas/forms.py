@@ -139,11 +139,12 @@ class VentaMenuForm(forms.ModelForm):
         self.fields['pizza_mitad'].required = False 
         self.fields['media_orden'].required = False 
         self.fields['familiar'].required = False 
+        self.fields['final'].required = False 
 
 
     class Meta:
         model = VentaMenu
-        fields = ['venta','menu','cantidad','totalfinal','observaciones','extras','media_orden','familiar','pizza_mitad']
+        fields = ['venta','menu','cantidad','totalfinal','observaciones','extras','media_orden','familiar','pizza_mitad','final']
 
         
  

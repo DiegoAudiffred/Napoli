@@ -326,8 +326,8 @@
 
             </form>
         </div>
-        <div class="col-md-2">
-        <button id="submit-all-forms-button" class="btn btn-primary" type="submit">Enviar todos los formularios</button>
+        <div class="col-md-3">
+        <button id="submit-all-forms-button" class="btn btn-quinto text-white" type="submit">Enviar todos los formularios</button>
 
         </div>
     </div>
@@ -875,14 +875,13 @@
                         var fieldId = $(this).attr("id");
                         var fieldValue = $(this).val();
 
-                        // Si el campo es un checkbox, asignar valor booleano
                         if ($(this).is(":checkbox")) {
                             fieldValue = $(this).is(":checked");
                         }
 
                         formData[fieldId] = fieldValue;
                     });
-
+                console.log(formData)
                 var csrfToken = $("input[name=csrfmiddlewaretoken]").val();
                 formData["csrfmiddlewaretoken"] = csrfToken;
 
@@ -891,7 +890,7 @@
                     url: "{% url 'Ventas:agregarVenta' venta.id %}",
                     data: formData,
                     success: function (response) {
-                                location.reload(true);
+                              location.reload(true);
 
                     }
                 });
@@ -903,16 +902,15 @@
 
 
 <script>
- var formCounter = 0; // Variable global para mantener un contador único
+ var formCounter = 0; 
 
     function agregarFormulario() {
-        formCounter++; // Incrementa el contador global
+        formCounter++; 
 
         var formClone = $("#formVenta").clone();
         
     formClone.find("input, select, textarea, ul, a , span, img,li,button").val("");
 
-        // Cambia el nombre y el ID del formulario clonado
         var uniqueFormId = "formVenta" + formCounter;
         formClone.attr("id", uniqueFormId);
         formClone.find("input, select, textarea, ul, a, span, img,li,button").each(function () {
@@ -930,7 +928,6 @@
             $(this).attr("list", updatedlist);
         });
         
-        // Actualiza el ID y el texto del div "pruebas" con el valor de formCounter
         var pruebas = formClone.find("#pruebas_");
         var pruebasID = "pruebas_" + formCounter;
         pruebas.attr("id", pruebasID);

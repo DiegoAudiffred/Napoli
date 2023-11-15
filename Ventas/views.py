@@ -9,7 +9,7 @@ from datetime import datetime
 from django.contrib.auth.decorators import user_passes_test,login_required
 from django.http import QueryDict
 from decimal import Decimal
-
+import re
 
 def isAdmin(user):
     if user.rol == 'Admin':
@@ -47,7 +47,6 @@ def addCliente(request,id):
 
 def addMesa(request,id):
     venta = Venta.objects.get(id=id)
-    print(venta)
     if request.method == 'POST':
         form = modifyMesaForm (request.POST, instance=venta)  # Inicializar el formulario con los datos POST
         if form.is_valid():
@@ -106,7 +105,6 @@ def menuRow2(request):
         menus = menus.filter(
             Q(nombre__icontains=search) 
         )
-    print(menus)
     return render(request, "Ventas/menuRow2.html",{'menus':menus})
 
 @login_required(login_url='authentication:login')
@@ -119,8 +117,8 @@ def modificarVenta(request,id):
     total2 = 0
     for total in lista:
         total2 += total.totalfinal
-
-    
+    venta.total = total2
+    venta.save()
     form = modifyVentaForm(instance=venta)
     form2 = VentaMenuForm()
     form3 = modifyMesaForm()
@@ -135,18 +133,19 @@ def cerrarVenta(request,id):
     venta = Venta.objects.get(id=id)
     cliente = venta.cliente
     lista = VentaMenu.objects.filter(venta=id)
-    total = 0
-    for ventas in lista:
-        total += (ventas.menu.precio) * ventas.cantidad
+    
+    total2 = 0
+    for total in lista:
+        total2 += total.totalfinal
+    venta.total = total2
+    venta.save()
     
 
-    if venta.is_reopen == False:
-        cliente.total_compras +=  1
-        cliente.total_gastado += total
-    venta.total= total
-    venta.save()
-
-    cliente.save()
+    #if venta.is_reopen == False:
+    #    cliente.total_compras +=  1
+    #    cliente.total_gastado += total
+    #cliente.save()
+    
     venta.is_reopen = True
     venta.is_open= False
     venta.save()
@@ -176,30 +175,26 @@ def agregarVenta(request, id):
     data_from_jquery = request.POST
     mutable_data = QueryDict(mutable=True)
     mutable_data.update(data_from_jquery)
-    new_dict = {key.replace('_1', ''): value for key, value in mutable_data.items()}
+    new_dict = {re.sub(r'_\d+$', '', key): value for key, value in mutable_data.items()}
+    print(new_dict)
     if request.method == "POST":
         menu_id = new_dict.get('id_menu')
         cantidad = Decimal(new_dict.get('id_cantidad'))
         observaciones = new_dict.get('id_observaciones')
-        familiar = new_dict.get('id_familiar')
         pizza_id = new_dict.get('id_pizza_mitad')
+        familiar = new_dict.get('id_familiar')
         media_orden = new_dict.get('id_media_orden')
         extra1=new_dict.get('id_extras_0')
-        extra2=new_dict.get('id_extras')
+        extra2=new_dict.get('id_extras_1')
         extra3=new_dict.get('id_extras_2')
         extra4=new_dict.get('id_extras_3')
         extrasList = [extra1, extra2, extra3, extra4]
-      
+
         menu = None
         pizza_mitad = None
-        extras = False
-# Convertir "false" a False y cualquier otro valor a True para cada variable extra
         for i in range(len(extrasList)):
             extrasList[i] = extrasList[i] != "false"
-            if extrasList[i] == True:
-                extras= True
-        print(extrasList) 
-
+           
         if media_orden == "false":
             media_orden = False
         else:
@@ -237,20 +232,20 @@ def agregarVenta(request, id):
                         total += (pizza_mitad.precio) * cantidad
                 else:
                         total += (menu.precio) * cantidad
-        elif media_orden == "false": #Mediaorden
+        elif media_orden == True: #Mediaorden
                 total += (menu.mediaOrden) * (cantidad)
 
         else: #Compra normal
                 total += (menu.precio) * cantidad
-
+        print(total,"antes de extras")
         listaextras = Extras.objects.all()
+        
         for i,ext in enumerate(listaextras):
             if extrasList[i] == True:
                 if familiar:
                     total += ext.precioFamiliar * cantidad
                 else:
                     total += ext.precio * cantidad
-     
         indicies = []
         for i,ex in enumerate(extrasList):
             elemento = Extras.objects.get(id=i+1)
@@ -259,13 +254,8 @@ def agregarVenta(request, id):
       
 
         queryset_result = Extras.objects.filter(id__in=indicies)        
-        print(queryset_result)
-
-      
-
-        totalfinal = total
        
-        
+        print(total)
         ####   
         form = VentaMenuForm({
             'venta': ventas,
@@ -275,18 +265,16 @@ def agregarVenta(request, id):
             'familiar': familiar,
             'media_orden': media_orden,
             'pizza_mitad': pizza_mitad,
-            'totalfinal':totalfinal,
-            'extras':queryset_result
+            'totalfinal':total,
+            'extras':queryset_result,
+            'final':total
         })
 
         if form.is_valid():    
-            #print("Es valido")
             data = form.cleaned_data
-            #print(data)
             data2 = form.save()
             return redirect("Ventas:modificarVenta", id)
         else:
-            print("No es valido")
             print(form.errors)
     return redirect("Ventas:ventasIndex")
 
@@ -339,30 +327,28 @@ def ventasCard(request):
                 Q(fecha_compra__date=start_dt)  
             )
 
-
                 
     return render(request, "Ventas/ventasCard.html",{'ventas':ventas})
 
 @login_required(login_url='authentication:login')
 def guardarCambios(request,compra_id,list_id,operacion):
-   
-    compras = Venta.objects.get(id=compra_id)
-    producto = VentaMenu.objects.get(venta=compras,id=list_id)
-    
+
+    venta = Venta.objects.get(id=compra_id)
+    producto = VentaMenu.objects.get(venta=venta,id=list_id)
+
     if operacion == "suma":
         
         producto.cantidad = producto.cantidad + 1
+        producto.totalfinal = producto.final * producto.cantidad
         producto.save()
 
     else:
         
-    
-   
         if producto.cantidad > 0:
-            producto.cantidad = producto.cantidad - 1
-            
-            producto.save()
-            if producto.cantidad == 0:
+                producto.cantidad = producto.cantidad - 1
+                producto.totalfinal = producto.final * producto.cantidad
+                producto.save()
+        if producto.cantidad == 0:
                 producto.delete()
    
        

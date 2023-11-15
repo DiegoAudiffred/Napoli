@@ -195,7 +195,7 @@ class Menu(models.Model):
         return self.nombre
     def save(self, *args, **kwargs):
         self.precioFamiliar = self.precio + 120
-        self.mediaOrden = round(self.precio / 2)
+        self.mediaOrden = self.precio / 2
         super().save(*args, **kwargs)
     
     
@@ -230,6 +230,7 @@ class VentaMenu(models.Model):
     observaciones = models.TextField(blank=True,null=True,max_length=100)
     cantidad = models.PositiveIntegerField(blank=True,null=True,default=1)
     totalfinal = models.DecimalField(max_digits=8, decimal_places=2,default=0)
+    final = models.DecimalField(max_digits=8, decimal_places=2,default=0)
     extras = models.ManyToManyField(Extras,blank=True,null=True)
     media_orden = models.BooleanField(default=False)
     familiar = models.BooleanField(default=False)
