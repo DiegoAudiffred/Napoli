@@ -3,11 +3,12 @@ import json
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from Ventas.forms import VentaMenuForm, createVentaForm, modifyMesaForm, modifyVentaForm
-from db.models import Cliente, Menu, Mesa, User, Venta, VentaMenu
+from db.models import Cliente, Menu, Mesa, User, Venta, VentaMenu,Extras
 from django.db.models import Q
 from datetime import datetime
 from django.contrib.auth.decorators import user_passes_test,login_required
 from django.http import QueryDict
+from decimal import Decimal
 
 
 def isAdmin(user):
@@ -112,65 +113,13 @@ def menuRow2(request):
 
 def modificarVenta(request,id):
     venta = Venta.objects.get(id=id)
-    lista = VentaMenu.objects.filter(venta=id)
     mesas = Mesa.objects.all()
-  
-
+    lista = VentaMenu.objects.filter(venta=id)
     user = request.user
-    total = 0
     total2 = 0
-    for ventas in lista:
-        if ventas.menu.categoria == "Pizza":
-            if ventas.familiar:
-                if ventas.pizza_mitad:
-                    if ventas.pizza_mitad.precioFamiliar < ventas.menu.precioFamiliar:
-                        total += (ventas.menu.precioFamiliar) * ventas.cantidad
-                    else:
-                        total += (ventas.pizza_mitad.precioFamiliar) * ventas.cantidad
-                else:
-                    total += (ventas.menu.precioFamiliar) * ventas.cantidad
-            else:
-                if ventas.pizza_mitad:
-                    if ventas.pizza_mitad.precio < ventas.menu.precio:
-                        total += (ventas.menu.precio) * ventas.cantidad
-                    else:
-                        print(ventas.pizza_mitad.precio)
-                        print(ventas.cantidad)
+    for total in lista:
+        total2 += total.totalfinal
 
-                        total += (ventas.pizza_mitad.precio) * ventas.cantidad
-                else:
-                        total += (ventas.menu.precio) * ventas.cantidad
-        else:        
-            if ventas.media_orden:
-                total += ventas.menu.mediaOrden* ventas.cantidad
-            else:
-                total += (ventas.menu.precio) * ventas.cantidad
-
-            
-            
-            
-            
-        if ventas.extras:
-            if ventas.familiar:
-                for venti in ventas.extras.all():
-                    total += venti.precioFamiliar * ventas.cantidad
-            else:
-                for venti in ventas.extras.all():
-                    total += venti.precio * ventas.cantidad
-            
-            
-  
-        
-            
-        ventas.totalfinal = total
-        total2 = total2 + total
-      
-        total = 0
-        ventas.save()
-        
-        
-    venta.total = total2
-    venta.save()
     
     form = modifyVentaForm(instance=venta)
     form2 = VentaMenuForm()
@@ -223,28 +172,101 @@ def abrirVenta(request,id):
 
 def agregarVenta(request, id):
     ventas = Venta.objects.get(id=id)
+    lista = VentaMenu.objects.filter(venta=id)
     data_from_jquery = request.POST
     mutable_data = QueryDict(mutable=True)
     mutable_data.update(data_from_jquery)
     new_dict = {key.replace('_1', ''): value for key, value in mutable_data.items()}
-
     if request.method == "POST":
         menu_id = new_dict.get('id_menu')
-        cantidad = new_dict.get('id_cantidad')
+        cantidad = Decimal(new_dict.get('id_cantidad'))
         observaciones = new_dict.get('id_observaciones')
         familiar = new_dict.get('id_familiar')
-        media_orden = new_dict.get('id_media_orden')
         pizza_id = new_dict.get('id_pizza_mitad')
-
+        media_orden = new_dict.get('id_media_orden')
+        extra1=new_dict.get('id_extras_0')
+        extra2=new_dict.get('id_extras')
+        extra3=new_dict.get('id_extras_2')
+        extra4=new_dict.get('id_extras_3')
+        extrasList = [extra1, extra2, extra3, extra4]
+      
         menu = None
         pizza_mitad = None
+        extras = False
+# Convertir "false" a False y cualquier otro valor a True para cada variable extra
+        for i in range(len(extrasList)):
+            extrasList[i] = extrasList[i] != "false"
+            if extrasList[i] == True:
+                extras= True
+        print(extrasList) 
 
+        if media_orden == "false":
+            media_orden = False
+        else:
+            media_orden = True
+        if familiar == "false":
+            familiar = False
+        else:
+            familiar = True
         if menu_id:
             menu = Menu.objects.get(id=menu_id)
         
         if pizza_id:
             pizza_mitad = Menu.objects.get(id=pizza_id)
-            
+        #####
+  
+
+        total = 0
+       
+
+        if menu.categoria == "Pizza":
+            if familiar:
+                if pizza_mitad:
+                    if pizza_mitad.precioFamiliar < menu.precioFamiliar:
+                        total += (menu.precioFamiliar) * cantidad
+                    else:
+                        total += (pizza_mitad.precioFamiliar) * cantidad
+                else:
+                    total += (menu.precioFamiliar) * cantidad
+            else:
+                if pizza_mitad: 
+                    if pizza_mitad.precio < menu.precio:
+                        total += (menu.precio) * cantidad
+                    else:
+                  
+                        total += (pizza_mitad.precio) * cantidad
+                else:
+                        total += (menu.precio) * cantidad
+        elif media_orden == "false": #Mediaorden
+                total += (menu.mediaOrden) * (cantidad)
+
+        else: #Compra normal
+                total += (menu.precio) * cantidad
+
+        listaextras = Extras.objects.all()
+        for i,ext in enumerate(listaextras):
+            if extrasList[i] == True:
+                if familiar:
+                    total += ext.precioFamiliar * cantidad
+                else:
+                    total += ext.precio * cantidad
+     
+        indicies = []
+        for i,ex in enumerate(extrasList):
+            elemento = Extras.objects.get(id=i+1)
+            if extrasList[i] == True:
+                    indicies.append(i+1)
+      
+
+        queryset_result = Extras.objects.filter(id__in=indicies)        
+        print(queryset_result)
+
+      
+
+        totalfinal = total
+       
+        
+        ####   
         form = VentaMenuForm({
             'venta': ventas,
             'menu': menu,
@@ -252,13 +274,15 @@ def agregarVenta(request, id):
             'observaciones': observaciones,
             'familiar': familiar,
             'media_orden': media_orden,
-            'pizza_mitad': pizza_mitad
+            'pizza_mitad': pizza_mitad,
+            'totalfinal':totalfinal,
+            'extras':queryset_result
         })
 
         if form.is_valid():    
-            print("Es valido")
+            #print("Es valido")
             data = form.cleaned_data
-            print(data)
+            #print(data)
             data2 = form.save()
             return redirect("Ventas:modificarVenta", id)
         else:

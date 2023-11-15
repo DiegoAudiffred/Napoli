@@ -112,7 +112,7 @@ class User(AbstractUser):
 
     username = None
     email = models.EmailField('Correo electrónico', unique=True, blank=True, null=True)
-    first_name = models.CharField("Nombre", max_length=200, null=True, blank=True,unique=True,default="Empleado")
+    first_name = models.CharField("Nombre", max_length=200, null=True, blank=True,unique=True)
     phone_number = models.CharField("Teléfono", max_length=15, unique=True, null=True)
     url = models.ImageField(upload_to="uploads/gallery/",null=True, blank=True)
     USERNAME_FIELD = 'email'
@@ -124,11 +124,7 @@ class User(AbstractUser):
 
 
     def __str__(self):
-        return self.first_name
-    
-    def save(self, *args, **kwargs):
-        self.email = self.first_name + "@napoli.com"
-        super().save(*args, **kwargs)
+        return str(self.first_name) if self.first_name else "Empleado"
 
 
 
@@ -199,7 +195,7 @@ class Menu(models.Model):
         return self.nombre
     def save(self, *args, **kwargs):
         self.precioFamiliar = self.precio + 120
-        self.mediaOrden = self.precio / 2
+        self.mediaOrden = round(self.precio / 2)
         super().save(*args, **kwargs)
     
     
