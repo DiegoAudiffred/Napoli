@@ -4,21 +4,22 @@
 {% block body %}
 
 <style>
-    form {
+    .animated {
         animation-duration: 1s;
         animation-name: pepito ;
     }
 
-    @keyframes pepito{
-        from{ 
-            margin-left: 100%;
-            width: 300%;
-        } to{
-
-            margin-left: 0%;
-            width: 100%;
-        }
+@keyframes pepito {
+    from {
+        margin-top: 100%; /* Comienza desde abajo */
+        height: 300%; /* Aumenta la altura */
     }
+    to {
+        margin-top: 0%; /* Llega a la posición inicial */
+        height: 100%; /* Altura original */
+    }
+}
+
     
 </style>
 
@@ -138,7 +139,7 @@
 
     <div class="row">
         <div class="col-12 p-0">
-            <div class="table-responsive">
+            <div class="table-responsive animated">
                 <table class="table border border-3 table-hover table-bordered border-quinto table-sm">
                     <thead class="bg-tercero text-white">
                         <th class="d-none d-sm-table-cell">Imagen</th>
@@ -339,6 +340,8 @@
                                 <button type="button" class="btn btn-tercero text-white "
                                     data-bs-dismiss="modal">Cancelar</button>
                                 <button type="submit" class="btn btn-secondary">Cerrar cuenta</button>
+                                <button type="button" class="btn text-white" style="background-color: blue;" onclick="imprimirTicket()">Imprimir ticket</button>
+
                             </div>
                         </div>
                     </div>
@@ -350,10 +353,7 @@
         <button id="submit-all-forms-button" class="btn btn-quinto text-white  w-100" type="submit">Enviar formularios</button>
 
         </div>
-        <div class="col-2">
-            <button class="btn text-white w-100" style="background-color: blue;" onclick="imprimirTicket()">Imprimir ticket</button>
-
-        </div>
+      
     </div>
     {% else %}
     <div class="row justify-content-end w-100">
@@ -375,10 +375,10 @@
 
 
 <div class="container d-none">
-<form  method="POST" enctype="multipart/form-data" id="formVenta">
+<form  method="POST" enctype="multipart/form-data" id="formVenta" class="animated">
     {% csrf_token %}
     <div class="row border border-4 rounded rounded-4 border-quinto p-2">
-        <div id="formCounterID" class="d-none"   >
+        <div id="formCounterID" class="d-none">
 
         </div>
 
@@ -398,169 +398,12 @@
             
                     </ul>
                     <div class="d-block">
-                        <select name="menu" class="form-control shadow-none  d-none px-2 py-1" placeholder=" Breve descripción*"
+                        <select name="menu" class="form-control shadow-none  d-block px-2 py-1" placeholder=" Breve descripción*"
                             rows="1" aria-label="Username" aria-describedby="basic-addon1" style="border-left:none" required=""
                             id="id_menu_">
-                            <option value="" selected="">---------</option>
-            
-                            <option value="1">Bruschetta</option>
-            
-                            <option value="2">Bruschetta Angri</option>
-            
-                            <option value="3">Pimientos Ambra</option>
-            
-                            <option value="4">Zucchini all ´aceto</option>
-            
-                            <option value="5">Carpaccio de Carne</option>
-            
-                            <option value="6">Provolone al horno</option>
-            
-                            <option value="7">Antipasto misto</option>
-            
-                            <option value="8">Insalata Caprese</option>
-            
-                            <option value="9">Insalata Ninnarella</option>
-            
-                            <option value="10">Insalata Ambra</option>
-            
-                            <option value="11">Insalata Napoli</option>
-            
-                            <option value="12">Insalata André</option>
-            
-                            <option value="13">Corte Rib Eye (350grs)</option>
-            
-                            <option value="14">Pollo alla Pompeiana</option>
-            
-                            <option value="15">Salmón alla Mediterranea</option>
-            
-                            <option value="16">Pasta Siciliana</option>
-            
-                            <option value="17">Fusilli al Pesto</option>
-            
-                            <option value="18">Spaguetti Bolognesa</option>
-            
-                            <option value="19">Spaghetti Carbonara</option>
-            
-                            <option value="20">Fusilli del Chef</option>
-            
-                            <option value="21">Spaghetti Aglio e Olio</option>
-            
-                            <option value="22">Fusilli Funghi e Carciofine</option>
-            
-                            <option value="23">Spaghetti Primavera</option>
-            
-                            <option value="24">Margherita</option>
-            
-                            <option value="25">Marinara</option>
-            
-                            <option value="26">Napoletana</option>
-            
-                            <option value="27">Frutti Di Mare</option>
-            
-                            <option value="28">Peperoni</option>
-            
-                            <option value="29">Tropicale</option>
-            
-                            <option value="30">Capatone</option>
-            
-                            <option value="31">Mare e Monti</option>
-            
-                            <option value="32">Soucera</option>
-            
-                            <option value="33">Oaxaqueña</option>
-            
-                            <option value="34">Cognata</option>
-            
-                            <option value="35">Chucky Lozano</option>
-            
-                            <option value="36">Fratello</option>
-            
-                            <option value="37">4 Formaggi</option>
-            
-                            <option value="38">Paktiel</option>
-            
-                            <option value="39">Carciofina</option>
-            
-                            <option value="40">O´pazzo</option>
-            
-                            <option value="41">We´Alfo</option>
-            
-                            <option value="42">Salumi</option>
-            
-                            <option value="43">Calzone Maradona</option>
-            
-                            <option value="44">Calzone Vesuvio</option>
-            
-                            <option value="45">Calzone Puebla</option>
-            
-                            <option value="46">Calzone Vegetariano</option>
-            
-                            <option value="47">Calzone Napoletano</option>
-            
-                            <option value="48">Involtini Vegetariano</option>
-            
-                            <option value="49">Involtini de Embutidos</option>
-            
-                            <option value="50">Calzone de Nutella</option>
-            
-                            <option value="51">Calzone de Nutella con frutas</option>
-            
-                            <option value="52">Tiramisú</option>
-            
-                            <option value="53">Panna Cotta</option>
-            
-                            <option value="54">Agua Natural</option>
-            
-                            <option value="55">Agua Mineral</option>
-            
-                            <option value="56">Refresco</option>
-            
-                            <option value="57">Limonada</option>
-            
-                            <option value="58">Cerveza</option>
-            
-                            <option value="59">Chelada</option>
-            
-                            <option value="60">Michelada</option>
-            
-                            <option value="61">Copa de vino de la casa</option>
-            
-                            <option value="62">Clamato con cerveza</option>
-            
-                            <option value="63">Café Americano</option>
-            
-                            <option value="64">Café Espresso</option>
-            
-                            <option value="65">Café Espresso Doble</option>
-            
-                            <option value="66">Café Espresso Cortado</option>
-            
-                            <option value="67">Café Cappuchino</option>
-            
-                            <option value="68">Café con Leche</option>
-            
-                            <option value="69">Café Carajillo</option>
-            
-                            <option value="70">Té</option>
-            
-                            <option value="71">Café Bombón</option>
-            
-                            <option value="72">Barra Pan</option>
-            
-                            <option value="73">Jarra Limonada</option>
-            
-                            <option value="74">Gelato</option>
-            
-                            <option value="75">Limonchelo</option>
-            
-                            <option value="76">Grapa</option>
-            
-                            <option value="77">Ravioli espinaca</option>
-            
-                            <option value="78">Ravioli Queso</option>
-            
-                            <option value="79">Mezcal</option>
-            
+                                {% for men in menu%}
+                                <option value="{{men.id}}">{{men.nombre}}</option>
+                                {% endfor %}
                         </select>
             
                     </div>
@@ -591,169 +434,12 @@
                     <ul class="dropdown-menu" aria-labelledby="searchBarMenu_" id="cardHolder3_">
             
                     </ul>
-                    <select name="pizza_mitad" class="form-control shadow-none   px-2 py-1 d-none" placeholder=" Breve descripción*"
+                    <select name="pizza_mitad" class="form-control shadow-none   px-2 py-1 d-block" placeholder=" Breve descripción*"
                         rows="1" aria-label="Username" aria-describedby="basic-addon1" style="border-left:none"
                         id="id_pizza_mitad_">
-                        <option value="" selected="">---------</option>
-            
-                        <option value="1">Bruschetta</option>
-            
-                        <option value="2">Bruschetta Angri</option>
-            
-                        <option value="3">Pimientos Ambra</option>
-            
-                        <option value="4">Zucchini all ´aceto</option>
-            
-                        <option value="5">Carpaccio de Carne</option>
-            
-                        <option value="6">Provolone al horno</option>
-            
-                        <option value="7">Antipasto misto</option>
-            
-                        <option value="8">Insalata Caprese</option>
-            
-                        <option value="9">Insalata Ninnarella</option>
-            
-                        <option value="10">Insalata Ambra</option>
-            
-                        <option value="11">Insalata Napoli</option>
-            
-                        <option value="12">Insalata André</option>
-            
-                        <option value="13">Corte Rib Eye (350grs)</option>
-            
-                        <option value="14">Pollo alla Pompeiana</option>
-            
-                        <option value="15">Salmón alla Mediterranea</option>
-            
-                        <option value="16">Pasta Siciliana</option>
-            
-                        <option value="17">Fusilli al Pesto</option>
-            
-                        <option value="18">Spaguetti Bolognesa</option>
-            
-                        <option value="19">Spaghetti Carbonara</option>
-            
-                        <option value="20">Fusilli del Chef</option>
-            
-                        <option value="21">Spaghetti Aglio e Olio</option>
-            
-                        <option value="22">Fusilli Funghi e Carciofine</option>
-            
-                        <option value="23">Spaghetti Primavera</option>
-            
-                        <option value="24">Margherita</option>
-            
-                        <option value="25">Marinara</option>
-            
-                        <option value="26">Napoletana</option>
-            
-                        <option value="27">Frutti Di Mare</option>
-            
-                        <option value="28">Peperoni</option>
-            
-                        <option value="29">Tropicale</option>
-            
-                        <option value="30">Capatone</option>
-            
-                        <option value="31">Mare e Monti</option>
-            
-                        <option value="32">Soucera</option>
-            
-                        <option value="33">Oaxaqueña</option>
-            
-                        <option value="34">Cognata</option>
-            
-                        <option value="35">Chucky Lozano</option>
-            
-                        <option value="36">Fratello</option>
-            
-                        <option value="37">4 Formaggi</option>
-            
-                        <option value="38">Paktiel</option>
-            
-                        <option value="39">Carciofina</option>
-            
-                        <option value="40">O´pazzo</option>
-            
-                        <option value="41">We´Alfo</option>
-            
-                        <option value="42">Salumi</option>
-            
-                        <option value="43">Calzone Maradona</option>
-            
-                        <option value="44">Calzone Vesuvio</option>
-            
-                        <option value="45">Calzone Puebla</option>
-            
-                        <option value="46">Calzone Vegetariano</option>
-            
-                        <option value="47">Calzone Napoletano</option>
-            
-                        <option value="48">Involtini Vegetariano</option>
-            
-                        <option value="49">Involtini de Embutidos</option>
-            
-                        <option value="50">Calzone de Nutella</option>
-            
-                        <option value="51">Calzone de Nutella con frutas</option>
-            
-                        <option value="52">Tiramisú</option>
-            
-                        <option value="53">Panna Cotta</option>
-            
-                        <option value="54">Agua Natural</option>
-            
-                        <option value="55">Agua Mineral</option>
-            
-                        <option value="56">Refresco</option>
-            
-                        <option value="57">Limonada</option>
-            
-                        <option value="58">Cerveza</option>
-            
-                        <option value="59">Chelada</option>
-            
-                        <option value="60">Michelada</option>
-            
-                        <option value="61">Copa de vino de la casa</option>
-            
-                        <option value="62">Clamato con cerveza</option>
-            
-                        <option value="63">Café Americano</option>
-            
-                        <option value="64">Café Espresso</option>
-            
-                        <option value="65">Café Espresso Doble</option>
-            
-                        <option value="66">Café Espresso Cortado</option>
-            
-                        <option value="67">Café Cappuchino</option>
-            
-                        <option value="68">Café con Leche</option>
-            
-                        <option value="69">Café Carajillo</option>
-            
-                        <option value="70">Té</option>
-            
-                        <option value="71">Café Bombón</option>
-            
-                        <option value="72">Barra Pan</option>
-            
-                        <option value="73">Jarra Limonada</option>
-            
-                        <option value="74">Gelato</option>
-            
-                        <option value="75">Limonchelo</option>
-            
-                        <option value="76">Grapa</option>
-            
-                        <option value="77">Ravioli espinaca</option>
-            
-                        <option value="78">Ravioli Queso</option>
-            
-                        <option value="79">Mezcal</option>
-            
+                        {% for men in menu%}
+                        <option value="{{men.id}}">{{men.nombre}}</option>
+                        {% endfor %}
                     </select>
             
             

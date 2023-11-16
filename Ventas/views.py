@@ -110,6 +110,8 @@ def menuRow2(request):
 @login_required(login_url='authentication:login')
 
 def modificarVenta(request,id):
+    menu = Menu.objects.all()
+
     venta = Venta.objects.get(id=id)
     mesas = Mesa.objects.all()
     lista = VentaMenu.objects.filter(venta=id)
@@ -123,7 +125,7 @@ def modificarVenta(request,id):
     form2 = VentaMenuForm()
     form3 = modifyMesaForm()
 
-    return render(request, 'Ventas/modificarVentas.html',{'venta':venta,'lista':lista,'form':form,'form2':form2,'form3':form3,'total':total2,'user':user,'mesas':mesas})
+    return render(request, 'Ventas/modificarVentas.html',{'venta':venta,'lista':lista,'form':form,'form2':form2,'form3':form3,'total':total2,'user':user,'mesas':mesas,'menu':menu})
 
 
 
