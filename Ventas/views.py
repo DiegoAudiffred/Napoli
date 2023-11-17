@@ -158,9 +158,13 @@ def updateRow(request,lista,venta):
             extras=form.cleaned_data['extras']
 
             if platillo.categoria == "Pizza":
+                print("Pizza pizza")
                 if familiar:
+                    print("Familiar")
                     if pizza_mitad:
-                        if platillo.precioFamiliar < platillo.precioFamiliar:
+                        print("Mitad")
+                        if pizza_mitad.precioFamiliar < platillo.precioFamiliar:
+                            print("La cara es la ")    
                             totalIndv += (platillo.precioFamiliar) 
                             total += (pizza_mitad.precioFamiliar) * cantidad
 
@@ -207,7 +211,8 @@ def updateRow(request,lista,venta):
             form.instance.totalfinal = total
             form.instance.final = totalIndv
        
-           
+            print(total)
+            print(totalIndv)   
             form.save()
           
 
