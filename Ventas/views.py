@@ -2,7 +2,7 @@ import datetime
 import json
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
-from Ventas.forms import VentaMenuForm, createVentaForm, modifyMesaForm, modifyVentaForm
+from Ventas.forms import VentaMenuForm, createVentaForm, modifyMesaForm, modifyVentaForm, modifyVentaMenuOrder
 from db.models import Cliente, Menu, Mesa, User, Venta, VentaMenu,Extras
 from django.db.models import Q
 from datetime import datetime
@@ -110,22 +110,110 @@ def menuRow2(request):
 @login_required(login_url='authentication:login')
 
 def modificarVenta(request,id):
-    menu = Menu.objects.all()
-
+   
+   
     venta = Venta.objects.get(id=id)
     mesas = Mesa.objects.all()
+    
+    menu = Menu.objects.all()
     lista = VentaMenu.objects.filter(venta=id)
+    
+    publications=[]
+    for lst in lista:
+            publications.append(modifyVentaMenuOrder(instance=lst))
+
+
+        
     user = request.user
     total2 = 0
     for total in lista:
         total2 += total.totalfinal
+        print(total)
+        print(total2,"acumulado")
     venta.total = total2
     venta.save()
-    form = modifyVentaForm(instance=venta)
-    form2 = VentaMenuForm()
-    form3 = modifyMesaForm()
+    form = modifyVentaForm(instance=venta) #Cliente
+    form2 = VentaMenuForm() #Venta
+    form3 = modifyMesaForm() #Mesa
+    form4 = modifyVentaMenuOrder()
 
-    return render(request, 'Ventas/modificarVentas.html',{'venta':venta,'lista':lista,'form':form,'form2':form2,'form3':form3,'total':total2,'user':user,'mesas':mesas,'menu':menu})
+    return render(request, 'Ventas/modificarVentas.html',{'venta':venta,'lista':zip(lista,publications),'form':form,'form2':form2,'form3':form3,'form4':form4,'total':total2,'user':user,'mesas':mesas,'menu':menu}) 
+
+
+@login_required(login_url='authentication:login')
+def updateRow(request,lista,venta):
+    row = VentaMenu.objects.get(id=lista)
+    total = 0
+    totalIndv = 0
+    print(row)
+    if request.method == "POST":
+        form = modifyVentaMenuOrder(request.POST, instance=row)
+        if form.is_valid():
+            platillo = form.cleaned_data['menu']
+            familiar = form.cleaned_data['familiar']
+            pizza_mitad = form.cleaned_data['pizza_mitad']
+            familiar = form.cleaned_data['familiar']
+            cantidad = form.cleaned_data['cantidad']
+            media_orden = form.cleaned_data['media_orden']
+            extras=form.cleaned_data['extras']
+
+            if platillo.categoria == "Pizza":
+                if familiar:
+                    if pizza_mitad:
+                        if platillo.precioFamiliar < platillo.precioFamiliar:
+                            totalIndv += (platillo.precioFamiliar) 
+                            total += (pizza_mitad.precioFamiliar) * cantidad
+
+                        else:
+                            totalIndv += (pizza_mitad.precioFamiliar)
+                            total += (pizza_mitad.precioFamiliar) * cantidad
+
+                    else:
+                        totalIndv += (platillo.precioFamiliar)
+                        total += (pizza_mitad.precioFamiliar) * cantidad
+
+                else:
+                    if pizza_mitad: 
+                        if pizza_mitad.precio < platillo.precio:
+                            totalIndv += (platillo.precio)
+                            total += (platillo.precio) * cantidad
+
+                        else:
+                  
+                            totalIndv += (pizza_mitad.precio)
+                            total += (pizza_mitad.precio) * cantidad                            
+                            
+                            
+                    else:
+                            totalIndv += (platillo.precio)
+                            total += (platillo.precio) * cantidad  
+        
+            elif media_orden == True: #Mediaorden
+                    totalIndv += (platillo.mediaOrden)
+                    total += (platillo.mediaOrden) * cantidad  
+
+            else: #Compra normal
+                totalIndv += (platillo.precio)
+                total += (platillo.precio) * cantidad  
+         
+            listaextras = Extras.objects.all()
+            for i,list in enumerate(listaextras):
+                if listaextras[i] in extras:
+                    total += listaextras[i].precio * cantidad
+                    totalIndv += listaextras[i].precio
+                    print("Entro", listaextras[i] )
+
+
+            form.instance.totalfinal = total
+            form.instance.final = totalIndv
+       
+           
+            form.save()
+          
+
+    else:
+            print(form.errors)
+    return redirect('Ventas:modificarVenta',venta)
 
 
 
@@ -178,7 +266,6 @@ def agregarVenta(request, id):
     mutable_data = QueryDict(mutable=True)
     mutable_data.update(data_from_jquery)
     new_dict = {re.sub(r'_\d+$', '', key): value for key, value in mutable_data.items()}
-    print(new_dict)
     if request.method == "POST":
         menu_id = new_dict.get('id_menu')
         cantidad = Decimal(new_dict.get('id_cantidad'))
@@ -214,40 +301,58 @@ def agregarVenta(request, id):
   
 
         total = 0
-       
+        totalIndiv=0
 
         if menu.categoria == "Pizza":
             if familiar:
                 if pizza_mitad:
                     if pizza_mitad.precioFamiliar < menu.precioFamiliar:
                         total += (menu.precioFamiliar) * cantidad
+                        totalIndiv += (menu.precioFamiliar)
+
                     else:
                         total += (pizza_mitad.precioFamiliar) * cantidad
+                        totalIndiv += (pizza_mitad.precioFamiliar)
+
                 else:
                     total += (menu.precioFamiliar) * cantidad
+                    totalIndiv += (menu.precioFamiliar)
+   
             else:
                 if pizza_mitad: 
                     if pizza_mitad.precio < menu.precio:
                         total += (menu.precio) * cantidad
+                        totalIndiv += (menu.precio)
+      
                     else:
                   
                         total += (pizza_mitad.precio) * cantidad
+                        totalIndiv += (pizza_mitad.precio) 
                 else:
                         total += (menu.precio) * cantidad
+                
+                        totalIndiv += (menu.precio)
+
         elif media_orden == True: #Mediaorden
                 total += (menu.mediaOrden) * (cantidad)
+                totalIndiv += (menu.mediaOrden)
 
         else: #Compra normal
                 total += (menu.precio) * cantidad
-        print(total,"antes de extras")
+                totalIndiv += (menu.precio)
+   
         listaextras = Extras.objects.all()
         
         for i,ext in enumerate(listaextras):
             if extrasList[i] == True:
                 if familiar:
                     total += ext.precioFamiliar * cantidad
+                    totalIndiv += ext.precioFamiliar
+
                 else:
-                    total += ext.precio * cantidad
+                    total += ext.precio * cantidad               
+                    totalIndiv += ext.precio
+
         indicies = []
         for i,ex in enumerate(extrasList):
             elemento = Extras.objects.get(id=i+1)
@@ -256,8 +361,8 @@ def agregarVenta(request, id):
       
 
         queryset_result = Extras.objects.filter(id__in=indicies)        
-       
-        print(total)
+        print(total,"TotalFinal")
+        print(totalIndiv,"Indiv")
         ####   
         form = VentaMenuForm({
             'venta': ventas,
@@ -269,7 +374,7 @@ def agregarVenta(request, id):
             'pizza_mitad': pizza_mitad,
             'totalfinal':total,
             'extras':queryset_result,
-            'final':total
+            'final':totalIndiv
         })
 
         if form.is_valid():    
@@ -345,8 +450,9 @@ def guardarCambios(request,compra_id,list_id,operacion):
         producto.save()
 
     else:
-        
+        print("resta")
         if producto.cantidad > 0:
+
                 producto.cantidad = producto.cantidad - 1
                 producto.totalfinal = producto.final * producto.cantidad
                 producto.save()

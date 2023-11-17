@@ -149,3 +149,27 @@ class VentaMenuForm(forms.ModelForm):
         
  
 
+class modifyVentaMenuOrder(forms.ModelForm):
+    
+    def __init__(self, *args, **kwargs):
+        super(modifyVentaMenuOrder, self).__init__(*args, **kwargs)
+        self.fields['menu'].required = True
+        self.fields['cantidad'].required = True
+        self.fields['observaciones'].required = False
+        self.fields['totalfinal'].required = False
+        self.fields['extras'].required = False 
+        self.fields['pizza_mitad'].required = False 
+        self.fields['media_orden'].required = False 
+        self.fields['familiar'].required = False 
+        self.fields['final'].required = False 
+        
+        self.fields['menu'].widget.attrs.update({'class':'form-control  px-2 py-1','placeholder':' Breve descripción*','rows':'1' })
+        self.fields['cantidad'].widget.attrs.update({'class':'form-control shadow-none border border-2s   px-2 py-1 ','placeholder':' Cantidad*','rows':'1', 'aria-label':'Username','aria-describedby':'basic-addon1','style':'border-left:none', })
+        self.fields['observaciones'].widget.attrs.update({'class':'form-control shadow-none border border-2  px-2 py-1 ','placeholder':' Observaciones en la preparación*','rows':'5' })
+        self.fields['extras'].widget.attrs.update({'class':'form-control shadow-none bg-corporateTan200  px-2 py-1 text-primary','placeholder':' Ingredientes*','rows':'1', 'aria-label':'Username','aria-describedby':'basic-addon1','style':'border-left:none', })
+        self.fields['extras'].widget = forms.CheckboxSelectMultiple()
+        self.fields['extras'].queryset = Extras.objects.all()
+
+    class Meta:
+        model = VentaMenu
+        fields = ['menu','cantidad','totalfinal','observaciones','extras','media_orden','familiar','pizza_mitad','final']

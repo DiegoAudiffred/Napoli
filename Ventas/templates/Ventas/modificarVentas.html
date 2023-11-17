@@ -139,7 +139,7 @@
 
     <div class="row">
         <div class="col-12 p-0">
-            <div class="table-responsive animated">
+            <div class="table-responsive">
                 <table class="table border border-3 table-hover table-bordered border-quinto table-sm">
                     <thead class="bg-tercero text-white">
                         <th class="d-none d-sm-table-cell">Imagen</th>
@@ -154,25 +154,26 @@
                     </thead>
                     <tbody>
 
-                        {% for list in lista%}
-                        <tr>
-                            <td class="align-middle border border-0 d-none d-sm-table-cell"
-                                style=" width: 75px;height:75px">
+                        {% for list,publications in lista%}
+                 
+                        <tr data-bs-toggle="modal" data-bs-target="#exampleModal{{list.id}}">
+
+                            <td class="align-middle border border-0 d-none d-sm-table-cell" style=" width: 75px;height:75px">
                                 <img src="{{list.menu.url.url}}" alt="" width="90px" height="90px">
                                 {% if list.pizza_mitad %}
                                 <img src="{{list.pizza_mitad.url.url}}" alt="" width="90px" height="90px">
                                 {% endif %}
                             </td>
-
+                        
                             <td class="align-middle  text-center">
-
+                        
                                 {% if list.media_orden %}
                                 <p>Media Orden:</p>
-
+                        
                                 {% endif %}
                                 {% if list.familiar %}
                                 <p>Pizza Familiar</p>
-
+                        
                                 {% endif %}
                                 {% if list.pizza_mitad %}
                                 Mitad:
@@ -183,21 +184,20 @@
                                 </p> {% endif %}
                             </td>
                             <td class="align-middle">
-
+                        
                                 <p class=" text-break">
-
+                        
                                     {{list.observaciones}}</p>
                             </td>
                             <td class="align-middle text-center d-none d-sm-table-cell" style="width: 200px;">
                                 {% if list.menu.categoria == "Pizza" %}
                                 {% if list.familiar %}
                                 {% if list.pizza_mitad %}
-                                {% if list.pizza_mitad.precioFamiliar < list.menu.precioFamiliar %}
-                                    ${{list.menu.precioFamiliar}} mxn {% else %} $ {{list.pizza_mitad.precioFamiliar}}
-                                    mxn {% endif %} {% else %} ${{list.menu.precioFamiliar}} mxn {% endif %} {% else %}
-                                    {% if list.pizza_mitad %} {% if list.pizza_mitad.precio < list.menu.precio %} $
-                                    {{list.menu.precio}} mxn {% else %} $ {{ list.pizza_mitad.precio }} mxm {% endif %}
-                                    {% else %} $ {{ list.menu.precio }} mxn {% endif %} {% endif %} {% else %} <!-- -->
+                                {% if list.pizza_mitad.precioFamiliar < list.menu.precioFamiliar %} ${{list.menu.precioFamiliar}} mxn {% else %}
+                                    $ {{list.pizza_mitad.precioFamiliar}} mxn {% endif %} {% else %} ${{list.menu.precioFamiliar}} mxn {% endif%} 
+                                    {% else %} {% if list.pizza_mitad %} {% if list.pizza_mitad.precio < list.menu.precio %} $
+                                    {{list.menu.precio}} mxn {% else %} $ {{ list.pizza_mitad.precio }} mxm {% endif %} {% else %} $ 
+                                    {{list.menu.precio }} mxn {% endif %} {% endif %} {% else %} <!-- -->
                                     {% if list.media_orden %} $ {{list.menu.mediaOrden}} mxn {% else %} $
                                     {{list.menu.precio}}
                                     mxn {% endif %} {% endif %} </td>
@@ -211,49 +211,86 @@
                                         ${{ ingrediente.precio }}
                                         {% endif %}
                                     </p>
-
+                        
                                 </div>
-
-
+                        
+                        
                                 {% endfor %}
                             </td>
                             <td class="align-middle  text-center">
-
-
+                        
+                        
                                 <div class="plus-minus-input">
                                     {% if venta.is_open %}
-
+                        
                                     <div class="input-group-button my-auto">
-
+                        
                                         <a onclick="incrementValue({{list.id}})" data-field="quantity1" class="p-1"
-                                            href="{% url 'Ventas:guardarCambios' venta.id list.id 'suma' %}"
-                                            id="plus{{list.id}}" class="btn"><i class="fa fa-plus text-primary"
-                                                aria-hidden="true"></i>
+                                            href="{% url 'Ventas:guardarCambios' venta.id list.id 'suma' %}" id="plus{{list.id}}" class="btn"><i
+                                                class="fa fa-plus text-primary" aria-hidden="true"></i>
                                         </a>
-
+                        
                                     </div>
                                     {% endif %}
-
-                                    <input class="input-group-field border rounded rounded-4 text-center" type="number"
-                                        name="quantity" value="{{list.cantidad}}" style="width: 50px;"
-                                        id="input{{list.id}}" disabled>
+                        
+                                    <input class="input-group-field border rounded rounded-4 text-center" type="number" name="quantity"
+                                        value="{{list.cantidad}}" style="width: 50px;" id="input{{list.id}}" disabled>
                                     {% if venta.is_open %}
                                     <div class="input-group-button my-auto">
-
+                        
                                         <a onclick="decrementValue({{list.id}})" data-field="quantity1" class="p-1"
-                                            href="{% url 'Ventas:guardarCambios' venta.id list.id 'resta' %}"
-                                            id="minus{{list.id}}" class="btn"><i class="fa fa-minus text-secondary"
-                                                aria-hidden="true"></i>
+                                            href="{% url 'Ventas:guardarCambios' venta.id list.id 'resta' %}" id="minus{{list.id}}"
+                                            class="btn"><i class="fa fa-minus text-secondary" aria-hidden="true"></i>
                                         </a>
                                     </div>
                                     {% endif %}
-
+                        
                                 </div>
                             </td>
                             <td class="align-middle text-center d-none d-sm-table-cell">
+                               
                                 $ {{list.totalfinal}}
                             </td>
                         </tr>
+                
+                                        <form action="{% url 'Ventas:updateRow' list.id venta.id %}" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                        <div class="modal fade" id="exampleModal{{list.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">Modificar {{list.menu.nombre}}</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+
+                                        <p>Menu</p>
+                                    {{publications.menu}}
+                                    <p>Cantidad</p>
+                                    {{publications.cantidad}}
+                                    <p>Observaciones</p>
+                                    {{publications.observaciones}}
+                                   <p>Extras</p>
+                                    {{publications.extras}}
+                                    <p>¿Es media orden?</p>
+                                    {{publications.media_orden}}
+                                    <p>¿Es un alimento familiar?</p>
+                                    {{publications.familiar}}
+                                        <p>Mitad de la otra pizza</p>
+                                    {{publications.pizza_mitad}}
+                              
+
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                        <button type="submit" class="btn btn-primary">Save changes</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                                                            </form>
+
                         {% endfor %}
 
 
