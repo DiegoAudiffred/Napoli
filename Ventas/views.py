@@ -10,6 +10,10 @@ from django.contrib.auth.decorators import user_passes_test,login_required
 from django.http import QueryDict
 from decimal import Decimal
 import re
+from reportlab.lib.pagesizes import letter
+from reportlab.lib.units import inch
+from reportlab.pdfgen import canvas
+import os
 
 def isAdmin(user):
     if user.rol == 'Admin':
@@ -221,8 +225,74 @@ def updateRow(request,lista,venta):
     return redirect('Ventas:modificarVenta',venta)
 
 
+def generar_pdf(id):
+    venta = Venta.objects.get(id=id)
+    pdf_file = "ticket" + str(id) +".pdf" 
+    row = VentaMenu.objects.filter(venta=venta)
+    alturaFinal = int(row.count() * 20 + 380)
+    pdf = canvas.Canvas(pdf_file, pagesize=(215, alturaFinal))
+    
+    pdf.setFont("Helvetica", 12)
+    line_start = 30
+    line_end = 180
+    pdf.drawString(line_start, alturaFinal - 60, "Napoli Ristorante y Pizzeria")
+    pdf.drawString(line_start, alturaFinal - 80, "C. 29 Sur 303, La Paz, 72160") 
+    pdf.drawString(line_start, alturaFinal - 100, "Heroica Puebla de Zaragoza")
+    pdf.drawString(line_start, alturaFinal - 120, "Teléfono: 222 621 9650")
+    pdf.drawString(line_start, alturaFinal - 140, "-----------------------------------------")
+    pdf.drawString(line_start, alturaFinal - 160, "Producto       Cantidad     Total")
+
+   # Posiciones iniciales y configuraciones
+    line_start = 30
+    alturaFor = alturaFinal - 180
+    var = 20
+    espacio_linea = 20  # Espacio vertical entre cada línea de producto
+
+    for products in row:
+        nombre = products.menu.nombre[:15]
+        cantidad = str(products.cantidad)
+        totalfinal = str(products.totalfinal)
+
+
+
+
+        pdf.drawString(line_start, alturaFor - var, nombre)
+        pdf.drawString(line_start+100, alturaFor - var, cantidad)
+        pdf.drawString(line_start+130, alturaFor - var, totalfinal)
+
+       
+        var += espacio_linea  
+    
+
+    alturaPostFor = alturaFor - var
+
+    pdf.drawString(line_start,alturaPostFor, "Total:")
+    pdf.drawString(line_start+130,alturaPostFor, str(venta.total))
+
+    pdf.drawString(line_start,alturaPostFor - 20 , "-----------------------------------------")
+    pdf.drawString(line_start,alturaPostFor- 40, "Gracias por su compra")
+    empleado = f"Atendido por: {venta.empleado}"
+    nventa = f"Venta num: {venta.id}"
+    fecha = f"Fecha: {venta.fecha_compra.strftime('%Y-%m-%d %H:%M:%S')}"
+  
+    pdf.drawString(line_start,alturaPostFor- 60, empleado)
+    pdf.drawString(line_start,alturaPostFor- 80, nventa)
+    pdf.drawString(line_start,alturaPostFor- 100, fecha)
+
+    pdf.drawString(line_start,alturaPostFor- 120, "Este ticket no es un comprobante")
+    pdf.drawString(line_start,alturaPostFor- 130, "fiscal")
+
+    pdf.showPage()
+    pdf.save()
+    os.startfile(pdf_file)
+   
 
 @login_required(login_url='authentication:login')
+
+def ticket(request,venta):
+    venta = Venta.objects.get(id=venta)
+    generar_pdf(venta.id)
+    return redirect('Ventas:ventasIndex')
 
 def cerrarVenta(request,id):
     venta = Venta.objects.get(id=id)
@@ -245,6 +315,8 @@ def cerrarVenta(request,id):
     venta.is_open= False
     venta.save()
     
+    
+    generar_pdf(venta.id)
     
     return redirect('Ventas:ventasIndex')
 @login_required(login_url='authentication:login')
