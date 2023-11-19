@@ -14,6 +14,13 @@ from reportlab.lib.pagesizes import letter
 from reportlab.lib.units import inch
 from reportlab.pdfgen import canvas
 import os
+import win32print
+import win32ui
+import os
+import win32api
+import PyPDF2
+import subprocess
+
 
 def isAdmin(user):
     if user.rol == 'Admin':
@@ -225,12 +232,46 @@ def updateRow(request,lista,venta):
     return redirect('Ventas:modificarVenta',venta)
 
 
+    # Configurar la impresora
+    printer_name = win32print.GetDefaultPrinter()
+    if not printer_name:
+        print("No se encontró ninguna impresora predeterminada.")
+        return
+
+    # Abrir el archivo PDF
+    try:
+        file_handle = open(pdf_file, "rb")
+    except IOError:
+        print(f"No se puede abrir el archivo {pdf_file}")
+        return
+
+    # Crear una impresora DC (Device Context)
+    hprinter = win32print.OpenPrinter(printer_name)
+    hdc = win32ui.CreateDC()
+    hdc.CreatePrinterDC(printer_name)
+
+    # Configurar los atributos de la impresión
+    raw_data = file_handle.read()
+    if hdc.StartDoc(pdf_file):
+        hdc.StartPage()
+        hdc.PlayMetaFileOnPrinter(hprinter, raw_data)
+        hdc.EndPage()
+        hdc.EndDoc()
+
+    # Cerrar los recursos
+    hdc.DeleteDC()
+    win32print.ClosePrinter(hprinter)
+    file_handle.close()
+
+
+
 def generar_pdf(id):
     venta = Venta.objects.get(id=id)
     pdf_file = "ticket" + str(id) +".pdf" 
     row = VentaMenu.objects.filter(venta=venta)
-    alturaFinal = int(row.count() * 20 + 380)
+    alturaFinal = int(row.count() * 20 + 450)
     pdf = canvas.Canvas(pdf_file, pagesize=(215, alturaFinal))
+    print(alturaFinal)
     
     pdf.setFont("Helvetica", 12)
     line_start = 30
@@ -239,8 +280,8 @@ def generar_pdf(id):
     pdf.drawString(line_start, alturaFinal - 80, "C. 29 Sur 303, La Paz, 72160") 
     pdf.drawString(line_start, alturaFinal - 100, "Heroica Puebla de Zaragoza")
     pdf.drawString(line_start, alturaFinal - 120, "Teléfono: 222 621 9650")
-    pdf.drawString(line_start, alturaFinal - 140, "-----------------------------------------")
-    pdf.drawString(line_start, alturaFinal - 160, "Producto       Cantidad     Total")
+    pdf.drawString(line_start, alturaFinal - 140, "--------------------------------")
+    pdf.drawString(line_start, alturaFinal - 160, "Producto        Cantidad   Total")
 
    # Posiciones iniciales y configuraciones
     line_start = 30
@@ -250,44 +291,75 @@ def generar_pdf(id):
 
     for products in row:
         nombre = products.menu.nombre[:15]
+        diff = 15 - len(nombre)
+        if len(nombre) < 15:
+            nombre += " " * (diff)
+        nombre += "     "
         cantidad = str(products.cantidad)
+        cantidad += "     " 
         totalfinal = str(products.totalfinal)
+        string = nombre + cantidad + totalfinal
+        pdf.drawString(line_start, alturaFor - var, string)
+        #pdf.drawString(line_start+100, alturaFor - var, cantidad)
+        #pdf.drawString(line_start+130, alturaFor - var, totalfinal)
 
-
-
-
-        pdf.drawString(line_start, alturaFor - var, nombre)
-        pdf.drawString(line_start+100, alturaFor - var, cantidad)
-        pdf.drawString(line_start+130, alturaFor - var, totalfinal)
-
-       
         var += espacio_linea  
     
-
     alturaPostFor = alturaFor - var
+    totalString= str(venta.total)
+    strintTotal = f"Total:                  {totalString}"
+    pdf.drawString(line_start,alturaPostFor, strintTotal)
 
-    pdf.drawString(line_start,alturaPostFor, "Total:")
-    pdf.drawString(line_start+130,alturaPostFor, str(venta.total))
-
-    pdf.drawString(line_start,alturaPostFor - 20 , "-----------------------------------------")
+    pdf.drawString(line_start,alturaPostFor - 20 , "--------------------------------")
     pdf.drawString(line_start,alturaPostFor- 40, "Gracias por su compra")
     empleado = f"Atendido por: {venta.empleado}"
     nventa = f"Venta num: {venta.id}"
     fecha = f"Fecha: {venta.fecha_compra.strftime('%Y-%m-%d %H:%M:%S')}"
-  
+    
     pdf.drawString(line_start,alturaPostFor- 60, empleado)
     pdf.drawString(line_start,alturaPostFor- 80, nventa)
     pdf.drawString(line_start,alturaPostFor- 100, fecha)
 
     pdf.drawString(line_start,alturaPostFor- 120, "Este ticket no es un comprobante")
-    pdf.drawString(line_start,alturaPostFor- 130, "fiscal")
+    pdf.drawString(line_start,alturaPostFor- 140, "Fiscal")
+    pdf.drawString(line_start,alturaPostFor- 180 , "--------------------------------")
+
 
     pdf.showPage()
     pdf.save()
-    os.startfile(pdf_file)
-   
+    #os.startfile(pdf_file)
+    file_path = f"C:\\Users\\D1360\\Documents\\Napoli\\{pdf_file}"  # Ruta completa del archivo PDF generado
+    print(file_path)
+    printer_name = win32print.GetDefaultPrinter()
+    print(f"Nombre de la impresora predeterminada: {printer_name}")
+    
+    with open(pdf_file, 'rb') as file:
+        pdf_reader = PyPDF2.PdfReader(file)
+        texto = ''
+        for page in pdf_reader.pages:
+            texto += page.extract_text()
+    print(texto)
+    #subprocess.Popen([r"C:\Program Files\Adobe\Acrobat DC\Acrobat\Acrobat.exe", "/t", file_path, printer_name])
+    printer_name = win32print.GetDefaultPrinter()
+    hPrinter = win32print.OpenPrinter(printer_name)
+    try:
+        hJob = win32print.StartDocPrinter(hPrinter, 1, ("Texto a imprimir", None, "RAW"))
+        print("parte1")
+        try:
+            win32print.StartPagePrinter(hPrinter)
+            win32print.WritePrinter(hPrinter, texto.encode('utf-8'))
+            win32print.EndPagePrinter(hPrinter)
+            print("parte2")
 
+        finally:
+            win32print.EndDocPrinter(hPrinter)
+    finally:
+        win32print.ClosePrinter(hPrinter)
+    
+    
+  
 @login_required(login_url='authentication:login')
+
 
 def ticket(request,venta):
     venta = Venta.objects.get(id=venta)
