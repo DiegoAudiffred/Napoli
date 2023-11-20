@@ -283,11 +283,12 @@ def generar_pdf(id):
     pdf.drawString(line_start, alturaFinal - 140, "--------------------------------")
   
 
-    pdf.drawString(line_start, alturaFinal - 160, "Producto        Cantidad   Total")
+    pdf.drawString(line_start, alturaFinal - 160, "Producto        Cantidad  Total")
+    pdf.drawString(line_start, alturaFinal - 170, "                                 ")
 
    # Posiciones iniciales y configuraciones
     line_start = 30
-    alturaFor = alturaFinal - 180
+    alturaFor = alturaFinal - 190
     var = 20
     espacio_linea = 20  # Espacio vertical entre cada línea de producto
 
@@ -296,18 +297,32 @@ def generar_pdf(id):
         diff = 15 - len(nombre)
         if len(nombre) < 15:
             nombre += " " * (diff)
-        nombre += "     "
+        
         cantidad = str(products.cantidad)
-        cantidad += "     " 
+        if products.cantidad >= 10:
+            nombre += "    "
+            
+        else:
+            nombre += "     "
+            
+        if products.totalfinal >=100 and products.totalfinal < 1000:
+            cantidad +="    "   
+            print("Entro", products.menu.nombre)
+        elif products.totalfinal >= 1000:
+            cantidad +="  "  
+        else:
+            cantidad +="     "   
+
         totalfinal = str(products.totalfinal)
         string = nombre + cantidad + totalfinal
         pdf.drawString(line_start, alturaFor - var, string)
-     
+        pdf.drawString(line_start, alturaFor - var + 10, "                                 ")
+
         var += espacio_linea  
     
     alturaPostFor = alturaFor - var
     totalString= str(venta.total)
-    strintTotal = f"Total:                   {totalString}"
+    strintTotal = f"Total:                  {totalString}"
     pdf.drawString(line_start,alturaPostFor, strintTotal)
 
     pdf.drawString(line_start,alturaPostFor - 20 , "--------------------------------")
@@ -326,15 +341,14 @@ def generar_pdf(id):
 
     pdf.drawString(line_start,alturaPostFor- 120, "Este ticket no es un comprobante")
     pdf.drawString(line_start,alturaPostFor- 140, "fiscal")
-    pdf.drawString(line_start,alturaPostFor- 180 , "--------------------------------")
+    pdf.drawString(line_start,alturaPostFor- 200 , "--------------------------------")
 
 
     pdf.showPage()
     pdf.save()
     #os.startfile(pdf_file)
  
-    printer_name = win32print.GetDefaultPrinter()
-    print(f"Nombre de la impresora predeterminada: {printer_name}")
+   
     
     with open(pdf_file, 'rb') as file:
         pdf_reader = PyPDF2.PdfReader(file)
@@ -353,7 +367,6 @@ def generar_pdf(id):
             win32print.WritePrinter(hPrinter, texto.encode('utf-8'))
             win32print.EndPagePrinter(hPrinter)
             print("parte2")
-
         finally:
             win32print.EndDocPrinter(hPrinter)
     finally:
