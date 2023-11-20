@@ -82,9 +82,7 @@
             <form action="{% url 'Ventas:addMesa' venta.id %}" method="POST" enctype="multipart/form-data"
                 id="user-profile-form2">
                 {% csrf_token %}
-                {% if venta.is_reopen %}
-                {{ venta.mesa }}
-                {% else %}
+              
                 <select class="form-select border border-0 shadow-none py-0" aria-label="Default select example"
                     id="selectMesa" name="mesa">
                     {% if venta.mesa %}
@@ -102,7 +100,7 @@
                     {% endif %}
 
                 </select>
-                {% endif %}
+          
                 <div class="d-none">
                     {{form3.mesa}}
 
