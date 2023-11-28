@@ -277,7 +277,7 @@ def generar_pdf(id):
     line_start = 30
     line_end = 180
     pdf.drawString(line_start, alturaFinal - 60, "Napoli Ristorante y Pizzeria")
-    pdf.drawString(line_start, alturaFinal - 80, "C. 29 Sur 303, La Paz, 72160") 
+    pdf.drawString(line_start, alturaFinal - 80, "C. 29 Sur 119, La Paz, 72160") 
     pdf.drawString(line_start, alturaFinal - 100, "Heroica Puebla de Zaragoza")
     pdf.drawString(line_start, alturaFinal - 120, "Teléfono: 222 621 9650")
     pdf.drawString(line_start, alturaFinal - 140, "--------------------------------")
@@ -335,13 +335,18 @@ def generar_pdf(id):
     
     fecha = f"Fecha: {venta.fecha_compra.strftime('%Y-%m-%d %H:%M:%S')}"
     
-    pdf.drawString(line_start,alturaPostFor- 60, empleado)
-    pdf.drawString(line_start,alturaPostFor- 80, nventa)
+    #pdf.drawString(line_start,alturaPostFor- 60, empleado)
+    #pdf.drawString(line_start,alturaPostFor- 80, nventa)
     pdf.drawString(line_start,alturaPostFor- 100, fecha)
 
     pdf.drawString(line_start,alturaPostFor- 120, "Este ticket no es un comprobante")
     pdf.drawString(line_start,alturaPostFor- 140, "fiscal")
-    pdf.drawString(line_start,alturaPostFor- 200 , "--------------------------------")
+    pdf.drawString(line_start,alturaPostFor- 160, "Para facturar mandar sus datos")
+    pdf.drawString(line_start,alturaPostFor- 160, "fiscales completos al correo: ")
+
+    
+    pdf.drawString(line_start,alturaPostFor- 160, "napoli10.facturacion@gmail.com")
+    pdf.drawString(line_start,0  , "--------------------------------")
 
 
     pdf.showPage()
