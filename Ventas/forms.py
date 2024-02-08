@@ -8,7 +8,7 @@ class createVentaForm(forms.ModelForm):
 
     class Meta:
         model = Venta
-        fields = ['cliente','empleado','total','fecha_compra', 'is_open']
+        fields = ['cliente','empleado','total','fecha_compra', 'is_open','mesa']
       
 
     def __init__(self, *args, **kwargs):
@@ -26,6 +26,9 @@ class createVentaForm(forms.ModelForm):
         
         self.fields['fecha_compra'].required = False
         self.fields['fecha_compra'].widget.attrs.update({'class':'form-control shadow-none bg-corporateTan200  px-2 py-1 text-primary','placeholder':' Categoría*','rows':'1', 'aria-label':'Username','aria-describedby':'basic-addon1','style':'border-left:none', })
+
+        self.fields['mesa'].required = False
+        self.fields['mesa'].widget.attrs.update({'class':'form-control shadow-none bg-corporateTan200  px-2 py-1 text-primary','placeholder':' Categoría*','rows':'1', 'aria-label':'Username','aria-describedby':'basic-addon1','style':'border-left:none', })
 
         self.fields['is_open'].required = False 
         self.fields['is_open'].default = True 

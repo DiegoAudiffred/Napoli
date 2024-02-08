@@ -1,0 +1,204 @@
+
+
+<div class="row">
+    <div class="col-12 border border-4">
+       <div class="row p-3 border border-3 border-primary">
+        <div class="col-1 p-0">
+  
+          
+
+             {% if 10 in mesasEnUso2%}   
+          
+            <a href="{% url 'Ventas:modificarVenta' 0 %}" class="btn border border-3 mb-3 bg-corporateYellow800 text-white" id="mesa10"
+                style="width: 100px;height: 100px; display: flex;  align-items: center;  justify-content: center;">
+                <b>8B</b>
+            </a>
+           
+             {% else %}
+                <form action=" {% url 'Ventas:ventasCrearMesa' '8B'%}" method="POST" enctype="multipart/form-data"
+                    id="user-profile-form">
+                    {% csrf_token %}
+                    <button class="btn border border-3 mb-3 bg-primary text-white" style="width: 100px;height: 100px;" id="mesa10"> <!-- Mesa8B -->
+                        <b>8B</b>
+                    </button>
+                </form>
+            {% endif %}
+
+            {% if 11 in mesasEnUso2%}
+            
+            <a href="{% url 'Ventas:modificarVenta' 0 %}" class="btn border border-3 mb-3 bg-corporateYellow800 text-white" id="mesa11"
+                style="width: 100px;height: 100px; display: flex;  align-items: center;  justify-content: center;">
+                <b>8A</b>
+            </a>
+            {% else %}
+            <form action=" {% url 'Ventas:ventasCrearMesa' '8A'%}" method="POST" enctype="multipart/form-data"
+                id="user-profile-form">
+                {% csrf_token %}
+                <button class="btn border border-3 mb-3 bg-primary text-white" style="width: 100px;height: 100px;" id="mesa11">
+                    <b>8A</b>
+                </button>
+            </form>
+            {% endif %}
+       
+        </div>
+
+
+
+ 
+
+        <div class="col-2 px-4">
+                {% if 9 in mesasEnUso2%}
+                
+                <a href="{% url 'Ventas:modificarVenta' 0 %}" class="btn border border-3 mb-3 bg-corporateYellow800 text-white"
+                    id="mesa9" style="width: 100px;height: 232px; display: flex;  align-items: center;  justify-content: center;">
+                    <b>8</b>
+                </a>
+                {% else %}
+                <form action=" {% url 'Ventas:ventasCrearMesa' '8'%}" method="POST" enctype="multipart/form-data"
+                    id="user-profile-form">
+                    {% csrf_token %}
+                    <button class="btn border border-3 mb-3 bg-primary text-white" style="width: 100px;height: 232px;" id="mesa9">
+                        <b>8</b>
+                    </button>
+                </form>
+                {% endif %}
+        
+        </div>
+
+
+
+        
+        <div class="col-2 px-4">
+            {% if 12 in mesasEnUso2%}
+            
+            <a href="{% url 'Ventas:modificarVenta' 0 %}" class="btn border border-3 mb-3 bg-corporateYellow800 text-white"
+                id="mesa12" style="width: 100px;height: 232px; display: flex;  align-items: center;  justify-content: center;">
+                <b>9</b>
+            </a>
+            {% else %}
+            <form action=" {% url 'Ventas:ventasCrearMesa' '9'%}" method="POST" enctype="multipart/form-data"
+                id="user-profile-form">
+                {% csrf_token %}
+                <button class="btn border border-3 mb-3 bg-primary text-white" style="width: 100px;height: 232px;" id="mesa12">
+                    <b>9</b>
+                </button>
+            </form>
+            {% endif %}
+        
+        </div>
+        <div class="col-1 p-0 ">
+            <button class="btn border border-3 mb-3" style="width: 100px;height: 100px;">
+                9B
+            </button>
+            <button class="btn border border-3 mt-3" style="width: 100px;height: 100px;">
+                9A
+            </button>
+        </div>
+        <div class="col-5 ">
+
+        </div>
+        
+ 
+
+
+        <div class="col-1 p-0 ">
+                    <button class="btn border border-3 mb-4" style="width: 100px;height: 100px;">
+                        1A
+                    </button>
+                    <button class="btn border border-3 mb-4 " style="width: 100px;height: 100px;">
+                        1B
+                    </button>
+                   
+                
+                </div>
+   
+        <div class="col-2 p-0 px-2 my-2">
+            <button class="btn border border-3" style="width: 100px;height: 100px;">
+                7
+            </button>
+    
+        </div>
+        <div class="col-2 p-0 px-2 my-2">
+            <button class="btn border border-3" style="width: 100px;height: 100px;">
+                6
+            </button>
+    
+        </div>
+        <div class="col-2 p-0 px-2 my-2 ">
+            <button class="btn border border-3" style="width: 100px;height: 100px;">
+                5
+            </button>
+    
+        </div>
+    <div class="col-2">
+    
+    </div>
+<div class="col-1  p-0 me-3">
+    <button class="btn border border-3" style="width: 100px;height: 100px;">
+        4
+    </button>
+
+</div>
+
+<div class="col-1 p-0 me-3">
+    <button class="btn border border-3" style="width: 100px;height: 100px;">
+        3
+    </button>
+
+</div>
+<div class="col-1 p-0">
+    <button class="btn border border-3" style="width: 100px;height: 100px;">
+        2
+    </button>
+
+</div>
+       </div>
+
+      
+        <div class="row p-3 border-bottom border-end border-start border-3 border-primary">
+                <div class="col-1 p-0 text-center">
+                <button class="btn border border-3 mb-3"  style="width: 100px;height: 100px;">
+                    6B
+                </button>
+                <button class="btn border border-3 mt-3"  style="width: 100px;height: 100px;">
+                    6A
+                </button>
+            </div>
+            <div class="col-2 text-center">
+                <button class="btn border border-3 "  style="width: 100px;height: 232px;">
+                    T6
+                </button>
+           
+            </div>
+          
+                <div class="col-2 text-center">
+                <button class="btn border border-3 mb-3 " style="width: 100px;height: 100px;">
+                    T7
+                </button>
+                <button class="btn border border-3 mt-3"  style="width: 100px;height: 100px;">
+                    T5
+                </button>
+            </div>
+            <div class="col-3 ">
+            
+            </div>
+            <div class="col-2 text-center">
+                    <button class="btn border border-3 mb-3" style="width: 100px;height: 100px;">
+                        T1
+                    </button>
+                    <button class="btn border border-3 mt-3" style="width: 100px;height: 100px;">
+                        T4
+                    </button>
+            </div>
+          
+            <div class="col-2 text-center">
+                    <button class="btn border border-3 mb-3" style="width: 100px;height: 100px;">
+                       T2
+                    </button>
+                    <button class="btn border border-3 mt-3" style="width: 100px;height: 100px;">
+                        T3
+                    </button>
+            </div>
+       </div>
+    </div>
+</div>

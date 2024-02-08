@@ -1,21 +1,12 @@
 {% extends 'layout/layout.html' %}
 {% load static %}
 {% block body %}
-
 <div class="container min-vh-100 px-4">
-    <div class="row pt-5 pb-3">
+        <div class="row pt-5 pb-3">
         <div class="col-xl-3 col-md-4 col-12 my-auto">
-            <h1 class="text-quinto">Ventas abiertas</h1>
+            <h1 class="text-quinto">Ventas</h1>
         </div>
-        <div class="col-xl-2 col-md-4 col-6 my-auto">
-            <form action=" {% url 'Ventas:ventasCrear' user.id%}" method="POST" enctype="multipart/form-data"
-                id="user-profile-form">
-                {% csrf_token %}
-                <button class="btn rounded rounded-3  bg-tercero text-white w-100 py-2" type="submit">Crear
-                    Venta </button>
-
-            </form>
-        </div>
+    
         {% if user.rol == "Admin" or user.rol == "Dueña/o"%}
 
         <div class="col-xl-2 col-md-4 col-6 my-auto">
@@ -25,6 +16,20 @@
         {% endif %}
 
     </div>
+                    {% include 'Ventas/map.html' %}
+
+
+</div>
+<div class="container min-vh-100 px-4">
+    <div class="col-xl-2 col-md-4 col-6 my-auto">
+            <form action=" " method="POST" enctype="multipart/form-data"
+                id="user-profile-form"> <!-- { url 'Ventas:ventasCrear' user.id} -->
+                {% csrf_token %}
+                <button class="btn rounded rounded-3  bg-tercero text-white w-100 py-2" type="submit">Crear
+                    Venta </button>
+
+            </form>
+        </div>
     <div class="row">
 
         {% for venta in ventas %}
@@ -95,10 +100,37 @@
         </div>
         {% endfor %}
 
-
+       
     </div>
 
 </div>
 
+<script>
+window.onload = function() {
+   var listaTuplas = [
+            {% for tupla in mesasEnUso %}
+                [{{ tupla.0 }}, {{ tupla.1 }}],
+            {% endfor %}
+        ];
+        for (var i = 0; i < listaTuplas.length; i++) {
+            console.log(listaTuplas[i]);
+        }
+        
+var modificarVentaUrl=""
+    for(var i = 0; i < listaTuplas.length;i++){
+        enlaceMesa = document.getElementById('mesa'+listaTuplas[i][0])
+        modificarVentaUrl = "{% url 'Ventas:modificarVenta' 999 %}".replace("999", listaTuplas[i][1]);
+        enlaceMesa.href = modificarVentaUrl
+
+       
+    
+    }    
+
+
+
+};
+
+    
+</script>
 
 {% endblock %}

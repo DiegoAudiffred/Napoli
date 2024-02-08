@@ -20,7 +20,8 @@ import os
 import win32api
 import PyPDF2
 import subprocess
-
+from django.core.files import File
+from io import BytesIO
 
 def isAdmin(user):
     if user.rol == 'Admin':
@@ -38,8 +39,24 @@ def ventasIndex(request):
     form3 = modifyMesaForm()
     ventas = Venta.objects.filter(is_open=True).order_by('-fecha_compra')
     user = request.user
+   # Assuming ventas is a queryset or list of Venta objects
+  
+   
+    mesasEnUso2 = []
+    i = 0
+    mesasEnUso = []
+    mesas = Mesa.objects.all()
+    for mesa in mesas:
+        if mesa.ocupada:
+            ventaActual = Venta.objects.get(mesa = mesa,is_open = True)
+            mesasEnUso.append((mesa.id,ventaActual.id))
+            mesasEnUso2.append(mesa.id)
+            
 
-    return render(request, 'Ventas/indexVentas.html',{'form':form,'ventas':ventas,'form2':form2,'form3':form3,'user':user})
+    print(mesasEnUso)
+  
+
+    return render(request, 'Ventas/indexVentas.html',{'mesasEnUso2':mesasEnUso2,'mesasEnUso':mesasEnUso,'form':form,'ventas':ventas,'form2':form2,'form3':form3,'user':user})
 
 @login_required(login_url='authentication:login')
 
@@ -120,8 +137,10 @@ def menuRow2(request):
 
 @login_required(login_url='authentication:login')
 
+
+
+
 def modificarVenta(request,id):
-   
    
     venta = Venta.objects.get(id=id)
     mesas = Mesa.objects.all()
@@ -132,9 +151,7 @@ def modificarVenta(request,id):
     publications=[]
     for lst in lista:
             publications.append(modifyVentaMenuOrder(instance=lst))
-
-
-        
+  
     user = request.user
     total2 = 0
     for total in lista:
@@ -149,6 +166,37 @@ def modificarVenta(request,id):
     form4 = modifyVentaMenuOrder()
 
     return render(request, 'Ventas/modificarVentas.html',{'venta':venta,'lista':zip(lista,publications),'form':form,'form2':form2,'form3':form3,'form4':form4,'total':total2,'user':user,'mesas':mesas,'menu':menu}) 
+
+#def modificarVenta(request,mesa):
+#    mesaVenta = Mesa.objects.get(nombre = mesa)
+#    print(mesaVenta)
+#
+#    venta = Venta.objects.get(mesa = mesaVenta,is_open = True)
+#    print(venta)
+#
+#    mesas = Mesa.objects.all()
+#    
+#    menu = Menu.objects.all()
+#    lista = VentaMenu.objects.filter(venta=venta.id)
+#    print(lista)
+#    publications=[]
+#    for lst in lista:
+#            publications.append(modifyVentaMenuOrder(instance=lst))
+#  
+#    user = request.user
+#    total2 = 0
+#    for total in lista:
+#        total2 += total.totalfinal
+#        print(total)
+#        print(total2,"acumulado")
+#    venta.total = total2
+#    venta.save()
+#    form = modifyVentaForm(instance=venta) #Cliente
+#    form2 = VentaMenuForm() #Venta
+#    form3 = modifyMesaForm() #Mesa
+#    form4 = modifyVentaMenuOrder()
+#
+#    return render(request, 'Ventas/modificarVentas.html',{'venta':venta,'lista':zip(lista,publications),'form':form,'form2':form2,'form3':form3,'form4':form4,'total':total2,'user':user,'mesas':mesas,'menu':menu}) 
 
 
 @login_required(login_url='authentication:login')
@@ -376,7 +424,8 @@ def generar_pdf(id):
             win32print.EndDocPrinter(hPrinter)
     finally:
         win32print.ClosePrinter(hPrinter)
-    
+   
+
     
   
 @login_required(login_url='authentication:login')
@@ -391,7 +440,9 @@ def cerrarVenta(request,id):
     venta = Venta.objects.get(id=id)
     cliente = venta.cliente
     lista = VentaMenu.objects.filter(venta=id)
-    
+    mesa = venta.mesa
+    mesa.ocupada=False
+    mesa.save()
     total2 = 0
     for total in lista:
         total2 += total.totalfinal
@@ -409,8 +460,13 @@ def cerrarVenta(request,id):
     venta.save()
     
     
-    generar_pdf(venta.id)
     
+
+    generar_pdf(venta.id)
+
+    
+    
+    #venta.ticket = generar_pdf(venta.id)
     return redirect('Ventas:ventasIndex')
 @login_required(login_url='authentication:login')
 
@@ -558,15 +614,43 @@ def agregarVenta(request, id):
 
 @login_required(login_url='authentication:login')
 
-def ventasCrear(request,id):
+#def ventasCrear(request,id):
+#    if request.method == "POST":
+#        form = createVentaForm(request.POST, request.FILES)
+#   
+#        if form.is_valid():
+#            user = form.save()
+#            user.empleado = request.user
+#            user.cliente = Cliente.objects.get(id=1)
+#
+#            user.is_open = True
+#            user.save()
+#                      
+#
+#            
+#            return redirect("Ventas:ventasIndex")
+#        else:
+#            return render(request, 'Ventas/ventasIndex.html',{'form':form})
+#          
+#
+#    form = createVentaForm()
+#
+#    return redirect("Ventas:ventasIndex")
+#
+#
+@login_required(login_url='authentication:login')
+
+def ventasCrearMesa(request,mesa):
     if request.method == "POST":
         form = createVentaForm(request.POST, request.FILES)
    
         if form.is_valid():
             user = form.save()
-            user.empleado = User.objects.get(id=id)
-            user.cliente = Cliente.objects.get(id=1)
-
+            user.empleado = request.user
+            user.mesa = Mesa.objects.get(nombre = mesa)
+            mesa2 = Mesa.objects.get(nombre = mesa)
+            mesa2.ocupada = True
+            mesa2.save()
             user.is_open = True
             user.save()
                       

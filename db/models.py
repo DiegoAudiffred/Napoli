@@ -216,8 +216,9 @@ class Extras(models.Model):
 
 class Mesa(models.Model):
     nombre = models.CharField(max_length=20)
-    def __str__(self):
-        return self.nombre
+    ocupada = models.BooleanField(default=False)
+    
+  
 class Venta(models.Model):
     cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE,blank=True,null=True)
     empleado = models.ForeignKey(User, on_delete=models.CASCADE,blank=True,null=True)
@@ -227,6 +228,7 @@ class Venta(models.Model):
     is_open = models.BooleanField(default=True)
     is_reopen = models.BooleanField(default=False)
     bool_factura = models.BooleanField(default=False)
+    ticket = models.FileField(upload_to='pdf',null=True,blank=True)
 
 class VentaMenu(models.Model):
     venta = models.ForeignKey(Venta, on_delete=models.CASCADE)
