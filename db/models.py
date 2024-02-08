@@ -217,7 +217,9 @@ class Extras(models.Model):
 class Mesa(models.Model):
     nombre = models.CharField(max_length=20)
     ocupada = models.BooleanField(default=False)
-    
+    def __str__(self):
+        return self.nombre
+
   
 class Venta(models.Model):
     cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE,blank=True,null=True)

@@ -352,19 +352,33 @@ def generar_pdf(id):
             
         else:
             nombre += "     "
-            
+        
         if products.totalfinal >=100 and products.totalfinal < 1000:
             cantidad +="    "   
             print("Entro", products.menu.nombre)
         elif products.totalfinal >= 1000:
             cantidad +="  "  
         else:
-            cantidad +="     "   
-
+            cantidad +="     " 
+              
+        ing = []
         totalfinal = str(products.totalfinal)
         string = nombre + cantidad + totalfinal
         pdf.drawString(line_start, alturaFor - var, string)
-        pdf.drawString(line_start, alturaFor - var + 10, "                                 ")
+        
+        if products.extras.exists():
+            for extra in products.extras.all():
+                ing.append(extra.nombre)
+                
+        try:
+            pdf.drawString(line_start, alturaFor - var + 10, ing[0])
+            pdf.drawString(line_start, alturaFor - var + 20, ing[1])
+            pdf.drawString(line_start, alturaFor - var + 30, ing[2])
+            pdf.drawString(line_start, alturaFor - var + 40, ing[3])
+
+        except:
+            print("")
+        pdf.drawString(line_start, alturaFor - var + 50, "                                 ")
 
         var += espacio_linea  
     
@@ -640,30 +654,32 @@ def agregarVenta(request, id):
 #
 @login_required(login_url='authentication:login')
 
-def ventasCrearMesa(request,mesa):
+def ventasCrearMesa(request, mesa):
     if request.method == "POST":
-        form = createVentaForm(request.POST, request.FILES)
-   
-        if form.is_valid():
-            user = form.save()
-            user.empleado = request.user
-            user.mesa = Mesa.objects.get(nombre = mesa)
-            mesa2 = Mesa.objects.get(nombre = mesa)
-            mesa2.ocupada = True
-            mesa2.save()
-            user.is_open = True
-            user.save()
-                      
+        mesa_ocupada = Mesa.objects.filter(nombre=mesa, ocupada=True).exists()
 
-            
-            return redirect("Ventas:ventasIndex")
+        form = createVentaForm(request.POST, request.FILES)
+
+        if form.is_valid():
+            if not mesa_ocupada:
+                user = form.save(commit=False)
+                user.empleado = request.user
+                user.mesa = Mesa.objects.get(nombre=mesa)
+                mesa2 = Mesa.objects.get(nombre=mesa)
+                mesa2.ocupada = True
+                mesa2.save()
+                user.is_open = True
+                user.save()
+                id = user.id
+                return redirect("Ventas:modificarVenta", id=id)
+            else:
+                pass
         else:
-            return render(request, 'Ventas/ventasIndex.html',{'form':form})
-          
+            return render(request, 'Ventas/ventasIndex.html', {'form': form})
 
     form = createVentaForm()
-
     return redirect("Ventas:ventasIndex")
+
 @login_required(login_url='authentication:login')
 
 def ventasTodas(request):

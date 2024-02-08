@@ -1,6 +1,8 @@
 {% extends 'layout/layout.html' %}
 {% load static %}
 {% block body %}
+
+
 <div class="container min-vh-100 px-4">
         <div class="row pt-5 pb-3">
         <div class="col-xl-3 col-md-4 col-12 my-auto">
@@ -20,10 +22,11 @@
 
 
 </div>
-<div class="container min-vh-100 px-4">
+<!-- 
+    <div class="container min-vh-100 px-4">
     <div class="col-xl-2 col-md-4 col-6 my-auto">
             <form action=" " method="POST" enctype="multipart/form-data"
-                id="user-profile-form"> <!-- { url 'Ventas:ventasCrear' user.id} -->
+                id="user-profile-form"> <!-- { url 'Ventas:ventasCrear' user.id} 
                 {% csrf_token %}
                 <button class="btn rounded rounded-3  bg-tercero text-white w-100 py-2" type="submit">Crear
                     Venta </button>
@@ -91,10 +94,6 @@
             </div>
         </div>
 
-        <!-- Button trigger modal -->
-
-        <!-- Modal -->
-        {% empty %}
         <div class=" col-sm-12 my-3">
             <h2>No hay ventas abiertas por el momento </h2>
         </div>
@@ -104,6 +103,7 @@
     </div>
 
 </div>
+ -->
 
 <script>
 window.onload = function() {

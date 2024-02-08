@@ -53,9 +53,20 @@
             <ul class="list-group list-group-flush">
 
 
-                <li class="list-group-item bg-cuarto" style="height: 100px;"> {{empleado.descripcion}}</li>
 
-                <li class="list-group-item bg-cuarto">${{empleado.precio}} mxn</li>
+                <li class="list-group-item bg-cuarto">Precio normal${{empleado.precio}} mxn</li>
+                
+                {% if empleado.categoria == 'Entradas' or empleado.categoria == 'Pastas' or empleado.categoria == 'Ensaladas' %}
+                <li class="list-group-item bg-cuarto">Media Orden: ${{empleado.mediaOrden}} mxn</li>
+                {% endif %}
+
+                {% if empleado.categoria == 'Pizza' %}
+                <li class="list-group-item bg-cuarto">Familiar: ${{empleado.precioFamiliar}} mxn</li>
+                {% endif %}
+
+
+
+                
                 <li class="list-group-item bg-cuarto">{{empleado.categoria}}</li>
             </ul>
 
