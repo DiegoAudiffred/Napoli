@@ -141,7 +141,8 @@ def menuRow2(request):
 
 
 def modificarVenta(request,id):
-   
+
+
     venta = Venta.objects.get(id=id)
     mesas = Mesa.objects.all()
     
@@ -452,31 +453,27 @@ def ticket(request,venta):
 
 def cerrarVenta(request,id):
     venta = Venta.objects.get(id=id)
-    cliente = venta.cliente
-    lista = VentaMenu.objects.filter(venta=id)
-    mesa = venta.mesa
-    mesa.ocupada=False
-    mesa.save()
-    total2 = 0
-    for total in lista:
-        total2 += total.totalfinal
-    venta.total = total2
-    venta.save()
-    
+    if venta.is_open:
+        cliente = venta.cliente
+        lista = VentaMenu.objects.filter(venta=id)
+        mesa = venta.mesa
+        mesa.ocupada=False
+        mesa.save()
+        total2 = 0
+        for total in lista:
+            total2 += total.totalfinal
+        venta.total = total2
+        venta.save()
+        #if venta.is_reopen == False:
+        #    cliente.total_compras +=  1
+        #    cliente.total_gastado += total
+        #cliente.save()
+        venta.is_reopen = True
+        venta.is_open= False
+        venta.save()
 
-    #if venta.is_reopen == False:
-    #    cliente.total_compras +=  1
-    #    cliente.total_gastado += total
-    #cliente.save()
-    
-    venta.is_reopen = True
-    venta.is_open= False
-    venta.save()
-    
-    
-    
-
-    generar_pdf(venta.id)
+        generar_pdf(venta.id)
+  
 
     
     

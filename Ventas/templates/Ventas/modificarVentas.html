@@ -20,9 +20,22 @@
     }
 }
 
-    
-</style>
+    .checkbox-label {
+    cursor: pointer;
+}
 
+.checkbox-highlight {
+    background-color: orangered;
+    color:  white;
+}
+
+</style>
+<script>
+    function highlightLabel(label) {
+            label.classList.toggle('checkbox-highlight');
+        }
+
+</script>
 <div class="container min-vh-100  py-4">
  
   <div class="row my-2">
@@ -325,10 +338,157 @@
 
                 </table>
                 <div class="container"> <!-- Contenedor  -->
+
+<div id="menu-container" class="d-none">
+    <div class="row">
+
+        <h2>Entradas</h2>
+        <div class="row">
+            {% for men in menu %}
+        {% if men.categoria == "Entradas" %}
+        <div class="col-3 py-2">
+            <input type="checkbox" id="platillo_{{ men.id }}" name="platillo" value="{{ men.id }}" style="display: none;">
+            <label for="platillo_{{ men.id }}" class="checkbox-label w-100" onclick="highlightLabel(this)">
+                <img src="{{ men.url.url }}" alt="{{ men.nombre }}" width="50px" height="50px">
+                {{ men.nombre }}
+            </label><br>
+        </div>
+        {% endif %}
+
+            {% endfor %}
+        </div>
+    </div>
+    <div class="row">
+
+        <h2>Ensaladas</h2>
+        <div class="row">
+            {% for men in menu %}
+            {% if men.categoria == "Ensaladas" %}
+            <div class="col-3 py-2">
+                <input type="checkbox" id="platillo_{{ men.id }}" name="platillo" value="{{ men.id }}" style="display: none;">
+                <label for="platillo_{{ men.id }}" class="checkbox-label w-100" onclick="highlightLabel(this)">
+                    <img src="{{ men.url.url }}" alt="{{ men.nombre }}" width="50px" height="50px">
+                    {{ men.nombre }}
+                </label><br>
+            </div>
+            {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+    <div class="row">
+
+        <h2>Pastas</h2>
+        <div class="row">
+            {% for men in menu %}
+            {% if men.categoria == "Pastas" %}
+            <div class="col-3 py-2">
+                <input type="checkbox" id="platillo_{{ men.id }}" name="platillo" value="{{ men.id }}" style="display: none;">
+                <label for="platillo_{{ men.id }}" class="checkbox-label w-100" onclick="highlightLabel(this)">
+                    <img src="{{ men.url.url }}" alt="{{ men.nombre }}" width="50px" height="50px">
+                    {{ men.nombre }}
+                </label><br>
+            </div>
+            {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+    <div class="row">
+
+        <h2>Carnes</h2>
+        <div class="row">
+            {% for men in menu %}
+            {% if men.categoria == "Carnes" %}
+            <div class="col-3 py-2">
+                <input type="checkbox" id="platillo_{{ men.id }}" name="platillo" value="{{ men.id }}" style="display: none;">
+                <label for="platillo_{{ men.id }}" class="checkbox-label w-100" onclick="highlightLabel(this)">
+                    <img src="{{ men.url.url }}" alt="{{ men.nombre }}" width="50px" height="50px">
+                    {{ men.nombre }}
+                </label><br>
+            </div>
+            {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+    <div class="row">
+
+        <h2>Postres</h2>
+        <div class="row">
+            {% for men in menu %}
+            {% if men.categoria == "Postres" %}
+            <div class="col-3 py-2">
+                <input type="checkbox" id="platillo_{{ men.id }}" name="platillo" value="{{ men.id }}" style="display: none;">
+                <label for="platillo_{{ men.id }}" class="checkbox-label w-100" onclick="highlightLabel(this)">
+                    <img src="{{ men.url.url }}" alt="{{ men.nombre }}" width="50px" height="50px">
+                    {{ men.nombre }}
+                </label><br>
+            </div>
+            {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+    <div class="row">
+
+        <h2>Bebidas</h2>
+        <div class="row">
+            {% for men in menu %}
+                {% if men.categoria == "Bebidas" %}
+                <div class="col-3 py-2">
+                    <input type="checkbox" id="platillo_{{ men.id }}" name="platillo" value="{{ men.id }}" style="display: none;">
+                    <label for="platillo_{{ men.id }}" class="checkbox-label w-100" onclick="highlightLabel(this)">
+                        <img src="{{ men.url.url }}" alt="{{ men.nombre }}" width="50px" height="50px">
+                        {{ men.nombre }}
+                    </label><br>
+                </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+    <div class="row">
+
+        <h2>Pizza</h2>
+        <div class="row">
+            {% for men in menu %}
+            {% if men.categoria == "Pizza" %}
+            <div class="col-3 py-2">
+                <input type="checkbox" id="platillo_{{ men.id }}" name="platillo" value="{{ men.id }}" style="display: none;">
+                <label for="platillo_{{ men.id }}" class="checkbox-label w-100" onclick="highlightLabel(this)">
+                    <img src="{{ men.url.url }}" alt="{{ men.nombre }}" width="50px" height="50px">
+                    {{ men.nombre }}
+                </label><br>
+            </div>
+            {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+    <div class="row">
+
+        <h2>Especialidad</h2>
+        <div class="row">
+            {% for men in menu %}
+            {% if men.categoria == "Especialidad" %}
+            <div class="col-3 py-2">
+                <input type="checkbox" id="platillo_{{ men.id }}" name="platillo" value="{{ men.id }}" style="display: none;">
+                <label for="platillo_{{ men.id }}" class="checkbox-label w-100" onclick="highlightLabel(this)">
+                    <img src="{{ men.url.url }}" alt="{{ men.nombre }}" width="50px" height="50px">
+                    {{ men.nombre }}
+                </label><br>
+            </div>
+            {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
                     <div id="dynamic-forms-container">
 
                     </div>
-                 
+                    
                 </div>
             </div>
 
@@ -340,7 +500,7 @@
             <button onclick="agregarFormulario()" class="btn btn-tercero text-white w-100">Agregar a venta (avanzado)</button>
         </div>
          <div class="col-6 col-md-3 text-center">
-            <button onclick="" class="btn btn-tercero text-white w-100">Desplegar menu</button>
+            <button onclick="showMenu()" class="btn btn-tercero text-white w-100">Desplegar menu</button>
         </div>
         <div class="col-6 col-md-2 text-center">
             <form action="{% url 'Ventas:cerrarVenta' venta.id %}" method="POST" enctype="multipart/form-data"
@@ -389,7 +549,8 @@
             </form>
         </div>
         <div class="col-md-2">
-        <button id="submit-all-forms-button" class="btn btn-quinto text-white  w-100" type="submit">Enviar orden</button>
+        <button id="submit-all-forms-button" class="btn btn-quinto text-white  w-100 d-none" type="submit">Enviar orden</button>
+        <button id="submit-form" class="btn btn-quinto text-white  w-100 d-none" type="submit">Enviar orden</button>
 
         </div>
       
@@ -653,6 +814,8 @@
             });
         });
 
+
+
 </script>
 
 <script>
@@ -665,8 +828,11 @@
  var formCounter = 0; 
 
     function agregarFormulario() {
+        
         formCounter++; 
-
+        if (formCounter > 0)
+            document.getElementById("submit-all-forms-button").classList.remove("d-none");
+       
         var formClone = $("#formVenta").clone();
         
     formClone.find("input, select, textarea, ul, a , span, img,li,button").val("");
@@ -722,6 +888,9 @@
 
         deleteButton.on("click", function () {
             formClone.remove(); 
+            formCounter--
+            if (formCounter == 0)
+                document.getElementById("submit-all-forms-button").classList.add("d-none");
         });
         formClone.append(deleteButton);
 
@@ -738,7 +907,7 @@
       
 <script>
 
-
+    menuBandera = false;
   
    
     function show(element) {
@@ -820,6 +989,21 @@
         }
 
 
+    }
+
+    function showMenu(){
+        menu= document.getElementById("menu-container")
+
+        if (menuBandera == false){ 
+        menu.classList.remove('d-none')
+        menu.classList.add('d-block')
+            menuBandera = true  
+            
+        } else {
+            menu.classList.remove('d-block')
+            menu.classList.add('d-none')
+            menuBandera = false
+        }
     }
 
     function setNombre3(id,element) {
