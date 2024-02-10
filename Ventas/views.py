@@ -157,31 +157,35 @@ def modificarVenta(request,id):
 
 
     venta = Venta.objects.get(id=id)
-    mesas = Mesa.objects.all()
+    mesaactual = venta.mesa
+    if not mesaactual.ocupada:
+        return redirect('Ventas:ventasIndex')
+    else: 
+        mesas = Mesa.objects.all()
     
-    menu = Menu.objects.all()
-    lista = VentaMenu.objects.filter(venta=id)
+        menu = Menu.objects.all()
+        lista = VentaMenu.objects.filter(venta=id)
+
+        publications=[]
+        for lst in lista:
+                publications.append(modifyVentaMenuOrder(instance=lst))
     
-    publications=[]
-    for lst in lista:
-            publications.append(modifyVentaMenuOrder(instance=lst))
-  
-    user = request.user
-    total2 = 0
-    for total in lista:
-        total2 += total.totalfinal
-        print(total)
-        print(total2,"acumulado")
-    venta.total = total2
-    venta.save()
-    form = modifyVentaForm(instance=venta) #Cliente
-    form2 = VentaMenuForm() #Venta
-    form3 = modifyMesaForm() #Mesa
-    form4 = modifyVentaMenuOrder()
+        user = request.user
+        total2 = 0
+        for total in lista:
+            total2 += total.totalfinal
+            print(total)
+            print(total2,"acumulado")
+        venta.total = total2
+        venta.save()
+        form = modifyVentaForm(instance=venta) #Cliente
+        form2 = VentaMenuForm() #Venta
+        form3 = modifyMesaForm() #Mesa
+        form4 = modifyVentaMenuOrder()
 
-    return render(request, 'Ventas/modificarVentas.html',{'venta':venta,'lista':zip(lista,publications),'form':form,'form2':form2,'form3':form3,'form4':form4,'total':total2,'user':user,'mesas':mesas,'menu':menu}) 
+        return render(request, 'Ventas/modificarVentas.html',{'venta':venta,'lista':zip(lista,publications),'form':form,'form2':form2,'form3':form3,'form4':form4,'total':total2,'user':user,'mesas':mesas,'menu':menu}) 
 
-#def modificarVenta(request,mesa):
+#def  modificarVenta(request,mesa):
 #    mesaVenta = Mesa.objects.get(nombre = mesa)
 #    print(mesaVenta)
 #
@@ -215,115 +219,98 @@ def modificarVenta(request,id):
 
 @login_required(login_url='authentication:login')
 def updateRow(request,lista,venta):
-    row = VentaMenu.objects.get(id=lista)
-    total = 0
-    totalIndv = 0
-    print(row)
+        row = VentaMenu.objects.get(id=lista)
+        total = 0
+        totalIndv = 0
+        print(row)
+        if request.method == "POST":
+            form = modifyVentaMenuOrder(request.POST, instance=row)
+            if form.is_valid():
+                platillo = form.cleaned_data['menu']
+                familiar = form.cleaned_data['familiar']
+                pizza_mitad = form.cleaned_data['pizza_mitad']
+                familiar = form.cleaned_data['familiar']
+                cantidad = form.cleaned_data['cantidad']
+                media_orden = form.cleaned_data['media_orden']
+                extras=form.cleaned_data['extras']
+
+                if platillo.categoria == "Pizza":
+                    print("Pizza pizza")
+                    if familiar:
+                        print("Familiar")
+                        if pizza_mitad:
+                            print("Mitad")
+                            if pizza_mitad.precioFamiliar < platillo.precioFamiliar:
+                                print("La cara es la ")    
+                                totalIndv += (platillo.precioFamiliar) 
+                                total += (pizza_mitad.precioFamiliar) * cantidad
+
+                            else:
+                                totalIndv += (pizza_mitad.precioFamiliar)
+                                total += (pizza_mitad.precioFamiliar) * cantidad
+
+                        else:
+                            totalIndv += (platillo.precioFamiliar)
+                            total += (pizza_mitad.precioFamiliar) * cantidad
+
+                    else:
+                        if pizza_mitad: 
+                            if pizza_mitad.precio < platillo.precio:
+                                totalIndv += (platillo.precio)
+                                total += (platillo.precio) * cantidad
+
+                            else:
+                            
+                                totalIndv += (pizza_mitad.precio)
+                                total += (pizza_mitad.precio) * cantidad                            
+
+
+                        else:
+                                totalIndv += (platillo.precio)
+                                total += (platillo.precio) * cantidad  
+
+                elif media_orden == True: #Mediaorden
+                        totalIndv += (platillo.mediaOrden)
+                        total += (platillo.mediaOrden) * cantidad  
+
+                else: #Compra normal
+                    totalIndv += (platillo.precio)
+                    total += (platillo.precio) * cantidad  
+
+                listaextras = Extras.objects.all()
+                for i,list in enumerate(listaextras):
+                    if listaextras[i] in extras:
+                        total += listaextras[i].precio * cantidad
+                        totalIndv += listaextras[i].precio
+                        print("Entro", listaextras[i] )
+
+
+                form.instance.totalfinal = total
+                form.instance.final = totalIndv
+
+                print(total)
+                print(totalIndv)   
+                form.save()
+
+
+    
+        return redirect('Ventas:modificarVenta',venta)
+
+
+    
+@login_required(login_url='authentication:login')
+def updateRow2(request, list):
+    row = VentaMenu.objects.get(id=list)
+    venta = row.venta
     if request.method == "POST":
         form = modifyVentaMenuOrder(request.POST, instance=row)
         if form.is_valid():
-            platillo = form.cleaned_data['menu']
-            familiar = form.cleaned_data['familiar']
-            pizza_mitad = form.cleaned_data['pizza_mitad']
-            familiar = form.cleaned_data['familiar']
-            cantidad = form.cleaned_data['cantidad']
-            media_orden = form.cleaned_data['media_orden']
-            extras=form.cleaned_data['extras']
-
-            if platillo.categoria == "Pizza":
-                print("Pizza pizza")
-                if familiar:
-                    print("Familiar")
-                    if pizza_mitad:
-                        print("Mitad")
-                        if pizza_mitad.precioFamiliar < platillo.precioFamiliar:
-                            print("La cara es la ")    
-                            totalIndv += (platillo.precioFamiliar) 
-                            total += (pizza_mitad.precioFamiliar) * cantidad
-
-                        else:
-                            totalIndv += (pizza_mitad.precioFamiliar)
-                            total += (pizza_mitad.precioFamiliar) * cantidad
-
-                    else:
-                        totalIndv += (platillo.precioFamiliar)
-                        total += (pizza_mitad.precioFamiliar) * cantidad
-
-                else:
-                    if pizza_mitad: 
-                        if pizza_mitad.precio < platillo.precio:
-                            totalIndv += (platillo.precio)
-                            total += (platillo.precio) * cantidad
-
-                        else:
-                  
-                            totalIndv += (pizza_mitad.precio)
-                            total += (pizza_mitad.precio) * cantidad                            
-                            
-                            
-                    else:
-                            totalIndv += (platillo.precio)
-                            total += (platillo.precio) * cantidad  
-        
-            elif media_orden == True: #Mediaorden
-                    totalIndv += (platillo.mediaOrden)
-                    total += (platillo.mediaOrden) * cantidad  
-
-            else: #Compra normal
-                totalIndv += (platillo.precio)
-                total += (platillo.precio) * cantidad  
-         
-            listaextras = Extras.objects.all()
-            for i,list in enumerate(listaextras):
-                if listaextras[i] in extras:
-                    total += listaextras[i].precio * cantidad
-                    totalIndv += listaextras[i].precio
-                    print("Entro", listaextras[i] )
-
-
-            form.instance.totalfinal = total
-            form.instance.final = totalIndv
-       
-            print(total)
-            print(totalIndv)   
             form.save()
-          
-
     else:
-            print(form.errors)
-    return redirect('Ventas:modificarVenta',venta)
+        form = modifyVentaMenuOrder(instance=row)
+    return render(request, 'Ventas/modificarRow.html', {'row': row, 'venta': venta, 'form': form})
 
 
-    # Configurar la impresora
-    printer_name = win32print.GetDefaultPrinter()
-    if not printer_name:
-        print("No se encontró ninguna impresora predeterminada.")
-        return
-
-    # Abrir el archivo PDF
-    try:
-        file_handle = open(pdf_file, "rb")
-    except IOError:
-        print(f"No se puede abrir el archivo {pdf_file}")
-        return
-
-    # Crear una impresora DC (Device Context)
-    hprinter = win32print.OpenPrinter(printer_name)
-    hdc = win32ui.CreateDC()
-    hdc.CreatePrinterDC(printer_name)
-
-    # Configurar los atributos de la impresión
-    raw_data = file_handle.read()
-    if hdc.StartDoc(pdf_file):
-        hdc.StartPage()
-        hdc.PlayMetaFileOnPrinter(hprinter, raw_data)
-        hdc.EndPage()
-        hdc.EndDoc()
-
-    # Cerrar los recursos
-    hdc.DeleteDC()
-    win32print.ClosePrinter(hprinter)
-    file_handle.close()
 
 
 

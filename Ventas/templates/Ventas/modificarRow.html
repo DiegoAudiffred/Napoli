@@ -1,0 +1,40 @@
+
+
+{% extends 'layout/layout.html' %}
+{% load static %}
+{% block body %}
+<div class="container my-4">
+    <div class="row">
+        <div class="col-12">
+    <h5>Modificar  {{row.menu.nombre}}</h5>
+    <form action="{% url 'Ventas:updateRow' row.id venta.id %}" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                 
+                                 
+                                    
+                                   
+
+                                     <p>Menu</p>
+                                     {{form.menu}}
+                                     <p>Cantidad</p>
+                                     {{form.cantidad}}
+                                     <p>Observaciones</p>
+                                     {{form.observaciones}}
+                                        <p>Extras</p>
+                                     {{form.extras}}
+                                     <p>¿Es media orden?</p>
+                                     {{form.media_orden}}
+                                     <p>¿Es un alimento familiar?</p>
+                                     {{form.familiar}}
+                                         <p>Mitad de la otra pizza</p>
+                                     {{form.pizza_mitad}}
+                              
+
+                        <button type="submit">Actualizar</button>
+                                                            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

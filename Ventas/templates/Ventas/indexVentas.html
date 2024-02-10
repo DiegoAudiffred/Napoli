@@ -7,6 +7,7 @@
         <div class="row pt-5 pb-3">
         <div class="col-xl-3 col-md-4 col-12 my-auto">
             <h1 class="text-quinto">Ventas</h1>
+            
         </div>
     
         {% if user.rol == "Admin" or user.rol == "Dueña/o"%}
@@ -15,8 +16,71 @@
             <a href="{% url 'Ventas:ventasTodas'%}"> <button class="btn rounded rounded-3  bg-quinto text-white w-100 py-2">Buscar
             Venta</button> </a>
         </div>
+
+
+
         {% endif %}
 
+    </div>
+
+    <div class="row">
+<div class="col-2">
+      {% if 26 in mesasEnUso2%}   
+          
+            <a href="{% url 'Ventas:modificarVenta' 0 %}" class="btn border border-3 mb-3 bg-corporateYellow800 text-white" id="mesa26"
+                style="width: 100px;height: 100px; display: flex;  align-items: center;  justify-content: center;">
+                <b>Para llevar 1</b>
+            </a>
+           
+             {% else %}
+                <form action=" {% url 'Ventas:ventasCrearMesa' 'Para llevar 1'%}" method="POST" enctype="multipart/form-data"
+                    id="user-profile-form">
+                    {% csrf_token %}
+                    <button class="btn border border-3 mb-3 bg-primary text-white" style="width: 100px;height: 100px;" id="mesa26"> <!-- Mesa8B -->
+                        <b>Para llevar 1</b>
+                    </button>
+                </form>
+            {% endif %}
+           
+
+</div>
+<div class="col-2">
+  {% if 27 in mesasEnUso2%}   
+          
+            <a href="{% url 'Ventas:modificarVenta' 0 %}" class="btn border border-3 mb-3 bg-corporateYellow800 text-white" id="mesa27"
+                style="width: 100px;height: 100px; display: flex;  align-items: center;  justify-content: center;">
+                <b>Para llevar 2</b>
+            </a>
+           
+             {% else %}
+                <form action=" {% url 'Ventas:ventasCrearMesa' 'Para llevar 2'%}" method="POST" enctype="multipart/form-data"
+                    id="user-profile-form">
+                    {% csrf_token %}
+                    <button class="btn border border-3 mb-3 bg-primary text-white" style="width: 100px;height: 100px;" id="mesa27"> <!-- Mesa8B -->
+                        <b>Para llevar 2</b>
+                    </button>
+                </form>
+            {% endif %}
+        
+</div>
+<div class="col-2">
+     {% if 28 in mesasEnUso2%}   
+          
+            <a href="{% url 'Ventas:modificarVenta' 0 %}" class="btn border border-3 mb-3 bg-corporateYellow800 text-white" id="mesa28"
+                style="width: 100px;height: 100px; display: flex;  align-items: center;  justify-content: center;">
+                <b>Para llevar 3</b>
+            </a>
+           
+             {% else %}
+                <form action=" {% url 'Ventas:ventasCrearMesa' 'Para llevar 3'%}" method="POST" enctype="multipart/form-data"
+                    id="user-profile-form">
+                    {% csrf_token %}
+                    <button class="btn border border-3 mb-3 bg-primary text-white" style="width: 100px;height: 100px;" id="mesa28"> <!-- Mesa8B -->
+                        <b>Para llevar 3</b>
+                    </button>
+                </form>
+            {% endif %}
+</div>
     </div>
                     {% include 'Ventas/map.html' %}
 
