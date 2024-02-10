@@ -75,11 +75,24 @@ def addCliente(request,id):
 
 def addMesa(request,id):
     venta = Venta.objects.get(id=id)
+    mesa = Mesa.objects.get(nombre = venta.mesa)
     if request.method == 'POST':
         form = modifyMesaForm (request.POST, instance=venta)  # Inicializar el formulario con los datos POST
         if form.is_valid():
-            user = form.save()
-            user.save()
+            mesa_value = form.cleaned_data['mesa']
+            
+            mesa_value2 = Mesa.objects.get(nombre=mesa_value)
+
+            if mesa_value2.ocupada:
+                pass
+            else:
+                user = form.save()
+                user.save()
+               
+                mesa_value2.ocupada = True
+                mesa.ocupada = False
+            mesa_value2.save()
+            mesa.save()
         else:
             print(form.errors)
             return redirect('Ventas:modificarVenta',id)
@@ -744,3 +757,39 @@ def cambiarFactura(request,id):
             compras.save()
 
         return redirect("Ventas:modificarVenta",id)
+    
+    
+@login_required(login_url='authentication:login')
+def agregarPlatillosVenta(request,id):
+    print(id)
+    venta = Venta.objects.get(id=id)
+    print(venta)
+
+    if request.method == 'POST':
+        platillos_ids = request.POST.get('platillosIds').split(',')
+
+        for platillo_id in platillos_ids:
+            menu = Menu.objects.get(id=platillo_id)
+            final = menu.precio
+            totalfinal = final
+            form = VentaMenuForm({
+            'venta': venta,
+            'menu': menu,
+            'cantidad': 1,
+            'observaciones': "",
+            'familiar': False,
+            'media_orden': False,
+            'pizza_mitad': "",
+            'totalfinal':totalfinal,
+            'extras':"",
+            'final':final})
+            if form.is_valid():    
+                data = form.cleaned_data
+                data = form.save()
+            else:
+                print(form.errors)
+        
+
+            
+        return redirect('Ventas:modificarVenta',id)
+

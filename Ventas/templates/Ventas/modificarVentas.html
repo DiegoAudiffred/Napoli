@@ -31,9 +31,23 @@
 
 </style>
 <script>
-    function highlightLabel(label) {
-            label.classList.toggle('checkbox-highlight');
+    var listaPlatillos = [];
+
+    function highlightLabel(label, idPlatillo) {
+        label.classList.toggle('checkbox-highlight');
+
+        // Verifica si el platillo está en la lista
+        var index = listaPlatillos.indexOf(idPlatillo);
+
+        // Si no está en la lista, lo agregamos
+        if (index === -1) {
+            listaPlatillos.push(idPlatillo);
+        } else { // Si está en la lista, lo eliminamos
+            listaPlatillos.splice(index, 1);
         }
+
+        console.log(listaPlatillos); // Muestra la lista en la consola para depuración
+    }
 
 </script>
 <div class="container min-vh-100  py-4">
@@ -101,19 +115,11 @@
               
                 <select class="form-select border border-0 shadow-none py-0" aria-label="Default select example"
                     id="selectMesa" name="mesa">
-                    {% if venta.mesa %}
                     {% for mesa in mesas %}
                     <option {% if venta.mesa == mesa %} selected {% endif %} value="{{ mesa.id }}">{{ mesa.nombre }}
                     </option>
                     {% endfor %}
-                    {% else %}
-                    <option selected value="0">NA
-                    </option>
-                    {% for mesa in mesas %}
-                    <option value="{{ mesa.id }}">{{ mesa.nombre }}
-                    </option>
-                    {% endfor %}
-                    {% endif %}
+                  
 
                 </select>
           
@@ -344,18 +350,18 @@
 
         <h2>Entradas</h2>
         <div class="row">
-            {% for men in menu %}
-        {% if men.categoria == "Entradas" %}
-        <div class="col-3 py-2">
-            <input type="checkbox" id="platillo_{{ men.id }}" name="platillo" value="{{ men.id }}" style="display: none;">
-            <label for="platillo_{{ men.id }}" class="checkbox-label w-100" onclick="highlightLabel(this)">
-                <img src="{{ men.url.url }}" alt="{{ men.nombre }}" width="50px" height="50px">
-                {{ men.nombre }}
-            </label><br>
-        </div>
-        {% endif %}
+    {% for men in menu %}
+    {% if men.categoria == "Entradas" %}
+    <div class="col-3 py-2">
+        <input type="checkbox" id="platillo_{{ men.id }}" name="platillo" value="{{ men.id }}" style="display: none;">
+        <label for="platillo_{{ men.id }}" class="checkbox-label w-100" onclick="highlightLabel(this, {{ men.id }})">
+            <img src="{{ men.url.url }}" alt="{{ men.nombre }}" width="50px" height="50px">
+            {{ men.nombre }}
+        </label><br>
+    </div>
+    {% endif %}
+    {% endfor %}
 
-            {% endfor %}
         </div>
     </div>
     <div class="row">
@@ -366,7 +372,7 @@
             {% if men.categoria == "Ensaladas" %}
             <div class="col-3 py-2">
                 <input type="checkbox" id="platillo_{{ men.id }}" name="platillo" value="{{ men.id }}" style="display: none;">
-                <label for="platillo_{{ men.id }}" class="checkbox-label w-100" onclick="highlightLabel(this)">
+                <label for="platillo_{{ men.id }}" class="checkbox-label w-100" onclick="highlightLabel(this, {{ men.id }})">
                     <img src="{{ men.url.url }}" alt="{{ men.nombre }}" width="50px" height="50px">
                     {{ men.nombre }}
                 </label><br>
@@ -383,7 +389,7 @@
             {% if men.categoria == "Pastas" %}
             <div class="col-3 py-2">
                 <input type="checkbox" id="platillo_{{ men.id }}" name="platillo" value="{{ men.id }}" style="display: none;">
-                <label for="platillo_{{ men.id }}" class="checkbox-label w-100" onclick="highlightLabel(this)">
+                <label for="platillo_{{ men.id }}" class="checkbox-label w-100" onclick="highlightLabel(this, {{ men.id }})">
                     <img src="{{ men.url.url }}" alt="{{ men.nombre }}" width="50px" height="50px">
                     {{ men.nombre }}
                 </label><br>
@@ -400,7 +406,7 @@
             {% if men.categoria == "Carnes" %}
             <div class="col-3 py-2">
                 <input type="checkbox" id="platillo_{{ men.id }}" name="platillo" value="{{ men.id }}" style="display: none;">
-                <label for="platillo_{{ men.id }}" class="checkbox-label w-100" onclick="highlightLabel(this)">
+                <label for="platillo_{{ men.id }}" class="checkbox-label w-100" onclick="highlightLabel(this, {{ men.id }})">
                     <img src="{{ men.url.url }}" alt="{{ men.nombre }}" width="50px" height="50px">
                     {{ men.nombre }}
                 </label><br>
@@ -417,7 +423,7 @@
             {% if men.categoria == "Postres" %}
             <div class="col-3 py-2">
                 <input type="checkbox" id="platillo_{{ men.id }}" name="platillo" value="{{ men.id }}" style="display: none;">
-                <label for="platillo_{{ men.id }}" class="checkbox-label w-100" onclick="highlightLabel(this)">
+                <label for="platillo_{{ men.id }}" class="checkbox-label w-100" onclick="highlightLabel(this, {{ men.id }})">
                     <img src="{{ men.url.url }}" alt="{{ men.nombre }}" width="50px" height="50px">
                     {{ men.nombre }}
                 </label><br>
@@ -430,17 +436,17 @@
 
         <h2>Bebidas</h2>
         <div class="row">
-            {% for men in menu %}
-                {% if men.categoria == "Bebidas" %}
-                <div class="col-3 py-2">
-                    <input type="checkbox" id="platillo_{{ men.id }}" name="platillo" value="{{ men.id }}" style="display: none;">
-                    <label for="platillo_{{ men.id }}" class="checkbox-label w-100" onclick="highlightLabel(this)">
-                        <img src="{{ men.url.url }}" alt="{{ men.nombre }}" width="50px" height="50px">
-                        {{ men.nombre }}
-                    </label><br>
-                </div>
-                {% endif %}
-            {% endfor %}
+        {% for men in menu %}
+        {% if men.categoria == "Bebidas" %}
+        <div class="col-3 py-2">
+            <input type="checkbox" id="platillo_{{ men.id }}" name="platillo" value="{{ men.id }}" style="display: none;">
+            <label for="platillo_{{ men.id }}" class="checkbox-label w-100" onclick="highlightLabel(this, {{ men.id }})">
+                <img src="{{ men.url.url }}" alt="{{ men.nombre }}" width="50px" height="50px">
+                {{ men.nombre }}
+            </label><br>
+        </div>
+        {% endif %}
+        {% endfor %}
         </div>
     </div>
     <div class="row">
@@ -451,7 +457,7 @@
             {% if men.categoria == "Pizza" %}
             <div class="col-3 py-2">
                 <input type="checkbox" id="platillo_{{ men.id }}" name="platillo" value="{{ men.id }}" style="display: none;">
-                <label for="platillo_{{ men.id }}" class="checkbox-label w-100" onclick="highlightLabel(this)">
+                <label for="platillo_{{ men.id }}" class="checkbox-label w-100" onclick="highlightLabel(this, {{ men.id }})">
                     <img src="{{ men.url.url }}" alt="{{ men.nombre }}" width="50px" height="50px">
                     {{ men.nombre }}
                 </label><br>
@@ -464,17 +470,17 @@
 
         <h2>Especialidad</h2>
         <div class="row">
-            {% for men in menu %}
-            {% if men.categoria == "Especialidad" %}
-            <div class="col-3 py-2">
-                <input type="checkbox" id="platillo_{{ men.id }}" name="platillo" value="{{ men.id }}" style="display: none;">
-                <label for="platillo_{{ men.id }}" class="checkbox-label w-100" onclick="highlightLabel(this)">
-                    <img src="{{ men.url.url }}" alt="{{ men.nombre }}" width="50px" height="50px">
-                    {{ men.nombre }}
-                </label><br>
-            </div>
-            {% endif %}
-            {% endfor %}
+        {% for men in menu %}
+        {% if men.categoria == "Especialidad" %}
+        <div class="col-3 py-2">
+            <input type="checkbox" id="platillo_{{ men.id }}" name="platillo" value="{{ men.id }}" style="display: none;">
+            <label for="platillo_{{ men.id }}" class="checkbox-label w-100" onclick="highlightLabel(this, {{ men.id }})">
+                <img src="{{ men.url.url }}" alt="{{ men.nombre }}" width="50px" height="50px">
+                {{ men.nombre }}
+            </label><br>
+        </div>
+        {% endif %}
+        {% endfor %}
         </div>
     </div>
 </div>
@@ -550,7 +556,24 @@
         </div>
         <div class="col-md-2">
         <button id="submit-all-forms-button" class="btn btn-quinto text-white  w-100 d-none" type="submit">Enviar orden</button>
-        <button id="submit-form" class="btn btn-quinto text-white  w-100 d-none" type="submit">Enviar orden</button>
+
+        <form id="platillosForm" action="{% url 'Ventas:agregarPlatillosVenta' venta.id %}" method="POST">
+            {% csrf_token %}
+            <input type="hidden" id="platillosIds" name="platillosIds">
+            <button id="submit-form" class="btn btn-quinto text-white  w-100 d-none" type="submit">Enviar orden</button>
+        </form>
+
+<script>
+    document.getElementById('platillosForm').addEventListener('submit', function (event) {
+            event.preventDefault(); 
+            var platillosIds = listaPlatillos.join(',');
+
+            document.getElementById('platillosIds').value = platillosIds;
+
+            this.submit();
+        });
+
+</script>
 
         </div>
       
@@ -993,15 +1016,18 @@
 
     function showMenu(){
         menu= document.getElementById("menu-container")
+        boton = document.getElementById("submit-form")
 
         if (menuBandera == false){ 
         menu.classList.remove('d-none')
-        menu.classList.add('d-block')
+            boton.classList.remove('d-none')
+
             menuBandera = true  
             
         } else {
-            menu.classList.remove('d-block')
             menu.classList.add('d-none')
+            boton.classList.add('d-none')
+
             menuBandera = false
         }
     }
@@ -1108,5 +1134,12 @@
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
+<script>
+
+    function addToList(){
+
+
+    }
+</script>
 
 {% endblock %}
