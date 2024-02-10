@@ -154,13 +154,13 @@ def menuRow2(request):
 
 
 def modificarVenta(request,id):
+   
 
-
-    venta = Venta.objects.get(id=id)
-    mesaactual = venta.mesa
-    if not mesaactual.ocupada:
-        return redirect('Ventas:ventasIndex')
-    else: 
+        venta = Venta.objects.get(id=id)
+        print(id)
+        print(venta)
+        mesaactual = venta.mesa
+    
         mesas = Mesa.objects.all()
     
         menu = Menu.objects.all()
@@ -250,8 +250,11 @@ def updateRow(request,lista,venta):
                                 total += (pizza_mitad.precioFamiliar) * cantidad
 
                         else:
+                            print(f"Total:{platillo}")
+                            print(f"cantidad:{pizza_mitad}")
+                           
                             totalIndv += (platillo.precioFamiliar)
-                            total += (pizza_mitad.precioFamiliar) * cantidad
+                            total += (platillo.precioFamiliar) * cantidad
 
                     else:
                         if pizza_mitad: 
@@ -300,6 +303,8 @@ def updateRow(request,lista,venta):
     
 @login_required(login_url='authentication:login')
 def updateRow2(request, list):
+    pizzas = Menu.objects.filter(categoria="Pizza")
+    print(pizzas)
     row = VentaMenu.objects.get(id=list)
     venta = row.venta
     if request.method == "POST":
@@ -308,7 +313,7 @@ def updateRow2(request, list):
             form.save()
     else:
         form = modifyVentaMenuOrder(instance=row)
-    return render(request, 'Ventas/modificarRow.html', {'row': row, 'venta': venta, 'form': form})
+    return render(request, 'Ventas/modificarRow.html', {'row': row, 'venta': venta, 'form': form,'pizzas':pizzas})
 
 
 
@@ -680,10 +685,20 @@ def ventasCrearMesa(request, mesa):
 @login_required(login_url='authentication:login')
 
 def ventasTodas(request):
+     
+  
+    ventasPasadas = []
+    ventas = Venta.objects.filter(is_open = False)
+    for venta in ventas:
+        
+            ventasPasadas.append(venta.id)
+       
+            
+
+    print(ventas)
 
 
-
-    return render(request, 'Ventas/ventasTodas.html',)
+    return render(request, 'Ventas/ventasTodas.html',{'ventas':ventas,'ventasPasadas':ventasPasadas})
 
 def ventasCard(request):
     jsonObject = json.load(request)['jsonBody']

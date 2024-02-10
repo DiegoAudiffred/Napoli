@@ -30,7 +30,7 @@
 
                 </li>
                 <li class="list-group-item d-flex justify-content-end align-items-center px-0 bg-cuarto">
-                    <a href="{% url 'Ventas:modificarVenta' venta.id %}" class="card-link btn text-white btn-quinto">Ver
+                    <a href="{% url 'Ventas:modificarVenta' '0' %}" class="card-link btn text-white btn-quinto" id="venta_{venta.id}">Ver
                         cuenta
                     </a>
                 </li>
@@ -48,3 +48,4 @@
     <h2>No se pudieron encontrar ventas </h2>
 </div>
 {% endfor %}
+

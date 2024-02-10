@@ -3,36 +3,84 @@
 {% extends 'layout/layout.html' %}
 {% load static %}
 {% block body %}
+
+<style>
+    .checkbox-large {
+    transform: scale(4); /* Aumenta el tamaño del checkbox */
+}
+
+</style>
 <div class="container my-4">
     <div class="row">
-        <div class="col-12">
-    <h5>Modificar  {{row.menu.nombre}}</h5>
-    <form action="{% url 'Ventas:updateRow' row.id venta.id %}" method="POST" enctype="multipart/form-data">
-                {% csrf_token %}
+             <h1>Modificar  {{row.menu.nombre}}</h1>
+                    <form action="{% url 'Ventas:updateRow' row.id venta.id %}" method="POST" enctype="multipart/form-data">
+                          {% csrf_token %}
 
-                 
-                                 
-                                    
+                      
+                                <div class="col-6">
+                                    <h3>Platillo del Menu</h3>
+                                 </div>
+                                 <div class="col-6">
+                                    {{form.menu}}
+                                 </div>
+                                    <div class="col-6">
+                                    <h3>Cambiar Cantidad</h3>
+                                 </div>
+                                 <div class="col-6">
+
+                                 </div>
+                                 <div class="col-6">
+                                    {{form.cantidad}}
+                                 </div>
+                                    <div class="col-6">
+                                    <h3>Añadir Observaciones</h3>
+                                 </div> 
+                                 <div class="col-6">
+                                    {{form.observaciones}}
+                                 </div>
+                                    <div class="col-6">
+                                    <h3>Añadir Extras</h3>
+                                 </div>
+                                 <div class="col-6">
+                                    {{form.extras}}
+                                 </div>
+
+                                       <div class="col-6">
+                                    <h3>Hacer media orden</h3>
+                                 </div>
+                                 <div class="col-6">
+                                    {{form.media_orden}}
+                                 </div>
+                                    <div class="col-6">
+                                    <h3>Hacer familiar</h3>
+                                 </div>
+                                 <div class="col-6">
+                                    {{form.familiar}}
+                                 </div>
+                                <div class="col-6">
+                                    <h3>Añadir mitad de la otra pizza</h3>
+                                 </div>
+                                 <div class="col-6">
+                                <select name="pizza_mitad" id="id_pizza_mitad">
+    <option value="">Seleccionar Pizza Mitad</option>
+    {% for pizza in pizzas %}
+        <option value="{{ pizza.id }}">{{ pizza.nombre }}</option>
+    {% endfor %}
+</select>
+                                 </div>
                                    
 
-                                     <p>Menu</p>
-                                     {{form.menu}}
-                                     <p>Cantidad</p>
-                                     {{form.cantidad}}
-                                     <p>Observaciones</p>
-                                     {{form.observaciones}}
-                                        <p>Extras</p>
-                                     {{form.extras}}
-                                     <p>¿Es media orden?</p>
-                                     {{form.media_orden}}
-                                     <p>¿Es un alimento familiar?</p>
-                                     {{form.familiar}}
-                                         <p>Mitad de la otra pizza</p>
-                                     {{form.pizza_mitad}}
-                              
+                                    
+                                     
+                            
+                                      
 
-                        <button type="submit">Actualizar</button>
-                                                            </form>
+
+
+                        <button type="submit" class="btn bg-primary my-3 text-white py-2">Actualizar</button>
+                                        
+                               
+                </form>
         </div>
     </div>
 </div>

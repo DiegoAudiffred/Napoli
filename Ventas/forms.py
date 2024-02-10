@@ -172,7 +172,8 @@ class modifyVentaMenuOrder(forms.ModelForm):
         self.fields['extras'].widget.attrs.update({'class':'form-control shadow-none bg-corporateTan200  px-2 py-1 text-primary','placeholder':' Ingredientes*','rows':'1', 'aria-label':'Username','aria-describedby':'basic-addon1','style':'border-left:none', })
         self.fields['extras'].widget = forms.CheckboxSelectMultiple()
         self.fields['extras'].queryset = Extras.objects.all()
-
+        self.fields['media_orden'].widget.attrs.update({'class':'checkbox-large my-3 ms-4'})
+        self.fields['familiar'].widget.attrs.update({'class':'checkbox-large my-3 ms-4'})
     class Meta:
         model = VentaMenu
         fields = ['menu','cantidad','totalfinal','observaciones','extras','media_orden','familiar','pizza_mitad','final']

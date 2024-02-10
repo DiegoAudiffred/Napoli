@@ -1,6 +1,7 @@
 {% extends 'layout/layout.html' %}
 {% load static %}
 {% block body %}
+
 <link rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -94,5 +95,25 @@
 
     }
 
+    window.onload = function() {
+        var ventas = [
+            {% for venta in ventasPasadas %}
+                {{ venta }},
+            {% endfor %}
+        ]
+        for (var i = 0; i < ventas.length; i++) {
+            console.log(ventas[i]);
+        }
+
+        
+        var modificarVentaUrl="";
+         for(var i = 0; i < ventas.length;i++){
+        enlaceMesa = document.getElementById('venta_'+ventas[i])
+        modificarVentaUrl = "{% url 'Ventas:modificarVenta' 999 %}".replace("999", ventas[i]);
+        enlaceMesa.href = modificarVentaUrl
+        console.log(enlaceMesa)
+    }
+}
 </script>
+
 {% endblock %}
