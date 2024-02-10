@@ -3,8 +3,8 @@
 {% block body %}
 
 
-<div class="container min-vh-100 px-4">
-        <div class="row pt-5 pb-3">
+<div class="container min-vh-100 px-4 my-4">
+        <div class="row">
         <div class="col-xl-3 col-md-4 col-12 my-auto">
             <h1 class="text-quinto">Ventas</h1>
             
@@ -27,8 +27,8 @@
 <div class="col-2">
       {% if 26 in mesasEnUso2%}   
           
-            <a href="{% url 'Ventas:modificarVenta' 0 %}" class="btn border border-3 mb-3 bg-corporateYellow800 text-white" id="mesa26"
-                style="width: 100px;height: 100px; display: flex;  align-items: center;  justify-content: center;">
+            <a href="{% url 'Ventas:modificarVenta' 0 %}" class="btn border border-3 mb-3 bg-corporateYellow800 text-white w-100" id="mesa26"
+                style=" display: flex;  align-items: center;  justify-content: center;">
                 <b>Para llevar 1</b>
             </a>
            
@@ -36,7 +36,7 @@
                 <form action=" {% url 'Ventas:ventasCrearMesa' 'Para llevar 1'%}" method="POST" enctype="multipart/form-data"
                     id="user-profile-form">
                     {% csrf_token %}
-                    <button class="btn border border-3 mb-3 bg-primary text-white" style="width: 100px;height: 100px;" id="mesa26"> <!-- Mesa8B -->
+                    <button class="btn border border-3 mb-3 bg-primary text-white w-100"  id="mesa26"> <!-- Mesa8B -->
                         <b>Para llevar 1</b>
                     </button>
                 </form>
@@ -47,8 +47,8 @@
 <div class="col-2">
   {% if 27 in mesasEnUso2%}   
           
-            <a href="{% url 'Ventas:modificarVenta' 0 %}" class="btn border border-3 mb-3 bg-corporateYellow800 text-white" id="mesa27"
-                style="width: 100px;height: 100px; display: flex;  align-items: center;  justify-content: center;">
+            <a href="{% url 'Ventas:modificarVenta' 0 %}" class="btn border border-3 mb-3 bg-corporateYellow800 text-white w-100" id="mesa27"
+                style=" display: flex;  align-items: center;  justify-content: center;">
                 <b>Para llevar 2</b>
             </a>
            
@@ -56,7 +56,7 @@
                 <form action=" {% url 'Ventas:ventasCrearMesa' 'Para llevar 2'%}" method="POST" enctype="multipart/form-data"
                     id="user-profile-form">
                     {% csrf_token %}
-                    <button class="btn border border-3 mb-3 bg-primary text-white" style="width: 100px;height: 100px;" id="mesa27"> <!-- Mesa8B -->
+                    <button class="btn border border-3 mb-3 bg-primary text-white w-100"  id="mesa27"> <!-- Mesa8B -->
                         <b>Para llevar 2</b>
                     </button>
                 </form>
@@ -66,8 +66,8 @@
 <div class="col-2">
      {% if 28 in mesasEnUso2%}   
           
-            <a href="{% url 'Ventas:modificarVenta' 0 %}" class="btn border border-3 mb-3 bg-corporateYellow800 text-white" id="mesa28"
-                style="width: 100px;height: 100px; display: flex;  align-items: center;  justify-content: center;">
+            <a href="{% url 'Ventas:modificarVenta' 0 %}" class="btn border border-3 mb-3 bg-corporateYellow800 text-white w-100" id="mesa28"
+                style=" display: flex;  align-items: center;  justify-content: center;">
                 <b>Para llevar 3</b>
             </a>
            
@@ -75,12 +75,71 @@
                 <form action=" {% url 'Ventas:ventasCrearMesa' 'Para llevar 3'%}" method="POST" enctype="multipart/form-data"
                     id="user-profile-form">
                     {% csrf_token %}
-                    <button class="btn border border-3 mb-3 bg-primary text-white" style="width: 100px;height: 100px;" id="mesa28"> <!-- Mesa8B -->
+                    <button class="btn border border-3 mb-3 bg-primary text-white w-100"  id="mesa28"> <!-- Mesa8B -->
                         <b>Para llevar 3</b>
                     </button>
                 </form>
             {% endif %}
+               
 </div>
+<div class="col-2">
+     {% if 30 in mesasEnUso2%}   
+          
+            <a href="{% url 'Ventas:modificarVenta' 0 %}" class="btn border border-3 mb-3 bg-corporateYellow800 text-white w-100" id="mesa30"
+                style=" display: flex;  align-items: center;  justify-content: center;">
+                <b>Para llevar 4</b>
+            </a>
+           
+             {% else %}
+                <form action=" {% url 'Ventas:ventasCrearMesa' 'Para llevar 4'%}" method="POST" enctype="multipart/form-data"
+                    id="user-profile-form">
+                    {% csrf_token %}
+                    <button class="btn border border-3 mb-3 bg-primary text-white w-100"  id="mesa30"> <!-- Mesa8B -->
+                        <b>Para llevar 4</b>
+                    </button>
+                </form>
+            {% endif %}
+               
+</div>
+
+<div class="col-2">
+     {% if 31 in mesasEnUso2%}   
+          
+            <a href="{% url 'Ventas:modificarVenta' 0 %}" class="btn border border-3 mb-3 bg-corporateYellow800 text-white w-100" id="mesa31"
+                style=" display: flex;  align-items: center;  justify-content: center;">
+                <b>Para llevar 5</b>
+            </a>
+           
+             {% else %}
+                <form action=" {% url 'Ventas:ventasCrearMesa' 'Para llevar 5'%}" method="POST" enctype="multipart/form-data"
+                    id="user-profile-form">
+                    {% csrf_token %}
+                    <button class="btn border border-3 mb-3 bg-primary text-white w-100"  id="mesa31"> <!-- Mesa8B -->
+                        <b>Para llevar 5</b>
+                    </button>
+                </form>
+            {% endif %}
+               
+</div>
+
+ <div class="col-2">
+  {% if 29 in mesasEnUso2%}   
+          
+            <a href="{% url 'Ventas:modificarVenta' 0 %}" class="btn border border-3 mb-3 bg-corporateYellow800 text-white" id="mesa29"
+                style="width: 100px;height: 100px; display: flex;  align-items: center;  justify-content: center;">
+                <b>Donaciones</b>
+            </a>
+           
+             {% else %}
+                <form action=" {% url 'Ventas:ventasCrearMesa' 'Donaciones'%}" method="POST" enctype="multipart/form-data"
+                    id="user-profile-form">
+                    {% csrf_token %}
+                    <button class="btn border border-3 mb-3 bg-primary text-white w-100"  id="mesa29"> <!-- Mesa8B -->
+                        <b>Donaciones</b>
+                    </button>
+                </form>
+            {% endif %}
+                </div>
     </div>
                     {% include 'Ventas/map.html' %}
 

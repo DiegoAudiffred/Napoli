@@ -272,8 +272,9 @@
                                ${{list.final}} CU
                                 ${{list.totalfinal}}
                             </td>
-                            <td>
-                                <a href="{% url 'Ventas:updateRow2' list.id %}" class="btn border bg-primary text-white " type="button" >Modificar orden</a>
+                            <td class="align-middle text-center">
+
+                                <a href="{% url 'Ventas:updateRow2' list.id %}" class="btn border bg-primary text-white " type="button" >Modificar {{list.menu.nombre}}</a>
                             </td>
                         </tr>
 
@@ -292,6 +293,7 @@
                             <th class="bg-quinto"></th>
                             <th class="bg-quinto"></th>
                             <th class="bg-quinto "></th>
+                            <th class="bg-quinto"></th>
                             <th class="bg-quinto"></th>
                             <th class="bg-quinto"></th>
                             <th class="bg-quinto"></th>
