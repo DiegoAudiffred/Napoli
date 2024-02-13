@@ -20,8 +20,11 @@
                 <li class="list-group-item px-0 bg-cuarto fnTexto_Bold_Encabezado_003">Total: {% if venta.total %}
                     ${{ venta.total }} mxn {% else %} $0 mxn {% endif %}
                 </li>
-                <li class="list-group-item px-0 bg-cuarto fnTexto_Bold_Encabezado_003">Hora:
+                <li class="list-group-item px-0 bg-cuarto fnTexto_Bold_Encabezado_003">Hora entrada:
                     {{ venta.fecha_compra.time }}
+                </li>
+                 <li class="list-group-item px-0 bg-cuarto fnTexto_Bold_Encabezado_003">Hora salida:
+                    {{ venta.fecha_salida.time }}
                 </li>
                 <li class="list-group-item px-0 bg-cuarto fnTexto_Bold_Encabezado_003">Mesa:
                     {{ venta.mesa }}

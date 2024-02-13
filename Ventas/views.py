@@ -5,7 +5,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from Ventas.forms import VentaMenuForm, createVentaForm, modifyMesaForm, modifyVentaForm, modifyVentaMenuOrder
 from db.models import Cliente, Menu, Mesa, User, Venta, VentaMenu,Extras
 from django.db.models import Q
-from datetime import datetime
+from datetime import datetime, timezone
 from django.contrib.auth.decorators import user_passes_test,login_required
 from django.http import QueryDict
 from decimal import Decimal
@@ -325,7 +325,6 @@ def generar_pdf(id):
     row = VentaMenu.objects.filter(venta=venta)
     alturaFinal = int(row.count() * 20 + 450)
     pdf = canvas.Canvas(pdf_file, pagesize=(215, alturaFinal))
-    print(venta.mesa)
     
     pdf.setFont("Helvetica", 12)
     line_start = 30
@@ -430,7 +429,6 @@ def generar_pdf(id):
             texto += page.extract_text()
     print(texto)
     printer_name = win32print.GetDefaultPrinter()
-    print(printer_name)
     hPrinter = win32print.OpenPrinter(printer_name)
     try:
         hJob = win32print.StartDocPrinter(hPrinter, 1, ("Texto a imprimir", None, "RAW"))
@@ -444,7 +442,9 @@ def generar_pdf(id):
             win32print.EndDocPrinter(hPrinter)
     finally:
         win32print.ClosePrinter(hPrinter)
-   
+       
+    if os.path.exists(pdf_file):
+        os.remove(pdf_file)
 
     
   
@@ -459,7 +459,7 @@ def ticket(request,venta):
 def cerrarVenta(request,id):
     venta = Venta.objects.get(id=id)
     if venta.is_open:
-        cliente = venta.cliente
+        #cliente = venta.cliente
         lista = VentaMenu.objects.filter(venta=id)
         mesa = venta.mesa
         mesa.ocupada=False
@@ -475,9 +475,12 @@ def cerrarVenta(request,id):
         #cliente.save()
         venta.is_reopen = True
         venta.is_open= False
+        venta.fecha_salida = datetime.now()  
         venta.save()
-
-        generar_pdf(venta.id)
+        if venta.total == 0:
+            venta.delete()
+        else:
+            generar_pdf(venta.id)
   
 
     

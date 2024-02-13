@@ -147,7 +147,7 @@ class VentaMenuForm(forms.ModelForm):
 
     class Meta:
         model = VentaMenu
-        fields = ['venta','menu','cantidad','totalfinal','observaciones','extras','media_orden','familiar','pizza_mitad','final','extraCosto']
+        fields = ['venta','menu','cantidad','totalfinal','observaciones','extras','media_orden','familiar','pizza_mitad','final']
 
         
  

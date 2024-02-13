@@ -227,6 +227,7 @@ class Venta(models.Model):
     mesa = models.ForeignKey(Mesa, on_delete=models.CASCADE,blank=True,null=True)
     total = models.DecimalField(max_digits=8, decimal_places=2,blank=True,null=True)
     fecha_compra = models.DateTimeField(default=timezone.now,blank=True,null=True)  # Establecer la fecha actual como valor predeterminado
+    fecha_salida = models.DateTimeField(blank=True,null=True)
     is_open = models.BooleanField(default=True)
     is_reopen = models.BooleanField(default=False)
     bool_factura = models.BooleanField(default=False)
@@ -245,6 +246,8 @@ class VentaMenu(models.Model):
     media_orden = models.BooleanField(default=False)
     familiar = models.BooleanField(default=False)
     pizza_mitad = models.ForeignKey(Menu, on_delete=models.CASCADE,blank=True,null=True,related_name="pizza_mitad")
-    extraCosto = models.DecimalField(max_digits=8, decimal_places=2,blank=True,null=True)
-
+    extraCosto = models.DecimalField(max_digits=8, decimal_places=2,blank=True,null=True,default=0)
+    def save(self, *args, **kwargs):
+        self.totalfinal = self.totalfinal + self.extraCosto
+        super().save(*args, **kwargs)
 
