@@ -231,6 +231,8 @@ class Venta(models.Model):
     is_reopen = models.BooleanField(default=False)
     bool_factura = models.BooleanField(default=False)
     ticket = models.FileField(upload_to='pdf',null=True,blank=True)
+    #extraPago = models.DecimalField(max_digits=8, decimal_places=2,blank=True,null=True)
+
 
 class VentaMenu(models.Model):
     venta = models.ForeignKey(Venta, on_delete=models.CASCADE)
@@ -243,5 +245,6 @@ class VentaMenu(models.Model):
     media_orden = models.BooleanField(default=False)
     familiar = models.BooleanField(default=False)
     pizza_mitad = models.ForeignKey(Menu, on_delete=models.CASCADE,blank=True,null=True,related_name="pizza_mitad")
+    extraCosto = models.DecimalField(max_digits=8, decimal_places=2,blank=True,null=True)
 
 

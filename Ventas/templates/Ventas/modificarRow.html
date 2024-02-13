@@ -11,78 +11,91 @@
 
 </style>
 <div class="container my-4">
-    <div class="row">
-             <h1>Modificar  {{row.menu.nombre}}</h1>
-                    <form action="{% url 'Ventas:updateRow' row.id venta.id %}" method="POST" enctype="multipart/form-data">
-                          {% csrf_token %}
 
+             <h1>Modificar  {{row.menu.nombre}}</h1>
+   <form action="{% url 'Ventas:updateRow' row.id venta.id %}" method="POST" enctype="multipart/form-data">
+      {% csrf_token %}
+      <div class="row">
                       
-                                <div class="col-6">
+                                 <div class="col-6"> <!-- Platillo -->
                                     <h3>Platillo del Menu</h3>
+                                 </div>
+                                 <div class="col-6"> <!-- Cantidad -->
+                                    <h3>Cambiar Cantidad</h3>
                                  </div>
                                  <div class="col-6">
                                     {{form.menu}}
                                  </div>
-                                    <div class="col-6">
-                                    <h3>Cambiar Cantidad</h3>
-                                 </div>
-                                 <div class="col-6">
-
-                                 </div>
                                  <div class="col-6">
                                     {{form.cantidad}}
                                  </div>
-                                    <div class="col-6">
+
+
+                                 <div class="col-6 py-3"> <!-- Observaciones -->
                                     <h3>Añadir Observaciones</h3>
-                                 </div> 
-                                 <div class="col-6">
-                                    {{form.observaciones}}
-                                 </div>
-                                    <div class="col-6">
+                                 </div>                              
+                                 <div class="col-6 py-3"> <!-- Extras -->
                                     <h3>Añadir Extras</h3>
                                  </div>
                                  <div class="col-6">
+                                    {{form.observaciones}}
+                                 </div> 
+                                 <div class="col-6">
                                     {{form.extras}}
                                  </div>
-
-                                       <div class="col-6">
-                                    <h3>Hacer media orden</h3>
-                                 </div>
-                                 <div class="col-6">
+                                  <div class="col-1 text-center my-auto">
                                     {{form.media_orden}}
                                  </div>
-                                    <div class="col-6">
-                                    <h3>Hacer familiar</h3>
+                                   <div class="col-2 py-3 my-auto"> <!-- Media orden -->
+                                    <h3>Media orden</h3>
                                  </div>
-                                 <div class="col-6">
+                                 <div class="col-1 text-center my-auto">
                                     {{form.familiar}}
                                  </div>
-                                <div class="col-6">
-                                    <h3>Añadir mitad de la otra pizza</h3>
-                                 </div>
-                                 <div class="col-6">
-                                <select name="pizza_mitad" id="id_pizza_mitad">
-    <option value="">Seleccionar Pizza Mitad</option>
-    {% for pizza in pizzas %}
-        <option value="{{ pizza.id }}">{{ pizza.nombre }}</option>
-    {% endfor %}
-</select>
-                                 </div>
-                                   
-
-                                    
-                                     
-                            
-                                      
-
-
-
-                        <button type="submit" class="btn bg-primary my-3 text-white py-2">Actualizar</button>
-                                        
                                
-                </form>
-        </div>
-    </div>
+                                 <div class="col-2 py-3 my-auto"> <!-- Familiar -->
+                                    <h3>Familiar</h3>
+                                 </div>
+                                
+                                 <div class="col-2 text-center my-auto">
+                                    {{form.extraCosto}}
+                                 </div>
+
+                                 <div class="col-2 py-3 my-auto"> <!-- Familiar -->
+                                    <h3>Agregar Extra</h3>
+                                 </div>
+                               
+ <div class="col-3 py-3"> <!-- Mitad Pizza -->
+                                    <h3>Mitad de la otra pizza</h3>
+                                 </div>
+
+                                 <div class="col-3 py-3 my-auto">
+                                    <select name="pizza_mitad" id="id_pizza_mitad" class=" w-100">
+                                       <option value="">Seleccionar Pizza Mitad</option>
+                                       {% for pizza in pizzas %}
+                                       <option value="{{ pizza.id }}">{{ pizza.nombre }}</option>
+                                       {% endfor %}
+                                    </select>
+                                 </div>
+                                 
+                                
+                               
+                              
+                                 <button type="submit" class="btn bg-primary my-3 text-white py-2">Actualizar</button>                               
+                     
+      </div>
+   </form>
 </div>
+
+
+<script>
+$(document).ready(function() {
+   $('#id_extras_0').addClass('checkbox-large m-4');
+   $('#id_extras_1').addClass('checkbox-large m-4');
+   $('#id_extras_2').addClass('checkbox-large m-4');
+   $('#id_extras_3').addClass('checkbox-large m-4');
+
+});
+</script>
 {% endblock %}
 

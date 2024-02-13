@@ -95,24 +95,22 @@
 
     }
 
-    window.onload = function() {
-        var ventas = [
-            {% for venta in ventasPasadas %}
-                {{ venta }},
-            {% endfor %}
-        ]
-        for (var i = 0; i < ventas.length; i++) {
-            console.log(ventas[i]);
-        }
-
-        
-        var modificarVentaUrl="";
-         for(var i = 0; i < ventas.length;i++){
-        enlaceMesa = document.getElementById('venta_'+ventas[i])
-        modificarVentaUrl = "{% url 'Ventas:modificarVenta' 999 %}".replace("999", ventas[i]);
-        enlaceMesa.href = modificarVentaUrl
-        console.log(enlaceMesa)
-    }
+    //window.onload = function() {
+    //    var ventas = [
+    //        {% for venta in ventasPasadas %}
+    //            {{ venta }},
+    //        {% endfor %}
+    //    ]
+    //    for (var i = 0; i < ventas.length; i++) {
+    //        console.log(ventas[i]);
+    //    }
+    //    var modificarVentaUrl="";
+    //     for(var i = 0; i < ventas.length;i++){
+    //    enlaceMesa = document.getElementById('venta_'+ventas[i])
+    //    modificarVentaUrl = "{% url 'Ventas:modificarVenta' 999 %}".replace("999", ventas[i]);
+    //    enlaceMesa.href = modificarVentaUrl
+    //    console.log(enlaceMesa)
+    //}
 }
 </script>
 

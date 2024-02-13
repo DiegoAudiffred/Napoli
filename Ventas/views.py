@@ -41,7 +41,7 @@ def ventasIndex(request):
     user = request.user
    # Assuming ventas is a queryset or list of Venta objects
   
-   
+    
     mesasEnUso2 = []
     i = 0
     mesasEnUso = []
@@ -706,7 +706,9 @@ def ventasCard(request):
     fecha = jsonObject["date"]
    
     
-    ventas = Venta.objects.filter(is_open=False).order_by('-fecha_compra')
+
+
+    ventas = Venta.objects.filter(Q(is_open=False) | Q(is_reopen=True)).order_by('-fecha_compra')
 
     if fecha != "":
         if fecha != "" :

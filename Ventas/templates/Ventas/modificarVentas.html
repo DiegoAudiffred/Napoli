@@ -108,7 +108,7 @@
         <div class="col-3 col-md-2 border-end border-quinto  ">
 
 
-
+            {% if not venta.is_reopen%}
             <form action="{% url 'Ventas:addMesa' venta.id %}" method="POST" enctype="multipart/form-data"
                 id="user-profile-form2">
                 {% csrf_token %}
@@ -129,7 +129,9 @@
                 </div>
 
             </form>
-
+            {% else %}
+                <a> Mesa: {{venta.mesa.nombre}}</a>
+            {% endif %}
 
 
 
@@ -171,7 +173,9 @@
                         <th>Extras</th>
                         <th>Cantidad</th>
                         <th class="d-none d-sm-table-cell">Total</th>
+                        {% if venta.is_open%}
                         <th>Modificar</th>
+                        {% endif %}
                     </thead>
                     <tbody>
 
@@ -272,10 +276,14 @@
                                ${{list.final}} CU
                                 ${{list.totalfinal}}
                             </td>
+
+                                                    {% if  venta.is_open%}
+
                             <td class="align-middle text-center">
 
                                 <a href="{% url 'Ventas:updateRow2' list.id %}" class="btn border bg-primary text-white " type="button" >Modificar {{list.menu.nombre}}</a>
                             </td>
+                            {% endif %}
                         </tr>
 
                         
@@ -296,7 +304,10 @@
                             <th class="bg-quinto"></th>
                             <th class="bg-quinto"></th>
                             <th class="bg-quinto"></th>
+                                                                                {% if  venta.is_open%}
+
                             <th class="bg-quinto"></th>
+                            {% endif %}
 
 
                             <th class="bg-primary text-white" style="width: 200px">Total: $ {{total}}
@@ -474,9 +485,9 @@
     </div>
     {% if venta.is_open%}
     <div class="row ">
-        <div class="col-6 col-md-4 text-center">
+        <!-- <div class="col-6 col-md-4 text-center">
             <button onclick="agregarFormulario()" class="btn btn-tercero text-white w-100">Agregar a venta (avanzado)</button>
-        </div>
+        </div> -->
          <div class="col-6 col-md-3 text-center">
             <button onclick="showMenu()" class="btn btn-tercero text-white w-100">Desplegar menu</button>
         </div>
@@ -494,20 +505,19 @@
                     <div class="modal-dialog">
                         <div class="modal-content bg-cuarto">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalLabel">{% if venta.is_reopen %} ¿Esta
+                                <h5 class="modal-title" id="exampleModalLabel">¿Esta usted
                                     seguro de
-                                    volver a cerrar la cuenta de
-                                    {{venta.cliente.nombre}} ?
-                                    {% else %} ¿Esta seguro de
-                                    cerrar la cuenta de
-                                    {{venta.cliente.nombre}} ? {% endif %} </h5>
+                                    volver a cerrar la cuenta de la mesa 
+                                    {{venta.mesa.nombre}} ?
+                                 </h5>
                             </div>
                             {% if not venta.is_reopen%}
                             <div class="modal-body">
                                 <h4 class="text-secondary">¡UNA VEZ CERRADA NO
-                                    PODRAS CAMBIAR AL
-                                    CLIENTE!
+                                    PODRAS CAMBIAR LA
+                                    MESA!
                                 </h4>
+
                                 <h4>
                                     El total de la venta es $ {{total}} mxn
                                 </h4>
@@ -551,8 +561,8 @@
       
     </div>
     {% else %}
-    <div class="row justify-content-end w-100">
-        <div class="col-5 col-md-2 text-center">
+    <div class="row w-100">
+        <div class="col-3 col-md-2 text-center">
             <form action="{% url 'Ventas:abrirVenta' venta.id %}" method="POST" enctype="multipart/form-data"
                 id="user-profile-form">
                 {% csrf_token %}
@@ -562,6 +572,17 @@
             </form>
 
         </div>
+
+    
+
+        <div class="col-5 col-md-2 text-center">
+               
+
+                <a href="{% url 'Ventas:ticket' venta.id %}" type="submit" class="btn btn-quinto w-100 text-white">Reimprimir ticket
+                    </a>
+            
+
+       </div>
 
     </div>
     {% endif %}
