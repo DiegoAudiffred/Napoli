@@ -4,3 +4,4 @@ django-user-agents==0.4.0
 Pillow==9.4.0
 reportlab
 PyPDF2
+pypiwin32
