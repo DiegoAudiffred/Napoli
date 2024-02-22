@@ -1,0 +1,18 @@
+[
+  {
+    "origin": [
+      "127.0.0.1:8000"
+    ],
+    "method": [
+      "GET",
+      "HEAD",
+      "OPTIONS"
+    ],
+    "responseHeader": [
+      "Content-Type",
+      "Access-Control-Allow-Origin",
+      "Access-Control-Allow-Methods"
+    ],
+    "maxAgeSeconds": 3600
+  }
+]
