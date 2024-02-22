@@ -13,11 +13,10 @@ import re
 from reportlab.lib.pagesizes import letter
 from reportlab.lib.units import inch
 from reportlab.pdfgen import canvas
+#import win32print
+#import win32ui
 import os
-import win32print
-import win32ui
-import os
-import win32api
+#import win32api
 import PyPDF2
 import subprocess
 from django.core.files import File
@@ -418,33 +417,34 @@ def generar_pdf(id):
 
     pdf.showPage()
     pdf.save()
+    
     #os.startfile(pdf_file)
  
    
     
-    with open(pdf_file, 'rb') as file:
-        pdf_reader = PyPDF2.PdfReader(file)
-        texto = ''
-        for page in pdf_reader.pages:
-            texto += page.extract_text()
-    print(texto)
-    printer_name = win32print.GetDefaultPrinter()
-    hPrinter = win32print.OpenPrinter(printer_name)
-    try:
-        hJob = win32print.StartDocPrinter(hPrinter, 1, ("Texto a imprimir", None, "RAW"))
-        print("parte1")
-        try:
-            win32print.StartPagePrinter(hPrinter)
-            win32print.WritePrinter(hPrinter, texto.encode('utf-8'))
-            win32print.EndPagePrinter(hPrinter)
-            print("parte2")
-        finally:
-            win32print.EndDocPrinter(hPrinter)
-    finally:
-        win32print.ClosePrinter(hPrinter)
-       
-    if os.path.exists(pdf_file):
-        os.remove(pdf_file)
+    #with open(pdf_file, 'rb') as file:
+    #    pdf_reader = PyPDF2.PdfReader(file)
+    #    texto = ''
+    #    for page in pdf_reader.pages:
+    #        texto += page.extract_text()
+    #print(texto)
+    #printer_name = win32print.GetDefaultPrinter()
+    #hPrinter = win32print.OpenPrinter(printer_name)
+    #try:
+    #    hJob = win32print.StartDocPrinter(hPrinter, 1, ("Texto a imprimir", None, "RAW"))
+    #    print("parte1")
+    #    try:
+    #        win32print.StartPagePrinter(hPrinter)
+    #        win32print.WritePrinter(hPrinter, texto.encode('utf-8'))
+    #        win32print.EndPagePrinter(hPrinter)
+    #        print("parte2")
+    #    finally:
+    #        win32print.EndDocPrinter(hPrinter)
+    #finally:
+    #    win32print.ClosePrinter(hPrinter)
+    #   
+    #if os.path.exists(pdf_file):
+    #    os.remove(pdf_file)
 
     
   
