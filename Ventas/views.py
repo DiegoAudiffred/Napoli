@@ -1,4 +1,5 @@
 import datetime
+from email.message import EmailMessage
 import json
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
@@ -13,14 +14,22 @@ import re
 from reportlab.lib.pagesizes import letter
 from reportlab.lib.units import inch
 from reportlab.pdfgen import canvas
-#import win32print
-#import win32ui
+import win32print
+import win32ui
 import os
-#import win32api
+import ssl
+import win32api
 import PyPDF2
 import subprocess
 from django.core.files import File
 from io import BytesIO
+
+
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+from email.mime.base import MIMEBase
+from email import encoders
 
 def isAdmin(user):
     if user.rol == 'Admin':
@@ -417,36 +426,69 @@ def generar_pdf(id):
 
     pdf.showPage()
     pdf.save()
-    
     #os.startfile(pdf_file)
  
    
     
-    #with open(pdf_file, 'rb') as file:
-    #    pdf_reader = PyPDF2.PdfReader(file)
-    #    texto = ''
-    #    for page in pdf_reader.pages:
-    #        texto += page.extract_text()
+    with open(pdf_file, 'rb') as file:
+        pdf_reader = PyPDF2.PdfReader(file)
+        texto = ''
+        for page in pdf_reader.pages:
+            texto += page.extract_text()
     #print(texto)
-    #printer_name = win32print.GetDefaultPrinter()
-    #hPrinter = win32print.OpenPrinter(printer_name)
-    #try:
-    #    hJob = win32print.StartDocPrinter(hPrinter, 1, ("Texto a imprimir", None, "RAW"))
-    #    print("parte1")
-    #    try:
-    #        win32print.StartPagePrinter(hPrinter)
-    #        win32print.WritePrinter(hPrinter, texto.encode('utf-8'))
-    #        win32print.EndPagePrinter(hPrinter)
-    #        print("parte2")
-    #    finally:
-    #        win32print.EndDocPrinter(hPrinter)
-    #finally:
-    #    win32print.ClosePrinter(hPrinter)
-    #   
-    #if os.path.exists(pdf_file):
-    #    os.remove(pdf_file)
+    printer_name = win32print.GetDefaultPrinter()
+    hPrinter = win32print.OpenPrinter(printer_name)
+    print(printer_name)
+    try:
+        hJob = win32print.StartDocPrinter(hPrinter, 1, ("Texto a imprimir", None, "RAW"))
+        print("parte1")
+        try:
+            win32print.StartPagePrinter(hPrinter)
+            win32print.WritePrinter(hPrinter, texto.encode('utf-8'))
+            win32print.EndPagePrinter(hPrinter)
+            print("parte2")
+        finally:
+            win32print.EndDocPrinter(hPrinter)
+    finally:
+        win32print.ClosePrinter(hPrinter)
+       
+    if os.path.exists(pdf_file):
+        os.remove(pdf_file)
 
+
+def enviarCorreo(id):
+    #venta = Venta.objects.get(id=id)
+
+    email_reciver = "d1360.audi@gmail.com"
+    email_sender = "cuentapruebanapoli@gmail.com"
+    email_password = "spsy apcz sewh rmbc"  # Asegúrate de que esta contraseña sea la correcta
     
+    subject = "Correo con archivo adjunto"
+    body = "Hola, adjunto te envío un archivo desde Python."
+
+    # Creación del mensaje de correo electrónico
+    em = EmailMessage()
+    em['From'] = email_sender
+    em['To'] = email_reciver
+    em['Subject'] = subject
+    em.set_content(body)
+    idstring= str(id)
+
+    stringPDF = "ticket"+ idstring +".pdf"
+    # Adjuntar el archivo PDF
+    with open(stringPDF, "rb") as f:  # Asegúrate de proporcionar la ruta correcta al archivo PDF
+        archivo_adjunto = f.read()
+    em.add_attachment(archivo_adjunto, maintype="application", subtype="octet-stream", filename="ticket.pdf")
+
+    # Configuración del servidor SMTP y envío del correo electrónico
+    context = ssl.create_default_context()
+    with smtplib.SMTP_SSL('smtp.gmail.com', 465, context=context) as smtp:
+        smtp.login(email_sender, email_password)
+        smtp.send_message(em)
+    
+    print("Correo electrónico con el archivo adjunto enviado con éxito")
+
+# Llamada a la función para enviar el correo electrónico
   
 @login_required(login_url='authentication:login')
 
@@ -481,6 +523,7 @@ def cerrarVenta(request,id):
             venta.delete()
         else:
             generar_pdf(venta.id)
+            
   
 
     
