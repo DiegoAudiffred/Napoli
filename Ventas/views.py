@@ -329,7 +329,6 @@ def updateRow2(request, list):
 
 
 
-import winreg
 
 def generar_pdf(id):
     venta = Venta.objects.get(id=id)
@@ -478,6 +477,15 @@ def enviarCorreo(id):
 # Llamada a la función para enviar el correo electrónico
   
 @login_required(login_url='authentication:login')
+
+def ticketRead(request,venta):
+    
+        venta = Venta.objects.get(id=venta)
+     
+        items = VentaMenu.objects.filter(venta=venta)
+       
+
+        return render(request, 'Ventas/ticket.html',{'venta':venta,'items':items}) 
 
 
 def ticket(request,venta):
