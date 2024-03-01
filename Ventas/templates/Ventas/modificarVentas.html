@@ -578,15 +578,22 @@
         <div class="col-5 col-md-2 text-center">
                
 
-                <a href="{% url 'Ventas:ticket' venta.id %}" type="submit" class="btn btn-quinto w-100 text-white">Reimprimir ticket
-                    </a>
-            
+                <!-- <a href="{% url 'Ventas:ticket' venta.id %}" type="submit" class="btn btn-quinto w-100 text-white">Reimprimir ticket
+                    </a> -->
+<button onclick="imprimirContenido()" class="btn btn-quinto w-100 text-white">Imprimir ticket</button>
 
        </div>
 
     </div>
     {% endif %}
 </div>
+
+
+
+
+
+
+
 
 
 
@@ -795,6 +802,10 @@
 </form>
 </div>
 
+ {% include 'Ventas/ticket.html' %}
+                      
+
+</div>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
@@ -837,11 +848,7 @@
 
 </script>
 
-<script>
-    function imprimirTicket(){
-       window.print()
-    }
-</script>
+
 
 <script>
  var formCounter = 0; 
@@ -1138,4 +1145,21 @@
     }
 </script>
 
+<script>
+function imprimirContenido() {
+    // Obtener el contenido para imprimir
+    var contenidoImprimir = document.getElementById('contenidoImprimir').innerText;
+
+    // Crear un blob con el contenido
+    var blob = new Blob([contenidoImprimir], { type: 'text/plain' });
+
+    // Crear un enlace para descargar el archivo
+    var link = document.createElement('a');
+    link.href = window.URL.createObjectURL(blob);
+    link.download = 'ticket_{{venta.id}}.txt';
+    link.click();
+}
+
+
+</script>
 {% endblock %}

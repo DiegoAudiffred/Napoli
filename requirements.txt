@@ -10,4 +10,9 @@ django-environ==0.10.0
 psycopg2-binary==2.9.9
 gunicorn==20.1.0
 google-cloud-secret-manager==2.16.1
-pypiwin32
+#pywin32
+#pypiwin32
+#pycups
+#cmake
+#pip install wheel setuptools pip --upgrade
+

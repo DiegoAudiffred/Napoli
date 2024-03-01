@@ -14,16 +14,18 @@ import re
 from reportlab.lib.pagesizes import letter
 from reportlab.lib.units import inch
 from reportlab.pdfgen import canvas
-import win32print
-import win32ui
+#import win32print
+#import win32ui
 import os
 import ssl
-import win32api
+#import win32api
 import PyPDF2
 import subprocess
 from django.core.files import File
 from io import BytesIO
-
+#import cups
+import subprocess
+import tempfile
 
 import smtplib
 from email.mime.multipart import MIMEMultipart
@@ -173,6 +175,7 @@ def modificarVenta(request,id):
     
         menu = Menu.objects.all()
         lista = VentaMenu.objects.filter(venta=id)
+        print(lista)
 
         publications=[]
         for lst in lista:
@@ -191,7 +194,7 @@ def modificarVenta(request,id):
         form3 = modifyMesaForm() #Mesa
         form4 = modifyVentaMenuOrder()
 
-        return render(request, 'Ventas/modificarVentas.html',{'venta':venta,'lista':zip(lista,publications),'form':form,'form2':form2,'form3':form3,'form4':form4,'total':total2,'user':user,'mesas':mesas,'menu':menu}) 
+        return render(request, 'Ventas/modificarVentas.html',{'venta':venta,'items':lista,'lista':zip(lista,publications),'form':form,'form2':form2,'form3':form3,'form4':form4,'total':total2,'user':user,'mesas':mesas,'menu':menu}) 
 
 #def  modificarVenta(request,mesa):
 #    mesaVenta = Mesa.objects.get(nombre = mesa)
@@ -326,6 +329,7 @@ def updateRow2(request, list):
 
 
 
+import winreg
 
 def generar_pdf(id):
     venta = Venta.objects.get(id=id)
@@ -435,25 +439,8 @@ def generar_pdf(id):
         texto = ''
         for page in pdf_reader.pages:
             texto += page.extract_text()
-    #print(texto)
-    printer_name = win32print.GetDefaultPrinter()
-    hPrinter = win32print.OpenPrinter(printer_name)
-    print(printer_name)
-    try:
-        hJob = win32print.StartDocPrinter(hPrinter, 1, ("Texto a imprimir", None, "RAW"))
-        print("parte1")
-        try:
-            win32print.StartPagePrinter(hPrinter)
-            win32print.WritePrinter(hPrinter, texto.encode('utf-8'))
-            win32print.EndPagePrinter(hPrinter)
-            print("parte2")
-        finally:
-            win32print.EndDocPrinter(hPrinter)
-    finally:
-        win32print.ClosePrinter(hPrinter)
-       
-    if os.path.exists(pdf_file):
-        os.remove(pdf_file)
+    print(texto)
+  
 
 
 def enviarCorreo(id):

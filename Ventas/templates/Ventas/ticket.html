@@ -1,0 +1,99 @@
+<div id="contenidoImprimir">
+
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-3 text-break">
+                Napoli Ristorante y Pizzeria
+                C. 29 Sur 119, La Paz, 72160
+                Heroica Puebla de Zaragoza
+                Teléfono: 222 621 9650
+                
+            </div>
+            <div class="col-3 text-break">
+               ------------------------------------
+                
+            </div>
+        </div>
+       
+        <div class="row justify-content-center">
+            <div class="col-3">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Producto</th>
+                            <th>Cantidad</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in items %}
+                        <tr class="border-bottom border-3">
+                            <td>{{ item.menu.nombre|truncatechars:15 }}</td>
+                            <td>{{ item.cantidad }} U</td>
+                            <td>${{ item.totalfinal }}</td>
+
+                        </tr>      
+                        <tr>
+                            <td class="p-0 w-100">-----------------------</td>
+                            <td class="p-0 w-100">-------------</td>
+                        </tr>                                          
+                       
+                        {% if item.extras.exists %}
+                          <tr>
+                              <td colspan="3">
+                                  <ul>
+                                      {% for extra in item.extras.all %}
+                                      <li>{{ extra.nombre|truncatechars:20 }}</li>
+                                      {% endfor %}
+                                  </ul>
+                              </td>
+                          </tr>
+                        {% endif %}
+
+                        {% endfor %}
+                         
+                        </tr>
+                            <tr>
+                               
+                                <td>
+                                     Total:
+                                </td>
+                                <td>
+                                
+                                </td>
+                                <td>    
+                                    $ {{venta.total}}
+                                </td>
+                                 <hr>
+                          </tr>
+                            <tr>
+                            
+                            <td class="p-0 w-100">-----------------------</td>
+                            <td class="p-0 w-100">-------------</td>
+                        </tr>  
+                      </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-3 text-break">
+        Fecha: {{ venta.fecha_compra|date:"Y-m-d H:i:s" }}
+                <hr>
+            </div>
+        </div>
+         <div class="row justify-content-center">
+            <div class="col-3 text-break">
+        Mesa : {{venta.mesa}}
+                <hr>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-3 text-break">
+        Este ticket no es un comprobante fiscal. Para facturar mandar sus datos fiscales completos al correo: napoli10.facturacion@gmail.com
+                <hr>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
