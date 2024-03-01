@@ -30,7 +30,7 @@
                     {{ venta.mesa }}
                 </li>
                 <li class="list-group-item px-0 bg-cuarto fnTexto_Bold_Encabezado_003">Estado:
-                {% if not venta.is_open %} <b class="text-secondary">Cuenta cerrada</b>  {% else %}  <b class="text-primary">Cuenta Abierta</b> {% endif %}
+                {% if not venta.is_reopen %} <b class="text-secondary">Cuenta cerrada</b>  {% else %}  <b class="text-primary">Cuenta Re-Abierta</b> {% endif %}
                 </li>
                 <li class="list-group-item d-flex justify-content-end align-items-center px-0 bg-cuarto">
                     <a href="{% url 'Ventas:modificarVenta' venta.id %}" class="card-link btn text-white btn-quinto" id="venta_{venta.id}">Ver

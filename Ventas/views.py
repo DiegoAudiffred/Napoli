@@ -495,7 +495,7 @@ def ticket(request,venta):
 
 def cerrarVenta(request,id):
     venta = Venta.objects.get(id=id)
-    if venta.is_open:
+    if venta.is_open or venta.is_reopen:
         #cliente = venta.cliente
         lista = VentaMenu.objects.filter(venta=id)
         mesa = venta.mesa
@@ -510,14 +510,21 @@ def cerrarVenta(request,id):
         #    cliente.total_compras +=  1
         #    cliente.total_gastado += total
         #cliente.save()
-        venta.is_reopen = True
+        #if venta.is_open:
+        #    enviarCorreo(venta.id)
+        
+ 
         venta.is_open= False
+      
+        venta.is_reopen= False
+        venta.save()
         venta.fecha_salida = datetime.now()  
         venta.save()
         if venta.total == 0:
             venta.delete()
-        else:
-            generar_pdf(venta.id)
+        
+        #else:
+        #    generar_pdf(venta.id)
             
   
 
@@ -529,10 +536,9 @@ def cerrarVenta(request,id):
 
 def abrirVenta(request,id):
     venta = Venta.objects.get(id=id)
-    venta.is_open= True
-    if not venta.is_reopen:
-        venta.is_reopen= True
-  
+    #venta.is_open= True
+    venta.is_reopen= True
+    
 
     venta.save()
     return redirect('Ventas:ventasIndex')

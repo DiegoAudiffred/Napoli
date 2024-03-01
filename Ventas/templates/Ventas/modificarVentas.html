@@ -173,8 +173,8 @@
                         <th>Extras</th>
                         <th>Cantidad</th>
                         <th class="d-none d-sm-table-cell">Total</th>
-                        {% if venta.is_open%}
-                        <th>Modificar</th>
+                    {% if venta.is_open or venta.is_reopen%}                       
+                     <th>Modificar</th>
                         {% endif %}
                     </thead>
                     <tbody>
@@ -277,7 +277,7 @@
                                 ${{list.totalfinal}}
                             </td>
 
-                                                    {% if  venta.is_open%}
+                                                    {% if  venta.is_open or venta.is_reopen%}
 
                             <td class="align-middle text-center">
 
@@ -304,7 +304,7 @@
                             <th class="bg-quinto"></th>
                             <th class="bg-quinto"></th>
                             <th class="bg-quinto"></th>
-                                                                                {% if  venta.is_open%}
+                                                                                {% if  venta.is_open or venta.is_reopen%}
 
                             <th class="bg-quinto"></th>
                             {% endif %}
@@ -481,10 +481,11 @@
                 </div>
             </div>
 
-        </div>
+        </div>    
+
     </div>
-    {% if venta.is_open%}
-    <div class="row ">
+{% if venta.is_open or venta.is_reopen%}    
+<div class="row ">
         <!-- <div class="col-6 col-md-4 text-center">
             <button onclick="agregarFormulario()" class="btn btn-tercero text-white w-100">Agregar a venta (avanzado)</button>
         </div> -->
