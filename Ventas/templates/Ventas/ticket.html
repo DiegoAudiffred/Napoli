@@ -96,6 +96,15 @@
 
                         {% endfor %}
 
+                        <tr>
+                            <td>
+                                <strong>Total final:</strong>
+
+                            </td>
+                            <td>
+
+                            </td>
+                            <td><strong>${{venta.total}}</strong></td>
                         </tr>
 
 
@@ -103,12 +112,7 @@
                 </table>
             </div>
         </div>
-        <div class="row justify-content-center">
-            <div class="col-12 text-break">
-                Total: ${{venta.total}}
-                <hr>
-            </div>
-        </div>
+
         <div class="row justify-content-center">
             <div class="col-12 text-break">
                 Fecha: {{ venta.fecha_compra|date:"Y-m-d H:i:s" }}

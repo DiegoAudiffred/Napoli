@@ -546,6 +546,7 @@
             <button id="submit-form" class="btn btn-quinto text-white  w-100 d-none" type="submit">Enviar orden</button>
         </form>
 
+
 <script>
     document.getElementById('platillosForm').addEventListener('submit', function (event) {
             event.preventDefault(); 
@@ -557,6 +558,11 @@
         });
 
 </script>
+
+        </div>
+
+        <div class="col-2">
+        <button onclick="imprimirContenido2()" class="btn bg-corporateNavyBlue900 w-100 text-white">Imprimir ticket</button>
 
         </div>
       
@@ -581,7 +587,6 @@
 
                 <!-- <a href="{% url 'Ventas:ticket' venta.id %}" type="submit" class="btn btn-quinto w-100 text-white">Reimprimir ticket
                     </a> -->
-<button onclick="imprimirContenido2()" class="btn btn-quinto w-100 text-white">Imprimir ticket</button>
 
 <!-- <a href="{% url 'Ventas:ticketRead' venta.id %}" type="button" class="btn text-white" style="background-color: blue;">Imprimir ticket view</a>
  -->
