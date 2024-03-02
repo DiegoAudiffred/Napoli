@@ -231,8 +231,8 @@ def modificarVenta(request,id):
 @login_required(login_url='authentication:login')
 def updateRow(request,lista,venta):
         row = VentaMenu.objects.get(id=lista)
-        total = 0
-        totalIndv = 0
+        totalUpdate = 0
+        
         print(row)
         if request.method == "POST":
             form = modifyVentaMenuOrder(request.POST, instance=row)
@@ -254,64 +254,54 @@ def updateRow(request,lista,venta):
                             if pizza_mitad.precioFamiliar < platillo.precioFamiliar:
                                 print("La cara es la ") 
                                 print(platillo.nombre)
-                                totalIndv += (platillo.precioFamiliar) 
-                                total += (platillo.precioFamiliar) * cantidad
+                                totalUpdate += platillo.precioFamiliar 
 
                             else:
-                                totalIndv += (pizza_mitad.precioFamiliar)
-                                total += (pizza_mitad.precioFamiliar) * cantidad
+                                totalUpdate += (pizza_mitad.precioFamiliar)
                                 print(pizza_mitad.nombre)   
 
                         else:
                             print(f"Total:{platillo}")
                             print(f"cantidad:{pizza_mitad}")
                            
-                            totalIndv += (platillo.precioFamiliar)
-                            total += (platillo.precioFamiliar) * cantidad
+                            totalUpdate += (platillo.precioFamiliar)
 
                     else:
                         if pizza_mitad: 
                             if pizza_mitad.precio < platillo.precio:
-                                totalIndv += (platillo.precio)
-                                total += (platillo.precio) * cantidad
+                                totalUpdate += (platillo.precio)
 
                             else:
                             
-                                totalIndv += (pizza_mitad.precio)
-                                total += (pizza_mitad.precio) * cantidad                            
+                                totalUpdate += (pizza_mitad.precio)
 
 
                         else:
-                                totalIndv += (platillo.precio)
-                                total += (platillo.precio) * cantidad  
+                                totalUpdate += (platillo.precio)
 
                 elif media_orden == True: #Mediaorden
-                        totalIndv += (platillo.mediaOrden)
-                        total += (platillo.mediaOrden) * cantidad  
+                        totalUpdate += (platillo.mediaOrden)
 
                 else: #Compra normal
-                    totalIndv += (platillo.precio)
-                    total += (platillo.precio) * cantidad  
+                    totalUpdate += (platillo.precio)
 
                 listaextras = Extras.objects.all()
                 for i,list in enumerate(listaextras):
                     if listaextras[i] in extras:
                         if familiar:
-                            total += (listaextras[i].precio* 2) * cantidad
-                            totalIndv += listaextras[i].precio
+                            totalUpdate += (listaextras[i].precio* 2)
                             print("Entro", listaextras[i] )
                             print("Entro", listaextras[i].precio )
                         else:
-                            total += listaextras[i].precio * cantidad
-                            totalIndv += listaextras[i].precio
+                            totalUpdate += listaextras[i].precio
                             print("Entro", listaextras[i] )
                             print("Entro", listaextras[i].precio )
 
-                form.instance.totalfinal = total
-                form.instance.final = totalIndv
+                form.instance.totalfinal = totalUpdate * cantidad
+                form.instance.final = totalUpdate
 
-                print(total)
-                print(totalIndv)   
+                print(totalUpdate)
+                print(cantidad)   
                 form.save()
 
 
@@ -783,9 +773,11 @@ def guardarCambios(request,compra_id,list_id,operacion):
     producto = VentaMenu.objects.get(venta=venta,id=list_id)
 
     if operacion == "suma":
-        
         producto.cantidad = producto.cantidad + 1
         producto.totalfinal = producto.final * producto.cantidad
+        print(producto.cantidad)
+        print(producto.final)
+        print(producto.totalfinal)
         producto.save()
 
     else:
