@@ -252,13 +252,15 @@ def updateRow(request,lista,venta):
                         if pizza_mitad:
                             print("Mitad")
                             if pizza_mitad.precioFamiliar < platillo.precioFamiliar:
-                                print("La cara es la ")    
+                                print("La cara es la ") 
+                                print(platillo.nombre)
                                 totalIndv += (platillo.precioFamiliar) 
-                                total += (pizza_mitad.precioFamiliar) * cantidad
+                                total += (platillo.precioFamiliar) * cantidad
 
                             else:
                                 totalIndv += (pizza_mitad.precioFamiliar)
                                 total += (pizza_mitad.precioFamiliar) * cantidad
+                                print(pizza_mitad.nombre)   
 
                         else:
                             print(f"Total:{platillo}")
@@ -294,10 +296,16 @@ def updateRow(request,lista,venta):
                 listaextras = Extras.objects.all()
                 for i,list in enumerate(listaextras):
                     if listaextras[i] in extras:
-                        total += listaextras[i].precio * cantidad
-                        totalIndv += listaextras[i].precio
-                        print("Entro", listaextras[i] )
-
+                        if familiar:
+                            total += (listaextras[i].precio* 2) * cantidad
+                            totalIndv += listaextras[i].precio
+                            print("Entro", listaextras[i] )
+                            print("Entro", listaextras[i].precio )
+                        else:
+                            total += listaextras[i].precio * cantidad
+                            totalIndv += listaextras[i].precio
+                            print("Entro", listaextras[i] )
+                            print("Entro", listaextras[i].precio )
 
                 form.instance.totalfinal = total
                 form.instance.final = totalIndv
@@ -547,7 +555,7 @@ def abrirVenta(request,id):
 
 
 @login_required(login_url='authentication:login')
-
+#Forms viejos
 def agregarVenta(request, id):
     ventas = Venta.objects.get(id=id)
     lista = VentaMenu.objects.filter(venta=id)
