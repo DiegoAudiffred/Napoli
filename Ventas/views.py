@@ -49,7 +49,6 @@ def ventasIndex(request):
     form3 = modifyMesaForm()
     ventas = Venta.objects.filter(is_open=True).order_by('-fecha_compra')
     user = request.user
-   # Assuming ventas is a queryset or list of Venta objects
   
     
     mesasEnUso2 = []
@@ -440,7 +439,7 @@ def generar_pdf(id):
   
 
 
-def enviarCorreo(id):
+def enviarCorreo():
     #venta = Venta.objects.get(id=id)
 
     email_reciver = "d1360.audi@gmail.com"
