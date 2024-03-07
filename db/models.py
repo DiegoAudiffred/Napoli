@@ -210,9 +210,7 @@ class Extras(models.Model):
     ingredientes = models.ManyToManyField(Ingredientes,blank=True,null=True)
     def __str__(self):
         return self.nombre
-    def save(self, *args, **kwargs):
-        self.precioFamiliar = self.precio * 2
-        super().save(*args, **kwargs)
+
 
 class Mesa(models.Model):
     nombre = models.CharField(max_length=20)
