@@ -10,7 +10,6 @@
             
         </div>
     
-        {% if user.rol == "Admin" or user.rol == "Dueña/o"%}
 
         <div class="col-xl-2 col-md-4 col-6 my-auto">
             <a href="{% url 'Ventas:ventasTodas'%}"> <button class="btn rounded rounded-3  bg-quinto text-white w-100 py-2">Buscar
@@ -18,6 +17,7 @@
         </div>
 
 
+        {% if user.rol == "Admin" or user.rol == "Dueña/o"%}
 
         {% endif %}
 
@@ -256,5 +256,17 @@ var modificarVentaUrl=""
 
     
 </script>
+<script>
+  
+      function disableLink(enlace) {
+    // Evitar que se siga el enlace
+    event.preventDefault();
 
+    // Deshabilitar el enlace
+    enlace.removeEventListener('click', bloquearEnlace);
+    
+    // Redirigir a la URL
+    window.location.href = enlace.getAttribute('href');
+  }
+</script>
 {% endblock %}

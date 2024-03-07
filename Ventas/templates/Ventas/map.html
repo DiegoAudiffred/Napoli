@@ -169,14 +169,15 @@
         
         <a href="{% url 'Ventas:modificarVenta' 0 %}" class="btn border border-3 mb-3 bg-corporateYellow800 text-white"
             id="mesa8" style="width: 100px;height: 100px; display: flex;  align-items: center;  justify-content: center;">
-        
+
+
             <b>7</b>
         </a>
         {% else %}
         <form action=" {% url 'Ventas:ventasCrearMesa' '7'%}" method="POST" enctype="multipart/form-data"
             id="user-profile-form">
             {% csrf_token %}
-            <button class="btn border border-3 mb-3 bg-primary text-white" style="width: 100px;height: 100px;" id="mesa8">
+            <button class="btn border border-3 mb-3 bg-primary text-white" style="width: 100px;height: 100px;" id="mesa8" onclick="disableLink(event)">
                 <b>7</b>
             </button>
         </form>

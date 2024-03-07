@@ -6,7 +6,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from Ventas.forms import VentaMenuForm, createVentaForm, modifyMesaForm, modifyVentaForm, modifyVentaMenuOrder
 from db.models import Cliente, Menu, Mesa, User, Venta, VentaMenu,Extras
 from django.db.models import Q
-from datetime import datetime, timezone
+from datetime import date, datetime, timezone
 from django.contrib.auth.decorators import user_passes_test,login_required
 from django.http import QueryDict
 from decimal import Decimal
@@ -55,6 +55,8 @@ def ventasIndex(request):
     i = 0
     mesasEnUso = []
     mesas = Mesa.objects.all()
+    
+    #print(Mesa.objects.get(ocupada = True))
     for mesa in mesas:
         if mesa.ocupada:
             ventaActual = Venta.objects.get(mesa = mesa,is_open = True)
@@ -184,16 +186,21 @@ def modificarVenta(request,id):
         total2 = 0
         for total in lista:
             total2 += total.totalfinal
-            print(total)
-            print(total2,"acumulado")
+           
         venta.total = total2
         venta.save()
         form = modifyVentaForm(instance=venta) #Cliente
         form2 = VentaMenuForm() #Venta
         form3 = modifyMesaForm() #Mesa
         form4 = modifyVentaMenuOrder()
-
-        return render(request, 'Ventas/modificarVentas.html',{'venta':venta,'items':lista,'lista':zip(lista,publications),'form':form,'form2':form2,'form3':form3,'form4':form4,'total':total2,'user':user,'mesas':mesas,'menu':menu}) 
+        fecha_hoy = date.today()
+        nfinal = 0
+        numVentaHoy = Venta.objects.filter(fecha_compra__date = fecha_hoy)
+        for index, hoy in enumerate(numVentaHoy, start=1):
+            if hoy == venta:
+                nfinal = index
+                print("Número de venta de hoy:", index)
+        return render(request, 'Ventas/modificarVentas.html',{'venta':venta,'items':lista,'lista':zip(lista,publications),'form':form,'form2':form2,'form3':form3,'form4':form4,'total':total2,'user':user,'mesas':mesas,'menu':menu,'nfinal':nfinal}) 
 
 #def  modificarVenta(request,mesa):
 #    mesaVenta = Mesa.objects.get(nombre = mesa)
@@ -730,6 +737,10 @@ def ventasCrearMesa(request, mesa):
 
 def ventasTodas(request):
      
+    ventasChecar = Venta.objects.filter(is_open = True)
+    for venta in ventasChecar:
+        print(venta.id)
+        print(venta.mesa)
   
     ventasPasadas = []
     ventas = Venta.objects.filter(is_open = False)

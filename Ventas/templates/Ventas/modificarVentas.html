@@ -560,12 +560,8 @@
 </script>
 
         </div>
-
-        <div class="col-2">
-        <button onclick="imprimirContenido2()" class="btn bg-corporateNavyBlue900 w-100 text-white">Imprimir ticket</button>
-
-        </div>
-      
+     
+  
     </div>
     {% else %}
     <div class="row w-100">
@@ -574,13 +570,21 @@
                 id="user-profile-form">
                 {% csrf_token %}
 
-                <button href="" type="submit" class="btn btn-tercero w-100 text-white">Reabrir
-                    venta</button>
+            {% if request.user.rol == "Admin" %}
+        <button href="" type="submit" class="btn btn-tercero w-100 text-white">Reabrir
+                    venta</button> 
+
+            {% endif %}
+
+            
             </form>
 
         </div>
 
-    
+       <div class="col-2">
+        <button onclick="imprimirContenido2()" class="btn bg-corporateNavyBlue900 w-100 text-white">Imprimir ticket</button>
+
+        </div>
 
         <div class="col-5 col-md-2 text-center">
                
