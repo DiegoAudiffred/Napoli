@@ -218,6 +218,8 @@ class Mesa(models.Model):
     def __str__(self):
         return self.nombre
 
+
+
   
 class Venta(models.Model):
     cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE,blank=True,null=True)
@@ -231,8 +233,24 @@ class Venta(models.Model):
     bool_factura = models.BooleanField(default=False)
     ticket = models.FileField(upload_to='pdf',null=True,blank=True)
     #extraPago = models.DecimalField(max_digits=8, decimal_places=2,blank=True,null=True)
+    ticketsImpresos = models.IntegerField(null=True,blank=True,default=0)
+    direccion = models.CharField(max_length=200,null=True,blank=True,default="")
 
+class TicketImpresos(models.Model):
+    venta = models.ForeignKey(Venta, on_delete=models.CASCADE,blank=True,null=True)
+    cantidad = models.DecimalField(max_digits=8, decimal_places=2,blank=True,null=True)
+    numImpresion = models.IntegerField(null=True,blank=True,default=0)
+    horaImpresion = models.DateTimeField(blank=True,null=True)
 
+def redondear_hacia_arriba(numero):
+    residuo = numero % 10
+    if residuo > 5:
+        return numero + (10 - residuo)
+    elif residuo > 0:
+        return numero + (5 - residuo)
+    else:
+        return numero
+    
 class VentaMenu(models.Model):
     venta = models.ForeignKey(Venta, on_delete=models.CASCADE)
     menu = models.ForeignKey(Menu, on_delete=models.CASCADE,related_name="menu")
@@ -247,5 +265,7 @@ class VentaMenu(models.Model):
     extraCosto = models.DecimalField(max_digits=8, decimal_places=2,blank=True,null=True,default=0)
     def save(self, *args, **kwargs):
         self.totalfinal = self.totalfinal + self.extraCosto
+        self.totalfinal = redondear_hacia_arriba(self.totalfinal)
+
         super().save(*args, **kwargs)
 

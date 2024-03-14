@@ -150,7 +150,18 @@ class VentaMenuForm(forms.ModelForm):
         fields = ['venta','menu','cantidad','totalfinal','observaciones','extras','media_orden','familiar','pizza_mitad','final']
 
         
- 
+class VentaMenuFormDireccion(forms.ModelForm):
+      
+
+    def __init__(self, *args, **kwargs):
+        super(VentaMenuFormDireccion, self).__init__(*args, **kwargs)
+    
+        self.fields['direccion'].required = False
+        self.fields['direccion'].widget.attrs.update({'class':'form-control shadow-none border border-2  px-2 py-1 ','placeholder':' Direccion*','rows':'1', 'aria-label':'Username','aria-describedby':'basic-addon1','style':'border-left:none', })
+
+    class Meta:
+        model = Venta
+        fields = ['direccion']
 
 class modifyVentaMenuOrder(forms.ModelForm):
     

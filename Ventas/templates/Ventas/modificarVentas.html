@@ -246,7 +246,7 @@
                         
                         
                                 <div class="plus-minus-input">
-                                    {% if venta.is_open %}
+                                    {% if venta.is_open or venta.is_reopen%}
                         
                                     <div class="input-group-button my-auto">
                         
@@ -260,7 +260,7 @@
                         
                                     <input class="input-group-field border rounded rounded-4 text-center" type="number" name="quantity"
                                         value="{{list.cantidad}}" style="width: 50px;" id="input{{list.id}}" disabled>
-                                    {% if venta.is_open %}
+                                    {% if venta.is_open or venta.is_reopen%}
                                     <div class="input-group-button my-auto">
                         
                                         <a onclick="decrementValue({{list.id}})" data-field="quantity1" class="p-1"
@@ -328,6 +328,9 @@
                 </table>
                 <div class="container"> <!-- Contenedor  -->
 
+
+{% include "Ventas/acordeon.html" %}
+                    
 <div id="menu-container" class="d-none">
     <div class="row">
 
@@ -347,6 +350,7 @@
 
         </div>
     </div>
+    
     <div class="row">
 
         <h2>Ensaladas</h2>
@@ -538,12 +542,12 @@
             </form>
         </div>
         <div class="col-md-2">
-        <button id="submit-all-forms-button" class="btn btn-quinto text-white  w-100 d-none" type="submit">Enviar orden</button>
-
+<!--         <button id="submit-all-forms-button" class="btn btn-quinto text-white  w-100 d-none" type="submit">Enviar orden</button>
+ -->
         <form id="platillosForm" action="{% url 'Ventas:agregarPlatillosVenta' venta.id %}" method="POST">
             {% csrf_token %}
             <input type="hidden" id="platillosIds" name="platillosIds">
-            <button id="submit-form" class="btn btn-quinto text-white  w-100 d-none" type="submit">Enviar orden</button>
+            <button id="submit-form" class="btn btn-quinto text-white  w-100 d-none" type="submit">Enviar ordenes</button>
         </form>
 
 
@@ -560,6 +564,47 @@
 </script>
 
         </div>
+          <div class="col-2">
+        <button onclick="imprimirContenido2()" class="btn bg-corporateNavyBlue900 w-100 text-white">Imprimir ticket</button>
+
+        </div>
+         <div class="col-2">
+        <button class="btn w-100 text-white"  style="background-color: #E49B0F;" data-bs-toggle="modal" data-bs-target="#exampleModalDireccion">Agregar direccion</button>
+
+        </div>
+        <!-- Botón que abre el modal -->
+
+
+<!-- Modal -->
+            <form action="{% url 'Ventas:addDireccion' venta.id %}" method="POST" enctype="multipart/form-data"     id="user-profile-form">
+
+<div class="modal fade" id="exampleModalDireccion" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Agregar dirección</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+            
+                {% csrf_token %}
+            {{form5.direccion}}
+ 
+ 
+
+           
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+        <button id="submit-form" class="btn btn-primary text-white" type="submit">Agregar dirección</button>
+
+        <!-- Agrega aquí cualquier otro botón necesario -->
+      </div>
+    </div>
+  </div>
+</div>
+ 
+            </form>
      
   
     </div>
@@ -569,12 +614,12 @@
             <form action="{% url 'Ventas:abrirVenta' venta.id %}" method="POST" enctype="multipart/form-data"
                 id="user-profile-form">
                 {% csrf_token %}
-
-            {% if request.user.rol == "Admin" %}
+<!--             {% if request.user.rol == "Admin" %}
+ -->
         <button href="" type="submit" class="btn btn-tercero w-100 text-white">Reabrir
                     venta</button> 
 
-            {% endif %}
+          <!--   {% endif %} -->
 
             
             </form>
@@ -1030,17 +1075,18 @@
     }
 
     function showMenu(){
-        menu= document.getElementById("menu-container")
+        //menu= document.getElementById("menu-container")
+        menu2 = document.getElementById("acordionMenu")
         boton = document.getElementById("submit-form")
 
         if (menuBandera == false){ 
-        menu.classList.remove('d-none')
+        menu2.classList.remove('d-none')
             boton.classList.remove('d-none')
 
             menuBandera = true  
             
         } else {
-            menu.classList.add('d-none')
+            menu2.classList.add('d-none')
             boton.classList.add('d-none')
 
             menuBandera = false

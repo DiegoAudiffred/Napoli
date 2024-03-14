@@ -42,18 +42,19 @@ def enviarCorreo(request):
     texto+= "------------------------------\n"
     texto += "Total de las ventas de hoy:  $" + str(total)
     
+    
     email_reciver = "d1360.audi@gmail.com"
-    #email_reciver = "ale_0908@hotmail.com"
+    email_reciver2 = "ale_0908@hotmail.com"
 
     email_sender = "cuentapruebanapoli@gmail.com"
     email_password = "spsy apcz sewh rmbc"  # Asegúrate de que esta contraseña sea la correcta
     
-    subject = "Correo con archivo adjunto"
+    subject = "Cierre de caja del día: " + fecha_legible
     body = texto
 
     em = EmailMessage()
     em['From'] = email_sender
-    em['To'] = email_reciver
+    em['To'] = [email_reciver, email_reciver2]  # Lista de destinatarios
     em['Subject'] = subject
     em.set_content(body)
 

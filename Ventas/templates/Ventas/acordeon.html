@@ -1,0 +1,198 @@
+<div id="acordionMenu" class="d-none my-2">
+<!-- Entradas -->
+<div class="accordion accordion-flush" id="accordionFlushExample">
+  <div class="accordion-item">
+    <h2 class="accordion-header">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+       <h2>Entradas</h2>
+      </button>
+    </h2>
+    <div id="flush-collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+      <div class="accordion-body">
+        <div class="row">
+            {% for men in menu %}
+    {% if men.categoria == "Entradas" %}
+    <div class="col-3 py-2">
+        <input type="checkbox" id="platillo_{{ men.id }}" name="platillo" value="{{ men.id }}" style="display: none;">
+        <label for="platillo_{{ men.id }}" class="checkbox-label w-100 text-truncate" onclick="highlightLabel(this, {{ men.id }})" style="font-size: 18px;">
+            <img src="{{ men.url.url }}" alt="{{ men.nombre }}" width="100px" height="100px">
+            <strong>{{ men.nombre }}</strong>
+        </label><br>
+    </div>
+    {% endif %}
+    {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<!-- Ensaladas -->
+<div class="accordion accordion-flush" id="accordionFlushExample">
+  <div class="accordion-item">
+    <h2 class="accordion-header">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseEnsaladas" aria-expanded="false" aria-controls="flush-collapseEnsaladas">
+       <h2>Ensaladas</h2>
+      </button>
+    </h2>
+    <div id="flush-collapseEnsaladas" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+      <div class="accordion-body">
+        <div class="row">
+        {% for men in menu %}
+            {% if men.categoria == "Ensaladas" %}
+            <div class="col-3 py-2">
+        <input type="checkbox" id="platillo_{{ men.id }}" name="platillo" value="{{ men.id }}" style="display: none;">
+        <label for="platillo_{{ men.id }}" class="checkbox-label w-100 text-truncate" onclick="highlightLabel(this, {{ men.id }})" style="font-size: 18px;">
+            <img src="{{ men.url.url }}" alt="{{ men.nombre }}" width="100px" height="100px">
+            <strong>{{ men.nombre }}</strong>
+        </label><br>
+    </div>
+            {% endif %}
+            {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Ensaladas -->
+<div class="accordion accordion-flush" id="accordionFlushExample">
+  <div class="accordion-item">
+    <h2 class="accordion-header">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapsePastas" aria-expanded="false" aria-controls="flush-collapseEnsaladas">
+       <h2>Pastas</h2>
+      </button>
+    </h2>
+    <div id="flush-collapsePastas" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+      <div class="accordion-body">
+        <div class="row">
+        {% for men in menu %}
+            {% if men.categoria == "Pastas" %}
+            <div class="col-3 py-2">
+        <input type="checkbox" id="platillo_{{ men.id }}" name="platillo" value="{{ men.id }}" style="display: none;">
+        <label for="platillo_{{ men.id }}" class="checkbox-label w-100 text-truncate" onclick="highlightLabel(this, {{ men.id }})" style="font-size: 18px;">
+            <img src="{{ men.url.url }}" alt="{{ men.nombre }}" width="100px" height="100px">
+            <strong>{{ men.nombre }}</strong>
+        </label><br>
+    </div>
+            {% endif %}
+            {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="accordion accordion-flush" id="accordionFlushExample">
+  <div class="accordion-item">
+    <h2 class="accordion-header">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseCarnes" aria-expanded="false" aria-controls="flush-collapseEnsaladas">
+       <h2>Carnes</h2>
+      </button>
+    </h2>
+    <div id="flush-collapseCarnes" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+      <div class="accordion-body">
+        <div class="row">
+        {% for men in menu %}
+            {% if men.categoria == "Carnes" %}
+            <div class="col-3 py-2">
+        <input type="checkbox" id="platillo_{{ men.id }}" name="platillo" value="{{ men.id }}" style="display: none;">
+        <label for="platillo_{{ men.id }}" class="checkbox-label w-100 text-truncate" onclick="highlightLabel(this, {{ men.id }})" style="font-size: 18px;">
+            <img src="{{ men.url.url }}" alt="{{ men.nombre }}" width="100px" height="100px">
+            <strong>{{ men.nombre }}</strong>
+        </label><br>
+    </div>
+            {% endif %}
+            {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="accordion accordion-flush" id="accordionFlushExample">
+  <div class="accordion-item">
+    <h2 class="accordion-header">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapsePostres" aria-expanded="false" aria-controls="flush-collapseEnsaladas">
+       <h2>Postres</h2>
+      </button>
+    </h2>
+    <div id="flush-collapsePostres" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+      <div class="accordion-body">
+        <div class="row">
+        {% for men in menu %}
+            {% if men.categoria == "Postres" %}
+            <div class="col-3 py-2">
+        <input type="checkbox" id="platillo_{{ men.id }}" name="platillo" value="{{ men.id }}" style="display: none;">
+        <label for="platillo_{{ men.id }}" class="checkbox-label w-100 text-truncate" onclick="highlightLabel(this, {{ men.id }})" style="font-size: 18px;">
+            <img src="{{ men.url.url }}" alt="{{ men.nombre }}" width="100px" height="100px">
+            <strong>{{ men.nombre }}</strong>
+        </label><br>
+    </div>
+            {% endif %}
+            {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="accordion accordion-flush" id="accordionFlushExample">
+  <div class="accordion-item">
+    <h2 class="accordion-header">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseBebidas" aria-expanded="false" aria-controls="flush-collapseEnsaladas">
+       <h2>Bebidas</h2>
+      </button>
+    </h2>
+    <div id="flush-collapseBebidas" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+      <div class="accordion-body">
+        <div class="row">
+        {% for men in menu %}
+            {% if men.categoria == "Bebidas" %}
+            <div class="col-3 py-2">
+        <input type="checkbox" id="platillo_{{ men.id }}" name="platillo" value="{{ men.id }}" style="display: none;">
+        <label for="platillo_{{ men.id }}" class="checkbox-label w-100 text-truncate" onclick="highlightLabel(this, {{ men.id }})" style="font-size: 18px;">
+            <img src="{{ men.url.url }}" alt="{{ men.nombre }}" width="100px" height="100px">
+            <strong>{{ men.nombre }}</strong>
+        </label><br>
+    </div>
+            {% endif %}
+            {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="accordion accordion-flush" id="accordionFlushExample">
+  <div class="accordion-item">
+    <h2 class="accordion-header">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapsePizza" aria-expanded="false" aria-controls="flush-collapseEnsaladas">
+       <h2>Pizza & Especialidad</h2>
+      </button>
+    </h2>
+    <div id="flush-collapsePizza" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+      <div class="accordion-body">
+        <div class="row">
+        {% for men in menu %}
+            {% if men.categoria == "Pizza" %}
+            <div class="col-3 py-2">
+        <input type="checkbox" id="platillo_{{ men.id }}" name="platillo" value="{{ men.id }}" style="display: none;">
+        <label for="platillo_{{ men.id }}" class="checkbox-label w-100 text-truncate" onclick="highlightLabel(this, {{ men.id }})" style="font-size: 18px;">
+            <img src="{{ men.url.url }}" alt="{{ men.nombre }}" width="100px" height="100px">
+            <strong>{{ men.nombre }}</strong>
+        </label><br>
+    </div>
+            {% endif %}
+            {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>

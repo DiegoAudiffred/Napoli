@@ -31,6 +31,8 @@ urlpatterns = [
     path('modificarVenta/updateRow/<int:lista>/<int:venta>',views.updateRow,name='updateRow'),
     path('modificarVenta/updateRow2/<int:list>/',views.updateRow2,name='updateRow2'),
     path('modificarVenta/ticket2/<int:venta>/',views.ticketRead,name='ticketRead'),
+    path('modificarVenta/Direccion/<int:id>',views.addDireccion,name='addDireccion'),
+
 
     path('modificarVenta/ticket/<int:venta>',views.ticket,name='ticket'),
 

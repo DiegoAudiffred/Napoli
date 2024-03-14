@@ -3,7 +3,7 @@ from email.message import EmailMessage
 import json
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
-from Ventas.forms import VentaMenuForm, createVentaForm, modifyMesaForm, modifyVentaForm, modifyVentaMenuOrder
+from Ventas.forms import VentaMenuForm, VentaMenuFormDireccion, createVentaForm, modifyMesaForm, modifyVentaForm, modifyVentaMenuOrder
 from db.models import Cliente, Menu, Mesa, User, Venta, VentaMenu,Extras
 from django.db.models import Q
 from datetime import date, datetime, timezone
@@ -162,7 +162,16 @@ def menuRow2(request):
 @login_required(login_url='authentication:login')
 
 
-
+def addDireccion(request,id):
+    venta = Venta.objects.get(id=id)
+    if request.method == 'POST':
+        form = VentaMenuFormDireccion(request.POST, instance=venta)  # Inicializar el formulario con los datos POST
+        if form.is_valid():
+            user = form.save()
+            user.save()
+        else:
+            return redirect('Ventas:modificarVenta',id)
+    return redirect('Ventas:modificarVenta',id)
 
 def modificarVenta(request,id):
    
@@ -193,6 +202,7 @@ def modificarVenta(request,id):
         form2 = VentaMenuForm() #Venta
         form3 = modifyMesaForm() #Mesa
         form4 = modifyVentaMenuOrder()
+        form5 = VentaMenuFormDireccion(instance=venta)
         fecha_hoy = date.today()
         nfinal = 0
         numVentaHoy = Venta.objects.filter(fecha_compra__date = fecha_hoy)
@@ -200,7 +210,7 @@ def modificarVenta(request,id):
             if hoy == venta:
                 nfinal = index
                 print("Número de venta de hoy:", index)
-        return render(request, 'Ventas/modificarVentas.html',{'venta':venta,'items':lista,'lista':zip(lista,publications),'form':form,'form2':form2,'form3':form3,'form4':form4,'total':total2,'user':user,'mesas':mesas,'menu':menu,'nfinal':nfinal}) 
+        return render(request, 'Ventas/modificarVentas.html',{'venta':venta,'items':lista,'lista':zip(lista,publications),'form':form,'form2':form2,'form3':form3,'form4':form4,'form5':form5,'total':total2,'user':user,'mesas':mesas,'menu':menu,'nfinal':nfinal}) 
 
 #def  modificarVenta(request,mesa):
 #    mesaVenta = Mesa.objects.get(nombre = mesa)
@@ -832,7 +842,12 @@ def agregarPlatillosVenta(request,id):
         for platillo_id in platillos_ids:
             menu = Menu.objects.get(id=platillo_id)
             final = menu.precio
-            totalfinal = final
+            residuo = final % 10
+            if residuo > 5:
+                final += (10-residuo)  
+            elif residuo > 0: 
+                final += (5-residuo)  
+            print(final)
             form = VentaMenuForm({
             'venta': venta,
             'menu': menu,
@@ -841,7 +856,7 @@ def agregarPlatillosVenta(request,id):
             'familiar': False,
             'media_orden': False,
             'pizza_mitad': "",
-            'totalfinal':totalfinal,
+            'totalfinal':final,
             'extras':"",
             'final':final})
             if form.is_valid():    
