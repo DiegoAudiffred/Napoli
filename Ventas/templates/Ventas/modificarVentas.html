@@ -614,12 +614,11 @@
             <form action="{% url 'Ventas:abrirVenta' venta.id %}" method="POST" enctype="multipart/form-data"
                 id="user-profile-form">
                 {% csrf_token %}
-<!--             {% if request.user.rol == "Admin" %}
- -->
+
         <button href="" type="submit" class="btn btn-tercero w-100 text-white">Reabrir
                     venta</button> 
 
-          <!--   {% endif %} -->
+ 
 
             
             </form>

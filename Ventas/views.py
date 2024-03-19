@@ -555,7 +555,7 @@ def abrirVenta(request,id):
     
 
     venta.save()
-    return redirect('Ventas:ventasIndex')
+    return redirect('Ventas:modificarVenta',id)
 
 
 
