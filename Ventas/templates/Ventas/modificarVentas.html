@@ -100,8 +100,7 @@
         </div>
 
         <div class="col-2 border-end border-quinto  d-none d-md-block">
-            {% if venta.is_open %} {% if venta.is_reopen%} Cuenta reabierta {% else %} Cuenta abierta {% endif %}
-            {% else %} Cuenta cerrada {% endif %}
+            {% if venta.is_open %}  Cuenta abierta {% elif venta.is_reopen %}  Cuenta reabierta {% elif not venta.is_reopen or not venta.is_reopen %} Cuenta cerrada {% endif %}
         </div>
 
 
@@ -574,9 +573,7 @@
         </div>
         <!-- Botón que abre el modal -->
 
-
-<!-- Modal -->
-            <form action="{% url 'Ventas:addDireccion' venta.id %}" method="POST" enctype="multipart/form-data"     id="user-profile-form">
+ <form action="{% url 'Ventas:addDireccion' venta.id %}" method="POST" enctype="multipart/form-data"     id="user-profile-form">
 
 <div class="modal fade" id="exampleModalDireccion" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
@@ -598,13 +595,14 @@
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
         <button id="submit-form" class="btn btn-primary text-white" type="submit">Agregar dirección</button>
 
-        <!-- Agrega aquí cualquier otro botón necesario -->
       </div>
     </div>
   </div>
 </div>
  
-            </form>
+            </form> 
+<!-- Modal -->
+
      
   
     </div>

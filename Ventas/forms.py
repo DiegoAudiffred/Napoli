@@ -1,5 +1,5 @@
 from django import forms
-from db.models import Extras, Ingredientes, Menu, Venta, VentaMenu
+from db.models import Extras, Ingredientes, Menu, RegistroCambiosVentaMenu, Venta, VentaMenu
 from django.forms import ImageField, ModelChoiceField, ModelMultipleChoiceField, MultipleChoiceField
 from django.forms.widgets import ClearableFileInput
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
@@ -191,3 +191,23 @@ class modifyVentaMenuOrder(forms.ModelForm):
     class Meta:
         model = VentaMenu
         fields = ['menu','cantidad','totalfinal','observaciones','extras','media_orden','familiar','pizza_mitad','final','extraCosto']
+
+
+class RegistroCambiosVentaMenuForm(forms.ModelForm):
+      
+
+    def __init__(self, *args, **kwargs):
+        super(RegistroCambiosVentaMenuForm, self).__init__(*args, **kwargs)
+    
+        self.fields['venta_menu'].required = False
+        self.fields['accion'].required = False
+        self.fields['fecha_hora_cambio'].required = False
+        self.fields['precioNuevo'].required = False
+        self.fields['precioAnterior'].required = False
+        self.fields['venta'].required = False
+        self.fields['mesa'].required = False
+
+    class Meta:
+        model = RegistroCambiosVentaMenu
+        fields = ['venta_menu','accion','fecha_hora_cambio','precioNuevo','precioAnterior','venta','mesa']
+

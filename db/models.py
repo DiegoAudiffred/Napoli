@@ -9,7 +9,8 @@ from django.db.models.deletion import CASCADE
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db.models import Q
 from django.utils import timezone
-
+from django.db.models.signals import post_save, post_delete
+from django.dispatch import receiver
 # Create your models here.
 
 MESAS = [
@@ -59,6 +60,14 @@ METODOS = [
     ("Cheque", "Cheque"),
    
 
+]
+
+ACCION = [
+    ("CREADO", "CREADO"),
+    ("MODIFICADO", "MODIFICADO"),
+    ("AUMENTO", "AUMENTO"),
+    ("DISMINUYO", "DISMINUYO"),
+    ("ELIMINADO", "ELIMINADO"),
 ]
 
 
@@ -220,7 +229,7 @@ class Mesa(models.Model):
 
 
 
-  
+
 class Venta(models.Model):
     cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE,blank=True,null=True)
     empleado = models.ForeignKey(User, on_delete=models.CASCADE,blank=True,null=True)
@@ -232,15 +241,17 @@ class Venta(models.Model):
     is_reopen = models.BooleanField(default=False)
     bool_factura = models.BooleanField(default=False)
     ticket = models.FileField(upload_to='pdf',null=True,blank=True)
+    
     #extraPago = models.DecimalField(max_digits=8, decimal_places=2,blank=True,null=True)
-    ticketsImpresos = models.IntegerField(null=True,blank=True,default=0)
     direccion = models.CharField(max_length=200,null=True,blank=True,default="")
+
 
 class TicketImpresos(models.Model):
     venta = models.ForeignKey(Venta, on_delete=models.CASCADE,blank=True,null=True)
     cantidad = models.DecimalField(max_digits=8, decimal_places=2,blank=True,null=True)
     numImpresion = models.IntegerField(null=True,blank=True,default=0)
-    horaImpresion = models.DateTimeField(blank=True,null=True)
+    horaImpresion = models.DateTimeField(blank=True,null=True) 
+    
 
 def redondear_hacia_arriba(numero):
     residuo = numero % 10
@@ -264,8 +275,21 @@ class VentaMenu(models.Model):
     pizza_mitad = models.ForeignKey(Menu, on_delete=models.CASCADE,blank=True,null=True,related_name="pizza_mitad")
     extraCosto = models.DecimalField(max_digits=8, decimal_places=2,blank=True,null=True,default=0)
     def save(self, *args, **kwargs):
-        self.totalfinal = self.totalfinal + self.extraCosto
+        #self.totalfinal = self.totalfinal + self.extraCosto
         self.totalfinal = redondear_hacia_arriba(self.totalfinal)
 
         super().save(*args, **kwargs)
+
+class RegistroCambiosVentaMenu(models.Model):
+    #venta_menu = models.ForeignKey(VentaMenu, on_delete=models.CASCADE)
+    venta_menu = models.TextField(blank=True,null=True,max_length=100)
+    fecha_hora_cambio = models.DateTimeField(default=timezone.now)
+    precioAnterior = models.DecimalField(max_digits=8, decimal_places=2,blank=True,null=True,default=0)
+    precioNuevo  = models.DecimalField(max_digits=8, decimal_places=2,blank=True,null=True,default=0)
+    venta = models.IntegerField(null=True,blank=True,default=0)
+    mesa = models.TextField(blank=True,null=True,max_length=100)
+    accion = models.CharField( 
+        choices=ACCION, max_length=20)
+
+ 
 

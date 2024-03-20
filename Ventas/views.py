@@ -3,7 +3,7 @@ from email.message import EmailMessage
 import json
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
-from Ventas.forms import VentaMenuForm, VentaMenuFormDireccion, createVentaForm, modifyMesaForm, modifyVentaForm, modifyVentaMenuOrder
+from Ventas.forms import RegistroCambiosVentaMenuForm, VentaMenuForm, createVentaForm, modifyMesaForm, modifyVentaForm, modifyVentaMenuOrder,VentaMenuFormDireccion
 from db.models import Cliente, Menu, Mesa, User, Venta, VentaMenu,Extras
 from django.db.models import Q
 from datetime import date, datetime, timezone
@@ -184,7 +184,7 @@ def modificarVenta(request,id):
         mesas = Mesa.objects.all()
     
         menu = Menu.objects.all()
-        lista = VentaMenu.objects.filter(venta=id)
+        lista = VentaMenu.objects.filter(venta=id, cantidad__gt=0)
         print(lista)
 
         publications=[]
@@ -211,7 +211,7 @@ def modificarVenta(request,id):
                 nfinal = index
                 print("Número de venta de hoy:", index)
         return render(request, 'Ventas/modificarVentas.html',{'venta':venta,'items':lista,'lista':zip(lista,publications),'form':form,'form2':form2,'form3':form3,'form4':form4,'form5':form5,'total':total2,'user':user,'mesas':mesas,'menu':menu,'nfinal':nfinal}) 
-
+#
 #def  modificarVenta(request,mesa):
 #    mesaVenta = Mesa.objects.get(nombre = mesa)
 #    print(mesaVenta)
@@ -248,8 +248,7 @@ def modificarVenta(request,id):
 def updateRow(request,lista,venta):
         row = VentaMenu.objects.get(id=lista)
         totalUpdate = 0
-        
-        print(row)
+        totalAntes = row.totalfinal
         if request.method == "POST":
             form = modifyVentaMenuOrder(request.POST, instance=row)
             if form.is_valid():
@@ -260,7 +259,7 @@ def updateRow(request,lista,venta):
                 cantidad = form.cleaned_data['cantidad']
                 media_orden = form.cleaned_data['media_orden']
                 extras=form.cleaned_data['extras']
-
+                extraCosto =form.cleaned_data['extraCosto']
                 if platillo.categoria == "Pizza":
                     print("Pizza pizza")
                     if familiar:
@@ -313,33 +312,53 @@ def updateRow(request,lista,venta):
                             print("Entro", listaextras[i] )
                             print("Entro", listaextras[i].precio )
 
-                form.instance.totalfinal = totalUpdate * cantidad
+                form.instance.totalfinal = totalUpdate * cantidad + extraCosto
                 form.instance.final = totalUpdate
 
-                print(totalUpdate)
-                print(cantidad)   
+                
                 form.save()
+                if row.venta.is_reopen:
+                    registro_form = RegistroCambiosVentaMenuForm({'venta_menu': row.menu.nombre,
+                                                                  'accion': "MODIFICADO",
+                                                                  'fecha_hora_cambio': datetime.now(),
+                                                                  'precioAnterior': totalAntes,
+                                                                  'precioNuevo': row.totalfinal,
+                                                                  'mesa':row.venta.mesa,
+                                                                  'venta': row.venta.id,})
+        
+                    if registro_form.is_valid():
+                        registro_form.save()
+               
 
-
+                    else:
+                        print(registro_form.errors)
+        
     
         return redirect('Ventas:modificarVenta',venta)
 
 
     
 @login_required(login_url='authentication:login')
+
+
 def updateRow2(request, list):
     pizzas = Menu.objects.filter(categoria="Pizza")
-    print(pizzas)
     row = VentaMenu.objects.get(id=list)
     venta = row.venta
     if request.method == "POST":
+        # Crear una instancia del formulario de registro de cambios con los datos necesarios
+    
+        
+    
+        
         form = modifyVentaMenuOrder(request.POST, instance=row)
         if form.is_valid():
             form.save()
     else:
         form = modifyVentaMenuOrder(instance=row)
-    return render(request, 'Ventas/modificarRow.html', {'row': row, 'venta': venta, 'form': form,'pizzas':pizzas})
+        registro_form = RegistroCambiosVentaMenuForm()  # Crear un formulario en blanco
 
+    return render(request, 'Ventas/modificarRow.html', {'row': row, 'venta': venta, 'form': form,'pizzas': pizzas, 'registro_form': registro_form})
 
 
 
@@ -791,24 +810,71 @@ def guardarCambios(request,compra_id,list_id,operacion):
 
     venta = Venta.objects.get(id=compra_id)
     producto = VentaMenu.objects.get(venta=venta,id=list_id)
-
+    precioAnterior = producto.totalfinal
     if operacion == "suma":
         producto.cantidad = producto.cantidad + 1
-        producto.totalfinal = producto.final * producto.cantidad
+        producto.totalfinal = producto.final * producto.cantidad + producto.extraCosto
         print(producto.cantidad)
         print(producto.final)
         print(producto.totalfinal)
         producto.save()
+        registro_form = RegistroCambiosVentaMenuForm({
+            'venta_menu': producto.menu.nombre,
+            'accion': "AUMENTO",
+            'fecha_hora_cambio': datetime.now(),
+            'precioAnterior': precioAnterior,
+            'precioNuevo': producto.totalfinal,
+            'mesa':venta.mesa,
+            'venta': venta.id,})
+          
+        
+        
+        if registro_form.is_valid():
+                    registro_form.save()
+               
+
+        else:
+                    print(registro_form.errors)
 
     else:
         print("resta")
+        
         if producto.cantidad > 0:
 
                 producto.cantidad = producto.cantidad - 1
-                producto.totalfinal = producto.final * producto.cantidad
+                producto.totalfinal = producto.final * producto.cantidad + producto.extraCosto
                 producto.save()
+                
+                registro_form = RegistroCambiosVentaMenuForm({
+            'venta_menu': producto.menu.nombre,
+            'accion': "DISMINUYO",
+            'fecha_hora_cambio': datetime.now(),
+           'precioAnterior': precioAnterior,
+            'precioNuevo': producto.totalfinal,
+            'mesa':venta.mesa,
+            'venta': venta.id,
+            })
+          
+              
+        if registro_form.is_valid():
+                    registro_form.save()
+               
+
+        else:
+                    print(registro_form.errors)
         if producto.cantidad == 0:
-                producto.delete()
+            registro_form = RegistroCambiosVentaMenuForm({
+            'venta_menu': producto.menu.nombre,
+            'accion': "ELIMINADO",
+            'fecha_hora_cambio': datetime.now(),
+            'precioAnterior': precioAnterior,
+            'precioNuevo': 0,
+            'mesa':venta.mesa,
+            'venta': venta.id,})
+        
+            if registro_form.is_valid():
+                    registro_form.save()
+            producto.delete()
    
        
 
@@ -831,7 +897,7 @@ def cambiarFactura(request,id):
     
     
 @login_required(login_url='authentication:login')
-def agregarPlatillosVenta(request,id):
+def agregarPlatillosVenta(request, id):
     print(id)
     venta = Venta.objects.get(id=id)
     print(venta)
@@ -849,23 +915,36 @@ def agregarPlatillosVenta(request,id):
                 final += (5-residuo)  
             print(final)
             form = VentaMenuForm({
-            'venta': venta,
-            'menu': menu,
-            'cantidad': 1,
-            'observaciones': "",
-            'familiar': False,
-            'media_orden': False,
-            'pizza_mitad': "",
-            'totalfinal':final,
-            'extras':"",
-            'final':final})
+                'venta': venta,
+                'menu': menu,
+                'cantidad': 1,
+                'observaciones': "",
+                'familiar': False,
+                'media_orden': False,
+                'pizza_mitad': "",
+                'totalfinal': final,
+                'extras':"",
+                'final': final
+            })
+
             if form.is_valid():    
-                data = form.cleaned_data
-                data = form.save()
+                venta_menu_instance = form.save()  # Guardamos el formulario y obtenemos la instancia creada
+                
+                if venta.is_reopen:
+                    registro_form = RegistroCambiosVentaMenuForm({
+                        'venta_menu': menu.nombre,  # Usamos la instancia creada
+                        'accion': "CREADO",
+                        'fecha_hora_cambio': datetime.now(),
+                        'precioAnterior': 0,
+                        'precioNuevo': menu.precio,
+                        'mesa':venta.mesa,
+                        'venta': venta.id,
+                    })
+                    if registro_form.is_valid():
+                        registro_form.save()
+                    else:
+                        print(registro_form.errors)
             else:
                 print(form.errors)
-        
 
-            
-        return redirect('Ventas:modificarVenta',id)
-
+        return redirect('Ventas:modificarVenta', id)

@@ -44,6 +44,8 @@ INSTALLED_APPS = [
     'Proveedores',
     'Index',
     'Corte',
+    'tickets',
+    'VentaMenuEliminado',
     #Django
     'django.contrib.admin',
     'django.contrib.auth',
