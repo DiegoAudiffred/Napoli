@@ -3,8 +3,8 @@ from email.message import EmailMessage
 import json
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
-from Ventas.forms import RegistroCambiosVentaMenuForm, VentaMenuForm, createVentaForm, modifyMesaForm, modifyVentaForm, modifyVentaMenuOrder,VentaMenuFormDireccion
-from db.models import Cliente, Menu, Mesa, User, Venta, VentaMenu,Extras
+from Ventas.forms import RegistroCambiosVentaMenuForm, TicketImpresosForm, VentaMenuForm, createVentaForm, modifyMesaForm, modifyVentaForm, modifyVentaMenuOrder,VentaMenuFormDireccion
+from db.models import Cliente, Menu, Mesa, TicketImpresos, User, Venta, VentaMenu,Extras
 from django.db.models import Q
 from datetime import date, datetime, timezone
 from django.contrib.auth.decorators import user_passes_test,login_required
@@ -209,7 +209,6 @@ def modificarVenta(request,id):
         for index, hoy in enumerate(numVentaHoy, start=1):
             if hoy == venta:
                 nfinal = index
-                print("Número de venta de hoy:", index)
         return render(request, 'Ventas/modificarVentas.html',{'venta':venta,'items':lista,'lista':zip(lista,publications),'form':form,'form2':form2,'form3':form3,'form4':form4,'form5':form5,'total':total2,'user':user,'mesas':mesas,'menu':menu,'nfinal':nfinal}) 
 #
 #def  modificarVenta(request,mesa):
@@ -520,6 +519,52 @@ def ticketRead(request,venta):
 
         return render(request, 'Ventas/ticket.html',{'venta':venta,'items':items}) 
 
+# views.py
+
+
+
+def actualizar_ticket(request, venta):
+    if request.method == 'POST':
+        # Obtener los datos JSON del cuerpo de la solicitud
+        data = json.loads(request.body.decode('utf-8'))
+        
+        # Extraer el número de impresión de los datos
+        num_impresion = data.get('numImpresion')
+
+        print(num_impresion+1)
+        venta = Venta.objects.get(id=venta)
+
+        ticket = TicketImpresos.objects.filter(venta=venta).count()
+        print(f"Cantidad de tikets del tipo: {ticket} ")
+
+        if ticket == 0:
+            cantidad = 1
+            print("Ticket es 0")
+        else :
+            cantidad = ticket + 1
+            print("Ticket es ",cantidad)
+        print(f"Cantidad de nueva del tipo: {ticket} ")
+
+        registro_form = TicketImpresosForm({'venta': venta,
+                                                    'cantidad': venta.total ,
+                                                    'numImpresion': cantidad ,
+                                                    'horaImpresion': datetime.now(),
+                                                                  })
+               
+
+        if registro_form.is_valid():
+                        registro_form.save()
+        else:
+            print(registro_form.errors)
+            
+        venta.impresiones += 1
+        venta.save()
+
+        return JsonResponse({'success': True})
+
+    return JsonResponse({'success': False})
+
+
 
 def ticket(request,venta):
     venta = Venta.objects.get(id=venta)
@@ -737,16 +782,23 @@ def agregarVenta(request, id):
 @login_required(login_url='authentication:login')
 
 def ventasCrearMesa(request, mesa):
+    print("AQUI")
     if request.method == "POST":
+        print("ENTRO AL POST")
         mesa_ocupada = Mesa.objects.filter(nombre=mesa, ocupada=True).exists()
 
         form = createVentaForm(request.POST, request.FILES)
-
+        hot = date.today() 
+    
+        vDia = Venta.objects.filter(fecha_compra__date=hot).count()
+        
+  
         if form.is_valid():
             if not mesa_ocupada:
                 user = form.save(commit=False)
                 user.empleado = request.user
                 user.mesa = Mesa.objects.get(nombre=mesa)
+                user.numVentaDia = vDia + 1
                 mesa2 = Mesa.objects.get(nombre=mesa)
                 mesa2.ocupada = True
                 mesa2.save()
@@ -901,7 +953,8 @@ def agregarPlatillosVenta(request, id):
     print(id)
     venta = Venta.objects.get(id=id)
     print(venta)
-
+    hoy = datetime.now() 
+   
     if request.method == 'POST':
         platillos_ids = request.POST.get('platillosIds').split(',')
 
@@ -914,6 +967,7 @@ def agregarPlatillosVenta(request, id):
             elif residuo > 0: 
                 final += (5-residuo)  
             print(final)
+            
             form = VentaMenuForm({
                 'venta': venta,
                 'menu': menu,
@@ -924,7 +978,8 @@ def agregarPlatillosVenta(request, id):
                 'pizza_mitad': "",
                 'totalfinal': final,
                 'extras':"",
-                'final': final
+                'final': final,
+                
             })
 
             if form.is_valid():    

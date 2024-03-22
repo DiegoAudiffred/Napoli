@@ -2,5 +2,31 @@
 {% load static %}
 {% block body %}
 
-asd
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Venta</th>
+                        <th>Cantidad</th>
+                        <th>Número de Impresión</th>
+                        <th>Hora de Impresión</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for tkt in tkcket %}
+                    <tr>
+                        <td>{{ tkt.venta.id }}</td>
+                        <td>{{ tkt.cantidad }}</td>
+                        <td>{{ tkt.numImpresion }}</td>
+                        <td>{{ tkt.horaImpresion }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
 {% endblock %}

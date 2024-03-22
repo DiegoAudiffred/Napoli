@@ -21,7 +21,7 @@
             <tbody>
                 {% for venta in Ventas %}
                 <tr>
-                        <td>{{ forloop.counter }}</td>
+                        <td>{{ venta.numVentaDia }}</td>
 
                     <td>{{ venta.fecha_salida }}</td>
                     <td>{{ venta.mesa }}</td>
@@ -50,11 +50,20 @@
         </table>  
 
         </div>
-        <div class="col-12">
- <a class="btn btn-primary text-white py-3" data-bs-toggle="modal" data-bs-target="#modalCorteCaja">Corte de caja</a>
+        <div class="col-3">
+ <a class="btn btn-primary text-white py-2 w-100" data-bs-toggle="modal" data-bs-target="#modalCorteCaja">Corte de caja</a>
 
 
 <!-- Modal -->
+
+
+        </div>
+        <div class="col-3">
+        <button onclick="imprimirContenido2()" class="btn bg-corporateNavyBlue900 text-white py-2 w-100">Imprimir ticket</button>
+
+        </div>
+</div>
+</div>
 <div class="modal fade" id="modalCorteCaja" tabindex="-1" aria-labelledby="modalCorteCajaLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -85,9 +94,5 @@
         </div>
     </div>
 </div>
-
-        </div>
-</div>
-</div>
-
+{% include 'Corte/ticket.html' %}
 {% endblock %}

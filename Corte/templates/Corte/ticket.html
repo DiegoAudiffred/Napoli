@@ -1,0 +1,131 @@
+<style>
+    #contenidoImprimir {
+        width: 5.8cm;
+        height: 20cm;
+        /* Ancho del ticket */
+        font-family: Arial, sans-serif;
+        /* Fuente del texto */
+        font-size: 12px;
+        /* Tamaño de la fuente */
+        margin: 0 auto;
+        /* Centrar el contenido horizontalmente */
+    }
+
+    .table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .table th,
+    .table td {
+        border: 1px solid black;
+        /* Borde de las celdas */
+        padding: 4px;
+        /* Espaciado interno de las celdas */
+        text-align: left;
+        /* Alinear el texto a la izquierda */
+    }
+
+    .table tbody tr:nth-child(even) {
+        background-color: #f2f2f2;
+        /* Fondo de las filas pares */
+    }
+
+    hr {
+        border: none;
+        /* Eliminar el borde del hr */
+        border-top: 1px solid black;
+        /* Establecer un borde superior */
+        margin: 5px 0;
+        /* Espaciado alrededor del hr */
+    }
+
+    .container {
+        text-align: left;
+    }
+</style>
+<div id="contenidoImprimir" class="d-block">
+
+    <div class="">
+        <div class="row">
+            <div class="col-12 text-break">
+               Ventas del dia {{ fecha_hoy }}
+
+            </div>
+            <div class="col-12 text-break">
+                ------------------------------------
+
+            </div>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-12">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Mesa</th>
+                            <th>Total</th>
+                
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in Ventas %}
+                        <tr>
+                            <td>{{item.mesa}}</td>
+
+                            <td>{{item.total}}</td>
+                        </tr>
+
+
+                
+                        {% endfor %}
+
+                        <tr>
+                            <td>
+                                <strong>Total final:</strong>
+
+                            </td>
+                       
+                            <td><strong>${{total}}</strong></td>
+                        </tr>
+
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+   
+        
+
+    </div>
+</div>
+<!-- <button onclick="imprimirContenido2()" class="btn btn-quinto w-100 text-white">Imprimir ticket 2</button>
+ -->
+<script>
+    var conteoImpresiones = 0; // Variable para contar las impresiones
+
+    function imprimirContenido2() {
+        var contenidoImprimir = document.getElementById('contenidoImprimir').innerHTML;
+        var ventanaImpresion = window.open('', '_blank', 'width=600,height=600');
+        ventanaImpresion.document.write('<html><head><title>Imprimir contenido</title></head><body>');
+        ventanaImpresion.document.write(contenidoImprimir);
+        ventanaImpresion.document.write('</body></html>');
+        ventanaImpresion.document.close();
+        ventanaImpresion.addEventListener('load', function() {
+            conteoImpresiones++; // Incrementar el conteo de impresiones cuando la ventana de impresión se cargue completamente
+            console.log('Impresión exitosa');
+        });
+        ventanaImpresion.print();
+        ventanaImpresion.close();
+    }
+
+    window.onafterprint = function() {
+        console.log('Se ha completado la impresión');
+    };
+
+    window.onbeforeprint = function() {
+        console.log('Se está preparando para imprimir');
+    };
+</script>

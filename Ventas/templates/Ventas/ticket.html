@@ -115,7 +115,7 @@
 
         <div class="row justify-content-center">
             <div class="col-12 text-break">
-                Fecha: {{ venta.fecha_compra|date:"d-m-Y H:i" }}:0{{nfinal}}
+                Fecha: {{ venta.fecha_compra|date:"d-m-Y H:i" }}:0{{venta.numVentaDia}}
                 <hr>
             </div>
         </div>
@@ -146,19 +146,65 @@
 <!-- <button onclick="imprimirContenido2()" class="btn btn-quinto w-100 text-white">Imprimir ticket 2</button>
  -->
 <script>
-    // Llamar a la función después de cargar completamente el contenido
-
+    var conteoImpresiones = 0; // Variable para contar las impresiones
 
     function imprimirContenido2() {
+        // Obtener el contenido a imprimir
         var contenidoImprimir = document.getElementById('contenidoImprimir').innerHTML;
+
+        // Abrir una ventana de impresión
         var ventanaImpresion = window.open('', '_blank', 'width=600,height=600');
+        
+        // Escribir el contenido en la ventana de impresión
         ventanaImpresion.document.write('<html><head><title>Imprimir contenido</title></head><body>');
         ventanaImpresion.document.write(contenidoImprimir);
         ventanaImpresion.document.write('</body></html>');
-        console.log(contenidoImprimir)
         ventanaImpresion.document.close();
+        
+        // Incrementar el conteo de impresiones cuando la ventana de impresión se carga completamente
+        ventanaImpresion.addEventListener('load', function() {
+            conteoImpresiones++;
+            console.log('Impresión exitosa');
+        });
+        
+        // Imprimir el contenido y cerrar la ventana de impresión
         ventanaImpresion.print();
         ventanaImpresion.close();
+
+
+    // Obtener el token CSRF del cookie
+    var csrftoken = getCookie('csrftoken');
+
+    // Función para imprimir el contenido y enviar la solicitud AJAX
+        // Tu código existente...
+        
+        // Llamada AJAX para enviar datos al servidor después de imprimir
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "{% url 'Ventas:actualizar_ticket' venta.id %}", true); 
+        xhr.setRequestHeader("X-CSRFToken", csrftoken); // Incluir el token CSRF en la solicitud
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                console.log("Ticket actualizado correctamente en el servidor");
+            }
+        };
+        xhr.send(JSON.stringify({ numImpresion: conteoImpresiones }));
     }
 
+    // Función para obtener el valor del token CSRF del cookie
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = cookies[i].trim();
+                // Buscar el token CSRF en el cookie
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
 </script>
+

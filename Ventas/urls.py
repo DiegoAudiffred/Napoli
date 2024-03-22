@@ -35,6 +35,7 @@ urlpatterns = [
 
 
     path('modificarVenta/ticket/<int:venta>',views.ticket,name='ticket'),
+    path('actualizar-ticket/<int:venta>', views.actualizar_ticket, name='actualizar_ticket'),
 
     path('ventasTodas/',views.ventasTodas,name='ventasTodas'),
 

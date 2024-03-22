@@ -13,22 +13,37 @@ from django.contrib.auth.decorators import user_passes_test,login_required
 from django.http import QueryDict
 from decimal import Decimal
 from datetime import datetime, date
+
+
+
+
 def corteDeCajaIndex(request):
     fecha_hoy = date.today()
 
     Ventas = Venta.objects.filter(fecha_salida__date=fecha_hoy)
+    
+ 
     ventasAbiertas = Venta.objects.filter(is_open=True)
     print(ventasAbiertas)
     total = 0
     for venta in Ventas:
         total+= venta.total
-    return render(request, 'Corte/indexCorte.html',{'Ventas':Ventas,'total':total,'ventasAbiertas':ventasAbiertas})
+    return render(request, 'Corte/indexCorte.html',{'Ventas':Ventas,'total':total,'ventasAbiertas':ventasAbiertas,'fecha_hoy':fecha_hoy})
 
 
 def enviarCorreo(request):
     fecha_hoy = date.today()
+    
+
+        
     fecha_legible = fecha_hoy.strftime("%d/%m/%Y")
     Ventas = Venta.objects.filter(fecha_salida__date=fecha_hoy)
+    
+    for venta in Ventas:
+        venta.editable = False
+        venta.save()
+        
+    
     total = 0
     texto = "Ventas del dia " + fecha_legible + "\n"
 
@@ -44,7 +59,7 @@ def enviarCorreo(request):
     
     
     email_reciver = "d1360.audi@gmail.com"
-    email_reciver2 = "ale_0908@hotmail.com"
+    #email_reciver2 = "ale_0908@hotmail.com"
 
     email_sender = "cuentapruebanapoli@gmail.com"
     email_password = "spsy apcz sewh rmbc"  # Asegúrate de que esta contraseña sea la correcta
@@ -54,7 +69,7 @@ def enviarCorreo(request):
 
     em = EmailMessage()
     em['From'] = email_sender
-    em['To'] = [email_reciver, email_reciver2]  # Lista de destinatarios
+    em['To'] = [email_reciver]  # Lista de destinatarios , email_reciver2
     em['Subject'] = subject
     em.set_content(body)
 

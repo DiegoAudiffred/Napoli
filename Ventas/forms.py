@@ -1,5 +1,5 @@
 from django import forms
-from db.models import Extras, Ingredientes, Menu, RegistroCambiosVentaMenu, Venta, VentaMenu
+from db.models import Extras, Ingredientes, Menu, RegistroCambiosVentaMenu, TicketImpresos, Venta, VentaMenu
 from django.forms import ImageField, ModelChoiceField, ModelMultipleChoiceField, MultipleChoiceField
 from django.forms.widgets import ClearableFileInput
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
@@ -143,6 +143,7 @@ class VentaMenuForm(forms.ModelForm):
         self.fields['media_orden'].required = False 
         self.fields['familiar'].required = False 
         self.fields['final'].required = False 
+        #self.fields['numVentaDia'].required = False 
 
 
     class Meta:
@@ -211,3 +212,20 @@ class RegistroCambiosVentaMenuForm(forms.ModelForm):
         model = RegistroCambiosVentaMenu
         fields = ['venta_menu','accion','fecha_hora_cambio','precioNuevo','precioAnterior','venta','mesa']
 
+
+
+class TicketImpresosForm(forms.ModelForm):
+      
+
+    def __init__(self, *args, **kwargs):
+        super(TicketImpresosForm, self).__init__(*args, **kwargs)
+    
+        self.fields['venta'].required = False
+        self.fields['cantidad'].required = False
+        self.fields['numImpresion'].required = False
+        self.fields['horaImpresion'].required = False
+
+
+    class Meta:
+        model = TicketImpresos        
+        fields = ['venta','cantidad','numImpresion','horaImpresion']

@@ -4,7 +4,7 @@ import json
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from Ventas.forms import VentaMenuForm, createVentaForm, modifyMesaForm, modifyVentaForm, modifyVentaMenuOrder,VentaMenuFormDireccion
-from db.models import Cliente, Menu, Mesa, User, Venta, VentaMenu,Extras
+from db.models import Cliente, Menu, Mesa, TicketImpresos, User, Venta, VentaMenu,Extras
 from django.db.models import Q
 from datetime import date, datetime, timezone
 from django.contrib.auth.decorators import user_passes_test,login_required
@@ -45,6 +45,7 @@ def isAdmin(user):
 # Create your views here.
 def ticketsIndex(request):
 
-
-    return render(request, 'tickets/ticketsIndex.html')
+    tkcket = TicketImpresos.objects.all().order_by('-horaImpresion')
+    
+    return render(request, 'tickets/ticketsIndex.html',{'tkcket':tkcket})
 

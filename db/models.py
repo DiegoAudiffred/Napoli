@@ -241,9 +241,10 @@ class Venta(models.Model):
     is_reopen = models.BooleanField(default=False)
     bool_factura = models.BooleanField(default=False)
     ticket = models.FileField(upload_to='pdf',null=True,blank=True)
-    
-    #extraPago = models.DecimalField(max_digits=8, decimal_places=2,blank=True,null=True)
+    editable = models.BooleanField(default=True)
     direccion = models.CharField(max_length=200,null=True,blank=True,default="")
+    impresiones  = models.IntegerField(null=True,blank=True,default=0)
+    numVentaDia = models.IntegerField(null=True,blank=True,default=0)
 
 
 class TicketImpresos(models.Model):
@@ -292,4 +293,8 @@ class RegistroCambiosVentaMenu(models.Model):
         choices=ACCION, max_length=20)
 
  
-
+class CierreDeCaja(models.Model):
+    fecha_cierre = models.DateTimeField(default=timezone.now,blank=True,null=True)  # Establecer la fecha actual como valor predeterminado
+    is_open = models.BooleanField(default=True)
+    ventasDelDia = models.IntegerField(null=True,blank=True,default=0)
+    totalVentas = models.DecimalField(max_digits=8, decimal_places=2,blank=True,null=True,default=0)
