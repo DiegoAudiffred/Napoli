@@ -26,6 +26,7 @@ from io import BytesIO
 #import cups
 import subprocess
 import tempfile
+from django.db import transaction
 
 import smtplib
 from email.mime.multipart import MIMEMultipart
@@ -780,10 +781,10 @@ def agregarVenta(request, id):
 #
 @login_required(login_url='authentication:login')
 
+
+@transaction.atomic
 def ventasCrearMesa(request, mesa):
-    print("AQUI")
     if request.method == "POST":
-        print("ENTRO AL POST")
         mesa_ocupada = Mesa.objects.filter(nombre=mesa, ocupada=True).exists()
 
         form = createVentaForm(request.POST, request.FILES)
@@ -791,27 +792,31 @@ def ventasCrearMesa(request, mesa):
     
         vDia = Venta.objects.filter(fecha_compra__date=hot).count()
         
-  
         if form.is_valid():
             if not mesa_ocupada:
-                user = form.save(commit=False)
-                user.empleado = request.user
-                user.mesa = Mesa.objects.get(nombre=mesa)
-                user.numVentaDia = vDia + 1
-                mesa2 = Mesa.objects.get(nombre=mesa)
-                mesa2.ocupada = True
-                mesa2.save()
-                user.is_open = True
-                user.save()
-                id = user.id
-                return redirect("Ventas:modificarVenta", id=id)
+                # Guardar la venta dentro de una transacción
+                with transaction.atomic():
+                    user = form.save(commit=False)
+                    user.empleado = request.user
+                    user.mesa = Mesa.objects.get(nombre=mesa)
+                    user.numVentaDia = vDia + 1
+                    mesa2 = Mesa.objects.get(nombre=mesa)
+                    mesa2.ocupada = True
+                    mesa2.save()
+                    user.is_open = True
+                    user.save()
+                    id = user.id
+                    return redirect("Ventas:modificarVenta", id=id)
             else:
+                # La mesa está ocupada, mostrar algún mensaje de error
                 pass
         else:
+            # El formulario no es válido, volver a renderizar el formulario con los errores
             return render(request, 'Ventas/ventasIndex.html', {'form': form})
 
-    form = createVentaForm()
+    # Si la solicitud no es de tipo POST, redirigir a la página de índice de ventas
     return redirect("Ventas:ventasIndex")
+
 
 @login_required(login_url='authentication:login')
 
