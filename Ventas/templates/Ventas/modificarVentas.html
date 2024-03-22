@@ -107,7 +107,7 @@
         <div class="col-3 col-md-2 border-end border-quinto  ">
 
 
-            {% if not venta.is_reopen%}
+            {% if venta.is_open%}
             <form action="{% url 'Ventas:addMesa' venta.id %}" method="POST" enctype="multipart/form-data"
                 id="user-profile-form2">
                 {% csrf_token %}
@@ -607,7 +607,9 @@
   
     </div>
     {% else %}
-    <div class="row w-100">
+
+    {% if venta.editable %}
+      <div class="row w-100">
         <div class="col-3 col-md-2 text-center">
             <form action="{% url 'Ventas:abrirVenta' venta.id %}" method="POST" enctype="multipart/form-data"
                 id="user-profile-form">
@@ -623,22 +625,14 @@
 
         </div>
 
-       <div class="col-2">
+      
+
+      
+    {% endif %}
+   <div class="col-2">
         <button onclick="imprimirContenido2()" class="btn bg-corporateNavyBlue900 w-100 text-white">Imprimir ticket</button>
 
         </div>
-
-        <div class="col-5 col-md-2 text-center">
-               
-
-                <!-- <a href="{% url 'Ventas:ticket' venta.id %}" type="submit" class="btn btn-quinto w-100 text-white">Reimprimir ticket
-                    </a> -->
-
-<!-- <a href="{% url 'Ventas:ticketRead' venta.id %}" type="button" class="btn text-white" style="background-color: blue;">Imprimir ticket view</a>
- -->
-       </div>
-
-    </div>
     {% endif %}
 </div>
 

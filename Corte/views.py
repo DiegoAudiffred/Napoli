@@ -21,10 +21,9 @@ def corteDeCajaIndex(request):
     fecha_hoy = date.today()
 
     Ventas = Venta.objects.filter(fecha_salida__date=fecha_hoy)
-    
- 
+
     ventasAbiertas = Venta.objects.filter(is_open=True)
-    print(ventasAbiertas)
+    print(Ventas)
     total = 0
     for venta in Ventas:
         total+= venta.total
@@ -83,4 +82,4 @@ def enviarCorreo(request):
         smtp.login(email_sender, email_password)
         smtp.send_message(em)
     print("Enviaddo")
-    return render(request, 'Index/index.html')
+    return redirect('Index:index')

@@ -526,24 +526,23 @@ def ticketRead(request,venta):
 def actualizar_ticket(request, venta):
     if request.method == 'POST':
         # Obtener los datos JSON del cuerpo de la solicitud
-        data = json.loads(request.body.decode('utf-8'))
-        
-        # Extraer el número de impresión de los datos
-        num_impresion = data.get('numImpresion')
-
-        print(num_impresion+1)
+        print(venta)
         venta = Venta.objects.get(id=venta)
+        venta.impresiones += 1
+        venta.save()
+
 
         ticket = TicketImpresos.objects.filter(venta=venta).count()
-        print(f"Cantidad de tikets del tipo: {ticket} ")
-
+        print(f"Cantidad de tikets del tipo: {ticket} de la venta {venta}")
+        
+        cantidad = 0
         if ticket == 0:
             cantidad = 1
             print("Ticket es 0")
-        else :
+        else:
             cantidad = ticket + 1
             print("Ticket es ",cantidad)
-        print(f"Cantidad de nueva del tipo: {ticket} ")
+        print(f"Cantidad de nueva del tipo: {cantidad} ")
 
         registro_form = TicketImpresosForm({'venta': venta,
                                                     'cantidad': venta.total ,
@@ -557,8 +556,7 @@ def actualizar_ticket(request, venta):
         else:
             print(registro_form.errors)
             
-        venta.impresiones += 1
-        venta.save()
+     
 
         return JsonResponse({'success': True})
 
@@ -610,6 +608,7 @@ def cerrarVenta(request,id):
     
     #venta.ticket = generar_pdf(venta.id)
     return redirect('Ventas:ventasIndex')
+
 @login_required(login_url='authentication:login')
 
 def abrirVenta(request,id):
