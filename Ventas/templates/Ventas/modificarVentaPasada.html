@@ -92,9 +92,9 @@
     });
 </script>
 
-    {% include "Ventas/ventaMenuTable.html" %}
+{% include "Ventas/ventaMenuTable.html" %}
 
-    {% if venta.is_open %}
+{% if venta.is_reopen%}
     <div class="row ">
         <!-- <div class="col-6 col-md-4 text-center">
             <button onclick="agregarFormulario()" class="btn btn-tercero text-white w-100">Agregar a venta (avanzado)</button>
@@ -150,7 +150,7 @@
         <div class="col-md-2">
             <!--         <button id="submit-all-forms-button" class="btn btn-quinto text-white  w-100 d-none" type="submit">Enviar orden</button>
  -->
-            <form id="platillosForm" action="{% url 'Ventas:agregarPlatillosVenta' venta.id %}" method="POST">
+            <form id="platillosForm" action="{% url 'Ventas:agregarPlatillosVentaPasada' venta.id %}" method="POST">
                 {% csrf_token %}
                 <input type="hidden" id="platillosIds" name="platillosIds">
                 <button id="submit-form" class="btn btn-quinto text-white  w-100 d-none" type="submit">Enviar
@@ -217,9 +217,33 @@
         <!-- Modal -->
 
 
+{% else %}
 
+    {% if venta.editable %}
+      <div class="row w-100">
+        <div class="col-3 col-md-2 text-center">
+            <form action="{% url 'Ventas:abrirVenta' venta.id %}" method="POST" enctype="multipart/form-data"
+                id="user-profile-form">
+                {% csrf_token %}
+
+        <button href="" type="submit" class="btn btn-tercero w-100 text-white">Reabrir
+                    venta</button> 
+
+ 
+  
+            </form>
+
+        </div>
+
+
+    
+    {% endif %}
+       <div class="col-2">
+            <button onclick="imprimirContenido2()" class="btn bg-corporateNavyBlue900 w-100 text-white">Imprimir
+                ticket</button>
+
+        </div>
     </div>
-
 {% endif %}
     <div class="container d-none">
         <form method="POST" enctype="multipart/form-data" id="formVenta" class="animated">

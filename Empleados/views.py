@@ -41,21 +41,22 @@ def empleadosEditar(request,id):
     if request.method == "POST":
         form = modifyEmployeeForm(request.POST, request.FILES, instance=user)
         if form.is_valid():
-                print(form)
-                nueva_contraseña = request.POST['nueva_contraseña']
+            # Verificar si se proporcionó una nueva contraseña en la solicitud POST
+            nueva_contraseña = request.POST.get('nueva_contraseña', None)
+            print(nueva_contraseña)
+            if nueva_contraseña and nueva_contraseña.strip():  # Verificar que la contraseña no sea una cadena vacía
+                # Si se proporcionó una nueva contraseña, establecerla
                 user.set_password(nueva_contraseña)
-                user = form.save()
-                user.save()
-                update_session_auth_hash(request, user)
-
-                return redirect("Empleados:empleadosIndex")
+            user = form.save()
+            user.save()
+            update_session_auth_hash(request, user)
+            return redirect("Empleados:empleadosIndex")
         else:
-                return render(request, 'Empleados/editarEmpleado.html',{'form':form, 'user':user})
+            return render(request, 'Empleados/editarEmpleado.html',{'form':form, 'user':user})
+    else:
+        form = modifyEmployeeForm(instance=user)
+        return render(request, 'Empleados/editarEmpleado.html',{'form':form,'user':user})
 
-
-    form = modifyEmployeeForm(instance=user)
-    print(user)
-    return render(request, 'Empleados/editarEmpleado.html',{'form':form,'user':user})
 
 
 def recuperarContra(request,id):
@@ -76,7 +77,10 @@ def empleadosCrear(request):
             user = form.save()
             user.save()
             img = static('img/fondogris.PNG')
-            user.url = img
+            if not user.url:
+                user.url = img
+           
+                
             user.set_password('super')
           
             user.save()
@@ -89,10 +93,3 @@ def empleadosCrear(request):
           
 
 
-@login_required(login_url='authentication:login')
-
-def empleadosEliminar(request,id):
-    clientes = User.objects.get(id=id)
-    clientes.is_active=False
-    clientes.save()
-    return redirect("Empleados:empleadosIndex")

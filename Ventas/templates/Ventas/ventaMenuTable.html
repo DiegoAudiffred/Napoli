@@ -1,0 +1,361 @@
+
+    <div class="row">
+        <div class="col-12 p-0">
+            <div class="table-responsive">
+                <table class="table border border-3 table-hover table-bordered border-quinto table-sm">
+                    <thead class="bg-tercero">
+                        <th class="d-none d-sm-table-cell text-white">Imagen</th>
+
+                        <th class="text-white">Platillo</th>
+                        <th class="text-white">Observaciones</th>
+
+                        <th class="d-none d-sm-table-cell text-white">Precio</th>
+                        <th class="text-white">Extras</th>
+                        <th class="text-white">Cantidad</th>
+                        <th class="d-none d-sm-table-cell text-white">Total</th>
+                        {% if venta.is_open or venta.is_reopen%}
+                        <th class="text-white">Modificar</th>
+                        {% endif %}
+                    </thead>
+                    <tbody>
+
+                        {% for list,publications in lista%}
+
+                        <tr>
+
+                            <td class="align-middle border border-0 d-none d-sm-table-cell"
+                                style=" width: 75px;height:75px">
+                                <img src="{{list.menu.url.url}}" alt="" width="90px" height="90px">
+                                {% if list.pizza_mitad %}
+                                <img src="{{list.pizza_mitad.url.url}}" alt="" width="90px" height="90px">
+                                {% endif %}
+                            </td>
+
+                            <td class="align-middle  text-center">
+
+                                {% if list.media_orden %}
+                                <p>Media Orden:</p>
+
+                                {% endif %}
+                                {% if list.familiar %}
+                                <p>Pizza Familiar</p>
+
+                                {% endif %}
+                                {% if list.pizza_mitad %}
+                                Mitad:
+                                {% endif %}
+                                {{list.menu}}
+                                {% if list.pizza_mitad %}
+                                <p>Mitad: {{list.pizza_mitad}}
+                                </p> {% endif %}
+                            </td>
+                            <td class="align-middle">
+
+                                <p class=" text-break">
+
+                                    {{list.observaciones}}</p>
+                            </td>
+                            <td class="align-middle text-center d-none d-sm-table-cell" style="width: 200px;">
+                                {% if list.menu.categoria == "Pizza" %}
+                                {% if list.familiar %}
+                                {% if list.pizza_mitad %}
+                                {% if list.pizza_mitad.precioFamiliar < list.menu.precioFamiliar %}
+                                    ${{list.menu.precioFamiliar}} mxn {% else %} $ {{list.pizza_mitad.precioFamiliar}}
+                                    mxn {% endif %} {% else %} ${{list.menu.precioFamiliar}} mxn {% endif%} {% else %}
+                                    {% if list.pizza_mitad %} {% if list.pizza_mitad.precio < list.menu.precio %} $
+                                    {{list.menu.precio}} mxn {% else %} $ {{ list.pizza_mitad.precio }} mxm {% endif %}
+                                    {% else %} $ {{list.menu.precio }} mxn {% endif %} {% endif %} {% else %} {% if list.media_orden %} $ {{list.menu.mediaOrden}} mxn {% else %} $ {{list.menu.precio}}
+                                    mxn {% endif %} {% endif %} </td>
+                            <td class="align-middle text-center">
+                                {% for ingrediente in list.extras.all %}
+                                <div class="col-auto">
+                                    <p>{{ ingrediente.nombre }}
+                                        {% if list.familiar %}
+                                        ${{ ingrediente.precioFamiliar }}
+                                        {% else %}
+                                        ${{ ingrediente.precio }}
+                                        {% endif %}
+                                    </p>
+
+                                </div>
+
+
+                                {% endfor %}
+                            </td>
+                            <td class="align-middle  text-center">
+
+
+                                <div class="plus-minus-input">
+                                    {% if venta.is_open or venta.is_reopen%}
+
+                                    <div class="input-group-button my-auto">
+
+                                        <a onclick="incrementValue({{list.id}})" data-field="quantity1" class="p-1"
+                                            href="{% url 'Ventas:guardarCambios' venta.id list.id 'suma' %}"
+                                            id="plus{{list.id}}" class="btn"><i class="fa fa-plus text-primary"
+                                                aria-hidden="true"></i>
+                                        </a>
+
+                                    </div>
+                                    {% endif %}
+
+                                    <input class="input-group-field border rounded rounded-4 text-center" type="number"
+                                        name="quantity" value="{{list.cantidad}}" style="width: 50px;"
+                                        id="input{{list.id}}" disabled>
+                                    {% if venta.is_open or venta.is_reopen%}
+                                    <div class="input-group-button my-auto">
+
+                                        <a onclick="decrementValue({{list.id}})" data-field="quantity1" class="p-1"
+                                            href="{% url 'Ventas:guardarCambios' venta.id list.id 'resta' %}"
+                                            id="minus{{list.id}}" class="btn"><i class="fa fa-minus text-secondary"
+                                                aria-hidden="true"></i>
+                                        </a>
+                                    </div>
+                                    {% endif %}
+
+                                </div>
+                            </td>
+                            <td class="align-middle text-center d-none d-sm-table-cell">
+                                ${{list.final}} CU {% if list.extraCosto %} Extra: ${{list.extraCosto}} {% endif %}
+                                ${{list.totalfinal}}
+                            </td>
+
+                            {% if venta.is_open or venta.is_reopen%}
+
+                            <td class="align-middle text-center">
+
+                                <a href="{% url 'Ventas:updateRow2' list.id %}"
+                                    class="btn border bg-primary text-white " type="button">Modificar
+                                    {{list.menu.nombre}}</a>
+                            </td>
+                            {% endif %}
+                        </tr>
+
+
+
+
+
+                        {% endfor %}
+
+
+
+
+
+
+                        <tr class="d-none d-sm-table-row">
+                            <th class="bg-quinto"></th>
+                            <th class="bg-quinto"></th>
+                            <th class="bg-quinto "></th>
+                            <th class="bg-quinto"></th>
+                            <th class="bg-quinto"></th>
+                            <th class="bg-quinto"></th>
+                            {% if venta.is_open or venta.is_reopen%}
+
+                            <th class="bg-quinto"></th>
+                            {% endif %}
+
+
+                            <th class="bg-primary text-white" style="width: 200px">Total: $ {{total}}
+                            </th>
+                        </tr>
+                        <tr class="d-block d-sm-none d-table-row">
+                            <th class="bg-quinto"></th>
+
+                            <th class="bg-quinto"></th>
+                            <th class="bg-quinto text-white">Total: $</th>
+
+
+                            <th class="bg-primary text-white"> {{total}}
+                            </th>
+                        </tr>
+                    </tbody>
+
+                </table>
+
+
+                <div class="container"> <!-- Contenedor  -->
+
+
+                    {% include "Ventas/acordeon.html" %}
+
+                    <div id="menu-container" class="d-none">
+                        <div class="row">
+
+                            <h2>Entradas</h2>
+                            <div class="row">
+                                {% for men in menu %}
+                                {% if men.categoria == "Entradas" %}
+                                <div class="col-3 py-2">
+                                    <input type="checkbox" id="platillo_{{ men.id }}" name="platillo"
+                                        value="{{ men.id }}" style="display: none;">
+                                    <label for="platillo_{{ men.id }}" class="checkbox-label w-100 text-truncate"
+                                        onclick="highlightLabel(this, {{ men.id }})" style="font-size: 18px;">
+                                        <img src="{{ men.url.url }}" alt="{{ men.nombre }}" width="100px"
+                                            height="100px">
+                                        <strong>{{ men.nombre }}</strong>
+                                    </label><br>
+                                </div>
+                                {% endif %}
+                                {% endfor %}
+
+                            </div>
+                        </div>
+
+                        <div class="row">
+
+                            <h2>Ensaladas</h2>
+                            <div class="row">
+                                {% for men in menu %}
+                                {% if men.categoria == "Ensaladas" %}
+                                <div class="col-3 py-2">
+                                    <input type="checkbox" id="platillo_{{ men.id }}" name="platillo"
+                                        value="{{ men.id }}" style="display: none;">
+                                    <label for="platillo_{{ men.id }}" class="checkbox-label w-100 text-truncate"
+                                        onclick="highlightLabel(this, {{ men.id }})" style="font-size: 18px;">
+                                        <img src="{{ men.url.url }}" alt="{{ men.nombre }}" width="100px"
+                                            height="100px">
+                                        <strong>{{ men.nombre }}</strong>
+                                    </label><br>
+                                </div>
+                                {% endif %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="row">
+
+                            <h2>Pastas</h2>
+                            <div class="row">
+                                {% for men in menu %}
+                                {% if men.categoria == "Pastas" %}
+                                <div class="col-3 py-2">
+                                    <input type="checkbox" id="platillo_{{ men.id }}" name="platillo"
+                                        value="{{ men.id }}" style="display: none;">
+                                    <label for="platillo_{{ men.id }}" class="checkbox-label w-100 text-truncate"
+                                        onclick="highlightLabel(this, {{ men.id }})" style="font-size: 18px;">
+                                        <img src="{{ men.url.url }}" alt="{{ men.nombre }}" width="100px"
+                                            height="100px">
+                                        <strong>{{ men.nombre }}</strong>
+                                    </label><br>
+                                </div>
+                                {% endif %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="row">
+
+                            <h2>Carnes</h2>
+                            <div class="row">
+                                {% for men in menu %}
+                                {% if men.categoria == "Carnes" %}
+                                <div class="col-3 py-2">
+                                    <input type="checkbox" id="platillo_{{ men.id }}" name="platillo"
+                                        value="{{ men.id }}" style="display: none;">
+                                    <label for="platillo_{{ men.id }}" class="checkbox-label w-100 text-truncate"
+                                        onclick="highlightLabel(this, {{ men.id }})" style="font-size: 18px;">
+                                        <img src="{{ men.url.url }}" alt="{{ men.nombre }}" width="100px"
+                                            height="100px">
+                                        <strong>{{ men.nombre }}</strong>
+                                    </label><br>
+                                </div>
+                                {% endif %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="row">
+
+                            <h2>Postres</h2>
+                            <div class="row">
+                                {% for men in menu %}
+                                {% if men.categoria == "Postres" %}
+                                <div class="col-3 py-2">
+                                    <input type="checkbox" id="platillo_{{ men.id }}" name="platillo"
+                                        value="{{ men.id }}" style="display: none;">
+                                    <label for="platillo_{{ men.id }}" class="checkbox-label w-100 text-truncate"
+                                        onclick="highlightLabel(this, {{ men.id }})" style="font-size: 18px;">
+                                        <img src="{{ men.url.url }}" alt="{{ men.nombre }}" width="100px"
+                                            height="100px">
+                                        <strong>{{ men.nombre }}</strong>
+                                    </label><br>
+                                </div>
+                                {% endif %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="row">
+
+                            <h2>Bebidas</h2>
+                            <div class="row">
+                                {% for men in menu %}
+                                {% if men.categoria == "Bebidas" %}
+                                <div class="col-3 py-2">
+                                    <input type="checkbox" id="platillo_{{ men.id }}" name="platillo"
+                                        value="{{ men.id }}" style="display: none;">
+                                    <label for="platillo_{{ men.id }}" class="checkbox-label w-100 text-truncate"
+                                        onclick="highlightLabel(this, {{ men.id }})" style="font-size: 18px;">
+                                        <img src="{{ men.url.url }}" alt="{{ men.nombre }}" width="100px"
+                                            height="100px">
+                                        <strong>{{ men.nombre }}</strong>
+                                    </label><br>
+                                </div>
+                                {% endif %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="row">
+
+                            <h2>Pizza</h2>
+                            <div class="row">
+                                {% for men in menu %}
+                                {% if men.categoria == "Pizza" %}
+                                <div class="col-3 py-2">
+                                    <input type="checkbox" id="platillo_{{ men.id }}" name="platillo"
+                                        value="{{ men.id }}" style="display: none;">
+                                    <label for="platillo_{{ men.id }}" class="checkbox-label w-100 text-truncate"
+                                        onclick="highlightLabel(this, {{ men.id }})" style="font-size: 18px;">
+                                        <img src="{{ men.url.url }}" alt="{{ men.nombre }}" width="100px"
+                                            height="100px">
+                                        <strong>{{ men.nombre }}</strong>
+                                    </label><br>
+                                </div>
+                                {% endif %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="row">
+
+                            <h2>Especialidad</h2>
+                            <div class="row">
+                                {% for men in menu %}
+                                {% if men.categoria == "Especialidad" %}
+                                <div class="col-3 py-2">
+                                    <input type="checkbox" id="platillo_{{ men.id }}" name="platillo"
+                                        value="{{ men.id }}" style="display: none;">
+                                    <label for="platillo_{{ men.id }}" class="checkbox-label w-100 text-truncate"
+                                        onclick="highlightLabel(this, {{ men.id }})" style="font-size: 18px;">
+                                        <img src="{{ men.url.url }}" alt="{{ men.nombre }}" width="100px"
+                                            height="100px">
+                                        <strong>{{ men.nombre }}</strong>
+                                    </label><br>
+                                </div>
+                                {% endif %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+
+
+
+                    <div id="dynamic-forms-container">
+
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>

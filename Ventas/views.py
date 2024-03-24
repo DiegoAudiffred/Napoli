@@ -58,43 +58,37 @@ def ventasIndex(request):
     mesas = Mesa.objects.all()
     
     #print(Mesa.objects.get(ocupada = True))
+    #print(mesas)
     for mesa in mesas:
         if mesa.ocupada:
+            #print(mesa)
+
             ventaActual = Venta.objects.get(mesa = mesa,is_open = True)
             mesasEnUso.append((mesa.id,ventaActual.id))
             mesasEnUso2.append(mesa.id)
             
 
-    print(mesasEnUso)
+    #print(mesasEnUso)
   
 
     return render(request, 'Ventas/indexVentas.html',{'mesasEnUso2':mesasEnUso2,'mesasEnUso':mesasEnUso,'form':form,'ventas':ventas,'form2':form2,'form3':form3,'user':user})
 
 @login_required(login_url='authentication:login')
 
-def addCliente(request,id):
-    venta = Venta.objects.get(id=id)
-    if request.method == 'POST':
-        form = modifyVentaForm(request.POST, instance=venta)  # Inicializar el formulario con los datos POST
-        if form.is_valid():
-            user = form.save()
-            user.save()
-        else:
-            return redirect('Ventas:modificarVenta',id)
-
-    return redirect('Ventas:modificarVenta',id)
 
 
 def addMesa(request,id):
     venta = Venta.objects.get(id=id)
     mesa = Mesa.objects.get(nombre = venta.mesa)
+   
+    mesa_nueva = mesa
     if request.method == 'POST':
         form = modifyMesaForm (request.POST, instance=venta)  # Inicializar el formulario con los datos POST
         if form.is_valid():
             mesa_value = form.cleaned_data['mesa']
             
             mesa_value2 = Mesa.objects.get(nombre=mesa_value)
-
+        
             if mesa_value2.ocupada:
                 pass
             else:
@@ -103,13 +97,15 @@ def addMesa(request,id):
                
                 mesa_value2.ocupada = True
                 mesa.ocupada = False
-            mesa_value2.save()
-            mesa.save()
+                mesa_value2.save()
+                mesa.save()
+                mesa_nueva=mesa_value2
         else:
             print(form.errors)
-            return redirect('Ventas:modificarVenta',id)
+            
+            return redirect('Ventas:modificarVenta',mesa.id)
 
-    return redirect('Ventas:modificarVenta',id)
+    return redirect('Ventas:modificarVenta',mesa_nueva.id)
 
 def addRow(request, id):
     venta = Venta.objects.get(id=id)
@@ -171,16 +167,15 @@ def addDireccion(request,id):
             user = form.save()
             user.save()
         else:
-            return redirect('Ventas:modificarVenta',id)
-    return redirect('Ventas:modificarVenta',id)
+            return redirect('Ventas:modificarVenta',venta.mesa.id)
+    return redirect('Ventas:modificarVenta',venta.mesa.id)
 
-def modificarVenta(request,id):
-   
 
+def modificarVentaPasada(request,id):
+        
         venta = Venta.objects.get(id=id)
-        print(id)
+        #venta = Venta.objects.get(id=26)
         print(venta)
-        mesaactual = venta.mesa
     
         mesas = Mesa.objects.all()
     
@@ -210,42 +205,52 @@ def modificarVenta(request,id):
         for index, hoy in enumerate(numVentaHoy, start=1):
             if hoy == venta:
                 nfinal = index
+        return render(request, 'Ventas/modificarVentaPasada.html',{'venta':venta,'items':lista,'lista':zip(lista,publications),'form':form,'form2':form2,'form3':form3,'form4':form4,'form5':form5,'total':total2,'user':user,'mesas':mesas,'menu':menu,'nfinal':nfinal}) 
+
+
+
+
+
+def modificarVenta(request,id):
+        mesa = Mesa.objects.get(id=id)
+        print(mesa)
+        venta = Venta.objects.get(mesa=mesa,is_open= True)
+        #venta = Venta.objects.get(id=26)
+        print(venta)
+    
+        mesas = Mesa.objects.all()
+    
+        menu = Menu.objects.all()
+        lista = VentaMenu.objects.filter(venta=venta.id, cantidad__gt=0)
+        print(lista)
+
+        publications=[]
+        for lst in lista:
+                publications.append(modifyVentaMenuOrder(instance=lst))
+    
+        user = request.user
+        total2 = 0
+        for total in lista:
+            total2 += total.totalfinal
+           
+        venta.total = total2
+        venta.save()
+        form = modifyVentaForm(instance=venta) #Cliente
+        form2 = VentaMenuForm() #Venta
+        form3 = modifyMesaForm() #Mesa
+        form4 = modifyVentaMenuOrder()
+        form5 = VentaMenuFormDireccion(instance=venta)
+        fecha_hoy = date.today()
+        nfinal = 0
+        numVentaHoy = Venta.objects.filter(fecha_compra__date = fecha_hoy)
+        for index, hoy in enumerate(numVentaHoy, start=1):
+            if hoy == venta:
+                nfinal = index
         return render(request, 'Ventas/modificarVentas.html',{'venta':venta,'items':lista,'lista':zip(lista,publications),'form':form,'form2':form2,'form3':form3,'form4':form4,'form5':form5,'total':total2,'user':user,'mesas':mesas,'menu':menu,'nfinal':nfinal}) 
-#
-#def  modificarVenta(request,mesa):
-#    mesaVenta = Mesa.objects.get(nombre = mesa)
-#    print(mesaVenta)
-#
-#    venta = Venta.objects.get(mesa = mesaVenta,is_open = True)
-#    print(venta)
-#
-#    mesas = Mesa.objects.all()
-#    
-#    menu = Menu.objects.all()
-#    lista = VentaMenu.objects.filter(venta=venta.id)
-#    print(lista)
-#    publications=[]
-#    for lst in lista:
-#            publications.append(modifyVentaMenuOrder(instance=lst))
-#  
-#    user = request.user
-#    total2 = 0
-#    for total in lista:
-#        total2 += total.totalfinal
-#        print(total)
-#        print(total2,"acumulado")
-#    venta.total = total2
-#    venta.save()
-#    form = modifyVentaForm(instance=venta) #Cliente
-#    form2 = VentaMenuForm() #Venta
-#    form3 = modifyMesaForm() #Mesa
-#    form4 = modifyVentaMenuOrder()
-#
-#    return render(request, 'Ventas/modificarVentas.html',{'venta':venta,'lista':zip(lista,publications),'form':form,'form2':form2,'form3':form3,'form4':form4,'total':total2,'user':user,'mesas':mesas,'menu':menu}) 
 
 
 @login_required(login_url='authentication:login')
-def updateRow(request,lista,venta):
+def updateRow(request,lista):
         row = VentaMenu.objects.get(id=lista)
         totalUpdate = 0
         totalAntes = row.totalfinal
@@ -333,8 +338,12 @@ def updateRow(request,lista,venta):
                     else:
                         print(registro_form.errors)
         
-    
-        return redirect('Ventas:modificarVenta',venta)
+        if row.venta.is_reopen:
+            return redirect('Ventas:modificarVentaPasada',row.venta.id)
+
+        else:
+            return redirect('Ventas:modificarVenta',row.venta.mesa.id)
+
 
 
     
@@ -345,20 +354,14 @@ def updateRow2(request, list):
     pizzas = Menu.objects.filter(categoria="Pizza")
     row = VentaMenu.objects.get(id=list)
     venta = row.venta
-    if request.method == "POST":
-        # Crear una instancia del formulario de registro de cambios con los datos necesarios
+    #if request.method == "POST":
+    #    form = modifyVentaMenuOrder(request.POST, instance=row)
+    #    if form.is_valid():
+    #        form.save()
     
-        
-    
-        
-        form = modifyVentaMenuOrder(request.POST, instance=row)
-        if form.is_valid():
-            form.save()
-    else:
-        form = modifyVentaMenuOrder(instance=row)
-        registro_form = RegistroCambiosVentaMenuForm()  # Crear un formulario en blanco
+    form = modifyVentaMenuOrder(instance=row)
 
-    return render(request, 'Ventas/modificarRow.html', {'row': row, 'venta': venta, 'form': form,'pizzas': pizzas, 'registro_form': registro_form})
+    return render(request, 'Ventas/modificarRow.html', {'row': row, 'venta': venta, 'form': form,'pizzas': pizzas})
 
 
 
@@ -619,7 +622,7 @@ def abrirVenta(request,id):
     
 
     venta.save()
-    return redirect('Ventas:modificarVenta',id)
+    return redirect('Ventas:modificarVentaPasada',id)
 
 
 
@@ -786,14 +789,18 @@ def agregarVenta(request, id):
 def ventasCrearMesa(request, mesa):
     if request.method == "POST":
         mesa_ocupada = Mesa.objects.filter(nombre=mesa, ocupada=True).exists()
-
+        print(mesa_ocupada)
+        
         form = createVentaForm(request.POST, request.FILES)
         hot = date.today() 
     
         vDia = Venta.objects.filter(fecha_compra__date=hot).count()
-        
+        print("Jalo Chido 1")
+
         if form.is_valid():
-            if not mesa_ocupada:
+            if not mesa_ocupada:    
+                print("Jalo Chido 2")
+                mesa = Mesa.objects.get(nombre=mesa)
                 # Guardar la venta dentro de una transacción
                 with transaction.atomic():
                     user = form.save(commit=False)
@@ -806,14 +813,17 @@ def ventasCrearMesa(request, mesa):
                     user.is_open = True
                     user.save()
                     id = user.id
-                    return redirect("Ventas:modificarVenta", id=id)
+                    print("Jalo Chido 3")
+
+                    return redirect("Ventas:modificarVenta", id=mesa.id)
             else:
                 # La mesa está ocupada, mostrar algún mensaje de error
                 pass
         else:
+            print("No Jalo Chido 4")
             # El formulario no es válido, volver a renderizar el formulario con los errores
             return render(request, 'Ventas/ventasIndex.html', {'form': form})
-
+   
     # Si la solicitud no es de tipo POST, redirigir a la página de índice de ventas
     return redirect("Ventas:ventasIndex")
 
@@ -937,7 +947,7 @@ def guardarCambios(request,compra_id,list_id,operacion):
         
         
     
-    return redirect("Ventas:modificarVenta",compra_id)
+    return redirect("Ventas:modificarVenta",venta.mesa.id)
 @login_required(login_url='authentication:login')
 
 def cambiarFactura(request,id):
@@ -1006,4 +1016,60 @@ def agregarPlatillosVenta(request, id):
             else:
                 print(form.errors)
 
-        return redirect('Ventas:modificarVenta', id)
+        return redirect('Ventas:modificarVenta', venta.mesa.id)
+    
+    
+def agregarPlatillosVentaPasada(request, id):
+    print(id)
+    venta = Venta.objects.get(id=id)
+    print(venta)
+    hoy = datetime.now() 
+   
+    if request.method == 'POST':
+        platillos_ids = request.POST.get('platillosIds').split(',')
+
+        for platillo_id in platillos_ids:
+            menu = Menu.objects.get(id=platillo_id)
+            final = menu.precio
+            residuo = final % 10
+            if residuo > 5:
+                final += (10-residuo)  
+            elif residuo > 0: 
+                final += (5-residuo)  
+            print(final)
+            
+            form = VentaMenuForm({
+                'venta': venta,
+                'menu': menu,
+                'cantidad': 1,
+                'observaciones': "",
+                'familiar': False,
+                'media_orden': False,
+                'pizza_mitad': "",
+                'totalfinal': final,
+                'extras':"",
+                'final': final,
+                
+            })
+
+            if form.is_valid():    
+                venta_menu_instance = form.save()  # Guardamos el formulario y obtenemos la instancia creada
+                
+                if venta.is_reopen:
+                    registro_form = RegistroCambiosVentaMenuForm({
+                        'venta_menu': menu.nombre,  # Usamos la instancia creada
+                        'accion': "CREADO",
+                        'fecha_hora_cambio': datetime.now(),
+                        'precioAnterior': 0,
+                        'precioNuevo': menu.precio,
+                        'mesa':venta.mesa,
+                        'venta': venta.id,
+                    })
+                    if registro_form.is_valid():
+                        registro_form.save()
+                    else:
+                        print(registro_form.errors)
+            else:
+                print(form.errors)
+
+        return redirect('Ventas:modificarVentaPasada', venta.id)

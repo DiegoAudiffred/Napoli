@@ -10,7 +10,6 @@ urlpatterns = [
     path('<int:id>',views.empleadosEditar,name='empleadosEditar'),
     path('crear/',views.empleadosCrear,name='empleadosCrear'),
     path('AjaxSearch', views.employeeCard, name='employeeCard'),
-    path('Eliminar/<int:id>',views.empleadosEliminar,name='empleadosEliminar'),
     path('recuperar/<int:id>',views.recuperarContra,name='recuperarContra'),
 
 

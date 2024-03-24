@@ -36,7 +36,7 @@
                 {% if not venta.is_reopen %} <b class="text-secondary">Cuenta cerrada</b>  {% else %}  <b class="text-primary">Cuenta Re-Abierta</b> {% endif %}
                 </li>
                 <li class="list-group-item d-flex justify-content-end align-items-center px-0 bg-cuarto">
-                    <a href="{% url 'Ventas:modificarVenta' venta.id %}" class="card-link btn text-white btn-quinto" id="venta_{venta.id}">Ver
+                    <a href="{% url 'Ventas:modificarVentaPasada' venta.id %}" class="card-link btn text-white btn-quinto" id="venta_{venta.id}">Ver
                         cuenta
                     </a>
                 </li>

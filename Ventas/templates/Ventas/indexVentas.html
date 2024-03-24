@@ -27,7 +27,7 @@
 <div class="col-2">
       {% if 26 in mesasEnUso2%}   
           
-            <a href="{% url 'Ventas:modificarVenta' 0 %}" class="btn border border-3 mb-3 bg-corporateYellow800 text-white w-100" id="mesa26"
+            <a href="{% url 'Ventas:modificarVenta' 26 %}" class="btn border border-3 mb-3 bg-corporateYellow800 text-white w-100" id="mesa26"
                 style=" display: flex;  align-items: center;  justify-content: center;">
                 <b>Para llevar 1</b>
             </a>
@@ -47,7 +47,7 @@
 <div class="col-2">
   {% if 27 in mesasEnUso2%}   
           
-            <a href="{% url 'Ventas:modificarVenta' 0 %}" class="btn border border-3 mb-3 bg-corporateYellow800 text-white w-100" id="mesa27"
+            <a href="{% url 'Ventas:modificarVenta' 27 %}" class="btn border border-3 mb-3 bg-corporateYellow800 text-white w-100" id="mesa27"
                 style=" display: flex;  align-items: center;  justify-content: center;">
                 <b>Para llevar 2</b>
             </a>
@@ -66,7 +66,7 @@
 <div class="col-2">
      {% if 28 in mesasEnUso2%}   
           
-            <a href="{% url 'Ventas:modificarVenta' 0 %}" class="btn border border-3 mb-3 bg-corporateYellow800 text-white w-100" id="mesa28"
+            <a href="{% url 'Ventas:modificarVenta' 28 %}" class="btn border border-3 mb-3 bg-corporateYellow800 text-white w-100" id="mesa28"
                 style=" display: flex;  align-items: center;  justify-content: center;">
                 <b>Para llevar 3</b>
             </a>
@@ -85,7 +85,7 @@
 <div class="col-2">
      {% if 30 in mesasEnUso2%}   
           
-            <a href="{% url 'Ventas:modificarVenta' 0 %}" class="btn border border-3 mb-3 bg-corporateYellow800 text-white w-100" id="mesa30"
+            <a href="{% url 'Ventas:modificarVenta' 30 %}" class="btn border border-3 mb-3 bg-corporateYellow800 text-white w-100" id="mesa30"
                 style=" display: flex;  align-items: center;  justify-content: center;">
                 <b>Para llevar 4</b>
             </a>
@@ -105,7 +105,7 @@
 <div class="col-2">
      {% if 31 in mesasEnUso2%}   
           
-            <a href="{% url 'Ventas:modificarVenta' 0 %}" class="btn border border-3 mb-3 bg-corporateYellow800 text-white w-100" id="mesa31"
+            <a href="{% url 'Ventas:modificarVenta' 31 %}" class="btn border border-3 mb-3 bg-corporateYellow800 text-white w-100" id="mesa31"
                 style=" display: flex;  align-items: center;  justify-content: center;">
                 <b>Para llevar 5</b>
             </a>
@@ -125,7 +125,7 @@
  <div class="col-2">
   {% if 29 in mesasEnUso2%}   
           
-            <a href="{% url 'Ventas:modificarVenta' 0 %}" class="btn border border-3 mb-3 bg-corporateYellow800 text-white" id="mesa29"
+            <a href="{% url 'Ventas:modificarVenta' 29 %}" class="btn border border-3 mb-3 bg-corporateYellow800 text-white" id="mesa29"
                 style="width: 100px;height: 100px; display: flex;  align-items: center;  justify-content: center;">
                 <b>Donaciones</b>
             </a>
@@ -230,31 +230,25 @@
  -->
 
 <script>
-window.onload = function() {
-   var listaTuplas = [
-            {% for tupla in mesasEnUso %}
-                [{{ tupla.0 }}, {{ tupla.1 }}],
-            {% endfor %}
-        ];
-        for (var i = 0; i < listaTuplas.length; i++) {
-            console.log(listaTuplas[i]);
-        }
-        
-var modificarVentaUrl=""
-    for(var i = 0; i < listaTuplas.length;i++){
-        enlaceMesa = document.getElementById('mesa'+listaTuplas[i][0])
-        modificarVentaUrl = "{% url 'Ventas:modificarVenta' 999 %}".replace("999", listaTuplas[i][1]);
-        enlaceMesa.href = modificarVentaUrl
+//window.onload = function() {
+//   var listaTuplas = [
+//            {% for tupla in mesasEnUso %}
+//                [{{ tupla.0 }}, {{ tupla.1 }}],
+//            {% endfor %}
+//        ];
+//        for (var i = 0; i < listaTuplas.length; i++) {
+//            console.log(listaTuplas[i]);
+//        }
+//        
+//var modificarVentaUrl=""
+//    for(var i = 0; i < listaTuplas.length;i++){
+//        enlaceMesa = document.getElementById('mesa'+listaTuplas[i][0])
+//        modificarVentaUrl = "{% url 'Ventas:modificarVenta' 999 %}".replace("999", listaTuplas[i][1]);
+//        enlaceMesa.href = modificarVentaUrl
+//
+//    }    
+//};
 
-       
-    
-    }    
-
-
-
-};
-
-    
 </script>
 <script>
   
