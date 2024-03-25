@@ -246,7 +246,10 @@ def modificarVenta(request,id):
         for index, hoy in enumerate(numVentaHoy, start=1):
             if hoy == venta:
                 nfinal = index
-        return render(request, 'Ventas/modificarVentas.html',{'venta':venta,'items':lista,'lista':zip(lista,publications),'form':form,'form2':form2,'form3':form3,'form4':form4,'form5':form5,'total':total2,'user':user,'mesas':mesas,'menu':menu,'nfinal':nfinal}) 
+        if venta:
+            return render(request, 'Ventas/modificarVentas.html',{'venta':venta,'items':lista,'lista':zip(lista,publications),'form':form,'form2':form2,'form3':form3,'form4':form4,'form5':form5,'total':total2,'user':user,'mesas':mesas,'menu':menu,'nfinal':nfinal}) 
+        else:
+            return redirect("Ventas:ventasIndex")
 
 
 @login_required(login_url='authentication:login')
