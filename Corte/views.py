@@ -20,10 +20,9 @@ from datetime import datetime, date
 def corteDeCajaIndex(request):
     fecha_hoy = date.today()
 
-    Ventas = Venta.objects.filter(fecha_salida__date=fecha_hoy)
+    Ventas = Venta.objects.filter(fecha_salida__date=fecha_hoy,is_open=False,is_reopen=False)
 
     ventasAbiertas = Venta.objects.filter(is_open=True)
-    print(Ventas)
     total = 0
     for venta in Ventas:
         total+= venta.total
@@ -81,5 +80,4 @@ def enviarCorreo(request):
     with smtplib.SMTP_SSL('smtp.gmail.com', 465, context=context) as smtp:
         smtp.login(email_sender, email_password)
         smtp.send_message(em)
-    print("Enviaddo")
     return redirect('Index:index')

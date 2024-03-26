@@ -249,7 +249,7 @@ class Venta(models.Model):
 
 class TicketImpresos(models.Model):
     venta = models.ForeignKey(Venta, on_delete=models.CASCADE,blank=True,null=True)
-    cantidad = models.DecimalField(max_digits=8, decimal_places=2,blank=True,null=True)
+    cantidad = models.DecimalField(max_digits=10, decimal_places=2,blank=True,null=True)
     numImpresion = models.IntegerField(null=True,blank=True,default=0)
     horaImpresion = models.DateTimeField(blank=True,null=True) 
     

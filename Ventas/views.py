@@ -14,16 +14,13 @@ import re
 from reportlab.lib.pagesizes import letter
 from reportlab.lib.units import inch
 from reportlab.pdfgen import canvas
-#import win32print
-#import win32ui
+
 import os
 import ssl
-#import win32api
 import PyPDF2
 import subprocess
 from django.core.files import File
 from io import BytesIO
-#import cups
 import subprocess
 import tempfile
 from django.db import transaction
@@ -57,18 +54,15 @@ def ventasIndex(request):
     mesasEnUso = []
     mesas = Mesa.objects.all()
     
-    #print(Mesa.objects.get(ocupada = True))
-    #print(mesas)
+
     for mesa in mesas:
         if mesa.ocupada:
-            #print(mesa)
 
             ventaActual = Venta.objects.get(mesa = mesa,is_open = True)
             mesasEnUso.append((mesa.id,ventaActual.id))
             mesasEnUso2.append(mesa.id)
             
 
-    #print(mesasEnUso)
   
 
     return render(request, 'Ventas/indexVentas.html',{'mesasEnUso2':mesasEnUso2,'mesasEnUso':mesasEnUso,'form':form,'ventas':ventas,'form2':form2,'form3':form3,'user':user})
@@ -101,7 +95,6 @@ def addMesa(request,id):
                 mesa.save()
                 mesa_nueva=mesa_value2
         else:
-            print(form.errors)
             
             return redirect('Ventas:modificarVenta',mesa.id)
 
@@ -175,13 +168,11 @@ def modificarVentaPasada(request,id):
         
         venta = Venta.objects.get(id=id)
         #venta = Venta.objects.get(id=26)
-        print(venta)
     
         mesas = Mesa.objects.all()
     
         menu = Menu.objects.all()
         lista = VentaMenu.objects.filter(venta=id, cantidad__gt=0)
-        print(lista)
 
         publications=[]
         for lst in lista:
@@ -213,16 +204,13 @@ def modificarVentaPasada(request,id):
 
 def modificarVenta(request,id):
         mesa = Mesa.objects.get(id=id)
-        print(mesa)
         venta = Venta.objects.get(mesa=mesa,is_open= True)
         #venta = Venta.objects.get(id=26)
-        print(venta)
     
         mesas = Mesa.objects.all()
     
         menu = Menu.objects.all()
         lista = VentaMenu.objects.filter(venta=venta.id, cantidad__gt=0)
-        print(lista)
 
         publications=[]
         for lst in lista:
@@ -269,23 +257,17 @@ def updateRow(request,lista):
                 extras=form.cleaned_data['extras']
                 extraCosto =form.cleaned_data['extraCosto']
                 if platillo.categoria == "Pizza":
-                    print("Pizza pizza")
                     if familiar:
-                        print("Familiar")
                         if pizza_mitad:
-                            print("Mitad")
                             if pizza_mitad.precioFamiliar < platillo.precioFamiliar:
-                                print("La cara es la ") 
-                                print(platillo.nombre)
+                        
                                 totalUpdate += platillo.precioFamiliar 
 
                             else:
                                 totalUpdate += (pizza_mitad.precioFamiliar)
-                                print(pizza_mitad.nombre)   
 
                         else:
-                            print(f"Total:{platillo}")
-                            print(f"cantidad:{pizza_mitad}")
+                       
                            
                             totalUpdate += (platillo.precioFamiliar)
 
@@ -313,13 +295,10 @@ def updateRow(request,lista):
                     if listaextras[i] in extras:
                         if familiar:
                             totalUpdate += (listaextras[i].precio* 2)
-                            print("Entro", listaextras[i] )
-                            print("Entro", listaextras[i].precio )
+                          
                         else:
                             totalUpdate += listaextras[i].precio
-                            print("Entro", listaextras[i] )
-                            print("Entro", listaextras[i].precio )
-
+                          
                 form.instance.totalfinal = totalUpdate * cantidad + extraCosto
                 form.instance.final = totalUpdate
 
@@ -339,8 +318,7 @@ def updateRow(request,lista):
                
 
                     else:
-                        print(registro_form.errors)
-        
+                        pass
         if row.venta.is_reopen:
             return redirect('Ventas:modificarVentaPasada',row.venta.id)
 
@@ -410,7 +388,6 @@ def generar_pdf(id):
         
         if products.totalfinal >=100 and products.totalfinal < 1000:
             cantidad +="    "   
-            print("Entro", products.menu.nombre)
         elif products.totalfinal >= 1000:
             cantidad +="  "  
         else:
@@ -432,7 +409,7 @@ def generar_pdf(id):
             pdf.drawString(line_start, alturaFor - var + 40, ing[3])
 
         except:
-            print("")
+            pass
         pdf.drawString(line_start, alturaFor - var + 50, "                                 ")
 
         var += espacio_linea  
@@ -477,7 +454,6 @@ def generar_pdf(id):
         texto = ''
         for page in pdf_reader.pages:
             texto += page.extract_text()
-    print(texto)
   
 
 
@@ -511,7 +487,6 @@ def enviarCorreo():
         smtp.login(email_sender, email_password)
         smtp.send_message(em)
     
-    print("Correo electrónico con el archivo adjunto enviado con éxito")
 
 # Llamada a la función para enviar el correo electrónico
   
@@ -533,23 +508,19 @@ def ticketRead(request,venta):
 def actualizar_ticket(request, venta):
     if request.method == 'POST':
         # Obtener los datos JSON del cuerpo de la solicitud
-        print(venta)
         venta = Venta.objects.get(id=venta)
         venta.impresiones += 1
         venta.save()
 
 
         ticket = TicketImpresos.objects.filter(venta=venta).count()
-        print(f"Cantidad de tikets del tipo: {ticket} de la venta {venta}")
         
         cantidad = 0
         if ticket == 0:
             cantidad = 1
-            print("Ticket es 0")
         else:
             cantidad = ticket + 1
-            print("Ticket es ",cantidad)
-        print(f"Cantidad de nueva del tipo: {cantidad} ")
+           
 
         registro_form = TicketImpresosForm({'venta': venta,
                                                     'cantidad': venta.total ,
@@ -561,7 +532,7 @@ def actualizar_ticket(request, venta):
         if registro_form.is_valid():
                         registro_form.save()
         else:
-            print(registro_form.errors)
+            pass
             
      
 
@@ -734,8 +705,7 @@ def agregarVenta(request, id):
       
 
         queryset_result = Extras.objects.filter(id__in=indicies)        
-        print(total,"TotalFinal")
-        print(totalIndiv,"Indiv")
+
         ####   
         form = VentaMenuForm({
             'venta': ventas,
@@ -755,7 +725,7 @@ def agregarVenta(request, id):
             data2 = form.save()
             return redirect("Ventas:modificarVenta", id)
         else:
-            print(form.errors)
+            pass
     return redirect("Ventas:ventasIndex")
 
 
@@ -792,17 +762,14 @@ def agregarVenta(request, id):
 def ventasCrearMesa(request, mesa):
     if request.method == "POST":
         mesa_ocupada = Mesa.objects.filter(nombre=mesa, ocupada=True).exists()
-        print(mesa_ocupada)
         
         form = createVentaForm(request.POST, request.FILES)
         hot = date.today() 
     
         vDia = Venta.objects.filter(fecha_compra__date=hot).count()
-        print("Jalo Chido 1")
 
         if form.is_valid():
             if not mesa_ocupada:    
-                print("Jalo Chido 2")
                 mesa = Mesa.objects.get(nombre=mesa)
                 # Guardar la venta dentro de una transacción
                 with transaction.atomic():
@@ -816,14 +783,12 @@ def ventasCrearMesa(request, mesa):
                     user.is_open = True
                     user.save()
                     id = user.id
-                    print("Jalo Chido 3")
 
                     return redirect("Ventas:modificarVenta", id=mesa.id)
             else:
                 # La mesa está ocupada, mostrar algún mensaje de error
                 pass
         else:
-            print("No Jalo Chido 4")
             # El formulario no es válido, volver a renderizar el formulario con los errores
             return render(request, 'Ventas/ventasIndex.html', {'form': form})
    
@@ -835,10 +800,7 @@ def ventasCrearMesa(request, mesa):
 
 def ventasTodas(request):
      
-    ventasChecar = Venta.objects.filter(is_open = True)
-    for venta in ventasChecar:
-        print(venta.id)
-        print(venta.mesa)
+
   
     ventasPasadas = []
     ventas = Venta.objects.filter(is_open = False)
@@ -848,7 +810,7 @@ def ventasTodas(request):
        
             
 
-    print(ventas)
+
 
 
     return render(request, 'Ventas/ventasTodas.html',{'ventas':ventas,'ventasPasadas':ventasPasadas})
@@ -883,9 +845,7 @@ def guardarCambios(request,compra_id,list_id,operacion):
     if operacion == "suma":
         producto.cantidad = producto.cantidad + 1
         producto.totalfinal = producto.final * producto.cantidad + producto.extraCosto
-        print(producto.cantidad)
-        print(producto.final)
-        print(producto.totalfinal)
+
         producto.save()
         registro_form = RegistroCambiosVentaMenuForm({
             'venta_menu': producto.menu.nombre,
@@ -903,10 +863,10 @@ def guardarCambios(request,compra_id,list_id,operacion):
                
 
         else:
-                    print(registro_form.errors)
+                    pass
 
     else:
-        print("resta")
+        pass
         
         if producto.cantidad > 0:
 
@@ -930,7 +890,7 @@ def guardarCambios(request,compra_id,list_id,operacion):
                
 
         else:
-                    print(registro_form.errors)
+                    pass
         if producto.cantidad == 0:
             registro_form = RegistroCambiosVentaMenuForm({
             'venta_menu': producto.menu.nombre,
@@ -946,11 +906,11 @@ def guardarCambios(request,compra_id,list_id,operacion):
             producto.delete()
    
        
+    if venta.is_reopen:
+         return redirect("Ventas:modificarVentaPasada",venta.id)
+    else: 
+        return redirect("Ventas:modificarVenta",venta.mesa.id)
 
-        
-        
-    
-    return redirect("Ventas:modificarVenta",venta.mesa.id)
 @login_required(login_url='authentication:login')
 
 def cambiarFactura(request,id):
@@ -967,9 +927,7 @@ def cambiarFactura(request,id):
     
 @login_required(login_url='authentication:login')
 def agregarPlatillosVenta(request, id):
-    print(id)
     venta = Venta.objects.get(id=id)
-    print(venta)
     hoy = datetime.now() 
    
     if request.method == 'POST':
@@ -983,7 +941,6 @@ def agregarPlatillosVenta(request, id):
                 final += (10-residuo)  
             elif residuo > 0: 
                 final += (5-residuo)  
-            print(final)
             
             form = VentaMenuForm({
                 'venta': venta,
@@ -1015,17 +972,15 @@ def agregarPlatillosVenta(request, id):
                     if registro_form.is_valid():
                         registro_form.save()
                     else:
-                        print(registro_form.errors)
+                        pass
             else:
-                print(form.errors)
+                pass
 
         return redirect('Ventas:modificarVenta', venta.mesa.id)
     
     
 def agregarPlatillosVentaPasada(request, id):
-    print(id)
     venta = Venta.objects.get(id=id)
-    print(venta)
     hoy = datetime.now() 
    
     if request.method == 'POST':
@@ -1039,7 +994,6 @@ def agregarPlatillosVentaPasada(request, id):
                 final += (10-residuo)  
             elif residuo > 0: 
                 final += (5-residuo)  
-            print(final)
             
             form = VentaMenuForm({
                 'venta': venta,
@@ -1071,8 +1025,8 @@ def agregarPlatillosVentaPasada(request, id):
                     if registro_form.is_valid():
                         registro_form.save()
                     else:
-                        print(registro_form.errors)
+                        pass
             else:
-                print(form.errors)
+                pass
 
         return redirect('Ventas:modificarVentaPasada', venta.id)
