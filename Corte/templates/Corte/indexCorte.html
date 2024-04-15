@@ -51,7 +51,7 @@
 
         </div>
         <div class="col-3">
- <a class="btn btn-primary text-white py-2 w-100" data-bs-toggle="modal" data-bs-target="#modalCorteCaja">Corte de caja</a>
+ <a class="btn btn-primary text-white py-2 w-100 {% if corte_de_caja_habilitado %} d-none {% else %} d-block {% endif %}" data-bs-toggle="modal" data-bs-target="#modalCorteCaja">Corte de caja</a>
 
 
 <!-- Modal -->
@@ -59,9 +59,15 @@
 
         </div>
         <div class="col-3">
-        <button onclick="imprimirContenido2()" class="btn bg-corporateNavyBlue900 text-white py-2 w-100">Imprimir ticket</button>
+        <button onclick="imprimirContenido2()" class="btn bg-corporateNavyBlue900 text-white py-2 w-100 {% if corte_de_caja_habilitado %} d-block {% else %} d-none {% endif %} ">Imprimir ticket</button>
 
         </div>
+        {% if user.rol == "Admin" or user.rol == "Dueña/o"%}
+        <div class="col-3">
+             <a class="btn btn-quinto text-white py-2 w-100" href="{% url 'Corte:cortesPasados' %}">Ver cortes pasados</a>
+
+        </div>
+        {% endif %}
 </div>
 </div>
 <div class="modal fade" id="modalCorteCaja" tabindex="-1" aria-labelledby="modalCorteCajaLabel" aria-hidden="true">
@@ -85,7 +91,7 @@
 <h1>¿Esta seguro de hacer el corte de caja? </h1>
             </div>
             <div class="modal-footer">
-                    <a href="{% url 'Corte:enviarCorreo' %}" class="btn btn-primary text-white">Enviar Correo</a>
+                    <a href="{% url 'Corte:enviarCorreo' %}" class="btn btn-primary text-white">Realizar corte</a>
                     <button type="button" class="btn btn-secondary text-white" data-bs-dismiss="modal">Cerrar</button>
 
             </div>

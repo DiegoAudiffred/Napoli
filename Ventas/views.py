@@ -847,7 +847,9 @@ def guardarCambios(request,compra_id,list_id,operacion):
         producto.totalfinal = producto.final * producto.cantidad + producto.extraCosto
 
         producto.save()
-        registro_form = RegistroCambiosVentaMenuForm({
+        
+        if venta.is_reopen:
+            registro_form = RegistroCambiosVentaMenuForm({
             'venta_menu': producto.menu.nombre,
             'accion': "AUMENTO",
             'fecha_hora_cambio': datetime.now(),
@@ -856,52 +858,49 @@ def guardarCambios(request,compra_id,list_id,operacion):
             'mesa':venta.mesa,
             'venta': venta.id,})
           
-        
-        
-        if registro_form.is_valid():
+    
+            if registro_form.is_valid():
                     registro_form.save()
                
-
-        else:
-                    pass
+               
 
     else:
-        pass
+        
         
         if producto.cantidad > 0:
 
                 producto.cantidad = producto.cantidad - 1
                 producto.totalfinal = producto.final * producto.cantidad + producto.extraCosto
                 producto.save()
-                
-                registro_form = RegistroCambiosVentaMenuForm({
-            'venta_menu': producto.menu.nombre,
-            'accion': "DISMINUYO",
-            'fecha_hora_cambio': datetime.now(),
-           'precioAnterior': precioAnterior,
-            'precioNuevo': producto.totalfinal,
-            'mesa':venta.mesa,
-            'venta': venta.id,
-            })
+                if venta.is_reopen:
+
+                    registro_form = RegistroCambiosVentaMenuForm({
+                                  'venta_menu': producto.menu.nombre,
+                                  'accion': "DISMINUYO",
+                                  'fecha_hora_cambio': datetime.now(),
+                                 'precioAnterior': precioAnterior,
+                                  'precioNuevo': producto.totalfinal,
+                                  'mesa':venta.mesa,
+                                  'venta': venta.id,
+                                  })
           
               
-        if registro_form.is_valid():
-                    registro_form.save()
+                    if registro_form.is_valid():
+                        registro_form.save()
                
-
-        else:
-                    pass
         if producto.cantidad == 0:
-            registro_form = RegistroCambiosVentaMenuForm({
-            'venta_menu': producto.menu.nombre,
-            'accion': "ELIMINADO",
-            'fecha_hora_cambio': datetime.now(),
-            'precioAnterior': precioAnterior,
-            'precioNuevo': 0,
-            'mesa':venta.mesa,
-            'venta': venta.id,})
+            if venta.is_reopen:
+
+                registro_form = RegistroCambiosVentaMenuForm({
+                             'venta_menu': producto.menu.nombre,
+                             'accion': "ELIMINADO",
+                             'fecha_hora_cambio': datetime.now(),
+                             'precioAnterior': precioAnterior,
+                             'precioNuevo': 0,
+                             'mesa':venta.mesa,
+                             'venta': venta.id,})
         
-            if registro_form.is_valid():
+                if registro_form.is_valid():
                     registro_form.save()
             producto.delete()
    

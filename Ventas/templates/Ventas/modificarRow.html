@@ -133,5 +133,18 @@ $(document).ready(function() {
 
 });
 </script>
+
+<script>
+    function validarCantidad() {
+        var cantidad = document.getElementById('id_cantidad').value;
+        if (cantidad === "" || cantidad === "0") {
+            alert("La cantidad no puede estar vacía ni ser cero.");
+        }
+    }
+
+    // Agrega un listener para detectar cuando se pierde el foco en el campo de entrada
+    document.getElementById('id_cantidad').addEventListener('blur', validarCantidad);
+</script>
+
 {% endblock %}
 

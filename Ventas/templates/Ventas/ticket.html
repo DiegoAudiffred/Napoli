@@ -48,42 +48,37 @@
 
     <div class="">
         <div class="row">
-            <div class="col-12 text-break">
-                Napoli Ristorante y Pizzeria
-                C. 29 Sur 119, La Paz, 72160
-                Heroica Puebla de Zaragoza 
-                Teléfono: 222 621 9650 
+            <div class="col-12 text-break" style="line-height: 2;">
+                <b> Napoli Ristorante y Pizzeria</b>
+                C. 29 Sur 129, La Paz, 72160
+                Heroica Puebla de Zaragoza
+                Teléfono: 222 621 9650
 
             </div>
             <div class="col-12 text-break">
-                ------------------------------------
+                ------------------------------------------
 
             </div>
         </div>
-
         <div class="row justify-content-center">
             <div class="col-12">
-                <table class="table">
+                <table class="table" style="text-align: center;">
                     <thead>
                         <tr>
-                            <th>Producto</th>
-                            <th>Cantidad</th>
-                            <th>Total</th>
-
+                            <th style="width: 1.0cm;">C</th>
+                            <th style="width: 2.4cm;">Producto</th>
+                            <th style="width: 2.4cm;">Total</th>
                         </tr>
                     </thead>
                     <tbody>
                         {% for item in items %}
-                        <tr>
-                            <td>{{ item.menu.nombre|truncatechars:15 }}</td>
-                            <td>{{ item.cantidad }} U</td>
+                        <tr style="line-height: 2;">
+                            <td>{{ item.cantidad }}</td>
+                            <td>{{ item.menu.nombre|truncatechars:20 }}</td>
                             <td>${{ item.totalfinal }}</td>
-
                         </tr>
-
-
                         {% if item.extras.exists %}
-                        <tr>
+                        <tr style="line-height: 1.5;">
                             <td colspan="3">
                                 <ul>
                                     {% for extra in item.extras.all %}
@@ -93,51 +88,60 @@
                             </td>
                         </tr>
                         {% endif %}
-
                         {% endfor %}
-
-                        <tr>
-                            <td>
-                                <strong>Total final:</strong>
-
-                            </td>
-                            <td>
-
-                            </td>
+                        <tr style="line-height: 2;">
+                            <td></td>
+                            <td><strong>Total final:</strong></td>
                             <td><strong>${{venta.total}}</strong></td>
                         </tr>
-
-
                     </tbody>
                 </table>
             </div>
         </div>
 
+
         <div class="row justify-content-center">
             <div class="col-12 text-break">
-                Fecha: {{ venta.fecha_compra|date:"d-m-Y H:i" }}:{{venta.impresiones|add:1}}{{venta.numVentaDia}}
-                <hr>
+                ------------------------------------------
+
+            </div>
+            <div class="col-12 text-break" style="line-height: 2;">
+                Fecha: <div id="fechaActual" style="display: inline;">{{ venta.impresiones | add:1 }}0{{
+                    venta.numVentaDia }}</div>
+
+
             </div>
         </div>
         <div class="row justify-content-center">
             <div class="col-12 text-break">
+                ------------------------------------------
+
+            </div>
+            <div class="col-12 text-break" style="line-height: 2;">
                 Mesa : {{venta.mesa}}
-                <hr>
             </div>
         </div>
-         {% if venta.direccion  %}
-            <div class="row justify-content-center">
+        {% if venta.direccion %}
+        <div class="row justify-content-center">
+            <div class="col-12 text-break">
+                ------------------------------------------
+
+            </div>
             <div class="col-12 text-break">
                 Direccion: {{venta.direccion}}
                 <hr>
             </div>
         </div>
-         {% endif %}
+        {% endif %}
         <div class="row justify-content-center">
             <div class="col-12 text-break">
+                ------------------------------------------
+
+            </div>
+            <div class="col-12 text-break" style="line-height: 1.5;">
                 Este ticket no es un comprobante fiscal. Para facturar mandar sus datos fiscales completos al correo:
-                napoli10.facturacion@gmail.com
-                <hr>
+                <b>napoli10.facturacion@gmail.com</b>
+                ------------------------------------------
             </div>
         </div>
 
@@ -154,33 +158,33 @@
 
         // Abrir una ventana de impresión
         var ventanaImpresion = window.open('', '_blank', 'width=600,height=600');
-        
+
         // Escribir el contenido en la ventana de impresión
         ventanaImpresion.document.write('<html><head><title>Imprimir contenido</title></head><body>');
         ventanaImpresion.document.write(contenidoImprimir);
         ventanaImpresion.document.write('</body></html>');
         ventanaImpresion.document.close();
-        
+
         // Incrementar el conteo de impresiones cuando la ventana de impresión se carga completamente
-        ventanaImpresion.addEventListener('load', function() {
+        ventanaImpresion.addEventListener('load', function () {
             conteoImpresiones++;
             console.log('Impresión exitosa');
         });
-        
+
         // Imprimir el contenido y cerrar la ventana de impresión
         ventanaImpresion.print();
         ventanaImpresion.close();
 
 
-    // Obtener el token CSRF del cookie
-    var csrftoken = getCookie('csrftoken');
+        // Obtener el token CSRF del cookie
+        var csrftoken = getCookie('csrftoken');
 
-    // Función para imprimir el contenido y enviar la solicitud AJAX
+        // Función para imprimir el contenido y enviar la solicitud AJAX
         // Tu código existente...
-        
+
         // Llamada AJAX para enviar datos al servidor después de imprimir
         var xhr = new XMLHttpRequest();
-        xhr.open("POST", "{% url 'Ventas:actualizar_ticket' venta.id %}", true); 
+        xhr.open("POST", "{% url 'Ventas:actualizar_ticket' venta.id %}", true);
         xhr.setRequestHeader("X-CSRFToken", csrftoken); // Incluir el token CSRF en la solicitud
         xhr.onreadystatechange = function () {
             if (xhr.readyState === 4 && xhr.status === 200) {
@@ -188,7 +192,7 @@
             }
         };
         xhr.send(JSON.stringify({ numImpresion: conteoImpresiones }));
-            location.reload();
+        location.reload();
 
     }
 
@@ -209,4 +213,31 @@
         return cookieValue;
     }
 </script>
+<script>
+    // Obtener la fecha y hora actual
+    function getDate() {
+        var fechaHoraActual = new Date();
+        // Obtener la fecha actual
+        var dia = fechaHoraActual.getDate().toString().padStart(2, '0');
+        var mes = (fechaHoraActual.getMonth() + 1).toString().padStart(2, '0'); // Sumamos 1 porque los meses van de 0 a 11
+        var anio = fechaHoraActual.getFullYear();
+        var fechaActual = dia + "/" + mes + "/" + anio;
 
+        // Obtener la hora actual
+        var horas = fechaHoraActual.getHours().toString().padStart(2, '0');
+        var minutos = fechaHoraActual.getMinutes().toString().padStart(2, '0');
+
+        // Mostrar la fecha y hora actual
+        var espacioHora = document.getElementById("fechaActual");
+        var currentSeconds = espacioHora.innerHTML;
+        espacioHora.innerHTML = ""
+        espacioHora.innerHTML += fechaActual + " " + horas + ":" + minutos + ":" + currentSeconds;
+
+        // Mostrar la fecha y hora actual en la consola
+        console.log("Fecha actual: " + fechaActual);
+        console.log("Hora actual: " + horas + ":" + minutos);
+    }
+
+    // Llamar a la función getDate() cuando se cargue la página
+    window.onload = getDate;
+</script>

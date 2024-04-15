@@ -245,7 +245,8 @@ class Venta(models.Model):
     direccion = models.CharField(max_length=200,null=True,blank=True,default="")
     impresiones  = models.IntegerField(null=True,blank=True,default=0)
     numVentaDia = models.IntegerField(null=True,blank=True,default=0)
-
+    pago = models.CharField( 
+        choices=METODOS, max_length=20,null=True,blank=True)
 
 class TicketImpresos(models.Model):
     venta = models.ForeignKey(Venta, on_delete=models.CASCADE,blank=True,null=True)

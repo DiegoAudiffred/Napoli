@@ -53,7 +53,7 @@
 
             </div>
             <div class="col-12 text-break">
-                ------------------------------------
+                -------------------------------
 
             </div>
         </div>
@@ -64,7 +64,9 @@
                     <thead>
                         <tr>
                             <th>Mesa</th>
+                            <th>Metodo</th>
                             <th>Total</th>
+
                 
 
                         </tr>
@@ -72,10 +74,11 @@
                     <tbody>
                         {% for item in Ventas %}
                         <tr>
-                            <td>{{item.mesa}}</td>
-
-                            <td>${{item.total}}</td>
+                            <td> {{item.mesa}} </td>
+<td>{{item.pago}}</td>
+                            <td>$ {{item.total}}</td>
                         </tr>
+                       
 
 
                 
@@ -86,6 +89,7 @@
                                 <strong>Total final:</strong>
 
                             </td>
+                            <td></td>
                        
                             <td><strong>${{total}}</strong></td>
                         </tr>
