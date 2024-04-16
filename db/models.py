@@ -290,6 +290,7 @@ class RegistroCambiosVentaMenu(models.Model):
     precioNuevo  = models.DecimalField(max_digits=8, decimal_places=2,blank=True,null=True,default=0)
     venta = models.IntegerField(null=True,blank=True,default=0)
     mesa = models.TextField(blank=True,null=True,max_length=100)
+    postVenta = models.BooleanField(default=True)
     accion = models.CharField( 
         choices=ACCION, max_length=20)
 

@@ -99,7 +99,7 @@
         <!-- <div class="col-6 col-md-4 text-center">
             <button onclick="agregarFormulario()" class="btn btn-tercero text-white w-100">Agregar a venta (avanzado)</button>
         </div> -->
-        <div class="col-6 col-md-3 text-center">
+        <div class="col-6 col-md-2 text-center">
             <button onclick="showMenu()" class="btn btn-tercero text-white w-100">Desplegar menu</button>
         </div>
         <div class="col-6 col-md-2 text-center">
@@ -181,6 +181,52 @@
                 data-bs-target="#exampleModalDireccion">Agregar direccion</button>
 
         </div>
+        <div class="col-2">
+
+
+
+
+           <form action="{% url 'Ventas:addMetodo' venta.id %}" method="POST" enctype="multipart/form-data"
+                id="user-profile-form3">
+                {% csrf_token %}
+
+    <select class="form-select shadow-none text-black" aria-label="Default select example" id="selectPago" style"=  font-size: 2rem;" name="pago">
+    <option value="Efectivo" {% if venta.pago == "Efectivo" %} selected {% endif %} >Efectivo</option>
+    <option value="Tarjeta" {% if venta.pago == "Tarjeta" %} selected {% endif %} >Tarjeta</option>
+</select>
+
+ 
+
+
+                <div class="d-none">
+                                                 {{form6.pago}}
+
+                </div>
+
+            
+
+            </form>
+
+
+            <script>
+        $(document).ready(function () {
+        // Capturar el cambio en el select
+        $('#selectPago').on('change', function () {
+            // Obtener el valor seleccionado en el select
+            var selectedValue = $(this).val();
+
+            // Establecer el valor en el campo del formulario 'mesa'
+            $('#id_pago').val(selectedValue);
+            $('#user-profile-form3').submit();
+
+        });
+    });
+</script>
+
+        </div>
+
+
+
         <!-- Botón que abre el modal -->
 
         <form action="{% url 'Ventas:addDireccion' venta.id %}" method="POST" enctype="multipart/form-data"
@@ -446,6 +492,7 @@
     </div>
 
     {% include 'Ventas/ticket.html' %}
+    {% include "Ventas/cambios.html" %}
 
 
 </div>

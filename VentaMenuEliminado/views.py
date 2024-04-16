@@ -44,6 +44,6 @@ def isAdmin(user):
 @login_required(login_url='authentication:login')
 # Create your views here.
 def VentaMenuEliminadoIndex(request):
-    cambios = RegistroCambiosVentaMenu.objects.all().order_by('-fecha_hora_cambio')
+    cambios = RegistroCambiosVentaMenu.objects.filter(postVenta=True).order_by('-fecha_hora_cambio')
 
     return render(request, 'VentaMenuEliminado/indexVentasEliminadas.html', {'cambios': cambios})

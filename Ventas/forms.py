@@ -101,7 +101,15 @@ class modifyMesaForm(forms.ModelForm):
 
 
         
- 
+class modifyMetodoVentaForm(forms.ModelForm):
+
+    class Meta:
+        model = Venta
+        fields = ['pago']
+    def __init__(self, *args, **kwargs):
+        super(modifyMetodoVentaForm, self).__init__(*args, **kwargs)
+        
+        self.fields['pago'].required = False
 
 
 class modifyVentaForm(forms.ModelForm):
@@ -206,11 +214,11 @@ class RegistroCambiosVentaMenuForm(forms.ModelForm):
         self.fields['precioNuevo'].required = False
         self.fields['precioAnterior'].required = False
         self.fields['venta'].required = False
-        self.fields['mesa'].required = False
-
+        self.fields['mesa'].required = False 
+        self.fields['postVenta'].required = False
     class Meta:
         model = RegistroCambiosVentaMenu
-        fields = ['venta_menu','accion','fecha_hora_cambio','precioNuevo','precioAnterior','venta','mesa']
+        fields = ['venta_menu','accion','fecha_hora_cambio','precioNuevo','precioAnterior','venta','mesa','postVenta']
 
 
 

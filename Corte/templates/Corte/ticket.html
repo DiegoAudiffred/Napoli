@@ -75,7 +75,7 @@
                         {% for item in Ventas %}
                         <tr>
                             <td> {{item.mesa}} </td>
-<td>{{item.pago}}</td>
+<td>{{ item.pago|slice:":1" }}</td>
                             <td>$ {{item.total}}</td>
                         </tr>
                        

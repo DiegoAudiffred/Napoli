@@ -3,8 +3,8 @@ from email.message import EmailMessage
 import json
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
-from Ventas.forms import RegistroCambiosVentaMenuForm, TicketImpresosForm, VentaMenuForm, createVentaForm, modifyMesaForm, modifyVentaForm, modifyVentaMenuOrder,VentaMenuFormDireccion
-from db.models import Cliente, Menu, Mesa, TicketImpresos, User, Venta, VentaMenu,Extras
+from Ventas.forms import RegistroCambiosVentaMenuForm, TicketImpresosForm, VentaMenuForm, createVentaForm, modifyMesaForm, modifyMetodoVentaForm, modifyVentaForm, modifyVentaMenuOrder,VentaMenuFormDireccion
+from db.models import Cliente, Menu, Mesa, RegistroCambiosVentaMenu, TicketImpresos, User, Venta, VentaMenu,Extras
 from django.db.models import Q
 from datetime import date, datetime, timezone
 from django.contrib.auth.decorators import user_passes_test,login_required
@@ -168,7 +168,9 @@ def modificarVentaPasada(request,id):
         
         venta = Venta.objects.get(id=id)
         #venta = Venta.objects.get(id=26)
-    
+        venta_id = venta.id
+        cambios = RegistroCambiosVentaMenu.objects.filter(postVenta=False, venta=venta_id).order_by('-fecha_hora_cambio')
+        print(cambios)
         mesas = Mesa.objects.all()
     
         menu = Menu.objects.all()
@@ -196,7 +198,7 @@ def modificarVentaPasada(request,id):
         for index, hoy in enumerate(numVentaHoy, start=1):
             if hoy == venta:
                 nfinal = index
-        return render(request, 'Ventas/modificarVentaPasada.html',{'venta':venta,'items':lista,'lista':zip(lista,publications),'form':form,'form2':form2,'form3':form3,'form4':form4,'form5':form5,'total':total2,'user':user,'mesas':mesas,'menu':menu,'nfinal':nfinal}) 
+        return render(request, 'Ventas/modificarVentaPasada.html',{'venta':venta,'cambios':cambios,'items':lista,'lista':zip(lista,publications),'form':form,'form2':form2,'form3':form3,'form4':form4,'form5':form5,'total':total2,'user':user,'mesas':mesas,'menu':menu,'nfinal':nfinal}) 
 
 
 
@@ -206,7 +208,9 @@ def modificarVenta(request,id):
         mesa = Mesa.objects.get(id=id)
         venta = Venta.objects.get(mesa=mesa,is_open= True)
         #venta = Venta.objects.get(id=26)
-    
+        venta_id = venta.id
+        cambios = RegistroCambiosVentaMenu.objects.filter(postVenta=False, venta=venta_id).order_by('-fecha_hora_cambio')
+        print(cambios)
         mesas = Mesa.objects.all()
     
         menu = Menu.objects.all()
@@ -228,6 +232,7 @@ def modificarVenta(request,id):
         form3 = modifyMesaForm() #Mesa
         form4 = modifyVentaMenuOrder()
         form5 = VentaMenuFormDireccion(instance=venta)
+        form6 = modifyMetodoVentaForm(instance=venta)
         fecha_hoy = date.today()
         nfinal = 0
         numVentaHoy = Venta.objects.filter(fecha_compra__date = fecha_hoy)
@@ -235,9 +240,25 @@ def modificarVenta(request,id):
             if hoy == venta:
                 nfinal = index
         if venta:
-            return render(request, 'Ventas/modificarVentas.html',{'venta':venta,'items':lista,'lista':zip(lista,publications),'form':form,'form2':form2,'form3':form3,'form4':form4,'form5':form5,'total':total2,'user':user,'mesas':mesas,'menu':menu,'nfinal':nfinal}) 
+            return render(request, 'Ventas/modificarVentas.html',{'venta':venta,'cambios':cambios,'form6':form6,'items':lista,'lista':zip(lista,publications),'form':form,'form2':form2,'form3':form3,'form4':form4,'form5':form5,'total':total2,'user':user,'mesas':mesas,'menu':menu,'nfinal':nfinal}) 
         else:
             return redirect("Ventas:ventasIndex")
+        
+def addMetodo(request,id):
+    
+    venta = Venta.objects.get(id=id)
+    print(venta)
+    if request.method == 'POST':
+        form = modifyMetodoVentaForm(request.POST, instance=venta)  # Inicializar el formulario con los datos POST
+        if form.is_valid():
+
+            user = form.save()
+            user.save()
+               
+             
+    
+
+    return redirect('Ventas:modificarVenta',venta.mesa.id)
 
 
 @login_required(login_url='authentication:login')
@@ -311,14 +332,27 @@ def updateRow(request,lista):
                                                                   'precioAnterior': totalAntes,
                                                                   'precioNuevo': row.totalfinal,
                                                                   'mesa':row.venta.mesa,
-                                                                  'venta': row.venta.id,})
+                                                                  'venta': row.venta.id,
+                                                                 'postVenta': True})
+
         
                     if registro_form.is_valid():
                         registro_form.save()
-               
+                elif row.venta.is_open:
+                    registro_form = RegistroCambiosVentaMenuForm({'venta_menu': row.menu.nombre,
+                                                                  'accion': "MODIFICADO",
+                                                                  'fecha_hora_cambio': datetime.now(),
+                                                                  'precioAnterior': totalAntes,
+                                                                  'precioNuevo': row.totalfinal,
+                                                                  'mesa':row.venta.mesa,
+                                                                  'venta': row.venta.id,
+                                                                   'postVenta': False})
 
-                    else:
-                        pass
+        
+                    if registro_form.is_valid():
+                        registro_form.save()
+
+                    
         if row.venta.is_reopen:
             return redirect('Ventas:modificarVentaPasada',row.venta.id)
 
@@ -856,13 +890,28 @@ def guardarCambios(request,compra_id,list_id,operacion):
             'precioAnterior': precioAnterior,
             'precioNuevo': producto.totalfinal,
             'mesa':venta.mesa,
-            'venta': venta.id,})
+            'venta': venta.id,'postVenta': True})
+
           
     
             if registro_form.is_valid():
                     registro_form.save()
                
-               
+        elif venta.is_open:
+            registro_form = RegistroCambiosVentaMenuForm({
+            'venta_menu': producto.menu.nombre,
+            'accion': "AUMENTO",
+            'fecha_hora_cambio': datetime.now(),
+            'precioAnterior': precioAnterior,
+            'precioNuevo': producto.totalfinal,
+            'mesa':venta.mesa,
+            'venta': venta.id,
+            'postVenta': False})
+
+          
+    
+            if registro_form.is_valid():
+                    registro_form.save()     
 
     else:
         
@@ -882,12 +931,30 @@ def guardarCambios(request,compra_id,list_id,operacion):
                                   'precioNuevo': producto.totalfinal,
                                   'mesa':venta.mesa,
                                   'venta': venta.id,
-                                  })
+                                 'postVenta': True})
+
+                            
           
               
                     if registro_form.is_valid():
                         registro_form.save()
-               
+                elif venta.is_open:
+
+                    registro_form = RegistroCambiosVentaMenuForm({
+                                  'venta_menu': producto.menu.nombre,
+                                  'accion': "DISMINUYO",
+                                  'fecha_hora_cambio': datetime.now(),
+                                 'precioAnterior': precioAnterior,
+                                  'precioNuevo': producto.totalfinal,
+                                  'mesa':venta.mesa,
+                                  'venta': venta.id,
+                                 'postVenta': False})
+
+          
+              
+                    if registro_form.is_valid():
+                        registro_form.save()
+                        
         if producto.cantidad == 0:
             if venta.is_reopen:
 
@@ -898,7 +965,22 @@ def guardarCambios(request,compra_id,list_id,operacion):
                              'precioAnterior': precioAnterior,
                              'precioNuevo': 0,
                              'mesa':venta.mesa,
-                             'venta': venta.id,})
+                             'venta': venta.id,
+                            'postVenta': True})
+        
+                if registro_form.is_valid():
+                    registro_form.save()
+            elif venta.is_open:
+                
+                registro_form = RegistroCambiosVentaMenuForm({
+                             'venta_menu': producto.menu.nombre,
+                             'accion': "ELIMINADO",
+                             'fecha_hora_cambio': datetime.now(),
+                             'precioAnterior': precioAnterior,
+                             'precioNuevo': 0,
+                             'mesa':venta.mesa,
+                             'venta': venta.id,
+                             'postVenta': False })
         
                 if registro_form.is_valid():
                     registro_form.save()
@@ -967,13 +1049,31 @@ def agregarPlatillosVenta(request, id):
                         'precioNuevo': menu.precio,
                         'mesa':venta.mesa,
                         'venta': venta.id,
+                        'postVenta': True
+
                     })
+                    
                     if registro_form.is_valid():
                         registro_form.save()
-                    else:
-                        pass
-            else:
-                pass
+                elif venta.is_open:
+                    registro_form = RegistroCambiosVentaMenuForm({
+                        'venta_menu': menu.nombre,  # Usamos la instancia creada
+                        'accion': "CREADO",
+                        'fecha_hora_cambio': datetime.now(),
+                        'precioAnterior': 0,
+                        'precioNuevo': menu.precio,
+                        'mesa':venta.mesa,
+                        'venta': venta.id,
+                        'postVenta': False
+
+                    })
+                    
+                    if registro_form.is_valid():
+                        registro_form.save()
+                   
+
+                        
+           
 
         return redirect('Ventas:modificarVenta', venta.mesa.id)
     
@@ -1014,18 +1114,37 @@ def agregarPlatillosVentaPasada(request, id):
                 if venta.is_reopen:
                     registro_form = RegistroCambiosVentaMenuForm({
                         'venta_menu': menu.nombre,  # Usamos la instancia creada
-                        'accion': "CREADO",
+                        'accion': "MODIFICADO",
                         'fecha_hora_cambio': datetime.now(),
                         'precioAnterior': 0,
                         'precioNuevo': menu.precio,
                         'mesa':venta.mesa,
                         'venta': venta.id,
+                        'postVenta': True
+
                     })
                     if registro_form.is_valid():
                         registro_form.save()
-                    else:
-                        pass
-            else:
-                pass
+                
+                elif venta.is_open:
+                    registro_form = RegistroCambiosVentaMenuForm({
+                         'venta_menu': menu.nombre,  # Usamos la instancia creada
+                        'accion': "MODIFICADO",
+                        'fecha_hora_cambio': datetime.now(),
+                        'precioAnterior': 0,
+                        'precioNuevo': menu.precio,
+                        'mesa':venta.mesa,
+                        'venta': venta.id,
+                        'postVenta': False
+                    })
+                    
+                    if registro_form.is_valid():
+                        registro_form.save() 
+                
+                
+                
+            
+                
+                
 
         return redirect('Ventas:modificarVentaPasada', venta.id)
