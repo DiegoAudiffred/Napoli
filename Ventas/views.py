@@ -209,6 +209,8 @@ def modificarVenta(request,id):
         venta = Venta.objects.get(mesa=mesa,is_open= True)
         #venta = Venta.objects.get(id=26)
         venta_id = venta.id
+        user = request.user
+
         cambios = RegistroCambiosVentaMenu.objects.filter(postVenta=False, venta=venta_id).order_by('-fecha_hora_cambio')
         print(cambios)
         mesas = Mesa.objects.all()
@@ -240,7 +242,7 @@ def modificarVenta(request,id):
             if hoy == venta:
                 nfinal = index
         if venta:
-            return render(request, 'Ventas/modificarVentas.html',{'venta':venta,'cambios':cambios,'form6':form6,'items':lista,'lista':zip(lista,publications),'form':form,'form2':form2,'form3':form3,'form4':form4,'form5':form5,'total':total2,'user':user,'mesas':mesas,'menu':menu,'nfinal':nfinal}) 
+            return render(request, 'Ventas/modificarVentas.html',{'venta':venta,'user':user,'cambios':cambios,'form6':form6,'items':lista,'lista':zip(lista,publications),'form':form,'form2':form2,'form3':form3,'form4':form4,'form5':form5,'total':total2,'user':user,'mesas':mesas,'menu':menu,'nfinal':nfinal}) 
         else:
             return redirect("Ventas:ventasIndex")
         

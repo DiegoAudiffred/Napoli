@@ -470,7 +470,10 @@
     </div>
 
     {% include 'Ventas/ticket.html' %}
-    {% include "Ventas/cambios.html" %}
+        {% if user.rol == "Admin" or user.rol == "Dueña/o" %}
+
+        {% include "Ventas/cambios.html" %}
+    {% endif %}
 
 
 </div>
