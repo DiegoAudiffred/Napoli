@@ -610,7 +610,7 @@ def cerrarVenta(request,id):
         venta.save()
         venta.fecha_salida = datetime.now()  
         venta.save()
-        if venta.total == 0:
+        if venta.total == 0: #checar
             venta.delete()
         
         #else:
@@ -856,10 +856,16 @@ def ventasCard(request):
     search = jsonObject["search"]    
     fecha = jsonObject["date"]
    
-    
+    today = datetime.now().date()
+    if not fecha:
+        ventas = Venta.objects.filter(Q(is_open=False) | Q(is_reopen=True), fecha_compra__date=today).order_by('-fecha_compra')
+        print("No fehca")
 
+    else:
+        ventas = Venta.objects.filter(Q(is_open=False) | Q(is_reopen=True)).order_by('-fecha_compra')
+        
+        print(fecha)
 
-    ventas = Venta.objects.filter(Q(is_open=False) | Q(is_reopen=True)).order_by('-fecha_compra')
 
     if fecha != "":
         if fecha != "" :
