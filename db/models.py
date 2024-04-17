@@ -57,7 +57,7 @@ UNIDADES = [
 METODOS = [
     ("Tarjeta", "Tarjeta"),
     ("Efectivo", "Efectivo"),
-    ("Cheque", "Cheque"),
+    ("Mixto", "Mixto"),
    
 
 ]

@@ -193,6 +193,8 @@
     <select class="form-select shadow-none text-black" aria-label="Default select example" id="selectPago" style"=  font-size: 2rem;" name="pago">
     <option value="Efectivo" {% if venta.pago == "Efectivo" %} selected {% endif %} >Efectivo</option>
     <option value="Tarjeta" {% if venta.pago == "Tarjeta" %} selected {% endif %} >Tarjeta</option>
+    <option value="Mixto" {% if venta.pago == "Mixto" %} selected {% endif %} >Mixto</option>
+
 </select>
 
  

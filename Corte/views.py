@@ -76,51 +76,48 @@ def enviarCorreo(request):
         )
 
         print("Se ha creado un nuevo cierre de caja para hoy")
-    
-       
-    fecha_legible = fecha_hoy.strftime("%d/%m/%Y")
-    
+
+    fecha_legible = fecha_actual_sin_hora.strftime("%d/%m/%Y")
+
+    # Marcar las ventas como no editables
     for venta in Ventas:
         venta.editable = False
         venta.save()
-        
-    
+
+    # Generar el texto del correo con los detalles de las ventas del día
     total = 0
-    texto = "Ventas del dia " + fecha_legible + "\n"
+    texto = "Ventas del día " + fecha_legible + "\n"
 
     for venta in Ventas:
-        total+= venta.total
-        texto+= "------------------------------\n"
-        texto+= "Mesa: " + str(venta.mesa) + "\n"
-        texto+= "Fecha: " + str(venta.fecha_salida.strftime("%H:%M")) + "\n"
-        texto+= "Total: " + str(venta.total) + "\n"
-    
-    texto+= "------------------------------\n"
+        total += venta.total
+        texto += "------------------------------\n"
+        texto += "Mesa: " + str(venta.mesa) + "\n"
+        texto += "Fecha: " + str(venta.fecha_salida.strftime("%H:%M")) + "\n"
+        texto += "Total: " + str(venta.total) + "\n"
+
+    texto += "------------------------------\n"
     texto += "Total de las ventas de hoy:  $" + str(total)
-    
-    
+
+    # Configuración del correo electrónico
     email_reciver = "d1360.audi@gmail.com"
     email_reciver2 = "ale_0908@hotmail.com"
 
     email_sender = "cuentapruebanapoli@gmail.com"
     email_password = "spsy apcz sewh rmbc"  # Asegúrate de que esta contraseña sea la correcta
-    
     subject = "Cierre de caja del día: " + fecha_legible
     body = texto
 
+    # Crear el mensaje de correo
     em = EmailMessage()
     em['From'] = email_sender
     em['To'] = [email_reciver,email_reciver2]  # Lista de destinatarios , 
     em['Subject'] = subject
     em.set_content(body)
 
-    #stringPDF = "ticket" +".pdf"
-    #with open(stringPDF, "rb") as f:  
-    #    archivo_adjunto = f.read()
-    #em.add_attachment(archivo_adjunto, maintype="application", subtype="octet-stream", filename="ticket.pdf")
-
+    # Iniciar sesión en el servidor SMTP y enviar el correo
     context = ssl.create_default_context()
     with smtplib.SMTP_SSL('smtp.gmail.com', 465, context=context) as smtp:
         smtp.login(email_sender, email_password)
         smtp.send_message(em)
+
     return redirect('Corte:corteDeCajaIndex')
