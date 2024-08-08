@@ -47,19 +47,31 @@ def ventasIndex(request):
     form3 = modifyMesaForm()
     ventas = Venta.objects.filter(is_open=True).order_by('-fecha_compra')
     user = request.user
-  
-    
+
     mesasEnUso2 = []
-    i = 0
     mesasEnUso = []
     mesas = Mesa.objects.all()
-    
 
     for mesa in mesas:
         if mesa.ocupada:
+            # Obtener todas las ventas abiertas para la mesa actual
+            ventas_abiertas = Venta.objects.filter(mesa=mesa, is_open=True)
 
-            ventaActual = Venta.objects.get(mesa = mesa,is_open = True)
-            mesasEnUso.append((mesa.id,ventaActual.id))
+            # Si hay más de una venta abierta
+            if ventas_abiertas.count() > 1:
+                # Ordenar las ventas abiertas por fecha de creación (de más antiguo a más reciente)
+                ventas_abiertas = ventas_abiertas.order_by('fecha_compra')
+                
+                # Dejar solo la venta más antigua y eliminar todas las demás ventas
+                # Omite la primera venta (la más antigua) y elimina todas las demás
+                for venta in ventas_abiertas[1:]:
+                    venta.delete()
+                
+            # Actualizar la venta actual (la más antigua) para la mesa
+            ventaActual = ventas_abiertas.first()
+            
+            # Agregar mesa y venta actual a las listas
+            mesasEnUso.append((mesa.id, ventaActual.id))
             mesasEnUso2.append(mesa.id)
             
 
@@ -163,6 +175,7 @@ def addDireccion(request,id):
             return redirect('Ventas:modificarVenta',venta.mesa.id)
     return redirect('Ventas:modificarVenta',venta.mesa.id)
 
+@login_required(login_url='authentication:login')
 
 def modificarVentaPasada(request,id):
         
@@ -203,49 +216,88 @@ def modificarVentaPasada(request,id):
 
 
 
+@login_required(login_url='authentication:login')
 
-def modificarVenta(request,id):
-        mesa = Mesa.objects.get(id=id)
-        venta = Venta.objects.get(mesa=mesa,is_open= True)
-        #venta = Venta.objects.get(id=26)
-        venta_id = venta.id
-        user = request.user
+def modificarVenta(request, id):
+    # Obtener la mesa asociada al ID dado
+    mesa = Mesa.objects.get(id=id)
 
-        cambios = RegistroCambiosVentaMenu.objects.filter(postVenta=False, venta=venta_id).order_by('-fecha_hora_cambio')
-        print(cambios)
-        mesas = Mesa.objects.all()
-    
-        menu = Menu.objects.all()
-        lista = VentaMenu.objects.filter(venta=venta.id, cantidad__gt=0)
+    # Obtener todas las ventas abiertas para la mesa actual
+    ventas_abiertas = Venta.objects.filter(mesa=mesa, is_open=True)
 
-        publications=[]
-        for lst in lista:
-                publications.append(modifyVentaMenuOrder(instance=lst))
-    
-        user = request.user
-        total2 = 0
-        for total in lista:
-            total2 += total.totalfinal
-           
-        venta.total = total2
-        venta.save()
-        form = modifyVentaForm(instance=venta) #Cliente
-        form2 = VentaMenuForm() #Venta
-        form3 = modifyMesaForm() #Mesa
-        form4 = modifyVentaMenuOrder()
-        form5 = VentaMenuFormDireccion(instance=venta)
-        form6 = modifyMetodoVentaForm(instance=venta)
-        fecha_hoy = date.today()
-        nfinal = 0
-        numVentaHoy = Venta.objects.filter(fecha_compra__date = fecha_hoy)
-        for index, hoy in enumerate(numVentaHoy, start=1):
-            if hoy == venta:
-                nfinal = index
-        if venta:
-            return render(request, 'Ventas/modificarVentas.html',{'venta':venta,'user':user,'cambios':cambios,'form6':form6,'items':lista,'lista':zip(lista,publications),'form':form,'form2':form2,'form3':form3,'form4':form4,'form5':form5,'total':total2,'user':user,'mesas':mesas,'menu':menu,'nfinal':nfinal}) 
-        else:
-            return redirect("Ventas:ventasIndex")
+    # Si hay más de una venta abierta
+    if ventas_abiertas.count() > 1:
+        # Ordenar las ventas abiertas por fecha de creación (de más antiguo a más reciente)
+        ventas_abiertas = ventas_abiertas.order_by('fecha_compra')
         
+        # Eliminar todas las ventas desde la segunda venta en adelante (las más nuevas)
+        for venta in ventas_abiertas[1:]:
+            venta.delete()
+        
+    # Obtener la venta actual (la más antigua) para la mesa
+    venta = ventas_abiertas.first()
+
+    # El resto del código permanece igual
+    venta_id = venta.id
+    user = request.user
+
+    # Obtener cambios de RegistroCambiosVentaMenu
+    cambios = RegistroCambiosVentaMenu.objects.filter(postVenta=False, venta=venta_id).order_by('-fecha_hora_cambio')
+    mesas = Mesa.objects.all()
+    menu = Menu.objects.all()
+    lista = VentaMenu.objects.filter(venta=venta.id, cantidad__gt=0)
+
+    # Crear una lista de formularios para modificar cada elemento de venta
+    publications = [modifyVentaMenuOrder(instance=lst) for lst in lista]
+
+    # Calcular el total
+    total2 = sum(total.totalfinal for total in lista)
+
+    # Actualizar el total de la venta y guardarla
+    venta.total = total2
+    venta.save()
+
+    # Crear instancias de formularios
+    form = modifyVentaForm(instance=venta)
+    form2 = VentaMenuForm()
+    form3 = modifyMesaForm()
+    form4 = modifyVentaMenuOrder()
+    form5 = VentaMenuFormDireccion(instance=venta)
+    form6 = modifyMetodoVentaForm(instance=venta)
+    fecha_hoy = date.today()
+    nfinal = 0
+
+    # Calcular el número de ventas de hoy para la venta actual
+    numVentaHoy = Venta.objects.filter(fecha_compra__date=fecha_hoy)
+    for index, hoy in enumerate(numVentaHoy, start=1):
+        if hoy == venta:
+            nfinal = index
+
+    # Renderizar la plantilla 'Ventas/modificarVentas.html' con los datos necesarios
+    if venta:
+        return render(request, 'Ventas/modificarVentas.html', {
+            'venta': venta,
+            'user': user,
+            'cambios': cambios,
+            'form6': form6,
+            'items': lista,
+            'lista': zip(lista, publications),
+            'form': form,
+            'form2': form2,
+            'form3': form3,
+            'form4': form4,
+            'form5': form5,
+            'total': total2,
+            'user': user,
+            'mesas': mesas,
+            'menu': menu,
+            'nfinal': nfinal,
+        })
+    else:
+        return redirect("Ventas:ventasIndex")
+
+@login_required(login_url='authentication:login')
+       
 def addMetodo(request,id):
     
     venta = Venta.objects.get(id=id)
@@ -317,7 +369,7 @@ def updateRow(request,lista):
                 for i,list in enumerate(listaextras):
                     if listaextras[i] in extras:
                         if familiar:
-                            totalUpdate += (listaextras[i].precio* 2)
+                            totalUpdate += listaextras[i].precioFamiliar
                           
                         else:
                             totalUpdate += listaextras[i].precio
@@ -492,6 +544,7 @@ def generar_pdf(id):
             texto += page.extract_text()
   
 
+@login_required(login_url='authentication:login')
 
 def enviarCorreo():
     #venta = Venta.objects.get(id=id)
@@ -540,6 +593,7 @@ def ticketRead(request,venta):
 # views.py
 
 
+@login_required(login_url='authentication:login')
 
 def actualizar_ticket(request, venta):
     if request.method == 'POST':
@@ -577,12 +631,14 @@ def actualizar_ticket(request, venta):
     return JsonResponse({'success': False})
 
 
+@login_required(login_url='authentication:login')
 
 def ticket(request,venta):
     venta = Venta.objects.get(id=venta)
     generar_pdf(venta.id)
     return redirect('Ventas:ventasIndex')
 
+@login_required(login_url='authentication:login')
 def cerrarVenta(request,id):
     venta = Venta.objects.get(id=id)
     if venta.is_open or venta.is_reopen:
@@ -1085,6 +1141,7 @@ def agregarPlatillosVenta(request, id):
 
         return redirect('Ventas:modificarVenta', venta.mesa.id)
     
+@login_required(login_url='authentication:login')
     
 def agregarPlatillosVentaPasada(request, id):
     venta = Venta.objects.get(id=id)
