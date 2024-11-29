@@ -207,7 +207,7 @@ class Menu(models.Model):
     def __str__(self):
         return self.nombre
     def save(self, *args, **kwargs):
-        self.precioFamiliar = self.precio + 120
+        self.precioFamiliar = self.precio + 130
         self.mediaOrden = self.precio / 2
         super().save(*args, **kwargs)
     
@@ -245,6 +245,8 @@ class Venta(models.Model):
     direccion = models.CharField(max_length=200,null=True,blank=True,default="")
     impresiones  = models.IntegerField(null=True,blank=True,default=0)
     numVentaDia = models.IntegerField(null=True,blank=True,default=0)
+    #is_deleted = models.BooleanField(default=False)  # Nuevo campo para soft delete
+
     pago = models.CharField( 
         choices=METODOS, max_length=20,default="Efectivo")
 
