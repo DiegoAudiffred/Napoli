@@ -1,0 +1,34 @@
+<table class="table table-striped m-0">
+    <thead class="bg-tercero text-white ">
+        <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Precio/U</th>
+            <th>Cantidad</th>
+            <th>Fecha</th>
+            <th>Editar</th>
+
+        </tr>
+    </thead>
+    <tbody>
+        {% for stock in totalStock%}
+
+        <tr class="align-middle {% if stock.cantidad > 10 %} bg-cuarto {% else %} bg-secondary {% endif %}">
+            <td class="text-truncate">{{stock.id}}</td>
+            <td class="text-truncate">{{stock.nombre}}</td>
+            <td class="text-truncate">${{stock.precio}}</td>
+            <td class="text-truncate">{{stock.cantidad}}
+                {{stock.unidad}}
+            </td>
+            <td class="text-truncate">{{stock.fecha_compra|date:"Y-m-d"}}</td>
+            <td class="text-truncate"><a href="" class="btn p-0"> Editar</a></td>
+
+
+
+
+
+        </tr>
+        {% endfor %}
+
+    </tbody>
+</table>

@@ -7,6 +7,10 @@ app_name="Stock"
 
 urlpatterns = [
     path('',views.stockIndex,name='stockIndex'),
+    path('crear/',views.stockCrear,name='stockCrear'),
+
+
+    path('AjaxSearch', views.stockCard, name='stockCard'),
 
 
 

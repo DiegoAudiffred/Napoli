@@ -1,0 +1,89 @@
+<table class="table table-striped m-0">
+    <thead class="bg-tercero text-white">
+        <tr>
+            <th>Comprador</th>
+            <th>Metodo</th>
+            <th>Fecha</th>
+            <th>Total</th>
+            <th>Ticket</th>
+            <th>Num Factura</th>
+            <th>Proovedor</th>
+            <th>Editar</th>
+            <th>Eliminar</th>
+
+        </tr>
+    </thead>
+    <tbody>
+        {% for compras in totalCompras%}
+
+        <tr class="align-middle bg-cuarto ">
+            <td class="text-truncate">{{compras.comprador}}</td>
+            <td class="text-truncate">{{compras.metodo}}</td>
+            <td class="text-truncate">{{compras.fecha|date:"d-m-Y" }}</td>
+            <td class="text-truncate">${{compras.total_comprado}}</td>
+            <td class="text-truncate">{% if compras.ticket %} <a data-bs-toggle="modal"
+                    data-bs-target="#exampleModal{{compras.id}}" class="text-decoration-underline">Ticket</a>{% else %}
+                Sin ticket {% endif %}
+            </td>
+            <td class="text-truncate">{% if compras.numero_factura %}{{compras.numero_factura}} {% else %} Sin factura
+                {% endif %}
+            </td>
+            <td class="text-truncate">{% if compras.ticket %} {{compras.proovedor}} {% else %} Sin proveedor {% endif %}
+            </td>
+
+            {% if compras.is_open %}
+            <td class="text-start text-truncate"><a href="{% url 'Compras:compraEditar' compras.id %}"
+                    class="btn btn-tercero text-white"> Editar
+                    compra</a></td>
+
+
+            {% else %}
+            <td class="text-start text-truncate"><a href="{% url 'Compras:compraEditar' compras.id %}"
+                    class="btn btn-tercero text-white"> Ver
+                    compra</a></td> {% endif %}
+
+            <td class="text-start text-truncate"><a href="" class="btn btn-secondary text-white"> Eliminar compra</a>
+            </td>
+
+
+
+
+
+        </tr>
+        {% if compras.ticket %}
+        <div class="modal fade" id="exampleModal{{compras.id}}" tabindex=" -1" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header border border-0">
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <img src="{{compras.ticket.url}}" alt="" width="100%" height="414px" style="cursor: pointer;"
+                            class="rounded rounded-2 border border-3">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        {% empty %}
+        <tr class="align-middle bg-cuarto">
+            <td>No encontramos ningun resultado</td>
+
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+
+
+        </tr>
+
+        {% endfor %}
+
+    </tbody>
+</table>

@@ -7,13 +7,13 @@
     <div class="row py-3">
         <h1>Lista de empleados</h1>
 
-        <div class="col-2 d-flex">
-            <a href="{% url 'Empleados:empleadosCrear' %}" class="rounded-5 text-white py-2 px-3 text-decoration-none"
-                style="background-color: #199fd6;">
+        <div class="col-md-2 col-6 d-flex text-center">
+            <a class="btn btn-tercero rounded-5 text-white py-2 px-3 text-decoration-none w-100" data-bs-toggle="modal"
+                data-bs-target="#exampleModal">
                 Agregar empleado
             </a>
         </div>
-        <div class="col-5 d-flex justify-content-center align-items-center">
+        <div class="col-md-5 col-12 d-flex justify-content-center align-items-center my-2 my-md-0">
             <div class="input-group">
 
                 <input type="text" class="form-control shadow-none" placeholder="Buscar empleado por nombre"
@@ -25,13 +25,44 @@
 
 
     </div>
-    <div id="cardHolder" class="border border-3 rounded rounded-3">
+    <div id="cardHolder" class="border border-3 rounded rounded-3 table-responsive">
     </div>
 
 
 </div>
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Agregar producto</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                {% include 'Empleados/crearEmpleado.html' %}
+            </div>
+            <div class="modal-footer">
+                <a href="{% url 'Empleados:empleadosCrear' %}"></a>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
 
-
+    function checkText(id) {
+        if (document.getElementById(" inputEliminar" + id).value == "Eliminar") {
+            document.getElementById("botonEliminar" + id).classList.add("enabled");
+            document.getElementById("botonEliminar" + id).classList.remove("disabled");
+        } else {
+            document.getElementById("botonEliminar" + id).classList.remove("enabled");
+            document.getElementById("botonEliminar" + id).classList.add("disabled");
+        }
+    } </script>
 <script src="{% static 'js/employeesAjaxSearch.js' %}"></script>
-
+<script>
+    function ponerCorreo() {
+        email = document.getElementById("id_email")
+        usuario = document.getElementById("useremail")
+        email.value = usuario.value + "@napoli.com"
+    }
+</script>
 {% endblock %}

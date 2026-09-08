@@ -1,0 +1,753 @@
+{% extends 'layout/layout.html' %}
+{% load static %}
+
+{% block body %}
+<div class="container min-vh-100  py-4">
+
+
+    <div
+        class="row bg-whiterounded-top border-top border-end border-start border-3 border-quinto bg-white  rounded-top">
+
+        <div class="col-6 col-md-2 border-end border-quinto">
+            <form action="{% url 'Ventas:addCliente' venta.id%}" method="POST" enctype="multipart/form-data"
+                id="user-profile-form">
+                {% csrf_token %}
+                {% if venta.is_reopen%}
+                {{venta.cliente}}
+
+                {% else %}
+                <div class="input-group">
+
+                    <div class="dropdown mx-2">
+
+                        <input type="text" class="form-control shadow-none py-0 border border-0"
+                            placeholder="Buscar cliente" aria-label="" aria-describedby="basic-addon1" id="searchBar"
+                            list="cardHolder" data-bs-toggle="dropdown" onkeyup="getCardsReplace(this.value)"
+                            id="dropdownMenuLink"
+                            value="{% if venta.cliente %} {{venta.cliente}} {% else %} Sin cliente {% endif %}">
+
+
+                        <ul class="dropdown-menu w-100" aria-labelledby="dropdownMenuLink" id="cardHolder">
+
+                        </ul>
+                        <div class="d-none">
+                            {{form.cliente}}
+                        </div>
+                    </div>
+
+                </div>
+
+                {% endif %}
+            </form>
+        </div>
+
+        <div class="col-6 col-md-2 border-end border-quinto">
+            {{venta.empleado.first_name}}
+        </div>
+        <div class="col-3 border-end border-quinto d-none d-md-block">
+            {{venta.fecha_compra}}
+        </div>
+
+        <div class="col-2 border-end border-quinto  d-none d-md-block">
+            Estado:{% if venta.is_open %} {% if venta.is_reopen%} Cuenta reabierta {% else %} Cuenta abierta {% endif %}
+            {% else %} Cuenta cerrada {% endif %}
+        </div>
+
+
+        <div class="col-1 d-none d-md-block border-end border-quinto  ">
+
+
+
+
+            <form action="{% url 'Ventas:addMesa' venta.id %}" method="POST" enctype="multipart/form-data"
+                id="user-profile-form2">
+                {% csrf_token %}
+                {% if venta.is_reopen %}
+                {{ venta.mesa }}
+                {% else %}
+                <select class="form-select border border-0 shadow-none py-0" aria-label="Default select example"
+                    id="selectMesa" name="mesa">
+                    {% for mesa in mesas %}
+                    <option {% if venta.mesa == mesa %} selected {% endif %} value="{{ mesa.id }}">{{ mesa.nombre }}
+                    </option>
+                    {% endfor %}
+                </select>
+                {% endif %}
+                <div class="d-none">
+                    {{form3.mesa}}
+
+                </div>
+
+            </form>
+
+
+
+
+
+
+
+        </div>
+        <div class="col-2  d-none d-md-block">
+            Factura
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Capturar el cambio en el select
+            $('#selectMesa').on('change', function () {
+                // Obtener el valor seleccionado en el select
+                var selectedValue = $(this).val();
+
+                // Establecer el valor en el campo del formulario 'mesa'
+                $('#id_mesa').val(selectedValue);
+                $('#user-profile-form2').submit();
+
+            });
+        });
+    </script>
+
+
+    <div class="row">
+        <div class="col-12 p-0">
+            <div class="table-responsive">
+                <table class="table border border-3 table-hover table-bordered border-quinto table-sm">
+                    <thead class="bg-tercero text-white">
+                        <th class="d-none d-sm-table-cell">Imagen</th>
+
+                        <th>Platillo</th>
+                        <th>Observaciones</th>
+
+                        <th class="d-none d-sm-table-cell">Precio</th>
+                        <th>Extras</th>
+                        <th>Cantidad</th>
+                        <th class="d-none d-sm-table-cell">Total</th>
+                    </thead>
+                    <tbody>
+
+                        {% for list in lista%}
+                        <tr>
+                            <td class="align-middle border border-0 d-none d-sm-table-cell"
+                                style=" width: 75px;height:75px">
+                                <img src="{{list.menu.url.url}}" alt="" width="90px" height="90px">
+                                {% if list.pizza_mitad %}
+                                <img src="{{list.pizza_mitad.url.url}}" alt="" width="90px" height="90px">
+                                {% endif %}
+                            </td>
+
+                            <td class="align-middle  text-center">
+
+                                {% if list.media_orden %}
+                                <p>Media Orden:</p>
+
+                                {% endif %}
+                                {% if list.familiar %}
+                                <p>Pizza Familiar</p>
+
+                                {% endif %}
+                                {% if list.pizza_mitad %}
+                                Mitad:
+                                {% endif %}
+                                {{list.menu}}
+                                {% if list.pizza_mitad %}
+                                <p>Mitad: {{list.pizza_mitad}}
+                                </p> {% endif %}
+                            </td>
+                            <td class="align-middle" style="width: 300px;height: 100px;">
+
+                                <p class=" text-break">
+
+                                    {{list.observaciones}}</p>
+                            </td>
+                            <td class="align-middle text-center d-none d-sm-table-cell">
+                                {% if list.menu.categoria == "Pizza" %}
+                                {% if list.familiar %}
+                                {% if list.pizza_mitad %}
+                                {% if list.pizza_mitad.precioFamiliar < list.menu.precioFamiliar %}
+                                    ${{list.menu.precioFamiliar}} mxn {% else %} $ {{list.pizza_mitad.precioFamiliar}}
+                                    mxn {% endif %} {% else %} ${{list.menu.precioFamiliar}} mxn {% endif %} {% else %}
+                                    {% if list.pizza_mitad %} {% if list.pizza_mitad.precio < list.menu.precio %} $
+                                    {{list.menu.precio}} mxn {% else %} $ {{ list.pizza_mitad.precio }} mxm {% endif %}
+                                    {% else %} $ {{ list.menu.precio }} mxn {% endif %} {% endif %} {% else %} {% if list.media_orden %} $ {{list.menu.mediaOrden}} mxn {% else %} $ {{list.menu.precio}}
+                                    mxn {% endif %} {% endif %} </td>
+                            <td class="align-middle text-center" style="width: 200px;height: 100px;">
+                                {% for ingrediente in list.extras.all %}
+                                <div class="col-auto">
+                                    <p>{{ ingrediente.nombre }}
+                                        {% if list.familiar %}
+                                        ${{ ingrediente.precioFamiliar }}
+                                        {% else %}
+                                        ${{ ingrediente.precio }}
+                                        {% endif %}
+                                    </p>
+
+                                </div>
+
+
+                                {% endfor %}
+                            </td>
+                            <td class="align-middle  text-center" style="width: 100px;">
+
+
+                                <div class="plus-minus-input">
+                                    {% if venta.is_open %}
+
+                                    <div class="input-group-button my-auto">
+
+                                        <a onclick="incrementValue({{list.id}})" data-field="quantity1" class="p-1"
+                                            href="{% url 'Ventas:guardarCambios' venta.id list.id 'suma' %}"
+                                            id="plus{{list.id}}" class="btn"><i class="fa fa-plus text-primary"
+                                                aria-hidden="true"></i>
+                                        </a>
+
+                                    </div>
+                                    {% endif %}
+
+                                    <input class="input-group-field border rounded rounded-4 text-center" type="number"
+                                        name="quantity" value="{{list.cantidad}}" style="width: 50px;"
+                                        id="input{{list.id}}" disabled>
+                                    {% if venta.is_open %}
+                                    <div class="input-group-button my-auto">
+
+                                        <a onclick="decrementValue({{list.id}})" data-field="quantity1" class="p-1"
+                                            href="{% url 'Ventas:guardarCambios' venta.id list.id 'resta' %}"
+                                            id="minus{{list.id}}" class="btn"><i class="fa fa-minus text-secondary"
+                                                aria-hidden="true"></i>
+                                        </a>
+                                    </div>
+                                    {% endif %}
+
+                                </div>
+                            </td>
+                            <td class="align-middle text-center d-none d-sm-table-cell">
+                                $ {{list.totalfinal}} mxn
+                            </td>
+                        </tr>
+
+
+                        {% endfor %}
+                        <tr class="d-none d-sm-table-row">
+                            <th class="bg-quinto"></th>
+                            <th class="bg-quinto"></th>
+                            <th class="bg-quinto "></th>
+                            <th class="bg-quinto"></th>
+                            <th class="bg-quinto"></th>
+                            <th class="bg-quinto"></th>
+
+
+                            <th class="bg-primary text-white">Total: $ {{total}} mxn
+                            </th>
+                        </tr>
+                        <tr class="d-block d-sm-none d-table-row">
+                            <th class="bg-quinto"></th>
+
+                            <th class="bg-quinto"></th>
+                            <th class="bg-quinto text-white">Total: $</th>
+
+
+                            <th class="bg-primary text-white"> {{total}}
+                            </th>
+                        </tr>
+                    </tbody>
+
+                </table>
+            </div>
+
+        </div>
+    </div>
+    {% if venta.is_open%}
+    <div class="row ">
+        <div class="col-6 col-md-2 text-center">
+            <a href="" data-bs-toggle="modal" data-bs-target="#exampleModal"
+                class="btn btn-tercero text-white w-100">Agregar
+                venta</a>
+        </div>
+        <div class="col-6 col-md-2 text-center">
+            <form action="{% url 'Ventas:cerrarVenta' venta.id %}" method="POST" enctype="multipart/form-data"
+                id="user-profile-form">
+                {% csrf_token %}
+                <a class="btn btn-secondary text-white w-100" data-bs-toggle="modal" data-bs-target="#cerraModal">Cerrar
+                    venta</a>
+
+
+
+                <div class="modal fade" id="cerraModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content bg-cuarto">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">{% if venta.is_reopen %} ¿Esta
+                                    seguro de
+                                    volver a cerrar la cuenta de
+                                    {{venta.cliente.nombre}} ?
+                                    {% else %} ¿Esta seguro de
+                                    cerrar la cuenta de
+                                    {{venta.cliente.nombre}} ? {% endif %} </h5>
+                            </div>
+                            {% if not venta.is_reopen%}
+                            <div class="modal-body">
+                                <h4 class="text-secondary">¡UNA VEZ CERRADA NO
+                                    PODRAS CAMBIAR AL
+                                    CLIENTE!
+                                </h4>
+                                <h4>
+                                    El total de la venta es $ {{total}} mxn
+                                </h4>
+
+                            </div>
+                            {% endif %}
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-tercero text-white "
+                                    data-bs-dismiss="modal">Cancelar</button>
+                                <button type="submit" class="btn btn-secondary">Cerrar cuenta</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+    {% else %}
+    <div class="row justify-content-end w-100">
+        <div class="col-5 col-md-2 text-center">
+            <form action="{% url 'Ventas:abrirVenta' venta.id %}" method="POST" enctype="multipart/form-data"
+                id="user-profile-form">
+                {% csrf_token %}
+
+                <button href="" type="submit" class="btn btn-tercero w-100 text-white">Reabrir
+                    venta</button>
+            </form>
+
+        </div>
+
+    </div>
+    {% endif %}
+</div>
+
+
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Agregar a la cuenta </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="{% url 'Ventas:agregarVenta' venta.id %}" method="POST" enctype="multipart/form-data"
+                    id="user-profile-form">
+                    {% csrf_token %}
+
+                    <div class="row ">
+                        <div class="d-none">
+                            {{form2.venta}}
+
+                        </div>
+                        <div class="d-none">
+                            {{form2.totalfinal}}
+
+                        </div>
+
+                        <div class="col-12 p-3 text-start">
+                            <div class="row justify-content-start">
+                                <div class="col-12 py-2">
+
+                                    <div class="input-group rounded rounded-3 border border-2 border-primary">
+
+
+                                        <div class="input-group-prepend dropdown me-2 my-auto">
+                                            <span class="input-group-text bg-white border border-0"
+                                                id="basic-addon1"><svg width="19px" height="19px"
+                                                    viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg"
+                                                    fill="#000000">
+                                                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                                    <g id="SVGRepo_tracerCarrier" stroke-linecap="round"
+                                                        stroke-linejoin="round"></g>
+                                                    <g id="SVGRepo_iconCarrier">
+                                                        <path fill="#000000"
+                                                            d="m384.064 274.56.064-50.688A128 128 0 0 1 512.128 96c70.528 0 127.68 57.152 127.68 127.68v50.752A448.192 448.192 0 0 1 955.392 768H68.544A448.192 448.192 0 0 1 384 274.56zM96 832h832a32 32 0 1 1 0 64H96a32 32 0 1 1 0-64zm32-128h768a384 384 0 1 0-768 0zm447.808-448v-32.32a63.68 63.68 0 0 0-63.68-63.68 64 64 0 0 0-64 63.936V256h127.68z">
+                                                        </path>
+                                                    </g>
+                                                </svg></span>
+                                        </div>
+                                        <input type="text"
+                                            class="form-control shadow-none  px-2 py-1 border border-0 rounded rounded-3"
+                                            placeholder="Buscar platillo" aria-label="" aria-describedby="basic-addon1"
+                                            id="searchBar2" list="cardHolder2" data-bs-toggle="dropdown"
+                                            onkeyup="getCardsReplace2(this.value)" id="dropdownMenuLink" value="">
+
+
+                                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink" id="cardHolder2">
+
+                                        </ul>
+                                        <div class="d-none">
+                                            {{form2.menu}}
+
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="col-3 py-2">
+
+                                    <p class="m-0">Mitad Pizza:</p>
+
+
+                                </div>
+                                <div class="col-1 py-2 px-0">
+                                    <input class="form-check-input m-0" type="checkbox" value="" id="defaultCheck1"
+                                        style="height:30px;width:30px" onclick="show()">
+
+                                </div>
+                                <div class="col-3 py-2 ">
+                                    <p class="m-0">Familiar:</p>
+
+                                </div>
+                                <div class="col-1 py-2 px-0">
+                                    {{form2.familiar}}
+                                </div>
+                                <div class="col-3 py-2 ">
+                                    <p class="m-0">Media Orden:</p>
+
+                                </div>
+                                <div class="col-1 py-2 px-0">
+                                    {{form2.media_orden}}
+                                </div>
+
+                                <div class="col-12 py-2">
+
+                                    <div id="pruebas" class="d-none">
+                                        <div class="input-group rounded rounded-3 border border-2 border-primary">
+
+
+                                            <div class="input-group-prepend dropdown me-2 my-auto">
+                                                <span class="input-group-text bg-white border border-0"
+                                                    id="basic-addon1"><svg width="19px" height="19px"
+                                                        viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg"
+                                                        fill="#000000">
+                                                        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                                        <g id="SVGRepo_tracerCarrier" stroke-linecap="round"
+                                                            stroke-linejoin="round"></g>
+                                                        <g id="SVGRepo_iconCarrier">
+                                                            <path fill="#000000"
+                                                                d="m384.064 274.56.064-50.688A128 128 0 0 1 512.128 96c70.528 0 127.68 57.152 127.68 127.68v50.752A448.192 448.192 0 0 1 955.392 768H68.544A448.192 448.192 0 0 1 384 274.56zM96 832h832a32 32 0 1 1 0 64H96a32 32 0 1 1 0-64zm32-128h768a384 384 0 1 0-768 0zm447.808-448v-32.32a63.68 63.68 0 0 0-63.68-63.68 64 64 0 0 0-64 63.936V256h127.68z">
+                                                            </path>
+                                                        </g>
+                                                    </svg></span>
+                                            </div>
+                                            <input type="text"
+                                                class="form-control shadow-none  px-2 py-1 border border-0 rounded rounded-3"
+                                                placeholder="Buscar platillo" aria-label=""
+                                                aria-describedby="basic-addon1" id="searchBar3" list="cardHolder3"
+                                                data-bs-toggle="dropdown" onkeyup="getCardsReplace3(this.value)"
+                                                id="dropdownMenuLink3" value="">
+
+
+                                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink3"
+                                                id="cardHolder3">
+
+                                            </ul>
+                                            <div class="d-none">
+                                                {{form2.pizza_mitad}}
+
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+
+                                <div class="col-12 py-2">
+                                    <div class="input-group rounded rounded-3 border border-2 border-primary my-auto">
+                                        <span class="input-group-text bg-white border border-0 " id="basic-addon1"><svg
+                                                width="19px" height="19px" viewBox="0 0 24 24" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                                <g id="SVGRepo_tracerCarrier" stroke-linecap="round"
+                                                    stroke-linejoin="round"></g>
+                                                <g id="SVGRepo_iconCarrier">
+                                                    <circle opacity="0.5" cx="12" cy="12" r="10" stroke="#a8361a"
+                                                        stroke-width="1.5">
+                                                    </circle>
+                                                    <path d="M12 6V18" stroke="#a8361a" stroke-width="1.5"
+                                                        stroke-linecap="round">
+                                                    </path>
+                                                    <path
+                                                        d="M15 9.5C15 8.11929 13.6569 7 12 7C10.3431 7 9 8.11929 9 9.5C9 10.8807 10.3431 12 12 12C13.6569 12 15 13.1193 15 14.5C15 15.8807 13.6569 17 12 17C10.3431 17 9 15.8807 9 14.5"
+                                                        stroke="#a8361a" stroke-width="1.5" stroke-linecap="round">
+                                                    </path>
+                                                </g>
+                                            </svg>
+                                        </span>
+                                        {{form2.cantidad}}
+
+                                    </div>
+
+                                </div>
+
+                                <div class="col-12 py-2 ">
+                                    <div class="input-group rounded rounded-3 border border-2 border-primary ">
+                                        <span class="input-group-text bg-white border border-0 " id="basic-addon1"> <svg
+                                                width="19px" height="19px" viewBox="0 0 24 24" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                                <g id="SVGRepo_tracerCarrier" stroke-linecap="round"
+                                                    stroke-linejoin="round"></g>
+                                                <g id="SVGRepo_iconCarrier">
+                                                    <circle opacity="0.5" cx="12" cy="12" r="10" stroke="#a8361a"
+                                                        stroke-width="1.5">
+                                                    </circle>
+                                                    <path d="M12 6V18" stroke="#a8361a" stroke-width="1.5"
+                                                        stroke-linecap="round">
+                                                    </path>
+                                                    <path
+                                                        d="M15 9.5C15 8.11929 13.6569 7 12 7C10.3431 7 9 8.11929 9 9.5C9 10.8807 10.3431 12 12 12C13.6569 12 15 13.1193 15 14.5C15 15.8807 13.6569 17 12 17C10.3431 17 9 15.8807 9 14.5"
+                                                        stroke="#a8361a" stroke-width="1.5" stroke-linecap="round">
+                                                    </path>
+                                                </g>
+                                            </svg>
+                                        </span>
+                                        {{form2.observaciones}}
+
+                                    </div>
+
+                                </div>
+
+
+                                <div class="col-12 py-2 ">
+                                    <div class="input-group rounded rounded-3 border border-2 border-primary ">
+                                        <span class="input-group-text bg-white border border-0 " id="basic-addon1"> <svg
+                                                width="19px" height="19px" viewBox="0 0 24 24" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                                <g id="SVGRepo_tracerCarrier" stroke-linecap="round"
+                                                    stroke-linejoin="round"></g>
+                                                <g id="SVGRepo_iconCarrier">
+                                                    <circle opacity="0.5" cx="12" cy="12" r="10" stroke="#a8361a"
+                                                        stroke-width="1.5">
+                                                    </circle>
+                                                    <path d="M12 6V18" stroke="#a8361a" stroke-width="1.5"
+                                                        stroke-linecap="round">
+                                                    </path>
+                                                    <path
+                                                        d="M15 9.5C15 8.11929 13.6569 7 12 7C10.3431 7 9 8.11929 9 9.5C9 10.8807 10.3431 12 12 12C13.6569 12 15 13.1193 15 14.5C15 15.8807 13.6569 17 12 17C10.3431 17 9 15.8807 9 14.5"
+                                                        stroke="#a8361a" stroke-width="1.5" stroke-linecap="round">
+                                                    </path>
+                                                </g>
+                                            </svg>
+                                        </span>
+                                        {{form2.extras}}
+
+                                    </div>
+
+                                </div>
+
+
+
+
+                                <div class="col-6 col-sm-3 py-2 px-0 text-end">
+                                    <button class="btn fnOS_Bold_Boton_10 my-auto px-3 border border-0"
+                                        type="button" data-bs-dismiss="modal" aria-label="Close">
+
+                                        <span>Cancelar</span>
+
+                                    </button>
+
+                                </div>
+                                <div class="col-6 col-sm-3 py-2 px-0 text-start">
+                                    <button type="submit"
+                                        class="btn fnOS_Bold_Boton_10 btn-primary border border-2 border-primary text-white my-auto rounded rounded-3 px-3">
+
+                                        Guardar
+
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+<script>
+
+
+    const barra = document.getElementById("searchBar")
+
+    barra.addEventListener('dblclick', function () {
+        barra.value = ""
+    });
+
+    var bandera = true
+    function show() {
+        var pizza_extra = document.getElementById("pruebas")
+        console.log(pizza_extra)
+        if (bandera == true) {
+            pizza_extra.classList.remove('d-none')
+            pizza_extra.classList.add('d-block')
+            bandera = false
+        } else {
+            pizza_extra.classList.remove('d-block')
+            pizza_extra.classList.add('d-none')
+            bandera = true
+        }
+
+
+    }
+
+    function setNombre(id) {
+        if (id == 0) {
+            var nombre2 = document.getElementById("id_cliente");
+            nombre2.value = id
+
+        } else {
+            nombreC = "cliente" + id
+            var nombre = document.getElementById("searchBar");
+            var nombreChido = document.getElementById(nombreC);
+            nombre.value = nombreChido.textContent;
+
+            var nombre2 = document.getElementById("id_cliente");
+            nombre2.value = id
+        }
+
+
+    }
+    function setNombre2(id) {
+        console.log(id)
+        if (id == 0) {
+            var nombre2 = document.getElementById("id_menu");
+            nombre2.value = id
+
+        } else {
+            nombreC = "texto" + id
+            var nombre = document.getElementById("searchBar2");
+            var nombreChido = document.getElementById(nombreC);
+            nombre.value = nombreChido.textContent;
+
+            var nombre2 = document.getElementById("id_menu");
+            nombre2.value = id
+            console.log(nombre2)
+        }
+
+
+    }
+    function setNombre3(id) {
+        console.log(id)
+        if (id == 0) {
+            var nombre3 = document.getElementById("id_pizza_mitad");
+            nombre3.value = id
+
+        } else {
+            nombreC = "text" + id
+            var nombre = document.getElementById("searchBar3");
+            var nombreChido = document.getElementById(nombreC);
+            nombre.value = nombreChido.textContent;
+
+            var nombre3 = document.getElementById("id_pizza_mitad");
+            nombre3.value = id
+            console.log(nombre3)
+        }
+
+
+    }
+</script>
+
+<script>
+    var inputElement = document.getElementById("searchBar");
+
+    // Escuchar el evento "click" en el elemento
+    inputElement.addEventListener("click", function () {
+        // Establecer el valor del input a una cadena vacía
+        inputElement.value = '';
+        getCardsReplace("")
+        setNombre(0)
+
+    });
+</script>
+<script>
+    var inputElement = document.getElementById("searchBar2");
+
+    // Escuchar el evento "click" en el elemento
+    inputElement.addEventListener("click", function () {
+        // Establecer el valor del input a una cadena vacía
+        inputElement.value = '';
+        getCardsReplace2("")
+        setNombre2(0)
+
+    });
+</script>
+<script>
+    var inputElement = document.getElementById("searchBar3");
+
+    // Escuchar el evento "click" en el elemento
+    inputElement.addEventListener("click", function () {
+        // Establecer el valor del input a una cadena vacía
+        inputElement.value = '';
+        getCardsReplace3("")
+        setNombre3(0)
+
+    });
+</script>
+<script src="{% static 'js/clienteRow.js' %}"></script>
+<script src="{% static 'js/menuRow.js' %}"></script>
+<script src="{% static 'js/menuRow2.js' %}"></script>
+
+<script>
+    function incrementValue(id) {
+        var inputField = document.getElementById('input' + id);
+        console.log(inputField);
+        var currentVal = parseInt(inputField.value);
+        if (!isNaN(currentVal)) {
+            inputField.value = currentVal + 1;
+        } else {
+            inputField.value = 0;
+        }
+
+
+    }
+
+    function decrementValue(id) {
+        var inputField = document.getElementById('input' + id);
+        var currentVal = parseInt(inputField.value);
+        if (!isNaN(currentVal) && currentVal > 0) {
+            inputField.value = currentVal - 1;
+        } else {
+            inputField.value = 0;
+        }
+
+    }
+</script>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    /*  $(document).ready(function () {
+          $("#id_mesa").onchange(function () {
+              var item_id = {{ venta.id }};  // Aquí asigna el ID que deseas enviarasdasdsadsadsadsdsdswsdaasdasdsadasdasdsdsa
+  
+          $.ajax({
+              type: "POST",
+              url: `/Ventas/modificarVenta/Mesa/${item_id}`,  // URL con el ID en la ruta
+              data: {
+                  csrfmiddlewaretoken: '{{ csrf_token }}',
+                  // Otros datos si es necesario
+              },
+              success: function (data) {
+                  alert(data.mensaje);
+              },
+              error: function () {
+                  alert("Error al actualizar la base de datos.");
+              }
+          });
+      });
+  });*/
+
+
+</script>
+
+{% endblock %}

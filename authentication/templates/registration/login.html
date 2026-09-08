@@ -1,0 +1,50 @@
+{% extends 'layout/layout.html' %}
+
+{% load static %}
+{% block body %}
+
+<style>
+    /* Agrega un estilo personalizado para quitar el borde cuando el input está enfocado */
+    #id_email:focus {
+        border: none;
+        /* Otras propiedades de estilo si las necesitas */
+        outline: none;
+        /* Esto quita el contorno predeterminado en algunos navegadores */
+    }
+
+    #id_password:focus {
+        border: none;
+        /* Otras propiedades de estilo si las necesitas */
+        outline: none;
+        /* Esto quita el contorno predeterminado en algunos navegadores */
+    }
+</style>
+
+
+
+<form action="{% url 'authentication:signin' %}" method="post">
+    {% csrf_token %}
+
+    <div class="container">
+        <div class="row justify-content-center my-5">
+            <div class="col-12 col-md-5 text-center">
+                <div class="card shadow-lg bg-cuarto rounded rounded-3">
+                    <h4 class="my-2">Bienvenido</h4>
+
+                    <label for="id_email">Correo</label>
+                    <input type="email" name="email" id="id_email" class="rounded rounded-pill mx-4 border border-0">
+
+                    <label for="id_password">Contraseña</label>
+                    <input type="password" name="password" id="id_password"
+                        class="rounded rounded-pill mx-4 border border-0">
+
+                    <div class="d-flex justify-content-center">
+                        <button type="submit" class="btn bg-primary w-50 py-2 my-3 text-white">Ingresar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</form>
+{% endblock %}

@@ -1,0 +1,286 @@
+{% load static %}
+{% block body %}
+
+
+
+<style>
+    .file {
+        position: relative;
+        height: 30px;
+        width: 100px;
+    }
+
+    .file>input[type="file"] {
+        position: absoulte;
+        opacity: 0;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0
+    }
+
+    .file>label {
+        position: absolute;
+        top: 0;
+        right: 0;
+        left: 0;
+        bottom: 0;
+        background-color: #666;
+        color: #fff;
+        line-height: 30px;
+        text-align: center;
+        cursor: pointer;
+    }
+
+    .form-check-input[disabled] {
+        opacity: 1;
+
+    }
+
+    .disabled-text {
+        opacity: 1;
+        color: black;
+
+
+    }
+
+    .image-container {
+        position: relative;
+        display: inline-block;
+    }
+
+    .svg-container {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .svg-overlay {
+        z-index: 1;
+    }
+</style>
+<script>
+    var loadFile = function (event) {
+        var output = document.getElementById('output');
+        output.src = URL.createObjectURL(event.target.files[0]);
+        output.onload = function () {
+            URL.revokeObjectURL(output.src) // free memory
+        }
+
+
+
+    };
+
+</script>
+<script>
+    document.getElementById('id_url').addEventListener('change', function (event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function () {
+                const imagenPrevisualizacion = document.querySelector('#label-imagen img');
+                imagenPrevisualizacion.src = reader.result;
+            }
+            reader.readAsDataURL(file);
+        }
+    });
+</script>
+
+<style>
+    .profilePictureNotification {
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        padding: 15px;
+        background-color: rgba(0, 0, 0, 0.8);
+        color: white;
+        border-radius: 5px;
+        z-index: 1000;
+        opacity: 0;
+        transition: opacity 0.5s;
+    }
+</style>
+
+
+
+
+
+<div class="container">
+    <form action="{% url 'Stock:stockCrear' %}" method="POST" enctype="multipart/form-data" id="user-profile-form">
+        {% csrf_token %}
+
+        <div class="row ">
+
+            <div class="col-12 p-3 text-start">
+                <div class="row justify-content-end">
+                    <div class="col-12 py-2">
+                        <div class="input-group rounded rounded-3 border border-2 border-primary">
+                            <span class="input-group-text bg-white " id="basic-addon1" style="border-right: none;"><svg
+                                    width="19px" height="19px" viewBox="0 0 24 24" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                    <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                                    <g id="SVGRepo_iconCarrier">
+                                        <path
+                                            d="M13 21H6C4.11438 21 3.17157 21 2.58579 20.4142C2 19.8284 2 18.8856 2 17C2 15.1144 2 14.1716 2.58579 13.5858C3.17157 13 4.11438 13 6 13H18C19.8856 13 20.8284 13 21.4142 13.5858C22 14.1716 22 15.1144 22 17C22 18.8856 22 19.8284 21.4142 20.4142C20.8284 21 19.8856 21 18 21H17"
+                                            stroke="#a8361a" stroke-width="1.5" stroke-linecap="round"></path>
+                                        <path
+                                            d="M11 2H18C19.8856 2 20.8284 2 21.4142 2.58579C22 3.17157 22 4.11438 22 6C22 7.88562 22 8.82843 21.4142 9.41421C20.8284 10 19.8856 10 18 10H6C4.11438 10 3.17157 10 2.58579 9.41421C2 8.82843 2 7.88562 2 6C2 4.11438 2 3.17157 2.58579 2.58579C3.17157 2 4.11438 2 6 2H7"
+                                            stroke="#a8361a" stroke-width="1.5" stroke-linecap="round"></path>
+                                        <path d="M11 6H18" stroke="#a8361a" stroke-width="1.5" stroke-linecap="round">
+                                        </path>
+                                        <path d="M6 6H8" stroke="#a8361a" stroke-width="1.5" stroke-linecap="round">
+                                        </path>
+                                        <path d="M11 17H18" stroke="#a8361a" stroke-width="1.5" stroke-linecap="round">
+                                        </path>
+                                        <path d="M6 17H8" stroke="#a8361a" stroke-width="1.5" stroke-linecap="round">
+                                        </path>
+                                    </g>
+                                </svg>
+                            </span>
+                            {{form.nombre}}
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-12 py-2">
+                        <div class="input-group rounded rounded-3 border border-2 border-primary">
+                            <span class="input-group-text bg-white " id="basic-addon1" style="border-right: none;"><svg
+                                    width="19px" height="19px" viewBox="0 0 24 24" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                    <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                                    <g id="SVGRepo_iconCarrier">
+                                        <circle opacity="0.5" cx="12" cy="12" r="10" stroke="#a8361a"
+                                            stroke-width="1.5"></circle>
+                                        <path d="M12 6V18" stroke="#a8361a" stroke-width="1.5" stroke-linecap="round">
+                                        </path>
+                                        <path
+                                            d="M15 9.5C15 8.11929 13.6569 7 12 7C10.3431 7 9 8.11929 9 9.5C9 10.8807 10.3431 12 12 12C13.6569 12 15 13.1193 15 14.5C15 15.8807 13.6569 17 12 17C10.3431 17 9 15.8807 9 14.5"
+                                            stroke="#a8361a" stroke-width="1.5" stroke-linecap="round"></path>
+                                    </g>
+                                </svg>
+                            </span>
+                            {{form.precio}}
+
+                        </div>
+
+                    </div>
+                    <div class="col-12 py-2">
+                        <div class="input-group rounded rounded-3 border border-2 border-primary">
+                            <span class="input-group-text bg-white" id="basic-addon1" style="border-right: none;"><svg
+                                    fill="#9a0e00" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg"
+                                    viewBox="0 0 52 52" width="19px" height="19px">
+                                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                    <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                                    <g id="SVGRepo_iconCarrier">
+                                        <path
+                                            d="M21.45,32.64H5.36a1.29,1.29,0,0,0-1.28,1.29v1.28a1.28,1.28,0,0,0,1.28,1.28H21.45a1.28,1.28,0,0,0,1.28-1.28V33.93A1.29,1.29,0,0,0,21.45,32.64Z">
+                                        </path>
+                                        <path
+                                            d="M21.45,41.66H5.36A1.29,1.29,0,0,0,4.08,43v1.32a1.28,1.28,0,0,0,1.28,1.28H21.45a1.28,1.28,0,0,0,1.28-1.28V43a1.29,1.29,0,0,0-1.24-1.34Z">
+                                        </path>
+                                        <path
+                                            d="M46.65,32.64H30.57a1.29,1.29,0,0,0-1.28,1.29v1.28a1.28,1.28,0,0,0,1.28,1.28H46.65a1.28,1.28,0,0,0,1.29-1.27h0V33.93a1.29,1.29,0,0,0-1.29-1.29Z">
+                                        </path>
+                                        <path
+                                            d="M46.65,41.66H30.57A1.29,1.29,0,0,0,29.29,43v1.32a1.28,1.28,0,0,0,1.28,1.28H46.65a1.28,1.28,0,0,0,1.29-1.27h0V43a1.29,1.29,0,0,0-1.24-1.34Z">
+                                        </path>
+                                        <path
+                                            d="M38.61,6.52A10.17,10.17,0,1,0,48.78,16.69h0A10.19,10.19,0,0,0,38.61,6.52Zm5,10.88A.63.63,0,0,1,43,18H34.21a.6.6,0,0,1-.64-.55,8.66,8.66,0,0,1,0-1.44.66.66,0,0,1,.64-.55H43a.64.64,0,0,1,.63.55,9.22,9.22,0,0,1,0,1.39Z">
+                                        </path>
+                                        <path
+                                            d="M20.63,9.45a10.21,10.21,0,1,0,0,14.44A10.21,10.21,0,0,0,20.63,9.45Zm-.43,8.07a.4.4,0,0,1-.38.42H15.11a.45.45,0,0,0-.43.43V23a.44.44,0,0,1-.42.42h-1.7a.4.4,0,0,1-.43-.37V18.37a.4.4,0,0,0-.37-.43H7a.4.4,0,0,1-.43-.37V15.82A.45.45,0,0,1,7,15.39h4.67a.4.4,0,0,0,.42-.38V10.3a.47.47,0,0,1,.43-.43h1.7a.42.42,0,0,1,.42.42h0V15a.4.4,0,0,0,.38.42h4.72a.45.45,0,0,1,.42.43Z">
+                                        </path>
+                                    </g>
+                                </svg>
+
+                            </span>
+                            {{form.cantidad}}
+
+                        </div>
+
+                    </div>
+                    <div class="col-12 py-2">
+                        <div class="input-group rounded rounded-3 border border-2 border-primary">
+                            <span class="input-group-text bg-white" id="basic-addon1" style="border-right: none;">
+                                <svg width="19px" height="19px" viewBox="0 0 24 24" id="Layer_1" data-name="Layer 1"
+                                    xmlns="http://www.w3.org/2000/svg" fill="#000000">
+                                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                    <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                                    <g id="SVGRepo_iconCarrier">
+                                        <defs>
+                                            <style>
+                                                .cls-1 {
+                                                    fill: none;
+                                                    stroke: #9a0e00;
+                                                    stroke-miterlimit: 10;
+                                                    stroke-width: 1.91px;
+                                                }
+                                            </style>
+                                        </defs>
+                                        <path class="cls-1"
+                                            d="M16.88,8.57l1.61-3.76a2.45,2.45,0,0,0,.19-.93A2.37,2.37,0,0,0,16.31,1.5H7.69A2.37,2.37,0,0,0,5.32,3.88a2.45,2.45,0,0,0,.19.93L7.12,8.57">
+                                        </path>
+                                        <path class="cls-1"
+                                            d="M12,7.23a9.55,9.55,0,0,0-9.55,9.54c0,.12,0,.23,0,.34s0,.21,0,.31a8.64,8.64,0,0,0,.6,3.18,2.86,2.86,0,0,0,.79,1.12A3.37,3.37,0,0,0,6,22.5H18a3.33,3.33,0,0,0,2.15-.77,0,0,0,0,0,0,0,2.72,2.72,0,0,0,.77-1.09,8.59,8.59,0,0,0,.61-3.37v-.07c0-.13,0-.27,0-.42A9.55,9.55,0,0,0,12,7.23Z">
+                                        </path>
+                                        <line class="cls-1" x1="7.23" y1="12" x2="7.23" y2="19.64"></line>
+                                        <path class="cls-1"
+                                            d="M10.09,12V13a2.86,2.86,0,0,1-2.86,2.87h0a2.86,2.86,0,0,1,2.86,2.86v1">
+                                        </path>
+                                        <path class="cls-1"
+                                            d="M14.86,15.82h1.91v.95a1.9,1.9,0,0,1-1.91,1.91h0A1.91,1.91,0,0,1,13,16.77V14.86A1.92,1.92,0,0,1,14.86,13h1.91">
+                                        </path>
+                                    </g>
+                                </svg>
+                            </span>
+                            {{form.unidad}}
+
+                        </div>
+
+                    </div>
+
+
+
+
+
+
+
+
+                    <div class="col-6 col-sm-3 py-2 px-0 text-end">
+                        <button class="btn fnOS_Bold_Boton_10 text-primary my-auto px-3 border border-0" type="button"
+                            data-bs-dismiss="modal" aria-label="Close">
+
+                            <span style="border-bottom: 2px solid">Cancelar</span>
+
+                        </button>
+
+                    </div>
+                    <div class="col-6 col-sm-3 py-2 px-0 text-start">
+                        <button type="submit"
+                            class="btn fnOS_Bold_Boton_10 btn-primary border border-2 border-primary text-corporateTan500 my-auto rounded rounded-3 px-3">
+
+                            Guardar
+
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </form>
+</div>
+
+
+
+{% endblock %}

@@ -6,8 +6,10 @@ from django.urls import path, include
 app_name="authentication"
 
 urlpatterns = [
-    path('index/',views.index,name='index'),
-    path('createAccount/',views.createAccount,name='createAccount')
+    path('', include('django.contrib.auth.urls'), name="login"),
 
+    path('signout',views.signout,name='signout'),
+
+    path('signin',views.signin, name="signin"),
 
 ] 

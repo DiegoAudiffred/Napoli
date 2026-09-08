@@ -1,48 +1,30 @@
+from pyexpat.errors import messages
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
+import authentication
 from db.models import *
-from authentication.forms import createUserForm
+from django.contrib.auth import authenticate,login,logout
 # Create your views here.
-def index(request):
-    users = request.user
-    return render(request, 'authentication/index.html',{"users":users})
+from django.contrib.auth.decorators import user_passes_test,login_required
 
-def createAccount(request):
-    user = request.user
+
+def signin(request):
     if request.method == "POST":
-        form = createUserForm(request.POST, request.FILES)
-        if form.is_valid():
-            print("Entro")
-            newuser = form.save()
-            newuser.save()
-            return redirect('authentication:index')         
-
+        email = request.POST['email']
+        password = request.POST['password']  
+        users = authenticate(request,email=email,password=password)
+        if users is not None:
+            login(request,users)
+            
+            return redirect('Index:index')
         else:
-            return render(request, 'authentication/createAccount.html',{'form':form})
-    form = createUserForm()
-    return render(request, 'authentication/createAccount.html',{'form':form})
+            return redirect('Index:index')
+    return render(request,"registration/login.html")
+
+def signout(request):
+
+    logout(request)
+    return redirect('authentication:signin')
 
 
-def propertiesCreate(request):
-    owner = request.user
-    totalproperties = Property.objects.filter(user=owner).count()
-    if request.method == "POST":
-        form = addPropertyForm(request.POST, request.FILES)
-        if form.is_valid():
-            print("Entro")
-            property = form.save()
-            property.save()
-            images = request.FILES.getlist('propertyImages')
-            if len(images) > 0:
-                for imageFile in images:
-                    image = Image(url=imageFile, property=property)
-                    image.save()
-            return redirect('realStateProfile:propertiesList',owner.id)         
-        else:
-            print(form.cleaned_data)
-            print("no entro")
-            return render(request,"realStateProfile/propertyList.html", {
-        "profile": owner,
-        "form":form,
-        "totalproperties":totalproperties,
-     })
+      
