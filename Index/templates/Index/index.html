@@ -1,198 +1,118 @@
 {% extends 'layout/layout.html' %}
 {% load static %}
+
 {% block body %}
+<div class="container my-auto">
+    <div class="row overflow-hidden ">
 
+        <div class="col-12 col-md-6 bg-cuarto p-4 p-lg-5 d-flex flex-column justify-content-center">
 
+            {% if user.is_authenticated %}
+            <div class="mb-4 text-center text-md-start">
+                <h2 class="fnTexto_Bold_Encabezado_002 text-decimo m-0">Bienvenid@, {{ user.first_name }}</h2>
+            </div>
+            {% endif %}
 
+            <div class="d-flex flex-column gap-3">
 
+                <a href="{% url 'Ventas:ventasIndex' %}"
+                    class="btn bg-primary text-white py-3 px-4 rounded-3 border border-quinto d-flex align-items-center justify-content-between text-decoration-none transition-all min-vh-0"
+                    style="min-height: 60px;">
+                    <span class="fw-bold fs-5 m-0">Realizar Venta</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+                        class="bi bi-arrow-right-circle-fill" viewBox="0 0 16 16">
+                        <path
+                            d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0M4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5z" />
+                    </svg>
+                </a>
 
-<div class="container-fluid bg-quinto">
-
-
-    <div class="row">
-        <div class="col-1">
-
-        </div>
-        <div class="col-sm-5 col-12 px-5 bg-cuarto pt-3">
-            <div class="row px-4">
-                {% if user.is_authenticated %}
-                <h3 class="text-quinto">Bienvenid@ {{user.first_name}}</h3>
-                {% endif %}
-                <div class="col-12 text-start text-center my-2  border border-5 rounded
-                     rounded-3 bg-cuarto border-quinto ">
-                    <a href="{% url 'Ventas:ventasIndex' %}" class="text-decoration-none">
-                        <div class="row my-auto">
-
-                            <div class="col-12my-auto">
-                                <h3 class="my-auto text-quinto">Realizar Venta</h3>
-                            </div>
-
-                        </div>
-                    </a>
-                </div><!-- Realizar Venta -->
-      <!--           {% if user.rol == "Admin" or user.rol == "Dueña/o"%}
-                <div class="col-12 text-start text-center my-2  border border-5 rounded
-                     rounded-3 bg-cuarto border-quinto ">
-
-                    <a href="{% url 'Compras:indexCompras' %}" class="text-decoration-none">
-                        <div class="row my-auto">
-
-                            <div class="col-12my-auto">
-                                <h3 class="my-auto text-quinto">Compras</h3>
-                            </div>
-
-                        </div>
-                    </a>
-                </div> 
-
-                {% endif %} -->
-          <!--       {% if user.rol == "Admin" or user.rol == "Dueña/o"%}
-                <div
-                    class="col-12 text-start text-center my-2  border border-5 rounded rounded-3 bg-cuarto border-quinto ">
-
-                    <a href="{% url 'Stock:stockIndex' %}" class="text-decoration-none">
-                        <div class="row my-auto">
-
-                            <div class="col-12my-auto">
-                                <h3 class="my-auto text-quinto">Stock</h3>
-                            </div>
-
-                        </div>
-                    </a>
-                </div>
-                {% endif %} -->
-                <!-- <div
-                    class="col-12 text-start text-center my-2  border border-5 rounded rounded-3 bg-cuarto border-quinto ">
-
-                    <a href="{% url 'Clientes:clientesIndex' %}" class="text-decoration-none">
-
-                        <div class="row my-auto">
-
-                            <div class="col-12my-auto">
-                                <h3 class="my-auto text-quinto">Clientes</h3>
-                            </div>
-
-                        </div>
-                    </a>
-                </div>-->
-                {% if user.rol == "Admin" or user.rol == "Dueña/o"%}
-
-
-                <div
-                    class="col-12 text-start text-center my-2  border border-5 rounded rounded-3 bg-cuarto border-quinto ">
-
-                    <a href="{% url 'Empleados:empleadosIndex' %}" class="text-decoration-none">
-
-                        <div class="row my-auto">
-
-                            <div class="col-12my-auto">
-                                <h3 class="my-auto text-quinto">Empleados</h3>
-                            </div>
-
-                        </div>
-                    </a>
-                </div> <!-- Empleados -->
+                {% if user.rol == "Admin" or user.rol == "Dueña/o" %}
+                <a href="{% url 'Empleados:empleadosIndex' %}"
+                    class="btn bg-noveno text-decimo py-3 px-4 rounded-3 border border-quinto d-flex align-items-center justify-content-between text-decoration-none transition-all"
+                    style="min-height: 60px;">
+                    <span class="fw-bold fs-5 m-0">Empleados</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+                        class="bi bi-people-fill text-quinto" viewBox="0 0 16 16">
+                        <path
+                            d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6m-5.784 6A2.24 2.24 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.3 6.3 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1zM4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5" />
+                    </svg>
+                </a>
                 {% endif %}
 
-                <div
-                    class="col-12 text-start text-center my-2  border border-5 rounded rounded-3 bg-cuarto border-quinto ">
+                <a href="{% url 'Menu:menuIndex' %}"
+                    class="btn bg-noveno text-decimo py-3 px-4 rounded-3 border border-quinto d-flex align-items-center justify-content-between text-decoration-none transition-all"
+                    style="min-height: 60px;">
+                    <span class="fw-bold fs-5 m-0">Menú</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+                        class="bi bi-journal-richtext text-quinto" viewBox="0 0 16 16">
+                        <path
+                            d="M7.5 3.75a.75.75 0 0 0-1.5 0v.5h-.5a.75.75 0 0 0 0 1.5h.5v.5a.75.75 0 0 0 1.5 0v-.5h.5a.75.75 0 0 0 0-1.5h-.5zM3 6a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5A.5.5 0 0 1 3 6m0 2.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5m0 2.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5" />
+                        <path
+                            d="M14.5 3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5H3a.5.5 0 0 1-.5-.5V3a.5.5 0 0 1 .5-.5zM1 3a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2z" />
+                    </svg>
+                </a>
 
-                    <a href="{% url 'Menu:menuIndex' %}" class="text-decoration-none">
+                {% if user.rol == "Admin" or user.rol == "Dueña/o" %}
+                <a href="{% url 'tickets:ticketsIndex' %}"
+                    class="btn bg-noveno text-decimo py-3 px-4 rounded-3 border border-quinto d-flex align-items-center justify-content-between text-decoration-none transition-all"
+                    style="min-height: 60px;">
+                    <span class="fw-bold fs-5 m-0">Tickets</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+                        class="bi bi-receipt-cutoff text-quinto" viewBox="0 0 16 16">
+                        <path
+                            d="M3 4.5a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5m7-6.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5z" />
+                        <path
+                            d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.777.416L12 14.501l-1.723 1.415a.5.5 0 0 1-.654 0L8 14.501l-1.623 1.415a.5.5 0 0 1-.654 0L4 14.501l-1.223.999A.5.5 0 0 1 2 15.083zm2-1a1 1 0 0 0-1 1v12.566l.723-.591a.5.5 0 0 1 .654 0L6 15.39l1.623-1.415a.5.5 0 0 1 .654 0L10 15.39l1.623-1.415a.5.5 0 0 1 .654 0l.723.591V2a1 1 0 0 0-1-1z" />
+                    </svg>
+                </a>
 
-                        <div class="row my-auto">
-
-                            <div class="col-12my-auto">
-                                <h3 class="my-auto text-quinto">Menu</h3>
-                            </div>
-
-                        </div>
-                    </a>
-                </div> <!-- Menu -->
-                                {% if user.rol == "Admin" or user.rol == "Dueña/o"%}
-<!-- Tickets -->
-
-                          <div
-                    class="col-12 text-start text-center my-2  border border-5 rounded rounded-3 bg-cuarto border-quinto ">
-
-                    <a href="{% url 'tickets:ticketsIndex' %}" class="text-decoration-none">
-
-                        <div class="row my-auto">
-
-                            <div class="col-12my-auto">
-                                <h3 class="my-auto text-quinto">Tickets</h3>
-                            </div>
-
-                        </div>
-                    </a>
-                </div> 
-{% endif %}
-                                {% if user.rol == "Admin" or user.rol == "Dueña/o"%}
-
-                                  <div
-                    class="col-12 text-start text-center my-2  border border-5 rounded rounded-3 bg-cuarto border-quinto ">
-
-                    <a href="{% url 'VentaMenuEliminado:VentaMenuEliminadoIndex' %}" class="text-decoration-none">
-
-                        <div class="row my-auto">
-
-                            <div class="col-12my-auto">
-                                <h3 class="my-auto text-quinto">Cambios</h3>
-                            </div>
-
-                        </div>
-                    </a>
-                </div> 
+                <a href="{% url 'VentaMenuEliminado:VentaMenuEliminadoIndex' %}"
+                    class="btn bg-noveno text-decimo py-3 px-4 rounded-3 border border-quinto d-flex align-items-center justify-content-between text-decoration-none transition-all"
+                    style="min-height: 60px;">
+                    <span class="fw-bold fs-5 m-0">Cambios</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+                        class="bi bi-arrow-counterclockwise text-quinto" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M8 3a5 5 0 1 1-4.546 2.914.5.5 0 0 0-.908-.417A6 6 0 1 0 8 2z" />
+                        <path
+                            d="M8 4.466V.534a.25.25 0 0 0-.41-.192L5.23 2.308a.25.25 0 0 0 0 .384l2.36 1.966A.25.25 0 0 0 8 4.466" />
+                    </svg>
+                </a>
                 {% endif %}
-             
-                
-                <!-- VentaMenuElim -->
-               <!--  <div
-                    class="col-12 text-start  my-2 text-center border border-5 rounded rounded-3 bg-cuarto border-quinto ">
 
-                    <a href="{% url 'Proveedores:proveedoresIndex' %}" class="text-decoration-none">
-                        <div class="row my-auto">
+                <a href="{% url 'Corte:corteDeCajaIndex' %}"
+                    class="btn bg-noveno text-decimo py-3 px-4 rounded-3 border border-quinto d-flex align-items-center justify-content-between text-decoration-none transition-all"
+                    style="min-height: 60px;">
+                    <span class="fw-bold fs-5 m-0">Corte de Caja</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+                        class="bi bi-cash-stack text-quinto" viewBox="0 0 16 16">
+                        <path d="M1 3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1zm7 8a2 2 0 1 0 0-4 2 2 0 0 0 0 4" />
+                        <path
+                            d="M0 5a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1zm3 0a2 2 0 0 1-2 2v4a2 2 0 0 1 2 2h10a2 2 0 0 1 2-2V7a2 2 0 0 1-2-2z" />
+                    </svg>
+                </a>
 
-                            <div class="col-12my-auto">
-                                <h3 class="my-auto text-quinto">Proveedores</h3>
-                            </div>
-
-                        </div>
-                    </a>
-                </div> -->
-
-                <div
-                    class="col-12 text-start text-center my-2  border border-5 rounded rounded-3 bg-cuarto border-quinto ">
-
-                    <a href="{% url 'Corte:corteDeCajaIndex' %}" class="text-decoration-none">
-
-                        <div class="row my-auto">
-
-                            <div class="col-12my-auto">
-                                <h3 class="my-auto text-quinto ">Corte de caja</h3>
-                            </div>
-
-                        </div>
-                    </a>
-                </div> 
-                <div
-                    class="col-12 text-start  my-2 text-center border border-5 rounded rounded-3 bg-cuarto border-quinto ">
-
-                    <a href="/signout" class="text-decoration-none">
-                        <div class="row my-auto">
-
-                            <div class="col- my-auto">
-                                <h3 class="my-auto text-quinto  ">Cerrar sesion</h3>
-                            </div>
-
-                        </div>
-                    </a>
-                </div> <!-- Cerrar sesión -->
+                <a href="/signout"
+                    class="btn bg-secondary text-white py-3 px-4 rounded-3 border-0 d-flex align-items-center justify-content-between text-decoration-none mt-2 transition-all"
+                    style="min-height: 60px;">
+                    <span class="fw-bold fs-5 m-0">Cerrar Sesión</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+                        class="bi bi-box-arrow-right" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd"
+                            d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 1h-8A1.5 1.5 0 0 0 0 2.5v9A1.5 1.5 0 0 0 1.5 13h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0z" />
+                        <path fill-rule="evenodd"
+                            d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708z" />
+                    </svg>
+                </a>
 
             </div>
         </div>
-        <div class="col-5 p-0 d-none d-sm-block">
-            <img src="{% static 'img/asd.jpg'%}" class="w-100 h-100" alt="" width="" id="output">
+
+        <div class="col-6 d-none d-md-block position-relative">
+            <img src="{% static 'img/asd.jpg' %}" class="w-100 h-100 object-fit-cover position-absolute top-0 start-0"
+                alt="Restaurante" id="output">
         </div>
+
     </div>
 </div>
+
 {% endblock %}

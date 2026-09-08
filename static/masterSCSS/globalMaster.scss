@@ -15,6 +15,11 @@ $secondary: #B05750;
 $tercero: #5DAA80;
 $cuarto: #F5EDE3;
 $quinto: #68635A;
+$sexto: #205E3F;     // Verde bosque profundo (sombra/contraste)
+$septimo: #D98B82;   // Terracota suave/salmón (acento cálido)
+$octavo: #8FC9A8;    // Verde menta desvaído (interactivo/hover)
+$noveno: #EAE2D5;    // Crema medio (fondos secundarios/tarjetas)
+$decimo: #33302B;    // Oscuro neutro (texto principal/encabezados) 
 $corporateNavyBlue900: #19263F;
 $corporateNavyBlue800: #303C52;
 $corporateNavyBlue700: #475165;
@@ -65,6 +70,11 @@ $theme-colors: (
     "tercero": $tercero,
     "cuarto": $cuarto,
     "quinto": $quinto,
+    "sexto": $sexto,
+    "septimo": $septimo,
+    "octavo": $octavo,
+    "noveno": $noveno,
+    "decimo": $decimo,   
     "corporateNavyBlue800": $corporateNavyBlue800,
     "corporateNavyBlue900": $corporateNavyBlue900,
     "corporateNavyBlue700": $corporateNavyBlue700,

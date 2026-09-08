@@ -193,25 +193,30 @@ class Cliente(models.Model):
     def __str__(self):
         return self.nombre
 
+
+
 class Menu(models.Model):
     nombre = models.CharField(max_length=100)
-    descripcion = models.TextField(blank=True,null=True)
+    descripcion = models.TextField(blank=True, null=True)
     precio = models.DecimalField(max_digits=8, decimal_places=2)
-    precioFamiliar = models.DecimalField(max_digits=8, decimal_places=2,blank=True,null=True)
-    mediaOrden = models.DecimalField(max_digits=8, decimal_places=2,blank=True,null=True)
-    categoria = models.CharField( 
-        choices=CATEGORIA, max_length=20)
+    precioFamiliar = models.DecimalField(max_digits=8, decimal_places=2, blank=True, null=True)
+    mediaOrden = models.DecimalField(max_digits=8, decimal_places=2, blank=True, null=True)
+    categoria = models.CharField(choices=CATEGORIA, max_length=20)
     url = models.ImageField(upload_to="uploads/gallery/")
-    ingredientes = models.ManyToManyField(Ingredientes,blank=True,null=True)
+    ingredientes = models.ManyToManyField(Ingredientes, blank=True, null=True)
 
     def __str__(self):
         return self.nombre
+
     def save(self, *args, **kwargs):
-        self.precioFamiliar = self.precio + 130
-        self.mediaOrden = self.precio / 2
+        if self.pk is None:
+            if self.precioFamiliar is None:
+                self.precioFamiliar = self.precio + 130
+            if self.mediaOrden is None:
+                self.mediaOrden = self.precio / 2
+                
         super().save(*args, **kwargs)
-    
-    
+        
 class Extras(models.Model):
     nombre = models.CharField(max_length=100)
     precio = models.PositiveIntegerField()
