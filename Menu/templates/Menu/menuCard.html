@@ -1,96 +1,180 @@
 {% load static %}
 
+<style>
+    .menu-card {
+        border: 1px solid rgba(0, 0, 0, 0.08);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        overflow: hidden;
+        background-color: #ffffff;
+    }
 
+    .menu-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12) !important;
+    }
 
+    .card-img-wrapper {
+        position: relative;
+        height: 200px;
+        overflow: hidden;
+        background-color: #f8f9fa;
+    }
 
+    .card-img-wrapper img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.5s ease;
+    }
 
+    .menu-card:hover .card-img-wrapper img {
+        transform: scale(1.05);
+    }
 
-<div class="row">
+    .btn-edit-floating {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: rgba(255, 255, 255, 0.9);
+        backdrop-filter: blur(4px);
+        border-radius: 50%;
+        width: 38px;
+        height: 38px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        transition: all 0.2s ease;
+        z-index: 2;
+    }
+
+    .btn-edit-floating:hover {
+        background: #ffffff;
+        transform: scale(1.1);
+        color: var(--bs-primary);
+    }
+
+    .badge-category {
+        position: absolute;
+        bottom: 10px;
+        left: 10px;
+        background-color: rgba(0, 0, 0, 0.65);
+        backdrop-filter: blur(4px);
+        color: #ffffff;
+        font-size: 0.75rem;
+        font-weight: 600;
+        padding: 0.35em 0.8em;
+        border-radius: 20px;
+        letter-spacing: 0.5px;
+    }
+
+    .price-tag {
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: var(--bs-primary);
+    }
+
+    .ingredients-container {
+        min-height: 80px;
+        max-height: 100px;
+        overflow-y: auto;
+    }
+
+    .ingredient-badge {
+        font-size: 0.75rem;
+        padding: 0.35em 0.65em;
+        background-color: #f1f3f5;
+        color: #495057;
+        border: 1px solid #dee2e6;
+        border-radius: 6px;
+        font-weight: 500;
+    }
+</style>
+
+<div class="row g-4">
     {% for empleado in employees %}
+    <div class="col-12 col-sm-6 col-md-4 col-xl-4">
+        <div class="card h-100 rounded-4 shadow-sm menu-card">
 
-    <div class="col-md-4 col-xl-3 col-12 my-2">
-        <div class="card rounded rounded-4 bg-cuarto">
-            <div class="position-relative d-inline-block">
-                <img src=" {{empleado.url.url}}" class="rounded-4 img-fluid" style="width: 100%; height: 200px;"
-                    id="imgPerfil">
-        
-                        {% if request.user.rol == "Admin"%}
-        <a class="border border-0 btn" href="{% url 'Menu:menuEditar' empleado.id %}" style="position: absolute; top: 0; left: 0;background-color: transparent;"><svg
-                width="30px" height="30px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-                <g id="SVGRepo_iconCarrier">
-                    <path
-                        d="M21.2799 6.40005L11.7399 15.94C10.7899 16.89 7.96987 17.33 7.33987 16.7C6.70987 16.07 7.13987 13.25 8.08987 12.3L17.6399 2.75002C17.8754 2.49308 18.1605 2.28654 18.4781 2.14284C18.7956 1.99914 19.139 1.92124 19.4875 1.9139C19.8359 1.90657 20.1823 1.96991 20.5056 2.10012C20.8289 2.23033 21.1225 2.42473 21.3686 2.67153C21.6147 2.91833 21.8083 3.21243 21.9376 3.53609C22.0669 3.85976 22.1294 4.20626 22.1211 4.55471C22.1128 4.90316 22.0339 5.24635 21.8894 5.5635C21.7448 5.88065 21.5375 6.16524 21.2799 6.40005V6.40005Z"
-                        stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                    </path>
-                    <path
-                        d="M11 4H6C4.93913 4 3.92178 4.42142 3.17163 5.17157C2.42149 5.92172 2 6.93913 2 8V18C2 19.0609 2.42149 20.0783 3.17163 20.8284C3.92178 21.5786 4.93913 22 6 22H17C19.21 22 20 20.2 20 18V13"
-                        stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                    </path>
-                </g>
-            </svg></a>
-       
-                        {% endif %}
+            <div class="card-img-wrapper">
+                <img src="{{ empleado.url.url }}" alt="{{ empleado.nombre }}" id="imgPerfil">
+
+                <span class="badge-category text-uppercase">{{ empleado.categoria }}</span>
+
+                {% if request.user.rol == "Admin" %}
+                <a class="btn-edit-floating text-decoration-none" href="{% url 'Menu:menuEditar' empleado.id %}"
+                    title="Editar producto">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M21.2799 6.40005L11.7399 15.94C10.7899 16.89 7.96987 17.33 7.33987 16.7C6.70987 16.07 7.13987 13.25 8.08987 12.3L17.6399 2.75002C17.8754 2.49308 18.1605 2.28654 18.4781 2.14284C18.7956 1.99914 19.139 1.92124 19.4875 1.9139C19.8359 1.90657 20.1823 1.96991 20.5056 2.10012C20.8289 2.23033 21.1225 2.42473 21.3686 2.67153C21.6147 2.91833 21.8083 3.21243 21.9376 3.53609C22.0669 3.85976 22.1294 4.20626 22.1211 4.55471C22.1128 4.90316 22.0339 5.24635 21.8894 5.5635C21.7448 5.88065 21.5375 6.16524 21.2799 6.40005V6.40005Z"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                        <path
+                            d="M11 4H6C4.93913 4 3.92178 4.42142 3.17163 5.17157C2.42149 5.92172 2 6.93913 2 8V18C2 19.0609 2.42149 20.0783 3.17163 20.8284C3.92178 21.5786 4.93913 22 6 22H17C19.21 22 20 20.2 20 18V13"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                </a>
+                {% endif %}
             </div>
-<!-- Modal -->
 
-            <div class="card-body ">
-                <h5 class="card-title text-truncate ">{{empleado.nombre}}
+            <div class="card-body d-flex flex-column p-3">
+                <h5 class="card-title fw-bold text-dark text-truncate mb-2" title="{{ empleado.nombre }}">
+                    {{ empleado.nombre }}
                 </h5>
-            </div>
-            <ul class="list-group list-group-flush">
 
-
-
-                <li class="list-group-item bg-cuarto">Precio normal: ${{empleado.precio}} mxn</li>
-                
-                {% if empleado.categoria == 'Entradas' or empleado.categoria == 'Pastas' or empleado.categoria == 'Ensaladas' %}
-                <li class="list-group-item bg-cuarto">Media Orden: ${{empleado.mediaOrden}} mxn</li>
-                {% endif %}
-
-                {% if empleado.categoria == 'Pizza' %}
-                <li class="list-group-item bg-cuarto">Familiar: ${{empleado.precioFamiliar}} mxn</li>
-                {% endif %}
-
-
-
-                
-                <li class="list-group-item bg-cuarto">{{empleado.categoria}}</li>
-            </ul>
-
-
-            <div class="card-body" style="height: 150px;">
-                <div class="row">
-
-                    {% for ingrediente in empleado.ingredientes.all %}
-                    <div class="col-auto rounded rounded-5 border border-2 text-sm-center bg-tercero text-white">
-                        {{ ingrediente.nombre }}
-
+                <div class="bg-light p-2 rounded-3 mb-3">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="text-muted small">Precio normal:</span>
+                        <span class="price-tag">${{ empleado.precio }} <small
+                                class="fs-6 fw-normal text-muted">MXN</small></span>
                     </div>
 
+                    {% if empleado.categoria == 'Entradas' or empleado.categoria == 'Pastas' or empleado.categoria == 'Ensaladas' %}
+                    <div class="d-flex justify-content-between align-items-center mt-1 pt-1 border-top">
+                        <span class="text-muted small">Media Orden:</span>
+                        <span class="fw-bold text-dark">${{ empleado.mediaOrden }} <small
+                                class="text-muted">MXN</small></span>
+                    </div>
+                    {% endif %}
 
-                    {% endfor %}
+                    {% if empleado.categoria == 'Pizza' %}
+                    <div class="d-flex justify-content-between align-items-center mt-1 pt-1 border-top">
+                        <span class="text-muted small">Familiar:</span>
+                        <span class="fw-bold text-dark">${{ empleado.precioFamiliar }} <small
+                                class="text-muted">MXN</small></span>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <div class="mt-auto">
+                    <p class="text-uppercase text-muted fw-bold mb-2"
+                        style="font-size: 0.65rem; letter-spacing: 0.5px;">Ingredientes</p>
+                    <div class="d-flex flex-wrap gap-1 ingredients-container">
+                        {% for ingrediente in empleado.ingredientes.all %}
+                        <span class="ingredient-badge">
+                            {{ ingrediente.nombre }}
+                        </span>
+                        {% empty %}
+                        <span class="text-muted small italic">Sin ingredientes registrados</span>
+                        {% endfor %}
+                    </div>
                 </div>
             </div>
 
-
-
         </div>
     </div>
-
     {% empty %}
-    <div class="col-12">
-        <h2>No encontramos ningún resultado, intente cambiar su búsqueda</h2>
+    <div class="col-12 text-center py-5">
+        <div class="p-4 bg-light rounded-4 border d-inline-block">
+            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor"
+                class="bi bi-search text-muted mb-3" viewBox="0 0 16 16">
+                <path
+                    d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
+            </svg>
+            <h4 class="fw-bold text-dark mb-1">No se encontraron resultados</h4>
+            <p class="text-muted mb-0">Intenta modificar los términos de tu búsqueda.</p>
+        </div>
     </div>
-
-
-
     {% endfor %}
 </div>
 
-
-
-
-
-<input type="hidden" name="totalPaginas" id="totalPaginas" value="{{totalPaginas}}">
+<input type="hidden" name="totalPaginas" id="totalPaginas" value="{{ totalPaginas }}">

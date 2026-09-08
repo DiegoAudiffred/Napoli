@@ -2,10 +2,10 @@
 {% load static %}
 
 {% block body %}
-<div class="container my-auto">
+<div class="container my-auto bg-cuarto">
     <div class="row overflow-hidden ">
 
-        <div class="col-12 col-md-6 bg-cuarto p-4 p-lg-5 d-flex flex-column justify-content-center">
+        <div class="col-12 col-md-6  p-5  d-flex flex-column justify-content-center">
 
             {% if user.is_authenticated %}
             <div class="mb-4 text-center text-md-start">
@@ -16,7 +16,7 @@
             <div class="d-flex flex-column gap-3">
 
                 <a href="{% url 'Ventas:ventasIndex' %}"
-                    class="btn bg-primary text-white py-3 px-4 rounded-3 border border-quinto d-flex align-items-center justify-content-between text-decoration-none transition-all min-vh-0"
+                    class="btn bg-primary text-white  py-3 shadow-lg px-4 rounded-3 border border-quinto d-flex align-items-center justify-content-between text-decoration-none transition-all min-vh-0"
                     style="min-height: 60px;">
                     <span class="fw-bold fs-5 m-0">Realizar Venta</span>
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
@@ -28,7 +28,7 @@
 
                 {% if user.rol == "Admin" or user.rol == "Dueña/o" %}
                 <a href="{% url 'Empleados:empleadosIndex' %}"
-                    class="btn bg-noveno text-decimo py-3 px-4 rounded-3 border border-quinto d-flex align-items-center justify-content-between text-decoration-none transition-all"
+                    class="btn bg-noveno text-decimo  py-3 shadow-lg px-4 rounded-3 border border-quinto d-flex align-items-center justify-content-between text-decoration-none transition-all"
                     style="min-height: 60px;">
                     <span class="fw-bold fs-5 m-0">Empleados</span>
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
@@ -40,7 +40,7 @@
                 {% endif %}
 
                 <a href="{% url 'Menu:menuIndex' %}"
-                    class="btn bg-noveno text-decimo py-3 px-4 rounded-3 border border-quinto d-flex align-items-center justify-content-between text-decoration-none transition-all"
+                    class="btn bg-noveno text-decimo  py-3 shadow-lg px-4 rounded-3 border border-quinto d-flex align-items-center justify-content-between text-decoration-none transition-all"
                     style="min-height: 60px;">
                     <span class="fw-bold fs-5 m-0">Menú</span>
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
@@ -54,7 +54,7 @@
 
                 {% if user.rol == "Admin" or user.rol == "Dueña/o" %}
                 <a href="{% url 'tickets:ticketsIndex' %}"
-                    class="btn bg-noveno text-decimo py-3 px-4 rounded-3 border border-quinto d-flex align-items-center justify-content-between text-decoration-none transition-all"
+                    class="btn bg-noveno text-decimo  py-3 shadow-lg px-4 rounded-3 border border-quinto d-flex align-items-center justify-content-between text-decoration-none transition-all"
                     style="min-height: 60px;">
                     <span class="fw-bold fs-5 m-0">Tickets</span>
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
@@ -67,7 +67,7 @@
                 </a>
 
                 <a href="{% url 'VentaMenuEliminado:VentaMenuEliminadoIndex' %}"
-                    class="btn bg-noveno text-decimo py-3 px-4 rounded-3 border border-quinto d-flex align-items-center justify-content-between text-decoration-none transition-all"
+                    class="btn bg-noveno text-decimo  py-3 shadow-lg px-4 rounded-3 border border-quinto d-flex align-items-center justify-content-between text-decoration-none transition-all"
                     style="min-height: 60px;">
                     <span class="fw-bold fs-5 m-0">Cambios</span>
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
@@ -80,7 +80,7 @@
                 {% endif %}
 
                 <a href="{% url 'Corte:corteDeCajaIndex' %}"
-                    class="btn bg-noveno text-decimo py-3 px-4 rounded-3 border border-quinto d-flex align-items-center justify-content-between text-decoration-none transition-all"
+                    class="btn bg-noveno text-decimo  py-3 shadow-lg px-4 rounded-3 border border-quinto d-flex align-items-center justify-content-between text-decoration-none transition-all"
                     style="min-height: 60px;">
                     <span class="fw-bold fs-5 m-0">Corte de Caja</span>
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
@@ -92,7 +92,7 @@
                 </a>
 
                 <a href="/signout"
-                    class="btn bg-secondary text-white py-3 px-4 rounded-3 border-0 d-flex align-items-center justify-content-between text-decoration-none mt-2 transition-all"
+                    class="btn bg-secondary text-white  py-3 shadow-lg px-4 rounded-3 border-0 d-flex align-items-center justify-content-between text-decoration-none mt-2 transition-all"
                     style="min-height: 60px;">
                     <span class="fw-bold fs-5 m-0">Cerrar Sesión</span>
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
