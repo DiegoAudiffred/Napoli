@@ -1,8 +1,8 @@
 {% for menu in menus %}
 
-<li><a class="dropdown-item" id="menu3{{menu.id}}" onclick="setNombre3('{{menu.id}}')"><img src="{{menu.url.url}}"
-            alt="" width="50px" height="50px" id="menu3Imagen{{menu.id}}">
-        <span id="text{{menu.id}}">{{menu.nombre}}</span>
+<li id="listaPizza_{{menu.id}}_"><a class="dropdown-item" id="menusPizza_{{menu.id}}_" onclick="setNombre3('{{menu.id}}',this)"><img src="{{menu.url.url}}"
+            alt="" width="50px" height="50px" id="menuPizzaImagen_{{menu.id}}_">
+        <span id="textPizza_{{menu.id}}_">{{menu.nombre}}</span>
     </a>
 
 </li>
@@ -10,3 +10,4 @@
 <li><button class="dropdown-item" type="">No existe el Platillo</button></li>
 
 {% endfor %}
+

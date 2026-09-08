@@ -1,0 +1,252 @@
+<style>
+    #contenidoImprimir {
+        width: 5.8cm;
+        height: 20cm;
+        /* Ancho del ticket */
+        font-family: Arial, sans-serif;
+        /* Fuente del texto */
+        font-size: 12px;
+        /* Tamaño de la fuente */
+        margin: 0 auto;
+        /* Centrar el contenido horizontalmente */
+    }
+
+    .table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .table th,
+    .table td {
+        border: 1px solid black;
+        /* Borde de las celdas */
+        padding: 4px;
+        /* Espaciado interno de las celdas */
+        text-align: left;
+        /* Alinear el texto a la izquierda */
+    }
+
+    .table tbody tr:nth-child(even) {
+        background-color: #f2f2f2;
+        /* Fondo de las filas pares */
+    }
+
+    hr {
+        border: none;
+        /* Eliminar el borde del hr */
+        border-top: 1px solid black;
+        /* Establecer un borde superior */
+        margin: 5px 0;
+        /* Espaciado alrededor del hr */
+    }
+
+    .container {
+        text-align: left;
+    }
+</style>
+<div id="contenidoImprimir" class="d-block">
+
+    <div class="">
+        <div class="row">
+            <div class="col-12 text-break" style="line-height: 2;">
+                <b> Napoli Ristorante y Pizzeria</b>
+                C. 29 Sur 129, La Paz, 72160
+                Heroica Puebla de Zaragoza
+                Teléfono: 222 621 9650
+
+            </div>
+            <div class="col-12 text-break">
+                ------------------------------------------
+
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-12">
+                <table class="table" style="text-align: center;">
+                    <thead>
+                        <tr>
+                            <th style="width: 1.0cm;">C</th>
+                            <th style="width: 2.4cm;">Producto</th>
+                            <th style="width: 2.4cm;">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in items %}
+                        <tr style="line-height: 2;">
+                            <td>{{ item.cantidad }}</td>
+                            <td>{{ item.menu.nombre|truncatechars:20 }}</td>
+                            <td>${{ item.totalfinal }}</td>
+                        </tr>
+                        {% if item.extras.exists %}
+                        <tr style="line-height: 1.5;">
+                            <td colspan="3">
+                                <ul>
+                                    {% for extra in item.extras.all %}
+                                    <li>{{ extra.nombre|truncatechars:20 }}</li>
+                                    {% endfor %}
+                                </ul>
+                            </td>
+                        </tr>
+                        {% endif %}
+                        {% endfor %}
+                        <tr style="line-height: 2;">
+                            <td></td>
+                            <td><strong>Total final:</strong></td>
+                            <td><strong>${{venta.total}}</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+
+        <div class="row justify-content-center">
+            <div class="col-12 text-break">
+                ------------------------------------------
+
+            </div>
+            <div class="col-12 text-break" style="line-height: 2;">
+                Fecha: <div id="fechaActual" style="display: inline;">{{ venta.impresiones | add:1 }}0{{venta.numVentaDia }}</div>
+
+
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-12 text-break">
+                ------------------------------------------
+
+            </div>
+            <div class="col-12 text-break" style="line-height: 2;">
+                Mesa : {{venta.mesa}}
+            </div>
+        </div>
+        {% if venta.direccion %}
+        <div class="row justify-content-center">
+            <div class="col-12 text-break">
+                ------------------------------------------
+
+            </div>
+            <div class="col-12 text-break">
+                Direccion: {{venta.direccion}}
+                <hr>
+            </div>
+        </div>
+        {% endif %}
+          <div class="row justify-content-center">
+            <div class="col-12 text-break">
+                ------------------------------------------
+
+            </div>
+            <div class="col-12 text-break">
+                Num de Venta: {{venta.numVentaDia}}
+                <hr>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-12 text-break">
+                ------------------------------------------
+
+            </div>
+            <div class="col-12 text-break" style="line-height: 1.5;font-size: 0.8em;">
+                Este ticket no es un comprobante fiscal. Para facturar mandar sus datos fiscales completos al correo:
+                <b>napoli10.facturacion@gmail.com</b>
+                ------------------------------------------
+            </div>
+        </div>
+
+    </div>
+</div>
+<!-- <button onclick="imprimirContenido2()" class="btn btn-quinto w-100 text-white">Imprimir ticket 2</button>
+ -->
+<script>
+    var conteoImpresiones = 0; // Variable para contar las impresiones
+
+    function imprimirContenido2() {
+        // Obtener el contenido a imprimir
+        var contenidoImprimir = document.getElementById('contenidoImprimir').innerHTML;
+
+        // Abrir una ventana de impresión
+        var ventanaImpresion = window.open('', '_blank', 'width=600,height=600');
+
+        // Escribir el contenido en la ventana de impresión
+        ventanaImpresion.document.write('<html><head><title>Imprimir contenido</title></head><body>');
+        ventanaImpresion.document.write(contenidoImprimir);
+        ventanaImpresion.document.write('</body></html>');
+        ventanaImpresion.document.close();
+
+        // Incrementar el conteo de impresiones cuando la ventana de impresión se carga completamente
+        ventanaImpresion.addEventListener('load', function () {
+            conteoImpresiones++;
+            console.log('Impresión exitosa');
+        });
+
+        // Imprimir el contenido y cerrar la ventana de impresión
+        ventanaImpresion.print();
+        ventanaImpresion.close();
+
+
+        // Obtener el token CSRF del cookie
+        var csrftoken = getCookie('csrftoken');
+
+        // Función para imprimir el contenido y enviar la solicitud AJAX
+        // Tu código existente...
+
+        // Llamada AJAX para enviar datos al servidor después de imprimir
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "{% url 'Ventas:actualizar_ticket' venta.id %}", true);
+        xhr.setRequestHeader("X-CSRFToken", csrftoken); // Incluir el token CSRF en la solicitud
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                console.log("Ticket actualizado correctamente en el servidor");
+            }
+        };
+        xhr.send(JSON.stringify({ numImpresion: conteoImpresiones }));
+        location.reload();
+
+    }
+
+    // Función para obtener el valor del token CSRF del cookie
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = cookies[i].trim();
+                // Buscar el token CSRF en el cookie
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+</script>
+<script>
+    // Obtener la fecha y hora actual
+    function getDate() {
+        var fechaHoraActual = new Date();
+        // Obtener la fecha actual
+        var dia = fechaHoraActual.getDate().toString().padStart(2, '0');
+        var mes = (fechaHoraActual.getMonth() + 1).toString().padStart(2, '0'); // Sumamos 1 porque los meses van de 0 a 11
+        var anio = fechaHoraActual.getFullYear();
+        var fechaActual = dia + "/" + mes + "/" + anio;
+
+        // Obtener la hora actual
+        var horas = fechaHoraActual.getHours().toString().padStart(2, '0');
+        var minutos = fechaHoraActual.getMinutes().toString().padStart(2, '0');
+
+        // Mostrar la fecha y hora actual
+        var espacioHora = document.getElementById("fechaActual");
+        var currentSeconds = espacioHora.innerHTML;
+        espacioHora.innerHTML = ""
+        espacioHora.innerHTML += fechaActual + " " + horas + ":" + minutos + ":" + currentSeconds;
+
+        // Mostrar la fecha y hora actual en la consola
+        console.log("Fecha actual: " + fechaActual);
+        console.log("Hora actual: " + horas + ":" + minutos);
+    }
+
+    // Llamar a la función getDate() cuando se cargue la página
+    window.onload = getDate;
+</script>

@@ -9,7 +9,8 @@ from django.db.models.deletion import CASCADE
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db.models import Q
 from django.utils import timezone
-
+from django.db.models.signals import post_save, post_delete
+from django.dispatch import receiver
 # Create your models here.
 
 MESAS = [
@@ -25,6 +26,10 @@ MESAS = [
     ("T2","T2"),
     ("T3","T3"),
     ("T4","T4"),
+    ("T5","T5"),
+    ("T6","T6"),
+    ("T6A","T6A"),
+    ("T6B","T6B"),
     ("8A","8A"),
     ("8B","8B"),
     ("9A","9A"),
@@ -52,9 +57,17 @@ UNIDADES = [
 METODOS = [
     ("Tarjeta", "Tarjeta"),
     ("Efectivo", "Efectivo"),
-    ("Cheque", "Cheque"),
+    ("Mixto", "Mixto"),
    
 
+]
+
+ACCION = [
+    ("CREADO", "CREADO"),
+    ("MODIFICADO", "MODIFICADO"),
+    ("AUMENTO", "AUMENTO"),
+    ("DISMINUYO", "DISMINUYO"),
+    ("ELIMINADO", "ELIMINADO"),
 ]
 
 
@@ -112,7 +125,7 @@ class User(AbstractUser):
 
     username = None
     email = models.EmailField('Correo electrónico', unique=True, blank=True, null=True)
-    first_name = models.CharField("Nombre", max_length=200, null=True, blank=True,unique=True,default="Empleado")
+    first_name = models.CharField("Nombre", max_length=200, null=True, blank=True,unique=True)
     phone_number = models.CharField("Teléfono", max_length=15, unique=True, null=True)
     url = models.ImageField(upload_to="uploads/gallery/",null=True, blank=True)
     USERNAME_FIELD = 'email'
@@ -124,11 +137,7 @@ class User(AbstractUser):
 
 
     def __str__(self):
-        return self.first_name
-    
-    def save(self, *args, **kwargs):
-        self.email = self.first_name + "@napoli.com"
-        super().save(*args, **kwargs)
+        return str(self.first_name) if self.first_name else "Empleado"
 
 
 
@@ -186,7 +195,7 @@ class Cliente(models.Model):
 
 class Menu(models.Model):
     nombre = models.CharField(max_length=100)
-    descripcion = models.TextField()
+    descripcion = models.TextField(blank=True,null=True)
     precio = models.DecimalField(max_digits=8, decimal_places=2)
     precioFamiliar = models.DecimalField(max_digits=8, decimal_places=2,blank=True,null=True)
     mediaOrden = models.DecimalField(max_digits=8, decimal_places=2,blank=True,null=True)
@@ -198,7 +207,7 @@ class Menu(models.Model):
     def __str__(self):
         return self.nombre
     def save(self, *args, **kwargs):
-        self.precioFamiliar = self.precio + 120
+        self.precioFamiliar = self.precio + 130
         self.mediaOrden = self.precio / 2
         super().save(*args, **kwargs)
     
@@ -210,33 +219,86 @@ class Extras(models.Model):
     ingredientes = models.ManyToManyField(Ingredientes,blank=True,null=True)
     def __str__(self):
         return self.nombre
-    def save(self, *args, **kwargs):
-        self.precioFamiliar = self.precio * 2
-        super().save(*args, **kwargs)
+
 
 class Mesa(models.Model):
     nombre = models.CharField(max_length=20)
+    ocupada = models.BooleanField(default=False)
     def __str__(self):
         return self.nombre
+
+
+
+
 class Venta(models.Model):
     cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE,blank=True,null=True)
     empleado = models.ForeignKey(User, on_delete=models.CASCADE,blank=True,null=True)
     mesa = models.ForeignKey(Mesa, on_delete=models.CASCADE,blank=True,null=True)
     total = models.DecimalField(max_digits=8, decimal_places=2,blank=True,null=True)
     fecha_compra = models.DateTimeField(default=timezone.now,blank=True,null=True)  # Establecer la fecha actual como valor predeterminado
+    fecha_salida = models.DateTimeField(blank=True,null=True)
     is_open = models.BooleanField(default=True)
     is_reopen = models.BooleanField(default=False)
     bool_factura = models.BooleanField(default=False)
+    ticket = models.FileField(upload_to='pdf',null=True,blank=True)
+    editable = models.BooleanField(default=True)
+    direccion = models.CharField(max_length=200,null=True,blank=True,default="")
+    impresiones  = models.IntegerField(null=True,blank=True,default=0)
+    numVentaDia = models.IntegerField(null=True,blank=True,default=0)
+    #is_deleted = models.BooleanField(default=False)  # Nuevo campo para soft delete
 
+    pago = models.CharField( 
+        choices=METODOS, max_length=20,default="Efectivo")
+
+class TicketImpresos(models.Model):
+    venta = models.ForeignKey(Venta, on_delete=models.CASCADE,blank=True,null=True)
+    cantidad = models.DecimalField(max_digits=10, decimal_places=2,blank=True,null=True)
+    numImpresion = models.IntegerField(null=True,blank=True,default=0)
+    horaImpresion = models.DateTimeField(blank=True,null=True) 
+    
+
+def redondear_hacia_arriba(numero):
+    residuo = numero % 10
+    if residuo > 5:
+        return numero + (10 - residuo)
+    elif residuo > 0:
+        return numero + (5 - residuo)
+    else:
+        return numero
+    
 class VentaMenu(models.Model):
     venta = models.ForeignKey(Venta, on_delete=models.CASCADE)
     menu = models.ForeignKey(Menu, on_delete=models.CASCADE,related_name="menu")
     observaciones = models.TextField(blank=True,null=True,max_length=100)
-    cantidad = models.PositiveIntegerField(blank=True,null=True,)
+    cantidad = models.PositiveIntegerField(blank=True,null=True,default=1)
     totalfinal = models.DecimalField(max_digits=8, decimal_places=2,default=0)
+    final = models.DecimalField(max_digits=8, decimal_places=2,default=0)
     extras = models.ManyToManyField(Extras,blank=True,null=True)
     media_orden = models.BooleanField(default=False)
     familiar = models.BooleanField(default=False)
     pizza_mitad = models.ForeignKey(Menu, on_delete=models.CASCADE,blank=True,null=True,related_name="pizza_mitad")
+    extraCosto = models.DecimalField(max_digits=8, decimal_places=2,blank=True,null=True,default=0)
+    def save(self, *args, **kwargs):
+        #self.totalfinal = self.totalfinal + self.extraCosto
+        self.totalfinal = redondear_hacia_arriba(self.totalfinal)
 
+        super().save(*args, **kwargs)
 
+class RegistroCambiosVentaMenu(models.Model):
+    #venta_menu = models.ForeignKey(VentaMenu, on_delete=models.CASCADE)
+    venta_menu = models.TextField(blank=True,null=True,max_length=100)
+    fecha_hora_cambio = models.DateTimeField(default=timezone.now)
+    precioAnterior = models.DecimalField(max_digits=8, decimal_places=2,blank=True,null=True,default=0)
+    precioNuevo  = models.DecimalField(max_digits=8, decimal_places=2,blank=True,null=True,default=0)
+    venta = models.IntegerField(null=True,blank=True,default=0)
+    mesa = models.TextField(blank=True,null=True,max_length=100)
+    postVenta = models.BooleanField(default=True)
+    accion = models.CharField( 
+        choices=ACCION, max_length=20)
+
+ 
+class CierreDeCaja(models.Model):
+    fecha_cierre = models.DateTimeField(default=timezone.now,blank=True,null=True)  # Establecer la fecha actual como valor predeterminado
+    is_open = models.BooleanField(default=True)
+    ventasDelDia = models.IntegerField(null=True,blank=True,default=0)
+    totalVentas = models.DecimalField(max_digits=8, decimal_places=2,blank=True,null=True,default=0)

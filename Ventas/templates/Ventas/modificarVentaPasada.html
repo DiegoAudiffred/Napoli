@@ -1,0 +1,837 @@
+{% extends 'layout/layout.html' %}
+{% load static %}
+{% block body %}
+
+<style>
+    .animated {
+        animation-duration: 1s;
+        animation-name: pepito;
+    }
+
+    @keyframes pepito {
+        from {
+            margin-top: 100%;
+            /* Comienza desde abajo */
+            height: 300%;
+            /* Aumenta la altura */
+        }
+
+        to {
+            margin-top: 0%;
+            /* Llega a la posición inicial */
+            height: 100%;
+            /* Altura original */
+        }
+    }
+
+    .checkbox-label {
+        cursor: pointer;
+    }
+
+    .checkbox-highlight {
+        background-color: orangered;
+        color: white;
+    }
+</style>
+<script>
+    var listaPlatillos = [];
+
+    function highlightLabel(label, idPlatillo) {
+        label.classList.toggle('checkbox-highlight');
+
+        // Verifica si el platillo está en la lista
+        var index = listaPlatillos.indexOf(idPlatillo);
+
+        // Si no está en la lista, lo agregamos
+        if (index === -1) {
+            listaPlatillos.push(idPlatillo);
+        } else { // Si está en la lista, lo eliminamos
+            listaPlatillos.splice(index, 1);
+        }
+
+        console.log(listaPlatillos); // Muestra la lista en la consola para depuración
+    }
+
+</script>
+<div class="container min-vh-100  py-4">
+
+    <div class="row my-4">
+        <a href="{% url 'Ventas:ventasIndex' %}" class="text-decoration-none text-black">
+            <div style="display: flex; align-items: center;">
+                <svg fill="#000000" width="54px" height="54px" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
+                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                    <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                    <g id="SVGRepo_iconCarrier">
+                        <path
+                            d="M222.927 580.115l301.354 328.512c24.354 28.708 20.825 71.724-7.883 96.078s-71.724 20.825-96.078-7.883L19.576 559.963a67.846 67.846 0 01-13.784-20.022 68.03 68.03 0 01-5.977-29.488l.001-.063a68.343 68.343 0 017.265-29.134 68.28 68.28 0 011.384-2.6 67.59 67.59 0 0110.102-13.687L429.966 21.113c25.592-27.611 68.721-29.247 96.331-3.656s29.247 68.721 3.656 96.331L224.088 443.784h730.46c37.647 0 68.166 30.519 68.166 68.166s-30.519 68.166-68.166 68.166H222.927z">
+                        </path>
+                    </g>
+                </svg>
+                <h1 class="px-3 my-auto">Regresar</h1>
+            </div>
+        </a>
+
+
+    </div>
+    {% include "Ventas/infoLine.html" %}
+
+   
+<!-- Codigo para cambiar el valor de mesa -->
+<script>
+    $(document).ready(function () {
+        // Capturar el cambio en el select
+        $('#selectMesa').on('change', function () {
+            // Obtener el valor seleccionado en el select
+            var selectedValue = $(this).val();
+
+            // Establecer el valor en el campo del formulario 'mesa'
+            $('#id_mesa').val(selectedValue);
+            $('#user-profile-form2').submit();
+
+        });
+    });
+</script>
+
+{% include "Ventas/ventaMenuTable.html" %}
+
+{% if venta.is_reopen%}
+    <div class="row ">
+        <!-- <div class="col-6 col-md-4 text-center">
+            <button onclick="agregarFormulario()" class="btn btn-tercero text-white w-100">Agregar a venta (avanzado)</button>
+        </div> -->
+        <div class="col-6 col-md-3 text-center">
+            <button onclick="showMenu()" class="btn btn-tercero text-white w-100">Desplegar menu</button>
+        </div>
+        <div class="col-6 col-md-2 text-center">
+            <form action="{% url 'Ventas:cerrarVenta' venta.id %}" method="POST" enctype="multipart/form-data"
+                id="user-profile-form">
+                {% csrf_token %}
+                <a class="btn btn-secondary text-white w-100" data-bs-toggle="modal" data-bs-target="#cerraModal">Cerrar
+                    venta</a>
+
+
+
+                <div class="modal fade" id="cerraModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content bg-cuarto">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">¿Esta usted
+                                    seguro de
+                                    volver a cerrar la cuenta de la mesa
+                                    {{venta.mesa.nombre}} ?
+                                </h5>
+                            </div>
+                            {% if not venta.is_reopen%}
+                            <div class="modal-body">
+                                <h4 class="text-secondary">¡UNA VEZ CERRADA NO
+                                    PODRAS CAMBIAR LA
+                                    MESA!
+                                </h4>
+
+                                <h4>
+                                    El total de la venta es $ {{total}} mxn
+                                </h4>
+
+                            </div>
+                            {% endif %}
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-tercero text-white "
+                                    data-bs-dismiss="modal">Cancelar</button>
+                                <button type="submit" class="btn btn-secondary">Cerrar cuenta</button>
+                                <!--                                 <a href="{% url 'Ventas:ticket' venta.id %}" type="button" class="btn text-white" style="background-color: blue;">Imprimir ticket</a> -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+        <div class="col-md-2">
+            <!--         <button id="submit-all-forms-button" class="btn btn-quinto text-white  w-100 d-none" type="submit">Enviar orden</button>
+ -->
+            <form id="platillosForm" action="{% url 'Ventas:agregarPlatillosVentaPasada' venta.id %}" method="POST">
+                {% csrf_token %}
+                <input type="hidden" id="platillosIds" name="platillosIds">
+                <button id="submit-form" class="btn btn-quinto text-white  w-100 d-none" type="submit">Enviar
+                    ordenes</button>
+            </form>
+
+
+            <script>
+                document.getElementById('platillosForm').addEventListener('submit', function (event) {
+                    event.preventDefault();
+                    var platillosIds = listaPlatillos.join(',');
+
+                    document.getElementById('platillosIds').value = platillosIds;
+
+                    this.submit();
+                });
+
+            </script>
+
+        </div>
+        <div class="col-2">
+            <button onclick="imprimirContenido2()" class="btn bg-corporateNavyBlue900 w-100 text-white">Imprimir
+                ticket</button>
+
+        </div>
+        <div class="col-2">
+            <button class="btn w-100 text-white" style="background-color: #E49B0F;" data-bs-toggle="modal"
+                data-bs-target="#exampleModalDireccion">Agregar direccion</button>
+
+        </div>
+        <!-- Botón que abre el modal -->
+
+        <form action="{% url 'Ventas:addDireccion' venta.id %}" method="POST" enctype="multipart/form-data"
+            id="user-profile-form">
+
+            <div class="modal fade" id="exampleModalDireccion" tabindex="-1" aria-labelledby="exampleModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Agregar dirección</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+
+                            {% csrf_token %}
+                            {{form5.direccion}}
+
+
+
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                            <button id="submit-form" class="btn btn-primary text-white" type="submit">Agregar
+                                dirección</button>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </form>
+        <!-- Modal -->
+
+
+{% else %}
+
+    {% if venta.editable %}
+      <div class="row w-100">
+        <div class="col-3 col-md-2 text-center">
+            <form action="{% url 'Ventas:abrirVenta' venta.id %}" method="POST" enctype="multipart/form-data"
+                id="user-profile-form">
+                {% csrf_token %}
+
+        <button href="" type="submit" class="btn btn-tercero w-100 text-white">Reabrir
+                    venta</button> 
+
+ 
+  
+            </form>
+
+        </div>
+
+
+    
+    {% endif %}
+       <div class="col-2">
+            <button onclick="imprimirContenido2()" class="btn bg-corporateNavyBlue900 w-100 text-white">Imprimir
+                ticket</button>
+
+        </div>
+    </div>
+{% endif %}
+    <div class="container d-none">
+        <form method="POST" enctype="multipart/form-data" id="formVenta" class="animated">
+            {% csrf_token %}
+            <div class="row border border-4 rounded rounded-4 border-quinto p-2">
+                <div id="formCounterID" class="d-none">
+
+                </div>
+
+
+                <div class="row py-3">
+                    <div class="col-5">
+                        <div class="rounded rounded-3 border border-2 border-primary">
+
+
+                            <input type="text"
+                                class="form-control shadow-none  px-2 py-1 border border-0 rounded rounded-3"
+                                placeholder="Buscar platillo" aria-label="" aria-describedby="basic-addon1"
+                                id="searchBarMenu_" name="menu_text" list="cardHolder2_" data-bs-toggle="dropdown"
+                                onkeyup="getCardsReplace2(this.value,1,this)" value="">
+
+
+                            <ul class="dropdown-menu" aria-labelledby="searchBarMenu_" id="cardHolder2_">
+
+                            </ul>
+                            <div class="d-none">
+                                <select name="menu" class="form-control shadow-none  d-block px-2 py-1"
+                                    placeholder=" Breve descripción*" rows="1" aria-label="Username"
+                                    aria-describedby="basic-addon1" style="border-left:none" required="" id="id_menu_">
+                                    <option value="">Selecciona una opción</option>
+
+                                    {% for men in menu%}
+                                    <option value="{{men.id}}">{{men.nombre}}</option>
+                                    {% endfor %}
+                                </select>
+
+                            </div>
+
+                        </div>
+
+
+                    </div>
+                    <div class="col-1 my-auto">
+                        <p class="m-0">Mitad:</p>
+
+                    </div>
+                    <div class="col-1 my-auto text-center">
+                        <input type="checkbox" name="mitad_pizza" style="height:40px;width:40px" class="my-auto"
+                            id="mitad_pizza_" value="" onclick="show(this)">
+
+                    </div>
+                    <div class="col-5">
+                        <div class="rounded rounded-3 border border-2 border-primary d-none" id="pruebas_">
+
+
+
+                            <input type="text"
+                                class="form-control shadow-none  px-2 py-1 border border-0 rounded rounded-3"
+                                placeholder="Buscar platillo" aria-label="" aria-describedby="basic-addon1"
+                                id="searchBarPizza_" list="cardHolder3_" data-bs-toggle="dropdown"
+                                onkeyup="getCardsReplace3(this.value,1,this)" name="pizza_mitad_text_" value="">
+
+                            <ul class="dropdown-menu" aria-labelledby="searchBarMenu_" id="cardHolder3_">
+
+                            </ul>
+                            <select name="pizza_mitad" class="form-control shadow-none   px-2 py-1 d-block"
+                                placeholder=" Breve descripción*" rows="1" aria-label="Username"
+                                aria-describedby="basic-addon1" style="border-left:none" id="id_pizza_mitad_">
+                                <option value="">Selecciona una opción</option> <!-- Opción en blanco -->
+                                {% for men in menu%}
+                                <option value="{{men.id}}">{{men.nombre}}</option>
+                                {% endfor %}
+                            </select>
+
+
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Opciones -->
+                <div class="col-12 py-3">
+                    <div class="row">
+
+                        <div class="col-auto my-auto">
+                            <p class="m-0">Familiar:</p>
+                        </div>
+                        <div class="col-auto my-auto text-center">
+                            <input type="checkbox" name="familiar" style="height:40px;width:40px" class=""
+                                id="id_familiar_" value="">
+
+                        </div>
+
+                        <div class="col-auto my-auto">
+                            <p class="m-0">Media Orden:</p>
+
+                        </div>
+                        <div class="col-auto my-auto text-center">
+                            <input type="checkbox" name="media_orden_" style="height:40px;width:40px" class=""
+                                id="id_media_orden_" value="">
+
+                        </div>
+
+
+
+
+                    </div>
+
+                </div>
+
+                <div class="row align-items-center justify-content-center">
+                    <div class="col-2">
+
+
+                        <div class="row align-items-center justify-content-center ">
+                            <div class="col-4">
+                                <a onclick="decrementValueForm(this)" data-field="quantity1"
+                                    class="btn p-1 border border-0" id="id_cantidad_minus_"><svg width="40px"
+                                        height="40px" viewBox="0 -12 32 32" version="1.1"
+                                        xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                        xmlns:sketch="http://www.bohemiancoding.com/sketch/ns" fill="#000000">
+                                        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                        <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round">
+                                        </g>
+                                        <g id="SVGRepo_iconCarrier">
+
+                                            <g id="Page-1" stroke="none" stroke-width="1" fill="none"
+                                                fill-rule="evenodd" sketch:type="MSPage">
+                                                <g id="Icon-Set-Filled" sketch:type="MSLayerGroup"
+                                                    transform="translate(-414.000000, -1049.000000)" fill="#B05750">
+                                                    <path
+                                                        d="M442,1049 L418,1049 C415.791,1049 414,1050.79 414,1053 C414,1055.21 415.791,1057 418,1057 L442,1057 C444.209,1057 446,1055.21 446,1053 C446,1050.79 444.209,1049 442,1049"
+                                                        id="minus" sketch:type="MSShapeGroup"> </path>
+                                                </g>
+                                            </g>
+                                        </g>
+                                    </svg>
+                                </a>
+                            </div>
+                            <div class="col-4">
+                                <input class="input-group-field border rounded rounded-4 text-center" type="number"
+                                    name="quantity" value="1" style="width: 50px;" id="id_cantidad_">
+                            </div>
+                            <div class="col-4">
+                                <a onclick="incrementValueForm(this)" data-field="quantity1"
+                                    class="btn p-1 border border-0" id="id_cantidad_plus_"><svg width="40px"
+                                        height="40px" viewBox="0 0 32 32" version="1.1"
+                                        xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                        xmlns:sketch="http://www.bohemiancoding.com/sketch/ns" fill="#000000">
+                                        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                        <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round">
+                                        </g>
+                                        <g id="SVGRepo_iconCarrier">
+
+                                            <g id="Page-1" stroke="none" stroke-width="1" fill="none"
+                                                fill-rule="evenodd" sketch:type="MSPage">
+                                                <g id="Icon-Set-Filled" sketch:type="MSLayerGroup"
+                                                    transform="translate(-362.000000, -1037.000000)" fill="#349B67">
+                                                    <path
+                                                        d="M390,1049 L382,1049 L382,1041 C382,1038.79 380.209,1037 378,1037 C375.791,1037 374,1038.79 374,1041 L374,1049 L366,1049 C363.791,1049 362,1050.79 362,1053 C362,1055.21 363.791,1057 366,1057 L374,1057 L374,1065 C374,1067.21 375.791,1069 378,1069 C380.209,1069 382,1067.21 382,1065 L382,1057 L390,1057 C392.209,1057 394,1055.21 394,1053 C394,1050.79 392.209,1049 390,1049"
+                                                        id="plus" sketch:type="MSShapeGroup"> </path>
+                                                </g>
+                                            </g>
+                                        </g>
+                                    </svg>
+                                </a>
+                            </div>
+
+                        </div>
+
+
+
+
+
+
+                    </div>
+                    <!-- Observaciones -->
+
+                    <div class="col-6">
+                        <div class="input-group rounded rounded-3 border border-2 border-primary ">
+
+                            <textarea name="observaciones" cols="40" rows="5" maxlength="100"
+                                class="form-control shadow-none border border-0  px-2 py-1 "
+                                placeholder=" Observaciones en la preparación*" aria-label="Username"
+                                aria-describedby="basic-addon1" style="border-left:none" id="id_observaciones_"
+                                data-lt-tmp-id="lt-336604" spellcheck="false" data-gramm="false"></textarea>
+
+                        </div>
+                    </div>
+
+                    <div class="col-4">
+                        <div id="id_extras_">
+                            <div class="my-auto">
+                                <label for="id_extras_0_"><input type="checkbox" style="height:30px;width:30px"
+                                        name="extras-1" value="" id="id_extras_0_">
+                                    Ingrediente extra</label>
+
+                            </div>
+                            <div>
+                                <label for="id_extras_1_"><input type="checkbox" style="height:30px;width:30px"
+                                        name="extras-1" value="" id="id_extras_1_">
+                                    Camarón, jamón serrano, alcachofa,anchoas</label>
+
+                            </div>
+                            <div>
+                                <label for="id_extras_2_"><input type="checkbox" style="height:30px;width:30px"
+                                        name="extras-1" value="" id="id_extras_2_">
+                                    Parmesano reggiano o arúgula</label>
+
+                            </div>
+                            <div>
+                                <label for="id_extras_3_"><input type="checkbox" style="height:30px;width:30px"
+                                        name="extras-1" value="" id="id_extras_3_">
+                                    Mozzarela fresca</label>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+            </div>
+        </form>
+    </div>
+
+    {% include 'Ventas/ticket.html' %}
+        {% if user.rol == "Admin" or user.rol == "Dueña/o" %}
+
+        {% include "Ventas/cambios.html" %}
+    {% endif %}
+
+
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    $("#submit-all-forms-button").on("click", function () {
+        var formularios = $("#dynamic-forms-container").find("[id^='formVenta']");
+
+        formularios.each(function (index, form) {
+            var formData = {};
+
+            $(form)
+                .find("input, select, textarea")
+                .each(function () {
+                    var fieldId = $(this).attr("id");
+                    var fieldValue = $(this).val();
+
+                    if ($(this).is(":checkbox")) {
+                        fieldValue = $(this).is(":checked");
+                    }
+
+                    formData[fieldId] = fieldValue;
+                });
+            console.log(formData)
+            var csrfToken = $("input[name=csrfmiddlewaretoken]").val();
+            formData["csrfmiddlewaretoken"] = csrfToken;
+
+            $.ajax({
+                type: "POST",
+                url: "{% url 'Ventas:agregarVenta' venta.id %}",
+                data: formData,
+                success: function (response) {
+                    location.reload(true);
+
+                }
+            });
+        });
+    });
+
+
+
+</script>
+
+
+
+<script>
+    var formCounter = 0;
+
+    function agregarFormulario() {
+
+        formCounter++;
+        if (formCounter > 0)
+            document.getElementById("submit-all-forms-button").classList.remove("d-none");
+
+        var formClone = $("#formVenta").clone();
+
+        formClone.find("input, select, textarea, ul, a , span, img,li,button").val("");
+
+        var uniqueFormId = "formVenta" + formCounter;
+        formClone.attr("id", uniqueFormId);
+        formClone.find("input, select, textarea, ul, a, span, img,li,button").each(function () {
+
+            var originalName = $(this).attr("name");
+            var updatedName = originalName + formCounter;
+            $(this).attr("name", updatedName);
+
+            var originalId = $(this).attr("id");
+            var updatedId = originalId + formCounter;
+            $(this).attr("id", updatedId);
+
+            var originallist = $(this).attr("list");
+            var updatedlist = originallist + formCounter;
+            $(this).attr("list", updatedlist);
+        });
+
+        var pruebas = formClone.find("#pruebas_");
+        var pruebasID = "pruebas_" + formCounter;
+        pruebas.attr("id", pruebasID);
+
+        var extras = formClone.find("#id_extras_");
+        var extrasID = "id_extras_" + formCounter;
+        extras.attr("id", extrasID);
+
+
+        var formCounterID = formClone.find("#formCounterID");
+        var updatedFormCounterIDId = "formCounterID" + formCounter;
+        formCounterID.attr("id", updatedFormCounterIDId);
+        formCounterID.text(formCounter);
+
+
+        var formCounterID = formClone.find("#contenedorborrar");
+        var updatedFormCounterIDId = "formCounterID" + formCounter;
+        formCounterID.attr("id", updatedFormCounterIDId);
+        formCounterID.text(formCounter);
+
+        var updateCantidad = formClone.find("#id_cantidad_" + formCounter);
+        updateCantidad.val(1)
+
+        //<svg fill="#ffffff" width="64px" height="64px" viewBox="0 0 1000 1000" xmlns="http://www.w3.org/2000/svg" stroke="#ffffff"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M767 336H233q-12 0-21 9t-9 21l38 505q1 13 12 21.5t30 8.5h434q18 0 29-8.5t13-21.5l38-505q0-12-9-21t-21-9zM344 841q-10 0-18-9t-8-21l-26-386q0-12 9-20.5t21-8.5 21 8.5 9 20.5l18 386q0 12-7.5 21t-18.5 9zm182-31q0 13-7.5 22t-18.5 9-18.5-9-7.5-22l-4-385q0-12 9-20.5t21-8.5 21 8.5 9 20.5zm156 1q0 12-8 21t-18 9q-11 0-18.5-9t-7.5-21l18-386q0-12 9-20.5t21-8.5 21 8.5 9 20.5zm101-605l-179-30q-12-2-15-15l-8-33q-4-20-14-26-6-3-22-3h-90q-16 0-23 3-10 6-13 26l-8 33q-2 13-15 15l-179 30q-19 3-31.5 14.5T173 249v28q0 9 6.5 15t15.5 6h610q9 0 15.5-6t6.5-15v-28q0-17-12.5-28.5T783 206z"></path></g></svg>
+
+        var deleteButton = $("<button class='btn btn-secondary text-white my-2' type='button'></button>");
+        var trashCanIcon = $("<span></span>");
+
+        trashCanIcon.html('<svg fill="#ffffff" width="32px" height="32px" viewBox="0 0 1000 1000" xmlns="http://www.w3.org/2000/svg" stroke="#ffffff"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M767 336H233q-12 0-21 9t-9 21l38 505q1 13 12 21.5t30 8.5h434q18 0 29-8.5t13-21.5l38-505q0-12-9-21t-21-9zM344 841q-10 0-18-9t-8-21l-26-386q0-12 9-20.5t21-8.5 21 8.5 9 20.5l18 386q0 12-7.5 21t-18.5 9zm182-31q0 13-7.5 22t-18.5 9-18.5-9-7.5-22l-4-385q0-12 9-20.5t21-8.5 21 8.5 9 20.5zm156 1q0 12-8 21t-18 9q-11 0-18.5-9t-7.5-21l18-386q0-12 9-20.5t21-8.5 21 8.5 9 20.5zm101-605l-179-30q-12-2-15-15l-8-33q-4-20-14-26-6-3-22-3h-90q-16 0-23 3-10 6-13 26l-8 33q-2 13-15 15l-179 30q-19 3-31.5 14.5T173 249v28q0 9 6.5 15t15.5 6h610q9 0 15.5-6t6.5-15v-28q0-17-12.5-28.5T783 206z"></path></g></svg>');
+
+        deleteButton.append(trashCanIcon);
+
+        deleteButton.on("click", function () {
+            formClone.remove();
+            formCounter--
+            if (formCounter == 0)
+                document.getElementById("submit-all-forms-button").classList.add("d-none");
+        });
+        formClone.append(deleteButton);
+
+        $("#dynamic-forms-container").append(formClone);
+        getCardsReplace2("", 1);
+        getCardsReplace3("", 1)
+
+    }
+
+
+</script>
+
+
+
+<script>
+
+    menuBandera = false;
+
+
+    function show(element) {
+        console.log(element)
+
+        var currentId = element.id;
+        var idMatch = currentId.match(/\d+$/);
+        var idMatch = idMatch[0];
+        var targetId = "pruebas_" + idMatch;
+
+        var pizza_extra = document.getElementById(targetId);
+
+        if (element.checked) {
+            pizza_extra.classList.remove('d-none')
+            pizza_extra.classList.add('d-block')
+            bandera = false
+        } else {
+            pizza_extra.classList.remove('d-block')
+            pizza_extra.classList.add('d-none')
+            bandera = true
+        }
+    }
+
+    function setNombre(id) {
+        if (id == 0) {
+            var nombre2 = document.getElementById("id_cliente");
+            nombre2.value = id
+
+        } else {
+            nombreC = "cliente" + id
+            var nombre = document.getElementById("searchBar");
+            var nombreChido = document.getElementById(nombreC);
+            nombre.value = nombreChido.textContent;
+
+            var nombre2 = document.getElementById("id_cliente");
+            nombre2.value = id
+        }
+
+
+    }
+
+
+
+
+    function setNombre2(id, element) {
+        var currentId = element.id;
+        var idMatch = currentId.match(/\d+$/);
+        console.log(element)
+        var idMatch = idMatch[0];
+        var targetId = "menus_" + id + "_" + idMatch;
+        var ids = document.getElementById(targetId);
+
+        console.log(targetId)
+        console.log(ids)
+
+        if (id == 0) {
+            var prp = "id_menu_" + idMatch
+            var nombre2 = document.getElementById(prp);
+            nombre2.value = id
+
+        } else {
+
+            var prp = "id_menu_" + idMatch
+            var prpsearchBarMenu = "searchBarMenu_" + idMatch;
+            console.log(prp)
+            console.log(prpsearchBarMenu)
+
+
+
+            nombreC = "texto_" + id + "_" + idMatch;
+            var nombre = document.getElementById(prpsearchBarMenu);
+            var nombreChido = document.getElementById(nombreC);
+            // console.log(nombre)
+            // console.log(nombreChido)
+            nombre.value = nombreChido.textContent;
+
+            var nombre2 = document.getElementById(prp);
+            nombre2.value = id
+        }
+
+
+    }
+
+    function showMenu() {
+        //menu= document.getElementById("menu-container")
+        menu2 = document.getElementById("acordionMenu")
+        boton = document.getElementById("submit-form")
+
+        if (menuBandera == false) {
+            menu2.classList.remove('d-none')
+            boton.classList.remove('d-none')
+
+            menuBandera = true
+
+        } else {
+            menu2.classList.add('d-none')
+            boton.classList.add('d-none')
+
+            menuBandera = false
+        }
+    }
+
+    function setNombre3(id, element) {
+        var currentId = element.id;
+        var idMatch = currentId.match(/\d+$/);
+        console.log(element)
+        var idMatch = idMatch[0];
+        var targetId = "menusPizza_" + id + "_" + idMatch;
+        var ids = document.getElementById(targetId);
+        console.log(targetId)
+        console.log(ids)
+
+
+        if (id == 0) {
+            var prp = "id_pizza_mitad_" + idMatch
+            var nombre2 = document.getElementById(prp);
+            nombre2.value = id
+
+        } else {
+
+            var prp = "id_pizza_mitad_" + idMatch
+            var prpsearchBarMenu = "searchBarPizza_" + idMatch;
+            console.log(prp)
+            console.log(prpsearchBarMenu)
+
+
+
+            nombreC = "textPizza_" + id + "_" + idMatch;
+            var nombre = document.getElementById(prpsearchBarMenu);
+            var nombreChido = document.getElementById(nombreC);
+            // console.log(nombre)
+            // console.log(nombreChido)
+            nombre.value = nombreChido.textContent;
+
+            var nombre2 = document.getElementById(prp);
+            nombre2.value = id
+        }
+
+
+
+    }
+</script>
+
+
+<script src="{% static 'js/clienteRow.js' %}"></script>
+<script src="{% static 'js/menuRow.js' %}"></script>
+<script src="{% static 'js/menuRow2.js' %}"></script>
+
+<script>
+    function incrementValue(id) {
+        var inputField = document.getElementById('input' + id);
+        console.log(inputField);
+        var currentVal = parseInt(inputField.value);
+        if (!isNaN(currentVal)) {
+            inputField.value = currentVal + 1;
+        } else {
+            inputField.value = 0;
+        }
+
+
+    }
+
+    function decrementValue(id) {
+        var inputField = document.getElementById('input' + id);
+        var currentVal = parseInt(inputField.value);
+        if (!isNaN(currentVal) && currentVal > 0) {
+            inputField.value = currentVal - 1;
+        } else {
+            inputField.value = 0;
+        }
+
+    }
+
+    function incrementValueForm(element) {
+        var incrementID = element.id
+        var idMatch = incrementID.match(/\d+$/);
+        input = document.getElementById("id_cantidad_" + idMatch[0])
+        var currentVal = parseInt(input.value);
+        input.value = currentVal + 1;
+
+
+    }
+
+    function decrementValueForm(element) {
+        var decrementID = element.id
+        var idMatch = decrementID.match(/\d+$/);
+        input = document.getElementById("id_cantidad_" + idMatch[0])
+        var currentVal = parseInt(input.value);
+
+        if (input.value > 1) {
+            input.value = currentVal - 1;
+
+        } else {
+            input.value = 1
+            alert("No puedes poner numeros negativos o 0")
+
+        }
+
+
+    }
+</script>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+
+    function addToList() {
+
+
+    }
+</script>
+
+<script>
+    function imprimirContenido() {
+        // Obtener el contenido para imprimir
+        var contenidoImprimir = document.getElementById('contenidoImprimir').innerText;
+
+        // Crear un blob con el contenido
+        var blob = new Blob([contenidoImprimir], { type: 'text/plain' });
+
+        // Crear un enlace para descargar el archivo
+        var link = document.createElement('a');
+        link.href = window.URL.createObjectURL(blob);
+        link.download = 'ticket_{{venta.id}}.txt';
+        link.click();
+    }
+
+
+</script>
+{% endblock %}

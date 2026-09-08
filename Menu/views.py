@@ -35,23 +35,34 @@ def menuCard(request):
 
 @login_required(login_url='authentication:login')
 
-def menuEditar(request,id):
-    user = User.objects.get(id=id)
+
+def menuEditar(request, id):
+    try:
+        platillo = Menu.objects.get(id=id)
+    except Menu.DoesNotExist:
+        # Si el objeto Menu con el id dado no existe, redirigir o manejar el error según sea necesario
+        return redirect("ruta_a_tu_vista_de_error")
+
     if request.method == "POST":
-        form = createMenuForm(request.POST, request.FILES, instance=user)
+        form = createMenuForm(request.POST, request.FILES, instance=platillo)
         if form.is_valid():
-                print(form)
-                user = form.save()
-                user.save()
-
-                return redirect("Menu:empleadosIndex")
+            try:
+                platillo = form.save()
+            except ValidationError as e:
+                # Imprimir el error en la consola
+                print("Error al guardar el platillo:", e)
+                # Puedes agregar código para manejar el error aquí, como mostrar un mensaje de error al usuario
+                return render(request, 'ruta_a_tu_plantilla_de_error', {'error_message': e})
+            return redirect("Menu:menuIndex")
         else:
-                return render(request, 'Menu/editarEmpleado.html',{'form':form, 'user':user})
+            # Si hay errores en el formulario, imprimirlos en la consola
+            print("Errores en el formulario:", form.errors)
+            # Puedes agregar código para manejar los errores del formulario aquí, como mostrar los errores al usuario
+            return render(request, 'Menu/menuEditar.html', {'form': form, 'platillo': platillo})
+    else:
+        form = createMenuForm(instance=platillo)
+        return render(request, 'Menu/menuEditar.html', {'form': form, 'platillo': platillo})
 
-
-    form = createMenuForm(instance=user)
-    print(user)
-    return render(request, 'Menu/editarEmpleado.html',{'form':form,'user':user})
 
 
 
@@ -65,8 +76,11 @@ def menuCrear(request):
    
         if form.is_valid():
             user = form.save()
-            img = static('img/noimage.jpg')
-            user.url = img
+            if not user.url:
+                       
+                img = static('img/noimage.jpg')
+                user.url = img
+
             user.save()
                       
 

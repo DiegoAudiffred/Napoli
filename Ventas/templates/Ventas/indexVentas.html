@@ -2,30 +2,161 @@
 {% load static %}
 {% block body %}
 
-<div class="container min-vh-100 px-4">
-    <div class="row pt-5 pb-3">
-        <div class="col-sm-3 col-12 my-auto">
-            <h1 class="text-quinto">Ventas abiertas</h1>
+
+<div class="container min-vh-100 px-4 my-4">
+        <div class="row">
+        <div class="col-xl-3 col-md-4 col-12 my-auto">
+            <h1 class="text-quinto">Ventas</h1>
+            
         </div>
-        <div class="col-sm-2 col-6 my-auto">
-            <form action=" {% url 'Ventas:ventasCrear' user.id%}" method="POST" enctype="multipart/form-data"
-                id="user-profile-form">
+    
+
+        <div class="col-xl-2 col-md-4 col-6 my-auto">
+            <a href="{% url 'Ventas:ventasTodas'%}"> <button class="btn rounded rounded-3  bg-quinto text-white w-100 py-2">Buscar
+            Venta</button> </a>
+        </div>
+
+
+        {% if user.rol == "Admin" or user.rol == "Dueña/o"%}
+
+        {% endif %}
+
+    </div>
+
+    <div class="row">
+<div class="col-2">
+      {% if 26 in mesasEnUso2%}   
+          
+            <a href="{% url 'Ventas:modificarVenta' 26 %}" class="btn border border-3 mb-3 bg-corporateYellow800 text-white w-100" id="mesa26"
+                style=" display: flex;  align-items: center;  justify-content: center;">
+                <b>Para llevar 1</b>
+            </a>
+           
+             {% else %}
+                <form action=" {% url 'Ventas:ventasCrearMesa' 'Para llevar 1'%}" method="POST" enctype="multipart/form-data"
+                    id="user-profile-form">
+                    {% csrf_token %}
+                    <button class="btn border border-3 mb-3 bg-primary text-white w-100"  id="mesa26"> <!-- Mesa8B -->
+                        <b>Para llevar 1</b>
+                    </button>
+                </form>
+            {% endif %}
+           
+
+</div>
+<div class="col-2">
+  {% if 27 in mesasEnUso2%}   
+          
+            <a href="{% url 'Ventas:modificarVenta' 27 %}" class="btn border border-3 mb-3 bg-corporateYellow800 text-white w-100" id="mesa27"
+                style=" display: flex;  align-items: center;  justify-content: center;">
+                <b>Para llevar 2</b>
+            </a>
+           
+             {% else %}
+                <form action=" {% url 'Ventas:ventasCrearMesa' 'Para llevar 2'%}" method="POST" enctype="multipart/form-data"
+                    id="user-profile-form">
+                    {% csrf_token %}
+                    <button class="btn border border-3 mb-3 bg-primary text-white w-100"  id="mesa27"> <!-- Mesa8B -->
+                        <b>Para llevar 2</b>
+                    </button>
+                </form>
+            {% endif %}
+        
+</div>
+<div class="col-2">
+     {% if 28 in mesasEnUso2%}   
+          
+            <a href="{% url 'Ventas:modificarVenta' 28 %}" class="btn border border-3 mb-3 bg-corporateYellow800 text-white w-100" id="mesa28"
+                style=" display: flex;  align-items: center;  justify-content: center;">
+                <b>Para llevar 3</b>
+            </a>
+           
+             {% else %}
+                <form action=" {% url 'Ventas:ventasCrearMesa' 'Para llevar 3'%}" method="POST" enctype="multipart/form-data"
+                    id="user-profile-form">
+                    {% csrf_token %}
+                    <button class="btn border border-3 mb-3 bg-primary text-white w-100"  id="mesa28"> <!-- Mesa8B -->
+                        <b>Para llevar 3</b>
+                    </button>
+                </form>
+            {% endif %}
+               
+</div>
+<div class="col-2">
+     {% if 30 in mesasEnUso2%}   
+          
+            <a href="{% url 'Ventas:modificarVenta' 30 %}" class="btn border border-3 mb-3 bg-corporateYellow800 text-white w-100" id="mesa30"
+                style=" display: flex;  align-items: center;  justify-content: center;">
+                <b>Para llevar 4</b>
+            </a>
+           
+             {% else %}
+                <form action=" {% url 'Ventas:ventasCrearMesa' 'Para llevar 4'%}" method="POST" enctype="multipart/form-data"
+                    id="user-profile-form">
+                    {% csrf_token %}
+                    <button class="btn border border-3 mb-3 bg-primary text-white w-100"  id="mesa30"> <!-- Mesa8B -->
+                        <b>Para llevar 4</b>
+                    </button>
+                </form>
+            {% endif %}
+               
+</div>
+
+<div class="col-2">
+     {% if 31 in mesasEnUso2%}   
+          
+            <a href="{% url 'Ventas:modificarVenta' 31 %}" class="btn border border-3 mb-3 bg-corporateYellow800 text-white w-100" id="mesa31"
+                style=" display: flex;  align-items: center;  justify-content: center;">
+                <b>Para llevar 5</b>
+            </a>
+           
+             {% else %}
+                <form action=" {% url 'Ventas:ventasCrearMesa' 'Para llevar 5'%}" method="POST" enctype="multipart/form-data"
+                    id="user-profile-form">
+                    {% csrf_token %}
+                    <button class="btn border border-3 mb-3 bg-primary text-white w-100"  id="mesa31"> <!-- Mesa8B -->
+                        <b>Para llevar 5</b>
+                    </button>
+                </form>
+            {% endif %}
+               
+</div>
+
+ <div class="col-2">
+  {% if 29 in mesasEnUso2%}   
+          
+            <a href="{% url 'Ventas:modificarVenta' 29 %}" class="btn border border-3 mb-3 bg-corporateYellow800 text-white" id="mesa29"
+                style="width: 100px;height: 100px; display: flex;  align-items: center;  justify-content: center;">
+                <b>Donaciones</b>
+            </a>
+           
+             {% else %}
+                <form action=" {% url 'Ventas:ventasCrearMesa' 'Donaciones'%}" method="POST" enctype="multipart/form-data"
+                    id="user-profile-form">
+                    {% csrf_token %}
+                    <button class="btn border border-3 mb-3 bg-primary text-white w-100"  id="mesa29"> <!-- Mesa8B -->
+                        <b>Donaciones</b>
+                    </button>
+                </form>
+            {% endif %}
+                </div>
+    </div>
+                    {% include 'Ventas/map.html' %}
+
+    
+</div>
+
+<!-- 
+    <div class="container min-vh-100 px-4">
+    <div class="col-xl-2 col-md-4 col-6 my-auto">
+            <form action=" " method="POST" enctype="multipart/form-data"
+                id="user-profile-form"> <!-- { url 'Ventas:ventasCrear' user.id} 
                 {% csrf_token %}
-                <button class="btn rounded rounded-3  bg-tercero text-white w-100" type="submit">Crear
+                <button class="btn rounded rounded-3  bg-tercero text-white w-100 py-2" type="submit">Crear
                     Venta </button>
 
             </form>
         </div>
-        {% if user.rol == "Admin" or user.rol == "Dueña/o"%}
-
-        <div class="col-sm-2 col-6 my-auto">
-            <a class="btn rounded rounded-3  bg-quinto text-white w-100" href="{% url 'Ventas:ventasTodas'%}"
-                type="submit">Buscar
-                Venta </a>
-        </div>
-        {% endif %}
-
-    </div>
     <div class="row">
 
         {% for venta in ventas %}
@@ -42,6 +173,7 @@
                         {% else %} Por
                         asignar {% endif %}</p>
                     <p class="card-text">Fecha: {{venta.fecha_compra|date:"[d - M / H:i]"}} </p>
+                    
                     <p class="card-text">Total de venta: ${% if venta.total is None %} 0 {% else %} {{venta.total}}
                         {% endif %} mxn
                     </p>
@@ -86,19 +218,49 @@
             </div>
         </div>
 
-        <!-- Button trigger modal -->
-
-        <!-- Modal -->
-        {% empty %}
         <div class=" col-sm-12 my-3">
             <h2>No hay ventas abiertas por el momento </h2>
         </div>
         {% endfor %}
 
-
+       
     </div>
 
 </div>
+ -->
 
+<script>
+//window.onload = function() {
+//   var listaTuplas = [
+//            {% for tupla in mesasEnUso %}
+//                [{{ tupla.0 }}, {{ tupla.1 }}],
+//            {% endfor %}
+//        ];
+//        for (var i = 0; i < listaTuplas.length; i++) {
+//            console.log(listaTuplas[i]);
+//        }
+//        
+//var modificarVentaUrl=""
+//    for(var i = 0; i < listaTuplas.length;i++){
+//        enlaceMesa = document.getElementById('mesa'+listaTuplas[i][0])
+//        modificarVentaUrl = "{% url 'Ventas:modificarVenta' 999 %}".replace("999", listaTuplas[i][1]);
+//        enlaceMesa.href = modificarVentaUrl
+//
+//    }    
+//};
 
+</script>
+<script>
+  
+    function disableLink(enlace) {
+    // Evitar que se siga el enlace
+    event.preventDefault();
+
+    // Deshabilitar el enlace
+    enlace.removeEventListener('click', bloquearEnlace);
+    
+    // Redirigir a la URL
+    window.location.href = enlace.getAttribute('href');
+  }
+</script>
 {% endblock %}

@@ -1,0 +1,35 @@
+{% extends 'layout/layout.html' %}
+{% load static %}
+{% block body %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <h1>Cortes pasados</h1>
+        </div>
+        <div class="col-12">
+
+
+<table class="table table-striped">
+    <thead class="thead-light">
+        <tr>
+            <th scope="col">Fecha de Cierre</th>
+            <th scope="col">Ventas del Día</th>
+            <th scope="col">Total de Ventas</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for corte in Cortes %}
+        <tr>
+            <td>{{ corte.fecha_cierre|date:"d/m/Y H:i:s" }}</td>
+            <td>{{ corte.ventasDelDia }}</td>
+            <td>{{ corte.totalVentas }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

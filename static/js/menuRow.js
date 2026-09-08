@@ -10,76 +10,105 @@ window.addEventListener('DOMContentLoaded', (event) => {
 });
 
 
-function changeOrder2(str) {
-    element = document.getElementById(str)
-    dataValue = element.getAttribute("data-value");
-    if (dataValue.startsWith("-")) {
-        element.setAttribute("data-value", dataValue.replace("-", ""))
-        dataValue = dataValue.replace("-", "")
-        document.getElementById(str + "Chevron").setAttribute("d", "M19.5 8.25l-7.5 7.5-7.5-7.5")
-    }
-    else {
-        element.setAttribute("data-value", "-" + dataValue)
-        dataValue = "-" + dataValue
-        document.getElementById(str + "Chevron").setAttribute("d", "M4.5 15.75l7.5-7.5 7.5 7.5")
-
-    }
-    currPage = 1;
-    currentOrder = dataValue
-    getCardsReplace2(search, currPage)
-
-}
-
-window.onscroll = function (ev) {
-    if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
-        total = document.getElementById("totalPaginas").value
-        if (currPage < total) {
-            currPage++;
-            getCardsPaged2(currPage);
-        }
-    }
-};
 
 
-function getCardsReplace2(search, page = 1) {
-    search = search
-    console.log(search)
-    currPage = 1;
-    fetch('AjaxSearch2', {
-        method: 'POST',
-        credentials: 'same-origin',
-        headers: {
-            'Accept': 'application/json',
-            'X-Requested-With': 'XMLHttpRequest',
-            'X-CSRFToken': csrftoken,
-        },
-        body: JSON.stringify({ 'jsonBody': { "search": search, "page": page, "orderBy": currentOrder } })
-    })
-        .then(response => response.text())
-        .then(text => {
-            document.getElementById('cardHolder2').innerHTML = ``
-            document.getElementById('cardHolder2').innerHTML += text
 
+
+function getCardsReplace2(search, page = 1, element) {
+    if (element && element.id) {
+        var searchBarFId = element.id;
+
+        var match = searchBarFId.match(/(\d+)$/);
+        var number = match ? parseInt(match[1], 10) : null;
+
+
+        //var targetId = "searchBarMenu_" + number;
+
+        search = search;
+        currPage = 1;
+
+        fetch('AjaxSearch2', {
+            method: 'POST',
+            credentials: 'same-origin',
+            headers: {
+                'Accept': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest',
+                'X-CSRFToken': csrftoken,
+            },
+            body: JSON.stringify({ 'jsonBody': { "search": search, "page": page, "orderBy": currentOrder } })
         })
-}
+            .then(response => response.text())
+            .then(text => {
+                var cardHolderId = 'cardHolder2_' + number;
+                var elementosLista = [];
 
-function getCardsPaged2(page = 1) {
-    fetch('AjaxSearch2', {
-        method: 'POST',
-        credentials: 'same-origin',
-        headers: {
-            'Accept': 'application/json',
-            'X-Requested-With': 'XMLHttpRequest',
-            'X-CSRFToken': csrftoken,
-        },
-        body: JSON.stringify({ 'jsonBody': { "search": search, "page": page, "orderBy": currentOrder } })
-    })
-        .then(response => response.text())
-        .then(text => {
-            document.getElementById('cardHolder2').innerHTML += text
+                var tempDiv = document.createElement('div');
 
+                tempDiv.innerHTML = text;
+
+                var cardHolder = document.getElementById(cardHolderId);
+
+                cardHolder.innerHTML = '';
+
+                for (var i = 0; i < tempDiv.children.length; i++) {
+                    var child = tempDiv.children[i];
+
+                    var nuevoId = child.id + number;
+
+                    child.id = nuevoId;
+
+                    child.querySelectorAll('[id]').forEach(function (element) {
+                        element.id = element.id  + number;
+                    });
+
+                    cardHolder.appendChild(child);
+
+                    elementosLista.push({
+                        'id': nuevoId,
+                        'imagen': child.querySelector('img').src,
+                        'texto': child.querySelector('span').textContent
+                    });
+
+                }
+
+            });
+
+
+
+
+
+    }
+  
+     else {
+     
+        search = search
+        currPage = 1;
+
+        fetch('AjaxSearch2', {
+            method: 'POST',
+            credentials: 'same-origin',
+            headers: {
+                'Accept': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest',
+                'X-CSRFToken': csrftoken,
+            },
+            body: JSON.stringify({ 'jsonBody': { "search": search, "page": page, "orderBy": currentOrder } })
         })
+            .then(response => response.text())
+            .then(text => {
+                document.getElementById('cardHolder2_').innerHTML = ``
+                document.getElementById('cardHolder2_').innerHTML += text
+
+
+            })
+    }    
+
+
 }
+
+
+
+
 
 $(document).ready(function () {
     $('.dropdown').each(function (key, dropdown) {

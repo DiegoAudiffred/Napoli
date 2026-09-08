@@ -1,0 +1,150 @@
+
+
+{% extends 'layout/layout.html' %}
+{% load static %}
+{% block body %}
+
+<style>
+    .checkbox-large {
+    transform: scale(4); /* Aumenta el tamaño del checkbox */
+}
+
+</style>
+<div class="container my-4">
+  <div class="row my-2">
+       {% if row.venta.is_reopen %}
+ <a href="{% url 'Ventas:modificarVentaPasada' venta.id  %}" class="text-decoration-none text-black">
+            <div style="display: flex; align-items: center;">
+                <svg fill="#000000" width="54px" height="54px" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
+                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                    <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                    <g id="SVGRepo_iconCarrier">
+                        <path
+                            d="M222.927 580.115l301.354 328.512c24.354 28.708 20.825 71.724-7.883 96.078s-71.724 20.825-96.078-7.883L19.576 559.963a67.846 67.846 0 01-13.784-20.022 68.03 68.03 0 01-5.977-29.488l.001-.063a68.343 68.343 0 017.265-29.134 68.28 68.28 0 011.384-2.6 67.59 67.59 0 0110.102-13.687L429.966 21.113c25.592-27.611 68.721-29.247 96.331-3.656s29.247 68.721 3.656 96.331L224.088 443.784h730.46c37.647 0 68.166 30.519 68.166 68.166s-30.519 68.166-68.166 68.166H222.927z">
+                        </path>
+                    </g>
+                </svg>
+                <h1 class="px-3 my-auto">Regresar</h1>
+            </div>
+        </a>
+       {% else %}
+ <a href="{% url 'Ventas:modificarVenta' venta.mesa.id  %}" class="text-decoration-none text-black">
+            <div style="display: flex; align-items: center;">
+                <svg fill="#000000" width="54px" height="54px" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
+                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                    <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                    <g id="SVGRepo_iconCarrier">
+                        <path
+                            d="M222.927 580.115l301.354 328.512c24.354 28.708 20.825 71.724-7.883 96.078s-71.724 20.825-96.078-7.883L19.576 559.963a67.846 67.846 0 01-13.784-20.022 68.03 68.03 0 01-5.977-29.488l.001-.063a68.343 68.343 0 017.265-29.134 68.28 68.28 0 011.384-2.6 67.59 67.59 0 0110.102-13.687L429.966 21.113c25.592-27.611 68.721-29.247 96.331-3.656s29.247 68.721 3.656 96.331L224.088 443.784h730.46c37.647 0 68.166 30.519 68.166 68.166s-30.519 68.166-68.166 68.166H222.927z">
+                        </path>
+                    </g>
+                </svg>
+                <h1 class="px-3 my-auto">Regresar</h1>
+            </div>
+        </a>
+       {% endif %}
+   </div>
+             <h1>Modificar  {{row.menu.nombre}}</h1>
+   <form action="{% url 'Ventas:updateRow' row.id  %}" method="POST" enctype="multipart/form-data">
+      {% csrf_token %}
+      <div class="row">
+                      
+                                 <div class="col-6 "> <!-- Platillo -->
+                                    <h3>Platillo del Menu</h3>
+                                 </div>
+                                 <div class="col-6"> <!-- Cantidad -->
+                                    <h3>Cambiar Cantidad</h3>
+                                 </div>
+                                 <div class="col-6">
+                                    {{form.menu}}
+                                 </div>
+                                 <div class="col-6">
+                                    {{form.cantidad}}
+                                 </div>
+
+
+                                 <div class="col-6 py-3"> <!-- Observaciones -->
+                                    <h3>Añadir Observaciones</h3>
+                                 </div>                              
+                                 <div class="col-6 py-3"> <!-- Extras -->
+                                    <h3>Añadir Extras</h3>
+                                 </div>
+                                 <div class="col-6">
+                                    {{form.observaciones}}
+                                 </div> 
+                                 <div class="col-6">
+                                    {{form.extras}}
+                                 </div>
+                                  <div class="col-1 text-center my-auto">
+                                    {{form.media_orden}}
+                                 </div>
+                                   <div class="col-2 py-3 my-auto"> <!-- Media orden -->
+                                    <h3>Media orden</h3>
+                                 </div>
+                                 <div class="col-1 text-center my-auto">
+                                    {{form.familiar}}
+                                 </div>
+                               
+                                 <div class="col-2 py-3 my-auto"> <!-- Familiar -->
+                                    <h3>Familiar</h3>
+                                 </div>
+                                
+                                 <div class="col-2 text-center my-auto">
+                                    {{form.extraCosto}}
+                                 </div>
+
+                                 <div class="col-2 py-3 my-auto"> <!-- Familiar -->
+                                    <h3>Agregar Extra</h3>
+                                 </div>
+                               
+ <div class="col-3 py-3"> <!-- Mitad Pizza -->
+                                    <h3>Mitad de la otra pizza</h3>
+                                 </div>
+
+                                 <div class="col-3 py-3 my-auto">
+                                    <select name="pizza_mitad" id="id_pizza_mitad" class=" w-100">
+                                       <option value="">Seleccionar Pizza Mitad</option>
+                                       {% for pizza in pizzas %}
+                                       <option value="{{ pizza.id }}">{{ pizza.nombre }}</option>
+                                       {% endfor %}
+                                    </select>
+                                 </div>
+                                 
+                                
+                               
+                              
+                                 <button type="submit" class="btn bg-primary my-3 text-white py-2">Actualizar</button>                               
+                     
+      </div>
+   </form>
+</div>
+
+
+<script>
+$(document).ready(function() {
+   $('#id_extras_0').addClass('checkbox-large m-4');
+   $('#id_extras_1').addClass('checkbox-large m-4');
+   $('#id_extras_2').addClass('checkbox-large m-4');
+   $('#id_extras_3').addClass('checkbox-large m-4');
+   $('#id_extras_4').addClass('checkbox-large m-4');
+   $('#id_extras_5').addClass('checkbox-large m-4');
+   $('#id_extras_6').addClass('checkbox-large m-4');
+   $('#id_extras_7').addClass('checkbox-large m-4');
+
+});
+</script>
+
+<script>
+    function validarCantidad() {
+        var cantidad = document.getElementById('id_cantidad').value;
+        if (cantidad === "" || cantidad === "0") {
+            alert("La cantidad no puede estar vacía ni ser cero.");
+        }
+    }
+
+    // Agrega un listener para detectar cuando se pierde el foco en el campo de entrada
+    document.getElementById('id_cantidad').addEventListener('blur', validarCantidad);
+</script>
+
+{% endblock %}
+

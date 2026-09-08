@@ -1,5 +1,5 @@
 from django import forms
-from db.models import Extras, Ingredientes, Menu, Venta, VentaMenu
+from db.models import Extras, Ingredientes, Menu, RegistroCambiosVentaMenu, TicketImpresos, Venta, VentaMenu
 from django.forms import ImageField, ModelChoiceField, ModelMultipleChoiceField, MultipleChoiceField
 from django.forms.widgets import ClearableFileInput
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
@@ -8,7 +8,7 @@ class createVentaForm(forms.ModelForm):
 
     class Meta:
         model = Venta
-        fields = ['cliente','empleado','total','fecha_compra', 'is_open']
+        fields = ['cliente','empleado','total','fecha_compra', 'is_open','mesa']
       
 
     def __init__(self, *args, **kwargs):
@@ -27,10 +27,89 @@ class createVentaForm(forms.ModelForm):
         self.fields['fecha_compra'].required = False
         self.fields['fecha_compra'].widget.attrs.update({'class':'form-control shadow-none bg-corporateTan200  px-2 py-1 text-primary','placeholder':' Categoría*','rows':'1', 'aria-label':'Username','aria-describedby':'basic-addon1','style':'border-left:none', })
 
+        self.fields['mesa'].required = False
+        self.fields['mesa'].widget.attrs.update({'class':'form-control shadow-none bg-corporateTan200  px-2 py-1 text-primary','placeholder':' Categoría*','rows':'1', 'aria-label':'Username','aria-describedby':'basic-addon1','style':'border-left:none', })
+
         self.fields['is_open'].required = False 
         self.fields['is_open'].default = True 
 
         self.fields['is_open'].widget.attrs.update({'class':'form-control shadow-none bg-corporateTan200  px-2 py-1 text-primary','placeholder':' Ingredientes*','rows':'1', 'aria-label':'Username','aria-describedby':'basic-addon1','style':'border-left:none', })
+
+
+class modifyVentaForm(forms.ModelForm):
+
+    class Meta:
+        model = Venta
+        fields = ['cliente']
+    def __init__(self, *args, **kwargs):
+        super(modifyVentaForm, self).__init__(*args, **kwargs)
+        
+        self.fields['cliente'].required = False
+
+class modifyMesaForm(forms.ModelForm):
+
+    class Meta:
+        model = Venta
+        fields = ['mesa']
+    def __init__(self, *args, **kwargs):
+        super(modifyMesaForm, self).__init__(*args, **kwargs)
+        
+        self.fields['mesa'].required = False
+        self.fields['mesa'].widget.attrs.update({'class':'border border-0' })
+
+
+        
+#class VentaMenuForm(forms.ModelForm):
+#      
+#
+#    def __init__(self, *args, **kwargs):
+#        super(VentaMenuForm, self).__init__(*args, **kwargs)
+#    
+#    
+#        self.fields['venta'].required = False
+#
+#        self.fields['menu'].required = True
+#        self.fields['menu'].widget.attrs.update({'class':'form-control shadow-none   px-2 py-1','placeholder':' Breve descripción*','rows':'1', 'aria-label':'Username','aria-describedby':'basic-addon1','style':'border-left:none', })
+#
+#
+#        self.fields['cantidad'].required = True
+#        self.fields['cantidad'].widget.attrs.update({'class':'form-control shadow-none border border-0   px-2 py-1 ','placeholder':' Cantidad*','rows':'1', 'aria-label':'Username','aria-describedby':'basic-addon1','style':'border-left:none', })
+#        
+#        self.fields['observaciones'].required = False
+#        self.fields['observaciones'].widget.attrs.update({'class':'form-control shadow-none border border-0  px-2 py-1 ','placeholder':' Observaciones en la preparación*','rows':'5', 'aria-label':'Username','aria-describedby':'basic-addon1','style':'border-left:none', })
+#
+#
+#        self.fields['totalfinal'].required = False
+#        self.fields['totalfinal'].widget.attrs.update({'class':'form-control shadow-none bg-corporateTan200  px-2 py-1 text-primary','placeholder':' Breve descripción*','rows':'1', 'aria-label':'Username','aria-describedby':'basic-addon1','style':'border-left:none', })
+#
+#        self.fields['extras'].required = False 
+#        self.fields['extras'].widget.attrs.update({'class':'form-control shadow-none bg-corporateTan200  px-2 py-1 text-primary','placeholder':' Ingredientes*','rows':'1', 'aria-label':'Username','aria-describedby':'basic-addon1','style':'border-left:none', })
+#        self.fields['extras'].widget = forms.CheckboxSelectMultiple()
+#        self.fields['extras'].queryset = Extras.objects.all()
+#
+#        
+#        self.fields['familiar'].widget.attrs.update({'style':'height:30px;width:30px','class':'' })
+#        self.fields['media_orden'].widget.attrs.update({'style':'height:30px;width:30px','class':'' })
+#        
+#        self.fields['pizza_mitad'].required = False
+#        self.fields['pizza_mitad'].widget.attrs.update({'class':'form-control shadow-none   px-2 py-1','placeholder':' Breve descripción*','rows':'1', 'aria-label':'Username','aria-describedby':'basic-addon1','style':'border-left:none', })
+#
+#
+ #   class Meta:
+ #       model = VentaMenu
+ #       fields = ['venta','menu','cantidad','totalfinal','observaciones','extras','media_orden','familiar','pizza_mitad']
+
+
+        
+class modifyMetodoVentaForm(forms.ModelForm):
+
+    class Meta:
+        model = Venta
+        fields = ['pago']
+    def __init__(self, *args, **kwargs):
+        super(modifyMetodoVentaForm, self).__init__(*args, **kwargs)
+        
+        self.fields['pago'].required = False
 
 
 class modifyVentaForm(forms.ModelForm):
@@ -62,42 +141,99 @@ class VentaMenuForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(VentaMenuForm, self).__init__(*args, **kwargs)
     
-    
         self.fields['venta'].required = False
-
         self.fields['menu'].required = False
-        self.fields['menu'].widget.attrs.update({'class':'form-control shadow-none   px-2 py-1','placeholder':' Breve descripción*','rows':'1', 'aria-label':'Username','aria-describedby':'basic-addon1','style':'border-left:none', })
-
-
         self.fields['cantidad'].required = False
-        self.fields['cantidad'].widget.attrs.update({'class':'form-control shadow-none border border-0   px-2 py-1 ','placeholder':' Cantidad*','rows':'1', 'aria-label':'Username','aria-describedby':'basic-addon1','style':'border-left:none', })
-        
         self.fields['observaciones'].required = False
-        self.fields['observaciones'].widget.attrs.update({'class':'form-control shadow-none border border-0  px-2 py-1 ','placeholder':' Observaciones en la preparación*','rows':'5', 'aria-label':'Username','aria-describedby':'basic-addon1','style':'border-left:none', })
-
-
         self.fields['totalfinal'].required = False
-        self.fields['totalfinal'].widget.attrs.update({'class':'form-control shadow-none bg-corporateTan200  px-2 py-1 text-primary','placeholder':' Breve descripción*','rows':'1', 'aria-label':'Username','aria-describedby':'basic-addon1','style':'border-left:none', })
-
         self.fields['extras'].required = False 
-        self.fields['extras'].widget.attrs.update({'class':'form-control shadow-none bg-corporateTan200  px-2 py-1 text-primary','placeholder':' Ingredientes*','rows':'1', 'aria-label':'Username','aria-describedby':'basic-addon1','style':'border-left:none', })
-        self.fields['extras'].widget = forms.CheckboxSelectMultiple()
-        self.fields['extras'].queryset = Extras.objects.all()
-
-        
-        self.fields['familiar'].widget.attrs.update({'style':'height:30px;width:30px','class':'' })
-        self.fields['media_orden'].widget.attrs.update({'style':'height:30px;width:30px','class':'' })
-        
-        self.fields['pizza_mitad'].required = False
-        self.fields['pizza_mitad'].widget.attrs.update({'class':'form-control shadow-none   px-2 py-1','placeholder':' Breve descripción*','rows':'1', 'aria-label':'Username','aria-describedby':'basic-addon1','style':'border-left:none', })
+        self.fields['pizza_mitad'].required = False 
+        self.fields['media_orden'].required = False 
+        self.fields['familiar'].required = False 
+        self.fields['final'].required = False 
+        #self.fields['numVentaDia'].required = False 
 
 
     class Meta:
         model = VentaMenu
-        fields = ['venta','menu','cantidad','totalfinal','observaciones','extras','media_orden','familiar','pizza_mitad']
-
+        fields = ['venta','menu','cantidad','totalfinal','observaciones','extras','media_orden','familiar','pizza_mitad','final']
 
         
- 
+class VentaMenuFormDireccion(forms.ModelForm):
+      
+
+    def __init__(self, *args, **kwargs):
+        super(VentaMenuFormDireccion, self).__init__(*args, **kwargs)
+    
+        self.fields['direccion'].required = False
+        self.fields['direccion'].widget.attrs.update({'class':'form-control shadow-none border border-2  px-2 py-1 ','placeholder':' Direccion*','rows':'1', 'aria-label':'Username','aria-describedby':'basic-addon1','style':'border-left:none', })
+
+    class Meta:
+        model = Venta
+        fields = ['direccion']
+
+class modifyVentaMenuOrder(forms.ModelForm):
+    
+    def __init__(self, *args, **kwargs):
+        super(modifyVentaMenuOrder, self).__init__(*args, **kwargs)
+        self.fields['menu'].required = True
+        self.fields['cantidad'].required = True
+        self.fields['observaciones'].required = False
+        self.fields['totalfinal'].required = False
+        self.fields['extras'].required = False 
+        self.fields['pizza_mitad'].required = False 
+        self.fields['media_orden'].required = False 
+        self.fields['familiar'].required = False 
+        self.fields['final'].required = False 
+        self.fields['extraCosto'].required = False 
+
+        self.fields['menu'].widget.attrs.update({'class':'form-control  px-2 py-1','placeholder':' Breve descripción*','rows':'1' })
+        self.fields['cantidad'].widget.attrs.update({'class':'form-control shadow-none border border-2s   px-2 py-1 ','placeholder':' Cantidad*','rows':'1', 'aria-label':'Username','aria-describedby':'basic-addon1','style':'border-left:none', })
+        self.fields['observaciones'].widget.attrs.update({'class':'form-control h-100 shadow-none border border-2  px-2 py-1 ','placeholder':' Observaciones en la preparación*','rows':'5' })
+        self.fields['extras'].widget.attrs.update({'class':'form-control shadow-none bg-corporateTan200  px-2 py-1 text-primary','placeholder':' Ingredientes*','rows':'1', 'aria-label':'Username','aria-describedby':'basic-addon1','style':'border-left:none', })
+        self.fields['extras'].widget = forms.CheckboxSelectMultiple()
+        self.fields['extras'].queryset = Extras.objects.all()
+        self.fields['media_orden'].widget.attrs.update({'class':'checkbox-large my-3 ms-4'})
+        self.fields['familiar'].widget.attrs.update({'class':'checkbox-large my-3 ms-4'})
+        self.fields['extraCosto'].widget.attrs.update({'class':'form-control shadow-none border border-2s   px-2 py-1 ','placeholder':' Cantidad extra','rows':'1', 'aria-label':'Username','aria-describedby':'basic-addon1','style':'border-left:none', })
+
+    class Meta:
+        model = VentaMenu
+        fields = ['menu','cantidad','totalfinal','observaciones','extras','media_orden','familiar','pizza_mitad','final','extraCosto']
 
 
+class RegistroCambiosVentaMenuForm(forms.ModelForm):
+      
+
+    def __init__(self, *args, **kwargs):
+        super(RegistroCambiosVentaMenuForm, self).__init__(*args, **kwargs)
+    
+        self.fields['venta_menu'].required = False
+        self.fields['accion'].required = False
+        self.fields['fecha_hora_cambio'].required = False
+        self.fields['precioNuevo'].required = False
+        self.fields['precioAnterior'].required = False
+        self.fields['venta'].required = False
+        self.fields['mesa'].required = False 
+        self.fields['postVenta'].required = False
+    class Meta:
+        model = RegistroCambiosVentaMenu
+        fields = ['venta_menu','accion','fecha_hora_cambio','precioNuevo','precioAnterior','venta','mesa','postVenta']
+
+
+
+class TicketImpresosForm(forms.ModelForm):
+      
+
+    def __init__(self, *args, **kwargs):
+        super(TicketImpresosForm, self).__init__(*args, **kwargs)
+    
+        self.fields['venta'].required = False
+        self.fields['cantidad'].required = False
+        self.fields['numImpresion'].required = False
+        self.fields['horaImpresion'].required = False
+
+
+    class Meta:
+        model = TicketImpresos        
+        fields = ['venta','cantidad','numImpresion','horaImpresion']
