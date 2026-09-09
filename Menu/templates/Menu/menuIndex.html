@@ -2,69 +2,129 @@
 {% load static %}
 {% block body %}
 
-<div class="container ">
+<style>
+    .search-input-group {
+        border-radius: 10px;
+        overflow: hidden;
+        border: 1px solid #dee2e6;
+        transition: all 0.3s ease;
+        background-color: #ffffff;
+    }
 
-    <div class="row py-3">
-        <h1>Menu</h1>
+    .search-input-group:focus-within {
+        border-color: var(--bs-primary);
+        box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.15);
+    }
 
-        <div class="col-md-4 col-xl-2 col-6 d-flex text-center">
-          {% if request.user.rol == "Admin"%}
-<button class="btn rounded-5 py-2 px-3 text-decoration-none w-100 btn-tercero text-white" data-bs-toggle="modal"
-    data-bs-target="#exampleModal">
-    Agregar al menu
-</button>
-          {% endif %}
+    .search-input-group .form-control {
+        border: none;
+        padding: 0.65rem 1rem;
+    }
+
+    .search-input-group .input-group-text {
+        background: transparent;
+        border: none;
+        color: #6c757d;
+        padding-left: 1.25rem;
+    }
+
+    .btn-action-add {
+        transition: all 0.3s ease;
+        font-weight: 600;
+        letter-spacing: 0.3px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn-action-add:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+    }
+
+    .custom-modal-content {
+        border: none;
+        border-radius: 16px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        overflow: hidden;
+    }
+
+    .custom-modal-header {
+        background-color: var(--bs-primary);
+        color: #ffffff;
+        padding: 1.25rem 1.5rem;
+    }
+</style>
+
+<div class="container my-auto bg-cuarto p-5">
+
+    <div class="row align-items-center overflow-hidden my-3">
+
+        <div class="col-12 col-md-2">
+            <h1 class="fw-bold m-0 text-dark">Menú</h1>
         </div>
-        <div class="col-md-5 col-12 d-flex justify-content-center align-items-center my-2 my-md-0">
-            <div class="input-group">
 
-                <input type="text" class="form-control shadow-none" placeholder="Buscar platillo por nombre"
-                    aria-label="" aria-describedby="basic-addon1" id="searchBar" onkeyup="getCardsReplace(this.value)">
+        <div class="col-12 col-md-7">
+            <div class="input-group search-input-group">
+                <span class="input-group-text" id="basic-addon1">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor"
+                        class="bi bi-search" viewBox="0 0 16 16">
+                        <path
+                            d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
+                    </svg>
+                </span>
+                <input type="text" class="form-control shadow-none" placeholder="Buscar platillo por nombre..."
+                    aria-label="Buscar platillo por nombre" aria-describedby="basic-addon1" id="searchBar"
+                    onkeyup="getCardsReplace(this.value)">
             </div>
         </div>
 
-
-
+        <div class="col-12 col-md-3 d-flex justify-content-md-end">
+            {% if request.user.rol == "Admin" %}
+            <button
+                class="btn btn-tercero text-white rounded-pill py-2 px-4 w-100 w-md-auto d-flex align-items-center justify-content-center gap-2 btn-action-add"
+                data-bs-toggle="modal" data-bs-target="#exampleModal">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+                    class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
+                    <path
+                        d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3z" />
+                </svg>
+                <span>Agregar al menú</span>
+            </button>
+            {% endif %}
+        </div>
 
     </div>
-    <div id="cardHolder" class=" mb-4">
-    </div>
 
+    <div id="cardHolder" >
+    </div>
 
 </div>
-
 
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Agregar producto</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content custom-modal-content">
+            <div class="modal-header custom-modal-header">
+                <h5 class="modal-title fw-bold m-0" id="exampleModalLabel">Agregar producto</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body p-4">
                 {% include 'Menu/menuCrear.html' %}
             </div>
-
         </div>
     </div>
 </div>
-<script>
 
+<script>
     function checkText(id) {
         if (document.getElementById("inputEliminar" + id).value == "Eliminar") {
             document.getElementById("botonEliminar" + id).classList.add("enabled");
             document.getElementById("botonEliminar" + id).classList.remove("disabled");
-
-
         } else {
             document.getElementById("botonEliminar" + id).classList.remove("enabled");
             document.getElementById("botonEliminar" + id).classList.add("disabled");
-
         }
     }
-
 </script>
-
 
 <script src="{% static 'js/menuAjaxSearch.js' %}"></script>
 
