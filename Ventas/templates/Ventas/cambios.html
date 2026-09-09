@@ -1,0 +1,31 @@
+ <div class="row">
+        <div class="col-12">
+            <table class="table table-striped table-bordered ">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Fecha y Hora del Cambio</th>
+                        <th>Platillo</th>
+                        <th>Acción</th>
+                        <th>Precio Anterior</th>
+                        <th>Precio Nuevo</th>
+
+
+
+
+              </tr>
+                </thead>
+                <tbody>
+                    {% for cambio in cambios %}
+<tr {% if cambio.accion == "MODIFICADO" or cambio.accion == "DISMINUYO" or cambio.accion == "AUMENTO" %} style="background-color: yellow;" {% elif cambio.accion == "CREADO" %} style="background-color: greenyellow;" {% elif cambio.accion == "ELIMINADO" %} style="background-color: red;" {% endif %}>
+
+                        <td>{{ cambio.fecha_hora_cambio }}</td>
+                        <td>{{ cambio.venta_menu }}</td>
+                        <td>{{ cambio.accion }}</td>
+                        <td>${{cambio.precioAnterior}}</td>
+                        <td>${{cambio.precioNuevo}}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>

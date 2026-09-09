@@ -1,0 +1,56 @@
+{% load static %}
+
+
+
+
+
+<table class="table m-0">
+    <thead>
+        <tr class="align-middle bg-tercero">
+            <th>Foto</th>
+            <th>Nombre</th>
+            <th>Rol</th>
+            <th>Email</th>
+            <th>Numero</th>
+            <th>Modificar</th>
+        </tr>
+
+    </thead>
+    <tbody>
+
+        {% for empleado in employees %}
+        <tr class="align-middle">
+            <td class="bg-cuarto">
+
+                {% if empleado.url %}
+                <img src="{{empleado.url.url}}" class="rounded-2 img-fluid" id="imgPerfil"
+                    style="width: 50px;height: 50px;">
+                {% else %}
+                <img src="https://vectorified.com/images/no-profile-picture-icon-8.jpg" id="imgPerfil"
+                    class="rounded-5 img-fluid" style="width: 50px;height: 50px;">
+
+                {% endif %}
+
+            </td>
+
+
+            <td class="bg-cuarto text-truncate">{{empleado.first_name}}</td>
+            <td class="bg-cuarto text-truncate">{{empleado.rol}}</td>
+            <td class="bg-cuarto text-truncate">{{empleado.email}}</td>
+            <td class="bg-cuarto text-truncate">{{empleado.phone_number}}</td>
+            <td class="bg-cuarto"><a href="{% url 'Empleados:empleadosEditar' empleado.id %}"
+                    class="text-quinto">Modificar</a>
+            </td>
+
+        </tr>
+
+
+
+        {% endfor %}
+    </tbody>
+</table>
+
+
+
+
+<input type="hidden" name="totalPaginas" id="totalPaginas" value="{{totalPaginas}}">

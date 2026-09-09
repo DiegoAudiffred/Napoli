@@ -1,0 +1,86 @@
+{% extends 'layout/layout.html' %}
+{% load static %}
+
+{% block body %}
+
+<div class="container">
+
+
+    <div class="row py-3">
+        <div class="col-12">
+            <h1>Inventario</h1>
+        </div>
+
+        <div class="col-md-2 col-6 d-flex text-center">
+            <button class="btn btn-tercero rounded-5 text-white py-2 px-3 text-decoration-none w-100 my-auto"
+                data-bs-toggle="modal" data-bs-target="#exampleModal">
+                Agregar producto
+            </button>
+        </div>
+
+
+
+
+
+
+        <div class="col-md-3 col-12 d-flex justify-content-center align-items-center my-2 my-md-0">
+            <div class="input-group">
+
+                <input type="text" class="form-control shadow-none" placeholder="Buscar producto por nombre"
+                    aria-label="" aria-describedby="basic-addon1" id="searchBar" onkeyup="getCardsReplace(this.value)">
+            </div>
+        </div>
+
+
+
+
+
+
+    </div>
+    <div class="row  mb-4">
+        <div class="col-12 ">
+            <div id="cardHolder" class="border rounded rounded-3 border border-3 border-quinto table-responsive">
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Agregar producto</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                {% include 'Stock/crearStock.html' %}
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<script src="{% static 'js/comprasAjaxSearch.js' %}"></script>
+<script src="{% static 'js/productoAjaxSearch.js' %}"></script>
+<script>
+    function limpiarCampo(inputId) {
+        // Obtén el elemento de entrada por su ID
+        var campo = document.getElementById(inputId);
+        console.log(campo)
+        // Limpia el valor del campo
+        campo.value = "";
+        if (inputId == 'searchBar') {
+            getCardsReplace("", 1)
+
+        } else {
+            getCardsReplace2("", 1)
+
+        }
+
+    }
+</script>
+{% endblock %}

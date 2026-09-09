@@ -1,0 +1,351 @@
+
+    <div class="row">
+        <div class="col-12 p-0">
+            <div class="table-responsive">
+                <table class="table border border-3 table-hover table-bordered border-quinto table-sm">
+                    <thead class="bg-tercero">
+                        <th class="d-none d-sm-table-cell text-white">Imagen</th>
+
+                        <th class="text-white">Platillo</th>
+                        <th class="text-white">Observaciones</th>
+
+                        <th class="d-none d-sm-table-cell text-white">Precio</th>
+                        <th class="text-white">Extras</th>
+                        <th class="text-white">Cantidad</th>
+                        <th class="d-none d-sm-table-cell text-white">Total</th>
+                        {% if venta.is_open or venta.is_reopen%}
+                        <th class="text-white">Modificar</th>
+                        {% endif %}
+                    </thead>
+                    <tbody>
+
+                        {% for list,publications in lista%}
+
+                        <tr>
+
+                            <td class="align-middle border border-0 d-none d-sm-table-cell"
+                                style=" width: 75px;height:75px">
+                                <img src="{{list.menu.url.url}}" alt="" width="90px" height="90px">
+                                {% if list.pizza_mitad %}
+                                <img src="{{list.pizza_mitad.url.url}}" alt="" width="90px" height="90px">
+                                {% endif %}
+                            </td>
+
+                            <td class="align-middle  text-center" style="font-size: 18px;">
+
+                                {% if list.media_orden %}
+                                <p>Media Orden:</p>
+
+                                {% endif %}
+                                {% if list.familiar %}
+                                <p>Pizza Familiar</p>
+
+                                {% endif %}
+                                {% if list.pizza_mitad %}
+                                Mitad:
+                                {% endif %}
+                                {{list.menu}}
+                                {% if list.pizza_mitad %}
+                                <p>Mitad: {{list.pizza_mitad}}
+                                </p> {% endif %}
+                            </td>
+                            <td class="align-middle">
+
+                                <p class=" text-break">
+
+                                    {{list.observaciones}}</p>
+                            </td>
+                            <td class="align-middle text-center d-none d-sm-table-cell" style="width: 200px;font-size: 18px;">
+                                {% if list.menu.categoria == "Pizza" %}
+                                {% if list.familiar %}
+                                {% if list.pizza_mitad %}
+                                {% if list.pizza_mitad.precioFamiliar < list.menu.precioFamiliar %}
+                                    ${{list.menu.precioFamiliar}} mxn {% else %} $ {{list.pizza_mitad.precioFamiliar}}
+                                    mxn {% endif %} {% else %} ${{list.menu.precioFamiliar}} mxn {% endif%} {% else %}
+                                    {% if list.pizza_mitad %} {% if list.pizza_mitad.precio < list.menu.precio %} $
+                                    {{list.menu.precio}} mxn {% else %} $ {{ list.pizza_mitad.precio }} mxm {% endif %}
+                                    {% else %} $ {{list.menu.precio }} mxn {% endif %} {% endif %} {% else %} {% if list.media_orden %} $ {{list.menu.mediaOrden}} mxn {% else %} $ {{list.menu.precio}}
+                                    mxn {% endif %} {% endif %} </td>
+                            <td class="align-middle text-center">
+                                {% for ingrediente in list.extras.all %}
+                                <div class="col-auto">
+                                    <p>{{ ingrediente.nombre }}
+                                        {% if list.familiar %}
+                                        ${{ ingrediente.precioFamiliar }}
+                                        {% else %}
+                                        ${{ ingrediente.precio }}
+                                        {% endif %}
+                                    </p>
+
+                                </div>
+
+
+                                {% endfor %}
+                            </td>
+                          <td class="align-middle text-center">
+    <div class="plus-minus-input">
+        {% if venta.is_open or venta.is_reopen %}
+        <div class="input-group-button my-auto">
+            <a onclick="incrementValue({{list.id}})" data-field="quantity1" class="p-1"
+                href="{% url 'Ventas:guardarCambios' venta.id list.id 'suma' %}" id="plus{{list.id}}" class="btn">
+                <span><svg width="30px" height="30px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <title>plus</title> <desc>Created with Sketch Beta.</desc> <defs> </defs> <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage"> <g id="Icon-Set-Filled" sketch:type="MSLayerGroup" transform="translate(-362.000000, -1037.000000)" fill="#54ce3b"> <path d="M390,1049 L382,1049 L382,1041 C382,1038.79 380.209,1037 378,1037 C375.791,1037 374,1038.79 374,1041 L374,1049 L366,1049 C363.791,1049 362,1050.79 362,1053 C362,1055.21 363.791,1057 366,1057 L374,1057 L374,1065 C374,1067.21 375.791,1069 378,1069 C380.209,1069 382,1067.21 382,1065 L382,1057 L390,1057 C392.209,1057 394,1055.21 394,1053 C394,1050.79 392.209,1049 390,1049" id="plus" sketch:type="MSShapeGroup"> </path> </g> </g> </g></svg></span>
+            </a>
+        </div>
+        {% endif %}
+        <input class="input-group-field border rounded rounded-4 text-center" type="number" name="quantity" value="{{list.cantidad}}" style="width: 60px; height: 30px;font-size: 18px;" id="input{{list.id}}" disabled>
+        {% if venta.is_open or venta.is_reopen %}
+        <div class="input-group-button my-auto">
+            <a onclick="decrementValue({{list.id}})" data-field="quantity1" class="p-1" href="{% url 'Ventas:guardarCambios' venta.id list.id 'resta' %}" id="minus{{list.id}}" class="btn">
+                <span><svg width="30px" height="30px" viewBox="0 -12 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <title>minus</title> <desc>Created with Sketch Beta.</desc> <defs> </defs> <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage"> <g id="Icon-Set-Filled" sketch:type="MSLayerGroup" transform="translate(-414.000000, -1049.000000)" fill="#df1616"> <path d="M442,1049 L418,1049 C415.791,1049 414,1050.79 414,1053 C414,1055.21 415.791,1057 418,1057 L442,1057 C444.209,1057 446,1055.21 446,1053 C446,1050.79 444.209,1049 442,1049" id="minus" sketch:type="MSShapeGroup"> </path> </g> </g> </g></svg></span>
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</td>
+
+
+                            <td class="align-middle text-center d-none d-sm-table-cell" style="font-size: 18px;">
+                                <p class="py-2"> ${{list.final}} CU</p>
+                                <p class="py-2">{% if list.extraCosto %} Extra: ${{list.extraCosto}} {% endif %}</p>
+                              <p class="py-2"> ${{list.totalfinal}}</p>
+                            </td>
+
+                            {% if venta.is_open or venta.is_reopen%}
+
+                            <td class="align-middle text-center">
+
+                                <a href="{% url 'Ventas:updateRow2' list.id %}"
+                                    class="btn border bg-primary text-white " type="button">Modificar
+                                    {{list.menu.nombre}}</a>
+                            </td>
+                            {% endif %}
+                        </tr>
+
+
+
+
+
+                        {% endfor %}
+
+
+
+
+
+
+                        <tr class="d-none d-sm-table-row">
+                            <th class="bg-quinto"></th>
+                            <th class="bg-quinto"></th>
+                            <th class="bg-quinto "></th>
+                            <th class="bg-quinto"></th>
+                            <th class="bg-quinto"></th>
+                            <th class="bg-quinto"></th>
+                            {% if venta.is_open or venta.is_reopen%}
+
+                            <th class="bg-quinto"></th>
+                            {% endif %}
+
+
+                            <th class="bg-primary text-white" style="width: 200px">Total: $ {{total}}
+                            </th>
+                        </tr>
+                        <tr class="d-block d-sm-none d-table-row">
+                            <th class="bg-quinto"></th>
+
+                            <th class="bg-quinto"></th>
+                            <th class="bg-quinto text-white">Total: $</th>
+
+
+                            <th class="bg-primary text-white"> {{total}}
+                            </th>
+                        </tr>
+                    </tbody>
+
+                </table>
+
+
+                <div class="container"> <!-- Contenedor  -->
+
+
+                    {% include "Ventas/acordeon.html" %}
+
+                    <div id="menu-container" class="d-none">
+                        <div class="row">
+
+                            <h2>Entradas</h2>
+                            <div class="row">
+                                {% for men in menu %}
+                                {% if men.categoria == "Entradas" %}
+                                <div class="col-3 py-2">
+                                    <input type="checkbox" id="platillo_{{ men.id }}" name="platillo"
+                                        value="{{ men.id }}" style="display: none;">
+                                    <label for="platillo_{{ men.id }}" class="checkbox-label w-100 text-truncate"
+                                        onclick="highlightLabel(this, {{ men.id }})" style="font-size: 18px;">
+                                        <img src="{{ men.url.url }}" alt="{{ men.nombre }}" width="100px"
+                                            height="100px">
+                                        <strong>{{ men.nombre }}</strong>
+                                    </label><br>
+                                </div>
+                                {% endif %}
+                                {% endfor %}
+
+                            </div>
+                        </div>
+
+                        <div class="row">
+
+                            <h2>Ensaladas</h2>
+                            <div class="row">
+                                {% for men in menu %}
+                                {% if men.categoria == "Ensaladas" %}
+                                <div class="col-3 py-2">
+                                    <input type="checkbox" id="platillo_{{ men.id }}" name="platillo"
+                                        value="{{ men.id }}" style="display: none;">
+                                    <label for="platillo_{{ men.id }}" class="checkbox-label w-100 text-truncate"
+                                        onclick="highlightLabel(this, {{ men.id }})" style="font-size: 18px;">
+                                        <img src="{{ men.url.url }}" alt="{{ men.nombre }}" width="100px"
+                                            height="100px">
+                                        <strong>{{ men.nombre }}</strong>
+                                    </label><br>
+                                </div>
+                                {% endif %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="row">
+
+                            <h2>Pastas</h2>
+                            <div class="row">
+                                {% for men in menu %}
+                                {% if men.categoria == "Pastas" %}
+                                <div class="col-3 py-2">
+                                    <input type="checkbox" id="platillo_{{ men.id }}" name="platillo"
+                                        value="{{ men.id }}" style="display: none;">
+                                    <label for="platillo_{{ men.id }}" class="checkbox-label w-100 text-truncate"
+                                        onclick="highlightLabel(this, {{ men.id }})" style="font-size: 18px;">
+                                        <img src="{{ men.url.url }}" alt="{{ men.nombre }}" width="100px"
+                                            height="100px">
+                                        <strong>{{ men.nombre }}</strong>
+                                    </label><br>
+                                </div>
+                                {% endif %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="row">
+
+                            <h2>Carnes</h2>
+                            <div class="row">
+                                {% for men in menu %}
+                                {% if men.categoria == "Carnes" %}
+                                <div class="col-3 py-2">
+                                    <input type="checkbox" id="platillo_{{ men.id }}" name="platillo"
+                                        value="{{ men.id }}" style="display: none;">
+                                    <label for="platillo_{{ men.id }}" class="checkbox-label w-100 text-truncate"
+                                        onclick="highlightLabel(this, {{ men.id }})" style="font-size: 18px;">
+                                        <img src="{{ men.url.url }}" alt="{{ men.nombre }}" width="100px"
+                                            height="100px">
+                                        <strong>{{ men.nombre }}</strong>
+                                    </label><br>
+                                </div>
+                                {% endif %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="row">
+
+                            <h2>Postres</h2>
+                            <div class="row">
+                                {% for men in menu %}
+                                {% if men.categoria == "Postres" %}
+                                <div class="col-3 py-2">
+                                    <input type="checkbox" id="platillo_{{ men.id }}" name="platillo"
+                                        value="{{ men.id }}" style="display: none;">
+                                    <label for="platillo_{{ men.id }}" class="checkbox-label w-100 text-truncate"
+                                        onclick="highlightLabel(this, {{ men.id }})" style="font-size: 18px;">
+                                        <img src="{{ men.url.url }}" alt="{{ men.nombre }}" width="100px"
+                                            height="100px">
+                                        <strong>{{ men.nombre }}</strong>
+                                    </label><br>
+                                </div>
+                                {% endif %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="row">
+
+                            <h2>Bebidas</h2>
+                            <div class="row">
+                                {% for men in menu %}
+                                {% if men.categoria == "Bebidas" %}
+                                <div class="col-3 py-2">
+                                    <input type="checkbox" id="platillo_{{ men.id }}" name="platillo"
+                                        value="{{ men.id }}" style="display: none;">
+                                    <label for="platillo_{{ men.id }}" class="checkbox-label w-100 text-truncate"
+                                        onclick="highlightLabel(this, {{ men.id }})" style="font-size: 18px;">
+                                        <img src="{{ men.url.url }}" alt="{{ men.nombre }}" width="100px"
+                                            height="100px">
+                                        <strong>{{ men.nombre }}</strong>
+                                    </label><br>
+                                </div>
+                                {% endif %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="row">
+
+                            <h2>Pizza</h2>
+                            <div class="row">
+                                {% for men in menu %}
+                                {% if men.categoria == "Pizza" %}
+                                <div class="col-3 py-2">
+                                    <input type="checkbox" id="platillo_{{ men.id }}" name="platillo"
+                                        value="{{ men.id }}" style="display: none;">
+                                    <label for="platillo_{{ men.id }}" class="checkbox-label w-100 text-truncate"
+                                        onclick="highlightLabel(this, {{ men.id }})" style="font-size: 18px;">
+                                        <img src="{{ men.url.url }}" alt="{{ men.nombre }}" width="100px"
+                                            height="100px">
+                                        <strong>{{ men.nombre }}</strong>
+                                    </label><br>
+                                </div>
+                                {% endif %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="row">
+
+                            <h2>Especialidad</h2>
+                            <div class="row">
+                                {% for men in menu %}
+                                {% if men.categoria == "Especialidad" %}
+                                <div class="col-3 py-2">
+                                    <input type="checkbox" id="platillo_{{ men.id }}" name="platillo"
+                                        value="{{ men.id }}" style="display: none;">
+                                    <label for="platillo_{{ men.id }}" class="checkbox-label w-100 text-truncate"
+                                        onclick="highlightLabel(this, {{ men.id }})" style="font-size: 18px;">
+                                        <img src="{{ men.url.url }}" alt="{{ men.nombre }}" width="100px"
+                                            height="100px">
+                                        <strong>{{ men.nombre }}</strong>
+                                    </label><br>
+                                </div>
+                                {% endif %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+
+
+
+                    <div id="dynamic-forms-container">
+
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>

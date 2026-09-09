@@ -1,0 +1,71 @@
+{% extends 'layout/layout.html' %}
+{% load static %}
+{% block body %}
+
+<div class="container ">
+
+    <div class="row py-3">
+        <h1>Menu</h1>
+
+        <div class="col-md-4 col-xl-2 col-6 d-flex text-center">
+          {% if request.user.rol == "Admin"%}
+<button class="btn rounded-5 py-2 px-3 text-decoration-none w-100 btn-tercero text-white" data-bs-toggle="modal"
+    data-bs-target="#exampleModal">
+    Agregar al menu
+</button>
+          {% endif %}
+        </div>
+        <div class="col-md-5 col-12 d-flex justify-content-center align-items-center my-2 my-md-0">
+            <div class="input-group">
+
+                <input type="text" class="form-control shadow-none" placeholder="Buscar platillo por nombre"
+                    aria-label="" aria-describedby="basic-addon1" id="searchBar" onkeyup="getCardsReplace(this.value)">
+            </div>
+        </div>
+
+
+
+
+    </div>
+    <div id="cardHolder" class=" mb-4">
+    </div>
+
+
+</div>
+
+
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Agregar producto</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                {% include 'Menu/menuCrear.html' %}
+            </div>
+
+        </div>
+    </div>
+</div>
+<script>
+
+    function checkText(id) {
+        if (document.getElementById("inputEliminar" + id).value == "Eliminar") {
+            document.getElementById("botonEliminar" + id).classList.add("enabled");
+            document.getElementById("botonEliminar" + id).classList.remove("disabled");
+
+
+        } else {
+            document.getElementById("botonEliminar" + id).classList.remove("enabled");
+            document.getElementById("botonEliminar" + id).classList.add("disabled");
+
+        }
+    }
+
+</script>
+
+
+<script src="{% static 'js/menuAjaxSearch.js' %}"></script>
+
+{% endblock %}

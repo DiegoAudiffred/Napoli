@@ -1,0 +1,90 @@
+{% load static %}
+
+
+
+
+
+<table class="table m-0">
+    <thead>
+        <tr class="align-middle bg-tercero text-white">
+            <th>Nombre</th>
+                                    {% if request.user.rol == "Admin"%}
+
+            <th>Email</th>
+            
+            <th>Teléfono</th>
+            <th>Total ventas</th>
+            <th>Total consumido</th>
+            <th>Editar</th>
+            <th>Eliminar</th>
+                {% endif %}
+        </tr>
+
+    </thead>
+    <tbody>
+
+        {% for empleado in employees %}
+        <tr class="align-middle">
+
+
+
+            <td class="text-truncate">{{empleado.nombre}}</td>
+                                    {% if request.user.rol == "Admin"%}
+
+            <td class="text-truncate">{{empleado.email}}</td>
+            <td class="text-truncate">{{empleado.phone_number}}</td>
+
+            <td class="text-truncate">{{empleado.total_compras}}</td>
+            <td class="text-truncate">$ {{empleado.total_gastado}} mxn</td>
+
+            <td class="text-truncate"><a href="{% url 'Clientes:clientesEditar' empleado.id %}">Modificar </a></td>
+            <td class="text-truncate"><a type="button" class="" href="" data-bs-toggle="modal"
+                    data-bs-target="#exampleModal{{empleado.id}}">Eliminar
+                </a>
+
+            </td>
+        </tr>
+        <div class="modal fade" id="exampleModal{{empleado.id}}" tabindex="-1"
+            aria-labelledby="exampleModalLabel{{empleado.id}}" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">¿Seguro que deseas eliminar a
+                            {{empleado.nombre}}?</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-12 text-center">
+                                <div class="py-3">
+                                    <h2>Escribe "Eliminar" para habilitar el botón
+                                    </h2>
+                                </div>
+                                <input type="text" name="" id="inputEliminar{{empleado.id}}"
+                                    onkeyup="checkText({{empleado.id}})" class="w-50 rounded rounded-3 py-2">
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <a type="button" class="btn btn-primary" data-bs-dismiss="modal">Cancelar</a>
+                        <a type="button" href="{% url 'Clientes:clientesEliminar' empleado.id %}" class="btn disabled"
+                            id="botonEliminar{{empleado.id}}" style="background-color: red;color: white;"
+                            disabled>Eliminar</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        {% endfor %}
+    </tbody>
+</table>
+
+
+<!-- Button trigger modal -->
+
+
+<!-- Modal -->
+
+
+<input type="hidden" name="totalPaginas" id="totalPaginas" value="{{totalPaginas}}">
