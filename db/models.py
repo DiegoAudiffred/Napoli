@@ -207,9 +207,12 @@ class Menu(models.Model):
     def __str__(self):
         return self.nombre
     def save(self, *args, **kwargs):
-        self.precioFamiliar = self.precio + 130
-        self.mediaOrden = self.precio / 2
+        if not self.pk:
+            self.precioFamiliar = self.precio + 130
+            self.mediaOrden = self.precio / 2
+            
         super().save(*args, **kwargs)
+
     
     
 class Extras(models.Model):
